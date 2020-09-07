@@ -7,6 +7,19 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
+class Group(models.Model):
+    name = models.CharField(max_length=100, null=False, blank=False)
+    description = models.TextField(blank=False)
+    logo = models.ImageField()
+    address = models.CharField(max_length=200, blank=False, null=False)
+    contact_person = models.CharField(max_length=100)
+    contact_person_email = models.EmailField(null=True)
+    contact_person_phone = PhoneNumberField(blank=False, null=False)
+
+    def __str__(self):
+        return self.name
+
+
 class FarmerProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='farmer')
     date_of_birth = models.DateField()
@@ -22,5 +35,9 @@ class FarmerProfile(models.Model):
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     land_owned = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
     phone_1 = PhoneNumberField(blank = False)
+    phone_2 = PhoneNumberField(blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, null=True, blank=True)
+
+
     
 
