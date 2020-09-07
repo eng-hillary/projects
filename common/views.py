@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.views.generic import (
+    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
 
-# Create your views here.
+class HomePage(TemplateView):
+
+    template_name = 'index.html'
