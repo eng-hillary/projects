@@ -23,10 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9fakf1yzy-cr@g7=&#^bn5d7ck60=fm#(nh&2zzc*23hltrveh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS')]
 
 # Application definition
 
@@ -78,14 +77,18 @@ WSGI_APPLICATION = 'ict4farmers.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-       'default': {
-       'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'ict4farmers',
-       'USER': '8technologies',
-       'PASSWORD': '8technologies@net',
-        'HOST': 'localhost',
-         'PORT': '5432',
-}
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
+         'TEST': {
+            'NAME': 'test twous'
+        }
+
+    }
 }
 
 
