@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'farmer',
     'rest_framework',
     'phonenumber_field',
+    'farm',
 ]
 
 MIDDLEWARE = [
