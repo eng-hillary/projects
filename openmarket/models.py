@@ -5,6 +5,7 @@ from common.choices import(GENDER_CHOICES, MARITAL_STATUSES)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise
 # Create your models here.
+
 class Product(models.Model):
      name = models.CharField(max_length=50, null=True)
      enterprise = models.ForeignKey(to='farm.Enterprise',related_name='products',on_delete=models.CASCADE)
@@ -45,6 +46,7 @@ class Buyer(models.Model):
     class meta:
         ordering =("name",)
 
+
 class SellerPost(models.Model):
     name = models.ForeignKey(Seller, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -56,6 +58,7 @@ class SellerPost(models.Model):
 
     class Meta:
         ordering = ('-name',)
+   
 
 class BuyerPost(models.Model):
     name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
@@ -92,6 +95,7 @@ class ContactDetails(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
 
+
 class Logistics(models.Model):
     name = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     source = models.CharField(max_length=50, null=True)
@@ -122,7 +126,7 @@ class Storage(models.Model):
 
     class Meta:
         ordering =("name",)
-
+        
 class Packaging(models.Model):
     name = models.CharField(max_length=50, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -144,6 +148,7 @@ class Medical(models.Model):
     class Meta:
         ordering =("name",)
 
+
 class SoilScience(models.Model):
     name = models.CharField(max_length=50, null=True)
     location = models.CharField(null=True, max_length=50) 
@@ -153,3 +158,4 @@ class SoilScience(models.Model):
 
     class Meta:
         ordering =("name",)
+
