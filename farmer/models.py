@@ -37,7 +37,3 @@ class FarmerProfile(models.Model):
     phone_1 = PhoneNumberField(blank = False)
     phone_2 = PhoneNumberField(blank=True, null=True)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, null=True, blank=True)
-
-
-    
-
