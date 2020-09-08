@@ -103,6 +103,9 @@ class Logistics(models.Model):
     contact_details = models.ForeignKey(ContactDetails, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     description = models.TextField(blank=True)
+    status = models.BooleanField(default=True)
+    inventory_status = models.BooleanField(default=True)
+
 
     class Meta:
         ordering =("name",)
@@ -115,6 +118,7 @@ class Storage(models.Model):
     description = models.TextField(blank=True)
     available_services = models.CharField(max_length=50, blank=True)
     status = models.BooleanField(default=True)
+    inventory_status = models.BooleanField(default=True)
 
     class Meta:
         ordering =("name",)
