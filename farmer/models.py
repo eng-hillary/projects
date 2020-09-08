@@ -20,7 +20,7 @@ class Group(models.Model):
         return self.name
 
 
-class FarmerProfile(models.migrationsModel):
+class FarmerProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='farmer')
     date_of_birth = models.DateField()
     nin = models.CharField(max_length=50, null=False, blank=False)
@@ -29,7 +29,7 @@ class FarmerProfile(models.migrationsModel):
     county = models.ForeignKey(County, on_delete=models.CASCADE)
     sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE)
     parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
-    village = models.FmigrationsoreignKey(Village, on_delete=models.CASCADE)
+    village = models.ForeignKey(Village, on_delete=models.CASCADE)
     level_of_education = models.CharField(max_length=100, null=False, blank=False)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
