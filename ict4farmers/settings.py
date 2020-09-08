@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'phonenumber_field',
     'farm',
+    'weather',
     'openmarket',
+
 ]
 
 MIDDLEWARE = [
