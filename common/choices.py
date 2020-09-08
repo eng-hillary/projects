@@ -5,6 +5,7 @@ GENDER_CHOICES = (
     ('female', 'Female'),
     ('male', 'Male')
 )
+
 MARITAL_STATUSES = (
     (None, "--please select--"),
     ('single', 'Single'),
