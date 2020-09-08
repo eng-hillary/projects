@@ -13,3 +13,11 @@ MARITAL_STATUSES = (
     ('divorced', 'Divorced'),
     ('widowed', 'Widowed')
 )
+
+RESOURCE_CATEGORY = (
+    (None, "--please select--"),
+    ('storage', 'Storage'),
+    ('machinery', 'Machinery'),
+    ('land', 'Land'),
+    ('transportation', 'Transportation'),    
+)
