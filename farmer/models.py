@@ -1,13 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-from common.models import(Region, District, County, SubCounty, Parish, Village)
-from common.choices import(GENDER_CHOICES, MARITAL_STATUSES)
+from common.models import(Region, District, County, SubCounty, Parish, Village, TimeStampedModel)
+from common.choices import(GENDER_CHOICES, MARITAL_STATUSES, LAND_TYPES, PRODUCTION_SCALE, YES_OR_NO)
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
-
+from django.utils.translation import ugettext as _
 # Create your models here.
 
-class Group(models.Model):
+class Group(TimeStampedModel, models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     description = models.TextField(blank=False)
     logo = models.ImageField()
@@ -20,7 +20,12 @@ class Group(models.Model):
         return self.name
 
 
-class FarmerProfile(models.Model):
+class FarmerProfile(TimeStampedModel, models.Model):
+    STATUS = (
+        ('active', 'Active'),
+        ('in_active', 'In-Active'),
+        ('rejected', 'Rejected')
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='farmer')
     date_of_birth = models.DateField()
     nin = models.CharField(max_length=50, null=False, blank=False)
@@ -37,6 +42,22 @@ class FarmerProfile(models.Model):
     phone_1 = PhoneNumberField(blank = False)
     phone_2 = PhoneNumberField(blank=True, null=True)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, null=True, blank=True)
+    type_of_land = models.CharField(choices=LAND_TYPES, max_length=20)
+    production_scale = models.CharField(choices=PRODUCTION_SCALE, max_length=20)
+    number_of_dependants = models.PositiveIntegerField()
+    # initial capital moved to farm
+    #initial_total_capital = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    credit_acces = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=False, blank=False)
+    experience = models.FloatField(_('Experience in years'),null=False, blank=False)
+    status = models.CharField(default='in_active', max_length=20,null=False)
+    general_remarks = models.TextField(null=True, blank=True)
+    # handle approving of a farmer
+    approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent",null=True,blank=True)
+    approved_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.user)
+
 
 
     

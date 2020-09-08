@@ -1,6 +1,25 @@
 from django.db import models
-
+from django.utils.translation import ugettext as _
 # Create your models here.
+
+class TimeStampedModel(models.Model):
+    """
+    Abstract model class that includes timestamp fields
+    """
+    created = models.DateTimeField(
+        verbose_name=_('Created'),
+        auto_now_add=True)
+    modified = models.DateTimeField(
+        verbose_name=_('Modified'),
+        auto_now=True)
+
+    # pylint: disable=too-few-public-methods
+    class Meta:
+        """
+        Meta options for TimeStampedModel
+        """
+        abstract = True
+
 
 class Region(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
