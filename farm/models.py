@@ -27,7 +27,7 @@ class Enterprise(models.Model):
 
 
 
-class EnterpriseVariety(models.Model):
+class Farm(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
 

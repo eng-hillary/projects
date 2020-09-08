@@ -12,7 +12,7 @@ class Group(models.Model):
     description = models.TextField(blank=False)
     logo = models.ImageField()
     address = models.CharField(max_length=200, blank=False, null=False)
-    contact_person = models.Charlocationield(max_length=100)
+    contact_person = models.CharField(max_length=100)
     contact_person_email = models.EmailField(null=True)
     contact_person_phone = PhoneNumberField(blank=False, null=False)
 
