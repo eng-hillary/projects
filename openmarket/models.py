@@ -5,6 +5,7 @@ from common.choices import(GENDER_CHOICES, MARITAL_STATUSES)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise
 # Create your models here.
+
 class Product(models.Model):
      name = models.CharField(max_length=50, null=True)
      enterprise = models.ForeignKey(to='farm.Enterprise',related_name='products',on_delete=models.CASCADE)
@@ -45,6 +46,7 @@ class Buyer(models.Model):
     class meta:
         ordering =("name",)
 
+        
 class SellerPost(models.Model):
     name = models.ForeignKey(Seller, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -134,6 +136,7 @@ class Packaging(models.Model):
     class Meta:
         ordering =("name",)
 
+
 class Medical(models.Model):
     name = models.CharField(max_length=50, null=True)
     enterprise = models.ForeignKey(to='farm.Enterprise',related_name='medical',on_delete=models.CASCADE)
@@ -144,6 +147,7 @@ class Medical(models.Model):
     class Meta:
         ordering =("name",)
 
+
 class SoilScience(models.Model):
     name = models.CharField(max_length=50, null=True)
     location = models.CharField(null=True, max_length=50) 
@@ -153,3 +157,4 @@ class SoilScience(models.Model):
 
     class Meta:
         ordering =("name",)
+
