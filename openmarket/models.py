@@ -4,10 +4,15 @@ from common.models import(Region, District, County, SubCounty, Parish, Village)
 from common.choices import(GENDER_CHOICES, MARITAL_STATUSES)
 from django.core.validators import RegexValidator
 # Create your models here.
-class product(models.Model):
+class Product(models.Model):
      id = models.CharField(max_length=50, null=True, blank=True)
      name = models.CharField(max_length=50, null=True)
-     description = models.TextField(null=True)
+     enterprise = models.ForeignKey(Enterprise,related_name='products',on_delete=models.CASCADE)
+     slug = models.SlugField(max_length=200, db_index=True)
+     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+     description = models.TextField(blank=True)
+     price = models.DecimalField(max_digits=10, decimal_places=2)
+     available = models.BooleanField(default=True)
      date_created = models.DateTimeField(auto_now_add=True)
      date_updated = models.DateTimeField(auto_now=True)
 
@@ -27,7 +32,7 @@ class Seller(models.Model):
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     enterprise = models.TextField(null= True)
-    major_products = models.ManyToManyField(product, on_delete=models.CASCADE)
+    major_products = models.ManyToManyField(Product, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('-name',)
@@ -40,3 +45,33 @@ class Buyer(models.Model):
     class meta:
         ordering =("name",)
 
+class SellerPost(models.Model):
+    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.CharField(null=True)
+    price_offer = models.DecimalField(max_digits=10, decimal_places=2)
+    delivery_option = models.CharField(max_length=50)
+    payment_options = models.CharField(max_length=50, null=True)
+    payment_mode = models.CharField(null=True, max_length=50)
+
+    class Meta:
+        ordering = ('-name',)
+
+class BuyerPost(models.Model):
+    name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
+    current_location = models.CharField(max_length=50)
+    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.CharField(null=True)
+    total_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    delivery_options = models.CharField(null=False)
+    payment_options = models.CharField(max_length=50, null=True)
+    payment_mode = models.CharField(null=True, max_length=50)
+    Any_other_comment =models.TextField(null=True)
+
+    class meta:
+        ordering =("name",)
+
+class ServiceProvider(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='serviceprovider')
+    location = models.CharField(null=True, max_length=50)
+    list_of_service = models.CharField(blank=True, max_length=50)
