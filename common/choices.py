@@ -63,3 +63,12 @@ WHEATHER_OPTIONS = (
     ('cloudy', 'Cloudy'),
     
     )
+
+RESOURCE_CATEGORY = (
+    (None, "--please select--"),
+    ('storage', 'Storage'),
+    ('machinery', 'Machinery'),
+    ('land', 'Land'),
+    ('transportation', 'Transportation'),    
+)
+
