@@ -25,56 +25,14 @@ class Seller(models.Model):
     seller_type = models.CharField(max_length=15, null=False)
     date_of_birth = models.DateField(max_length=8)
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
-    district 
-class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-    
-    class meta:
-        ordering =("name",)= models.ForeignKey(District, on_delete=models.CASCADE)
+    district = models.ForeignKey(District, on_delete=models.CASCADE)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
-    sub_count
-class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-class SellerPost(models.Model):
-    class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-    
-    class meta:
-        ordering =("name",)
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-    
-    class meta:
-        ordering =("name",)
-    
-    class meta:
-        ordering =("name",)y = models.ForeignKey(SubCounty, on_delete=models.CASCADE)
+    sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE)
     parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
     village = models.ForeignKey(Village, on_delete=models.CASCADE)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
-class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-    
-    class meta:
-        ordering =("name",)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
-    enterpris
-class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-    
-    class meta:
-        ordering =("name",)e = models.TextField(null= True)
+    enterprise = models.TextField(null= True)
     major_products = models.ManyToManyField(Product, related_name='seller')
 
     class Meta:
@@ -100,6 +58,7 @@ class SellerPost(models.Model):
 
     class Meta:
         ordering = ('-name',)
+   
 
 class BuyerPost(models.Model):
     name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
@@ -136,19 +95,13 @@ class ContactDetails(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
 
+
 class Logistics(models.Model):
     name = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     source = models.CharField(max_length=50, null=True)
     destination = models.CharField(max_length=50, null=True)
     quantity = models.FloatField(max_length=50, null=True)
-    Time = mo
-class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-    
-    class meta:
-        ordering =("name",)dels.DateTimeField(auto_now_add=True)
+    Time = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     payment_mode = models.CharField(null=True, max_length=50)
     contact_details = models.ForeignKey(ContactDetails, on_delete=models.CASCADE)
@@ -173,32 +126,17 @@ class Storage(models.Model):
 
     class Meta:
         ordering =("name",)
-
+        
 class Packaging(models.Model):
     name = models.CharField(max_length=50, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.CharField(null=True, max_length=50) 
-    image = m
-class SellerP
-class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-    
-    class meta:
-        ordering =("name",)ost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.FloatField(max_length=50, null=True)
-    
-    class meta:
-        ordering =("name",)odels.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     status = models.BooleanField(default=True)
     rent = models.CharField(max_length=25, null=True)
 
     class Meta:
         ordering =("name",)
-
 
 class Medical(models.Model):
     name = models.CharField(max_length=50, null=True)

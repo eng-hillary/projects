@@ -12,14 +12,14 @@ class Resource(models.Model):
     )
     resource_name = models.CharField(max_length=200, blank = False)
     resource_provider_details = models.CharField(max_length = 400, blank = False)
-    resource_provider_contact = PhoneNumberField(blank = False)
+    resource_provider_contact = models.PhoneNumberField(blank = False)
     resource_category = models.ChoiceField(RESOURCE_CATEGORY)
     farmer = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
     latitude = models.FloatField(min_value=-90, max_value=90)
     longitude = models.FloatField(min_value=-180, max_value=180)
     termsandconditions = models.TextField(max_length=400, blank = False)
     resource_status = models.CharField(max_length=20, choices=RESOURCE_STATUS)
-    availability_date_and_time = models.datetime(blank = false) #this should be a dynamic field
+    availability_date_and_time = models.datetime(blank =False) #this should be a dynamic field
     price = models.DecimalField(blank = False)
     phone = models.PhoneNumberField(blank = False)
 
