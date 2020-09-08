@@ -1,12 +1,11 @@
 from django.db import models
-from Auth.models import User
+from django.contrib.auth.models import User
 from common.models import(Region, District, County, SubCounty, Parish, Village)
 from common.choices import(GENDER_CHOICES, MARITAL_STATUSES)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise
 # Create your models here.
 class Product(models.Model):
-     id = models.CharField(max_length=50, null=True, blank=True)
      name = models.CharField(max_length=50, null=True)
      enterprise = models.ForeignKey(to='farm.Enterprise',related_name='products',on_delete=models.CASCADE)
      slug = models.SlugField(max_length=200, db_index=True)
@@ -33,12 +32,12 @@ class Seller(models.Model):
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     enterprise = models.TextField(null= True)
-    major_products = models.ManyToManyField(Product, on_delete=models.CASCADE)
+    major_products = models.ManyToManyField(Product, related_name='seller')
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('seller_type',)
     def __str__(self):
-        return self.name
+        return self.seller_type
 
 class Buyer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
@@ -49,7 +48,7 @@ class Buyer(models.Model):
 class SellerPost(models.Model):
     name = models.ForeignKey(Seller, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.CharField(null=True)
+    quantity = models.FloatField(max_length=50, null=True)
     price_offer = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_option = models.CharField(max_length=50)
     payment_options = models.CharField(max_length=50, null=True)
@@ -62,9 +61,9 @@ class BuyerPost(models.Model):
     name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
     current_location = models.CharField(max_length=50)
     Product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.CharField(null=True)
+    quantity = models.FloatField(max_length=50, null=True)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
-    delivery_options = models.CharField(null=False)
+    delivery_options = models.CharField(max_length=50, null=False)
     payment_options = models.CharField(max_length=50, null=True)
     payment_mode = models.CharField(null=True, max_length=50)
     Any_other_comment =models.TextField(null=True)
@@ -86,7 +85,7 @@ class ServiceRegistration(models.Model):
     type = models.CharField(max_length=50)
 
     class Meta:
-        ordering =("name",)
+        ordering =("type",)
 
 class ContactDetails(models.Model):
     name = models.CharField(max_length=25, null=True)
@@ -97,7 +96,7 @@ class Logistics(models.Model):
     name = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
     source = models.CharField(max_length=50, null=True)
     destination = models.CharField(max_length=50, null=True)
-    quantity = models.CharField(null=True)
+    quantity = models.FloatField(max_length=50, null=True)
     Time = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     payment_mode = models.CharField(null=True, max_length=50)
@@ -114,7 +113,7 @@ class Storage(models.Model):
     size = models.FloatField(null=True)
     type = models.CharField(max_length=50, null=False)
     description = models.TextField(blank=True)
-    available_services = models.CharField(blank=True)
+    available_services = models.CharField(max_length=50, blank=True)
     status = models.BooleanField(default=True)
 
     class Meta:
@@ -122,18 +121,18 @@ class Storage(models.Model):
 
 class Packaging(models.Model):
     name = models.CharField(max_length=50, null=True)
-    product = models.ForeignKey(product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.CharField(null=True, max_length=50) 
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     status = models.BooleanField(default=True)
-    rent = models.CharField(null=True)
+    rent = models.CharField(max_length=25, null=True)
 
     class Meta:
         ordering =("name",)
 
-class Medical(models.Nodel):
+class Medical(models.Model):
     name = models.CharField(max_length=50, null=True)
-    enterprise = models.ForeignKey(to='farm.Enterprise',related_name='products',on_delete=models.CASCADE)
+    enterprise = models.ForeignKey(to='farm.Enterprise',related_name='medical',on_delete=models.CASCADE)
     location = models.CharField(null=True, max_length=50) 
     status = models.BooleanField(default=True)
     Time = models.DateTimeField(auto_now_add=True)
@@ -141,11 +140,11 @@ class Medical(models.Nodel):
     class Meta:
         ordering =("name",)
 
-class SoilScience(models.Models):
+class SoilScience(models.Model):
     name = models.CharField(max_length=50, null=True)
     location = models.CharField(null=True, max_length=50) 
     status = models.BooleanField(default=True)
-    operation_mode = models.CharField(null=True)
+    operation_mode = models.CharField(max_length=50, null=True)
     Time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
