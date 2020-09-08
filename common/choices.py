@@ -10,5 +10,5 @@ MARITAL_STATUSES = (
     ('single', 'Single'),
     ('married', 'Married'),
     ('divorced', 'Divorced'),
-    ('wodowed', 'Widowed')
+    ('widowed', 'Widowed')
 )
