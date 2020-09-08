@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from openmarket.models import Product
 from common.models import Region
 
@@ -14,7 +15,7 @@ class AgentProfile(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='unffeagent')
-    contact = models.PhoneNumberField(blank=false)
+    contact = models.PhoneNumberField(blank=False)
     latitude = models.FloatField(min_value=-90, max_value=90)
     longitude = models.FloatField(min_value=-180, max_value=180)
     specific_role = models.ChoiceField(max_length = 100)
