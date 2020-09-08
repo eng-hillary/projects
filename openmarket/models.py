@@ -3,11 +3,12 @@ from Auth.models import User
 from common.models import(Region, District, County, SubCounty, Parish, Village)
 from common.choices import(GENDER_CHOICES, MARITAL_STATUSES)
 from django.core.validators import RegexValidator
+from farm.models import Enterprise
 # Create your models here.
 class Product(models.Model):
      id = models.CharField(max_length=50, null=True, blank=True)
      name = models.CharField(max_length=50, null=True)
-     enterprise = models.ForeignKey(Enterprise,related_name='products',on_delete=models.CASCADE)
+     enterprise = models.ForeignKey(to='farm.Enterprise',related_name='products',on_delete=models.CASCADE)
      slug = models.SlugField(max_length=200, db_index=True)
      image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
      description = models.TextField(blank=True)
@@ -75,3 +76,77 @@ class ServiceProvider(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='serviceprovider')
     location = models.CharField(null=True, max_length=50)
     list_of_service = models.CharField(blank=True, max_length=50)
+    service_type = models.CharField(max_length=50, null=True)
+
+    class meta:
+        ordering =("-name",)
+
+class ServiceRegistration(models.Model):
+    service_id = models.CharField(max_length=50, null=True, blank=True)
+    type = models.CharField(max_length=50)
+
+    class Meta:
+        ordering =("name",)
+
+class ContactDetails(models.Model):
+    name = models.CharField(max_length=25, null=True)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
+
+class Logistics(models.Model):
+    name = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE)
+    source = models.CharField(max_length=50, null=True)
+    destination = models.CharField(max_length=50, null=True)
+    quantity = models.CharField(null=True)
+    Time = models.DateTimeField(auto_now_add=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    payment_mode = models.CharField(null=True, max_length=50)
+    contact_details = models.ForeignKey(ContactDetails, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    description = models.TextField(blank=True)
+
+    class Meta:
+        ordering =("name",)
+
+class Storage(models.Model):
+    name = models.CharField(max_length=50, null=True)
+    location = models.CharField(null=True, max_length=50)   
+    size = models.FloatField(null=True)
+    type = models.CharField(max_length=50, null=False)
+    description = models.TextField(blank=True)
+    available_services = models.CharField(blank=True)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering =("name",)
+
+class Packaging(models.Model):
+    name = models.CharField(max_length=50, null=True)
+    product = models.ForeignKey(product, on_delete=models.CASCADE)
+    location = models.CharField(null=True, max_length=50) 
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    status = models.BooleanField(default=True)
+    rent = models.CharField(null=True)
+
+    class Meta:
+        ordering =("name",)
+
+class Medical(models.Nodel):
+    name = models.CharField(max_length=50, null=True)
+    enterprise = models.ForeignKey(to='farm.Enterprise',related_name='products',on_delete=models.CASCADE)
+    location = models.CharField(null=True, max_length=50) 
+    status = models.BooleanField(default=True)
+    Time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering =("name",)
+
+class SoilScience(models.Models):
+    name = models.CharField(max_length=50, null=True)
+    location = models.CharField(null=True, max_length=50) 
+    status = models.BooleanField(default=True)
+    operation_mode = models.CharField(null=True)
+    Time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering =("name",)
