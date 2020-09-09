@@ -70,7 +70,7 @@ class BuyerPost(models.Model):
     delivery_options = models.CharField(max_length=50, null=False)
     payment_options = models.CharField(max_length=50, null=True)
     payment_mode = models.CharField(null=True, max_length=50)
-    Any_other_comment =models.TextField(null=True)
+    any_other_comment =models.TextField(null=True)
 
     class meta:
         ordering =("name",)
@@ -144,7 +144,7 @@ class Medical(models.Model):
     enterprise = models.ForeignKey(to='farm.Enterprise',related_name='medical',on_delete=models.CASCADE)
     location = models.CharField(null=True, max_length=50) 
     status = models.BooleanField(default=True)
-    Time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering =("name",)
@@ -155,7 +155,7 @@ class SoilScience(models.Model):
     location = models.CharField(null=True, max_length=50) 
     status = models.BooleanField(default=True)
     operation_mode = models.CharField(max_length=50, null=True)
-    Time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering =("name",)
