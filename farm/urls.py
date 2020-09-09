@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import SectorList
+from .views import SectorList, SectorDetail, CreateSector
 
 
 router = routers.DefaultRouter()
@@ -14,4 +14,6 @@ app_name = 'farms'
 urlpatterns = [
     path('', include(router.urls)),
     path('sectors', SectorList.as_view(), name='sector_list'),
+    path('<int:pk>/edit/sector', SectorDetail.as_view(), name="edit_sector"),
+     path('create/sector', CreateSector.as_view(), name="create_sector"),
 ]
