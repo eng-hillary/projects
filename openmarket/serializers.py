@@ -36,6 +36,11 @@ class BuyerPostSerializer(serializers.HyperlinkedModelSerializer):
          'payment_mode', 'any_other_comments')
 
 
+class ServiceProviderSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ServiceProvider
+        fields = ('user', 'location', 'list_of_service', 'service_type')
+
 class ServiceRegistrationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ServiceRegistration

@@ -50,7 +50,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     number_of_dependants = models.PositiveIntegerField()
     # initial capital moved to farm
     #initial_total_capital = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
-    credit_acces = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=False, blank=False)
+    credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=False, blank=False)
     experience = models.FloatField(_('Experience in years'),null=False, blank=False)
     status = models.CharField(default='in_active', max_length=20,null=False)
     general_remarks = models.TextField(null=True, blank=True)
