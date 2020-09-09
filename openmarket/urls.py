@@ -20,4 +20,4 @@ urlpatterns = [
     path('buyers', BuyerList.as_view(), name='buyer_list'),
     path('serviceproviders', ServiceProviderList.as_view(), name='serviceprovider_list'),
     path('serviceregistration', ServiceRegistrationList.as_view(), name='serviceregistration_list'),
-    ]
+]
