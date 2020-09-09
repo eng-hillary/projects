@@ -72,3 +72,7 @@ RESOURCE_CATEGORY = (
     ('transportation', 'Transportation'),    
 )
 
+PAYMENT_METHOD = (
+    ('full payment','Full Payment'),
+    ('installments','Installments')
+)

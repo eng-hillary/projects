@@ -14,7 +14,7 @@ class Group(TimeStampedModel, models.Model):
     address = models.CharField(max_length=200, blank=False, null=False)
     contact_person = models.CharField(max_length=100)
     contact_person_email = models.EmailField(null=True)
-    contact_person_phomigrationsne = PhoneNumberField(blank=False, null=False)
+    contact_person_phone = PhoneNumberField(blank=False, null=False)
 
     def __str__(self):
         return self.name
