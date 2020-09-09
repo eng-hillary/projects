@@ -79,7 +79,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ict4farmers.wsgi.application'
 
-
+COMPRESS_ENABLED=True
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
