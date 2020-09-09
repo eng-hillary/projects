@@ -19,5 +19,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('common.urls', namespace="common")),
-    #path('',)
+    path('api-openmarket/', include('openmarket.urls', namespace="api-openmarket")),
+    path('openmarket/', include('openmarket.urls', namespace="openmarket")),
+   
 ]
