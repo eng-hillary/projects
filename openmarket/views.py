@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, ServiceRegistration, ContactDetails, Logistics, Storage, Packaging, Medical, SoilScience
-from .serializers import ProductSerializer, SellerSerializer, BuyerSerializer, SellerPostSerializer, BuyerPostSerializer
+from .serializers import ProductSerializer, SellerSerializer, BuyerSerializer, SellerPostSerializer, BuyerPostSerializer, ServiceProviderSerializer, ServiceRegistrationSerializer
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -77,7 +77,7 @@ class SellerPostList(APIView):
     template_name = 'sellerpost_list.html'
 
     def get(self, request):
-        queryset = sellerpost.objects.order_by('-name')
+        queryset = SellerPost.objects.order_by('-name')
         return Response({'sellerposts': queryset})
 
 
@@ -98,3 +98,41 @@ class BuyerPostList(APIView):
     def get(self, request):
         queryset = BuyerPost.objects.order_by('name')
         return Response({'buyerposts': queryset})
+
+
+#views for service provider
+class ServiceProviderViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows products to be viewed or edited.
+    """
+    queryset = ServiceProvider.objects.all().order_by('name')
+    serializer_class = ServiceProviderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ServiceProviderList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'serviceprovider_list.html'
+
+    def get(self, request):
+        queryset = ServiceProvider.objects.order_by('-name')
+        return Response({'serviceproviders': queryset})
+
+
+#views for service registration
+class ServiceRegistrationViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows products to be viewed or edited.
+    """
+    queryset = ServiceRegistration.objects.all().order_by('name')
+    serializer_class = ServiceRegistrationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ServiceRegistrationList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'serviceregistration_list.html'
+
+    def get(self, request):
+        queryset = ServiceRegistration.objects.order_by('-name')
+        return Response({'serviceregistration': queryset})
