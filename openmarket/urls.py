@@ -1,6 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
+<<<<<<< HEAD
+=======
+from .views import ProductList, SellerList, BuyerList, ServiceProviderList, ServiceRegistrationList
+
+>>>>>>> 4136e3c639cef14ee456535c2b845b10dce68e07
 
 router = routers.DefaultRouter()
 router.register(r'openmarket', views.ProductViewSet)
@@ -19,4 +24,8 @@ urlpatterns = [
     path('buyers', BuyerList.as_view(), name='buyer_list'),
     path('serviceproviders', ServiceProviderList.as_view(), name='serviceprovider_list'),
     path('serviceregistration', ServiceRegistrationList.as_view(), name='serviceregistration_list'),
+<<<<<<< HEAD
 ]
+=======
+]
+>>>>>>> 4136e3c639cef14ee456535c2b845b10dce68e07
