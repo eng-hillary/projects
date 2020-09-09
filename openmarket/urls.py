@@ -1,8 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import ProductList, SellerList, BuyerList, ServiceProviderList, ServiceRegistrationList
-
 
 router = routers.DefaultRouter()
 router.register(r'openmarket', views.ProductViewSet)
