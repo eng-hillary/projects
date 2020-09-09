@@ -1,8 +1,4 @@
 from django.shortcuts import render
-<<<<<<< HEAD
-
-# Create your views here.
-=======
 from .models import Group, FarmerProfile
 from .serializers import GroupSerializer, FarmerProfileSerializer
 from rest_framework import viewsets
@@ -47,4 +43,3 @@ class FarmerProfileList(APIView):
     def get(self, request):
         queryset = FarmerProfile.objects.order_by('user')
         return Response({'farmerprofiles': queryset})
->>>>>>> 4136e3c639cef14ee456535c2b845b10dce68e07
