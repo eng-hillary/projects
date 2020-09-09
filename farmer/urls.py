@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 from django.urls import include, path
 from rest_framework import routers
 from . import views
@@ -18,3 +20,4 @@ urlpatterns = [
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
 
 ]
+>>>>>>> 4136e3c639cef14ee456535c2b845b10dce68e07
