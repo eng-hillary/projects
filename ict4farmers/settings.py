@@ -60,6 +60,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ict4farmers.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
