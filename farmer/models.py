@@ -5,6 +5,8 @@ from common.choices import(GENDER_CHOICES, MARITAL_STATUSES, LAND_TYPES, PRODUCT
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
+from farm .models import Sector
+
 # Create your models here.
 
 class Group(TimeStampedModel, models.Model):
@@ -14,7 +16,7 @@ class Group(TimeStampedModel, models.Model):
     address = models.CharField(max_length=200, blank=False, null=False)
     contact_person = models.CharField(max_length=100)
     contact_person_email = models.EmailField(null=True)
-    contact_person_phomigrationsne = PhoneNumberField(blank=False, null=False)
+    contact_person_phone = PhoneNumberField(blank=False, null=False)
 
     def __str__(self):
         return self.name
@@ -29,6 +31,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='farmer')
     date_of_birth = models.DateField()
     nin = models.CharField(max_length=50, null=False, blank=False)
+    sector = models.ManyToManyField(Sector, related_name='farmer_sectors')
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     county = models.ForeignKey(County, on_delete=models.CASCADE)

@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from common.choices import(RESOURCE_CATEGORY)
+from common.choices import(RESOURCE_CATEGORY, PAYMENT_MEANS,PAYMENT_METHOD)
 from farmer.models import FarmerProfile
+from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.translation import ugettext as _
+
 
 # Create your models here.
 class Resource(models.Model):
@@ -11,36 +14,39 @@ class Resource(models.Model):
         ('not available', 'Not Available')
     )
     resource_name = models.CharField(max_length=200, blank = False)
-    resource_provider_details = models.CharField(max_length = 400, blank = False)
-    resource_provider_contact = PhoneNumberField(blank = False)
-    resource_category = models.ChoiceField(RESOURCE_CATEGORY)
-    farmer = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
-    latitude = models.FloatField(min_value=-90, max_value=90)
-    longitude = models.FloatField(min_value=-180, max_value=180)
+    owner = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
+    contacts = PhoneNumberField(blank = False)
+    resource_category = models.CharField(choices=RESOURCE_CATEGORY, max_length=25, null=False, blank=False)
+    lat = models.FloatField(_('Latitude'), blank=True, null=True)
+    lon = models.FloatField(_('Longitude'), blank=True, null=True)
     termsandconditions = models.TextField(max_length=400, blank = False)
     resource_status = models.CharField(max_length=20, choices=RESOURCE_STATUS)
-    availability_date_and_time = models.datetime(blank = false) #this should be a dynamic field
-    price = models.DecimalField(blank = False)
-    phone = models.PhoneNumberField(blank = False)
+    availability_date_and_time = models.DateTimeField(blank =False,null=True) #this should be a dynamic field
+    price = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
 
     def __str__(self):
         return self.resource_name
 
+
 class ResourceSharing(models.Model):
     resource = models.ForeignKey(Resource, on_delete = models.CASCADE)
-    date_required = models.datetime(blank = True)
-
+    date_taken = models.DateTimeField(blank = False, null=False)
+    expected_return_date = models.DateTimeField(blank=False, null=False)
+    # taken_by = models.ForeignKey(User)
+    taken_by = models.CharField(max_length=100,null=False)
+    phone_1 = PhoneNumberField(verbose_name='contact phone of person who took the resource')
+    phone_2 = PhoneNumberField(verbose_name='contact phone of person who took the resource')
 
     def __str__(self):
         return self.resource
 
+
 class ResourceBooking(models.Model):
     resource = models.ForeignKey(Resource, on_delete = models.CASCADE)
     farmer = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
-    date_needed = models.datetime(blank = True)
-    duration = models.IntegerField(blank = False)
-    resource_user_details = models. CharField(max_length=100, blank=False)
-
+    date_needed = models.DateTimeField(blank = True)
+    payment_mode = models.CharField(choices=PAYMENT_MEANS, null=True, blank=True, max_length=25)
+    payment_method = models.CharField(choices=PAYMENT_METHOD, max_length=25,null=True, blank=True)
 
     def __str__(self):
         return self.resource
