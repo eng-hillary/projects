@@ -1,5 +1,4 @@
-from django.db import models
-from farmer .models import(FarmerProfile)
+from django.db import models 
 from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel)
 from django.contrib.auth.models import User
@@ -39,7 +38,7 @@ class Farm(TimeStampedModel, models.Model):
      )
     name = models.CharField(max_length=100, null=False, blank=False)
     enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
-    farmer = models.ForeignKey(FarmerProfile, on_delete=models.DO_NOTHING, related_name='farm')
+    farmer = models.ForeignKey('farmer.FarmerProfile', on_delete=models.DO_NOTHING, related_name='farm')
     lat = models.FloatField(_('Latitude'), blank=True, null=True)
     lon = models.FloatField(_('Longitude'), blank=True, null=True)
     initial_capital = models.DecimalField(decimal_places=2, max_digits=4)
