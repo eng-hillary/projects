@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'farm',
     'weather',
     'openmarket',
+    'unffeagents',
+    'resourcesharing',
 
 ]
 

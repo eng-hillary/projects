@@ -4,6 +4,7 @@ from common.models import(Region, District, County, SubCounty, Parish, Village)
 from common.choices import(GENDER_CHOICES, MARITAL_STATUSES)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise
+from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
 
 class Product(models.Model):
@@ -19,8 +20,8 @@ class Product(models.Model):
 
 class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller')
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    business_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
+    #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    business_number = PhoneNumberField() # validators should be a list
     business_location = models.CharField(null=True, max_length=50)
     seller_type = models.CharField(max_length=15, null=False)
     date_of_birth = models.DateField(max_length=8)
@@ -92,8 +93,8 @@ class ServiceRegistration(models.Model):
 
 class ContactDetails(models.Model):
     name = models.CharField(max_length=25, null=True)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
+    #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    phone_number = PhoneNumberField() # validators should be a list
 
 
 class Logistics(models.Model):
