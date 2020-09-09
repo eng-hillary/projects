@@ -16,4 +16,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('groups', GroupList.as_view(), name='group_list'),
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
+
 ]
