@@ -5,18 +5,19 @@ from common.choices import(GENDER_CHOICES, MARITAL_STATUSES)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise
 from phonenumber_field.modelfields import PhoneNumberField
+
 # Create your models here.
 
 class Product(models.Model):
-     name = models.CharField(max_length=50, null=True)
-     enterprise = models.ForeignKey(to='farm.Enterprise',related_name='products',on_delete=models.CASCADE)
-     slug = models.SlugField(max_length=200, db_index=True)
-     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-     description = models.TextField(blank=True)
-     price = models.DecimalField(max_digits=10, decimal_places=2)
-     available = models.BooleanField(default=True)
-     date_created = models.DateTimeField(auto_now_add=True)
-     date_updated = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=50, null=True)
+    enterprise = models.ForeignKey(to='farm.Enterprise',related_name='products',on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=200, db_index=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    available = models.BooleanField(default=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
 class Seller(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller')

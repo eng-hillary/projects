@@ -7,3 +7,8 @@ class SectorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Sector
         fields = ['name', 'size']
+
+class EnterpriseSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Enterprise
+        fields = ('name', 'sector', 'description')
