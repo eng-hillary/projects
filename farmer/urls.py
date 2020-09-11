@@ -5,8 +5,8 @@ from .views import GroupList, FarmerProfileList
 
 
 router = routers.DefaultRouter()
-router.register(r'farmer', views.GroupViewSet)
-router.register(r'farmer', views.FarmerProfileViewSet)
+router.register(r'groups', views.GroupViewSet)
+router.register(r'farmerprofiles', views.FarmerProfileViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

@@ -5,8 +5,8 @@ from .views import SectorList, EnterpriseList
 
 
 router = routers.DefaultRouter()
-router.register(r'farms', views.SectorViewSet)
-router.register(r'farms', views.EnterpriseViewSet)
+router.register(r'sector', views.SectorViewSet)
+router.register(r'enterprise', views.EnterpriseViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

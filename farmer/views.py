@@ -31,7 +31,7 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows sectors to be viewed or edited.
     """
-    queryset = FarmerProfile.objects.all().order_by('name')
+    queryset = FarmerProfile.objects.all().order_by('region')
     serializer_class = FarmerProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -41,5 +41,5 @@ class FarmerProfileList(APIView):
     template_name = 'farmerprofile_list.html'
 
     def get(self, request):
-        queryset = FarmerProfile.objects.order_by('user')
+        queryset = FarmerProfile.objects.order_by('region')
         return Response({'farmerprofiles': queryset})

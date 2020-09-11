@@ -41,4 +41,4 @@ class EnterpriseList(APIView):
 
     def get(self, request):
         queryset = Enterprise.objects.order_by('-id')
-        return Response({'enterprise': queryset})
+        return Response({'enterprises': queryset})
