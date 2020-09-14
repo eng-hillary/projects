@@ -30,8 +30,8 @@ class AgentProfile(models.Model):
 
 class Market(models.Model):
     market_name = models.CharField(max_length=100, blank = False)
-    lat = models.FloatField(_('Latitude'), blank=True, null=True)
-    lon = models.FloatField(_('Longitude'), blank=True, null=True)
+    latitude = models.FloatField(_('Latitude'), blank=True, null=True)
+    longitude = models.FloatField(_('Longitude'), blank=True, null=True)
     market_description = models.TextField(max_length=600, blank=False)
 
     def __str__(self):
