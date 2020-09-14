@@ -1,12 +1,12 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import (ProductList, 
+from .views import (ProductList,
                     SellerList,
                     BuyerList,
-                    ServiceProviderList, 
-                    ServiceRegistrationList, 
-                    SellerPostList, 
+                    ServiceProviderList,
+                    ServiceRegistrationList,
+                    SellerPostList,
                     BuyerPostList,
                     ContactDetailsList,
                     LogiticsList,
@@ -42,9 +42,6 @@ urlpatterns = [
     path('buyerpostsposts', BuyerPostList.as_view(), name='buyerpost_list'),
     path('serviceproviders', ServiceProviderList.as_view(), name='serviceprovider_list'),
     path('serviceregistration', ServiceRegistrationList.as_view(), name='serviceregistration_list'),
-<<<<<<< HEAD
-]
-=======
     path('contactdetails', ContactDetailsList.as_view(), name='contactdetails_list'),
     path('logistics', LogiticsList.as_view(), name='logistics_list'),
     path('storages', StorageList.as_view(), name='storage_list'),
@@ -53,4 +50,3 @@ urlpatterns = [
     path('soilsciences', SoilScienceList.as_view(), name='soilscience_list'),
 
 ]
->>>>>>> 8cdc5aa42aaf1cb2d5b5ecefe529b37f7e9fadac

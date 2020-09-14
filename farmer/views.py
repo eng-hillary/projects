@@ -10,9 +10,8 @@ from rest_framework.views import APIView
 
 class FarmerListView():
 
-<<<<<<< HEAD
     template_name = 'farmers_list.html'
-=======
+
 class GroupList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'group_list.html'
@@ -39,4 +38,3 @@ class FarmerProfileList(APIView):
     def get(self, request):
         queryset = FarmerProfile.objects.order_by('region')
         return Response({'farmerprofiles': queryset})
->>>>>>> 8cdc5aa42aaf1cb2d5b5ecefe529b37f7e9fadac

@@ -28,10 +28,8 @@ urlpatterns = [
     path('openmarket/', include('openmarket.urls', namespace="openmarket")),
 
     path('api-farm/', include('farm.urls', namespace="api-farm")),
-<<<<<<< HEAD
     path('farms/', include('farm.urls', namespace="farms")),
     #path('farmers/', include('farmer.urls', namespace="farmers")),
-=======
     path('farm/', include('farm.urls', namespace="farm")),
 
     path('api-farmer/', include('farmer.urls', namespace="api-farmer")),
@@ -45,9 +43,4 @@ urlpatterns = [
 
     path('api-resourcesharing/', include('resourcesharing.urls', namespace="api-resourcesharing")),
     path('resourcesharing/', include('resourcesharing.urls', namespace="resourcesharing")),
-
-
->>>>>>> 8cdc5aa42aaf1cb2d5b5ecefe529b37f7e9fadac
-
-
 ]
