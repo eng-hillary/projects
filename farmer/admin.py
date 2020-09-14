@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FarmerProfile,Group
+from .models import FarmerProfile
 
 # Register your models here.
 
@@ -14,3 +14,4 @@ class FarmerProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(FarmerProfile, FarmerProfileAdmin)
+
