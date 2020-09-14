@@ -1,14 +1,17 @@
 from rest_framework import serializers
 from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, ServiceRegistration, ContactDetails, Logistics, Storage, Packaging, Medical, SoilScience
 from django.contrib.auth.models import User
+from farm.serializers import EnterpriseSerializer
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
+    enterprise = EnterpriseSerializer()
     class Meta:
         model = Product
         fields = ('name', 'enterprise', 'slug', 'image', 'description', 'price', 'available',
          'date_created', 'date_updated')
 
 class SellerSerializer(serializers.HyperlinkedModelSerializer):
+    enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
         fields = ('user', 'business_number', 'business_location', 'seller_type', 'date_of_birth',
@@ -67,6 +70,7 @@ class PackagingSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MedicalSerializer(serializers.HyperlinkedModelSerializer):
+    enterprise = EnterpriseSerializer()
     class Meta:
         model = Medical
         fields = ('name', 'enterprise', 'location', 'status', 'time')
