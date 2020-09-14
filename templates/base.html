@@ -1,146 +1,245 @@
-{# HTML5 declaration #}
-
 {% load staticfiles %}
-{% load compress %}
-{% load thumbnail %}
-{% load navutils_tags %}
-
 <!DOCTYPE html>
-<html>
-    {# Make modifiable head elements #}
-    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ruforum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ICT4Farmers is system developed by Eight Technologies to manage small scale farmers.">
+    <meta name="author" content="Eight Technologies">
+    <link rel="icon" href="/images/dashboard/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/images/dashboard/favicon.png" type="image/x-icon">
+    <title>ICT4Farmers</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css">
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-    {% compress css %}
-   <link href="{% static 'css/main.scss' %}" type="text/x-scss" rel="stylesheet">
-    <link href="{% static 'css/mention.scss' %}" type="text/x-scss" rel="stylesheet">
-    {% endcompress %}
-  <!--  <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">-->
-    <link href="{% static "css/daterangepicker.css" %}" rel="stylesheet" type="text/css" />
-    <link href="{% static "css/jquery.comiseo.daterangepicker.css" %}" rel="stylesheet" type="text/css" />
-        <title>{% block title %}Home {% endblock title %} | CRM Easy</title>
-        {% block head_favicon %}
-    <link rel="icon" type="image/png" href="{{ STATIC_URL }}images/favicon.ico">
-        {% endblock head_favicon %}
-        {% block head_meta %}
-            {% block head_meta_charset %}
-                <meta http-equiv="Content-Type"
-                      content="text/html; charset=utf-8" />
-            {% endblock head_meta_charset %}
-            {% block head_meta_contentlanguage %}
-                <meta http-equiv="Content-Language" value="en-US" />
-            {% endblock head_meta_contentlanguage %}
-            {% block head_meta_viewport %}
-                <meta name="viewport"
-                      content="width=device-width, initial-scale=1.0">
-            {% endblock head_meta_viewport %}
-        {% endblock head_meta %}
-        {% block head_css %}
-            {% block head_css_site %}
-                <link href="{{ STATIC_URL }}css/bootstrap.min.css"
-                      rel="stylesheet" media="screen">
-                <link href="{{ STATIC_URL }}css/app.css"
-                      rel="stylesheet" media="screen">
-            {% endblock head_css_site %}
-            {% block head_css_section %}{% endblock head_css_section %}
-            {% block head_css_page %}{% endblock head_css_page %}
-        {% endblock head_css %}
-    </head>
-    <body>
+    <!-- Font Awesome-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fontawesome.css' %}">
 
-        {# Navigation Menu #}
+    <!-- ico-font-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/icofont.css' %}">
 
-        <header>
-          <nav class="navbar navbar-expand-lg navbar-dark">
-            {% comment %}
-            <a class="navbar-brand" href="">ICT4Farmers</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <i class="fas fa-bars"></i>
-            </button>
-            {% endcomment %}
-            <a class="navbar-brand" href="{% url "common:home" %}">
-              <img src="{% static "images/mainlogo.png" %}" style="width:140px" alt="">
-            </a>
-            {% block navlinks %}
+    <!-- Prism css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/prism.css' %}">
 
-            <div class="collapse navbar-collapse  justify-content-end" id="navbarSupportedContent">
+    <!-- Chartist css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chartist.css' %}">
 
-            <ul class="navbar-nav navbar-right my-2 my-lg-0" style="margin-top:15x;">
-                <li class="nav-item dropdown">
-                  <a href="#" class="dropdown-toggle abcd nav-link" data-toggle="dropdown" role="button" aria-haspopup="true"
-                    aria-expanded="false" >
-                    {{request.user.get_full_name}}
-                  {% if not request.user.profile_pic %}
-                  <img src="{% static 'images/user.png' %}" alt="Micro profile pic">
-                  {% else %}
-                  {% thumbnail request.user.profile_pic "25x25" as im %}
-                  <img src="{{ im.url }}">
-                  {% endthumbnail %}
-                  {% endif %}
-                  <b class="caret"></b></a>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    {% if request.user.email != "admin@micropyramid.com" %}
-                    <a class="dropdown-item" href="{% url 'common:change_password' %}"><i class="fas fa-key"></i> Change Password</a>
-                    {% endif %}
-                    <a class="dropdown-item" href="{% url 'common:profile' %}"><i class="fas fa-user"></i> Profile</a>
-                    <a class="dropdown-item" href="{% url 'common:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                  </div>
-                </li>
-              </ul>
-             </div>
+    <!-- Bootstrap css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
 
+    <!-- App css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
+</head>
 
-            {% endblock %}
-          </nav>
-          <nav class="navbar  navbar-expand-md navbar-dark justify-content-center" id="navMenu" style="background-color: #00766F;">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="true" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse w-100" id="navbarMenu">
-            {% render_menu menu=menus.main user=request.user %}
-          </div>
-          </nav>
-        </header>
+<body>
 
-        <!--The main body-->
-        <div id="mainbody" class="main_container" >
-          <!-- breadcrumb starts here -->
-          {% block breadcrumb %}
-          {% endblock %}
-          <!-- breadcrumb ends here -->
-          {% block content %}
-          {% endblock %}
+<!-- page-wrapper Start-->
+<div class="page-wrapper">
+
+    <!-- Page Header Start-->
+    <div class="page-main-header">
+        <div class="main-header-right row">
+            <div class="main-header-left d-lg-none">
+                <div class="logo-wrapper"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo.png' %}" style="background-color: #ffffff;" alt=""></a></div>
+            </div>
+            <div class="mobile-sidebar">
+                <div class="media-body text-right switch-sm">
+                    <label class="switch"><a href="#"><i id="sidebar-toggle" data-feather="align-left"></i></a></label>
+                </div>
+            </div>
+            <div class="nav-right col">
+                <ul class="nav-menus">
+                    <li>
+                        <form class="form-inline search-form">
+                            <div class="form-group">
+                                <input class="form-control-plaintext" type="search" placeholder="Search.."><span class="d-sm-none mobile-search"><i data-feather="search"></i></span>
+                            </div>
+                        </form>
+                    </li>
+                    <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize-2"></i></a></li>
+   
+                    <li class="onhover-dropdown"><i data-feather="bell"></i><span class="badge badge-pill badge-primary pull-right notification-badge">3</span><span class="dot"></span>
+                        <ul class="notification-dropdown onhover-show-div p-0">
+                            <li>Notification <span class="badge badge-pill badge-primary pull-right">3</span></li>
+                            <li>
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h6 class="mt-0"><span><i class="shopping-color" data-feather="shopping-bag"></i></span>Foot and mouth outbreak</h6>
+                                        <p class="mb-0">Foot and mouth outbreak.</p>
+                                    </div>
+                                </div>
+                            </li>
+                          
+                            <li class="txt-dark"><a href="#">All</a> notification</li>
+                        </ul>
+                    </li>
+                    <li class="onhover-dropdown">
+                        <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="{% static 'images/man.png' %}" alt="header-user">
+                            <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
+                        </div>
+                        <ul class="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
+                            <li><a href="#"><i data-feather="user"></i>Edit Profile</a></li>
+                            <li><a href="#"><i data-feather="settings"></i>Settings</a></li>
+                            <li><a href="{% url 'logout' %}"><i data-feather="log-out"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="d-lg-none mobile-toggle pull-right"><i data-feather="more-horizontal"></i></div>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header Ends -->
+
+    <!-- Page Body Start-->
+    <div class="page-body-wrapper">
+
+        <!-- Page Sidebar Start-->
+        <div class="page-sidebar">
+            <div class="main-header-left d-none d-lg-block">
+                <div class="logo-wrapper"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo.png' %}" style="background-color: #ffffff; margin-top: 20px;" width="100%"  alt=""></a></div>
+            </div>
+            <div class="sidebar custom-scrollbar">
+                <div class="sidebar-user text-center">
+                    <div>
+                        <br>
+                    </div>
+                    <p><br> <br></p>
+                    <p><br></p>
+                </div>
+                <ul class="sidebar-menu">
+                    <li><a class="sidebar-header" href="index.html"><i data-feather="home"></i><span>Dashboard</span></a></li>
+               
+                    <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Farmer</span><i class="fa fa-angle-right pull-right"></i></a>
+                        <ul class="sidebar-submenu">
+                            <li><a href="order.html"><i class="fa fa-circle"></i>Registration</a></li>
+                            <li><a href="transactions.html"><i class="fa fa-circle"></i>My Application</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Service Provider</span><i class="fa fa-angle-right pull-right"></i></a>
+                        <ul class="sidebar-submenu">
+                            <li><a href="order.html"><i class="fa fa-circle"></i>Registration</a></li>
+                            <li><a href="transactions.html"><i class="fa fa-circle"></i>My Applications</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Seller</span><i class="fa fa-angle-right pull-right"></i></a>
+                        <ul class="sidebar-submenu">
+                            <li><a href="order.html"><i class="fa fa-circle"></i>Registration</a></li>
+                            <li><a href="transactions.html"><i class="fa fa-circle"></i>My Application</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>UNFFE Agent</span><i class="fa fa-angle-right pull-right"></i></a>
+                        <ul class="sidebar-submenu">
+                            <li><a href="order.html"><i class="fa fa-circle"></i>Account Approval</a></li>
+                            <li><a href="transactions.html"><i class="fa fa-circle"></i>Alerts and Notifications</a></li>
+                        </ul>
+                    </li>
+                   
+                  
+                
+                  
+                    <li><a class="sidebar-header" href="reports.html"><i data-feather="bar-chart"></i><span>Reports</span></a></li>
+                    <li><a class="sidebar-header" href=""><i data-feather="settings" ></i><span>Settings</span><i class="fa fa-angle-right pull-right"></i></a>
+                        <ul class="sidebar-submenu">
+                            <li><a href="profile.html"><i class="fa fa-circle"></i>Profile</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a class="sidebar-header" href="login.html"><i data-feather="log-in"></i><span>Login</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Page Sidebar Ends-->
+
+    
+
+        <div class="page-body">
+            {% block content %}
+
+            <!--Body content goes here-->
+        {% endblock %}
+          
 
         </div>
 
+        <!-- footer start-->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 footer-copyright">
+                        <p class="mb-0">Copyright  {% now "Y" %} © Uganda National Farmers Federation (UNFFE) </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="pull-right mb-0">ICT4FARMERS</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer end-->
+    </div>
 
-        {# The Footer #}
-        <div class="footer">
-        <p>&copy; {% now "Y" %} ICT4Farmers</p>
-      </div>
-    </body>
-    {# Set of blocks that can be used to display JavaScript files #}
-    {% block footer_javascript %}
-        {% block footer_javascript_site %}
-            <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
-            <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-            <script src="{{ STATIC_URL }}js/app.js"></script>
-        {% endblock footer_javascript_site %}
-        {% block footer_javascript_section %}{% endblock footer_javascript_section %}
-        {% block footer_javascript_page %}{% endblock footer_javascript_page %}
-    {% endblock footer_javascript %}
+</div>
+
+<!-- latest jquery-->
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+
+<!-- Bootstrap js-->
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+
+<!-- feather icon js-->
+<script src="{% static 'js/icons/feather-icon/feather.min.js' %}"></script>
+<script src="{% static 'js/icons/feather-icon/feather-icon.js' %}"></script>
+
+<!-- Sidebar jquery-->
+<script src="{% static 'js/sidebar-menu.js' %}"></script>
+
+<!--chartist js-->
+<script src="{% static 'js/chart/chartist/chartist.js' %}"></script>
+
+<!--chartjs js-->
+<script src="{% static 'js/chart/chartjs/chart.min.js' %}"></script>
+
+<!-- lazyload js-->
+<script src="{% static 'js/lazysizes.min.js' %}"></script>
+
+<!--copycode js-->
+<script src="{% static 'js/prism.min.js' %}"></script>
+<script src="{% static 'js/clipboard.min.js' %}"></script>
+<script src="{% static 'js/custom-card.js' %}"></script>
+
+<!--counter js-->
+<script src="{% static 'js/counter/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/counter/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'js/counter/counter-custom.js' %}"></script>
+
+<!--peity chart js-->
+<script src="{% static 'js/chart/peity-chart/peity.jquery.js' %}"></script>
+
+<!--sparkline chart js-->
+<script src="{% static 'js/chart/sparkline/sparkline.js' %}"></script>
+
+<!--Customizer admin-->
+<script src="{% static 'js/admin-customizer.js' %}"></script>
+
+<!--dashboard custom js-->
+<script src="{% static 'js/default.js' %}"></script>
+
+<!--right sidebar js-->
+<script src="{% static 'js/chat-menu.js' %}"></script>
+
+<!--height equal js-->
+<script src="{% static 'js/height-equal.js' %}"></script>
+
+<!-- lazyload js-->
+<script src="{% static 'js/lazysizes.min.js' %}"></script>
+
+<!--script admin-->
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
 </html>

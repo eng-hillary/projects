@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from common .views import LoginView, LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # login urls
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('', include('common.urls', namespace="common")),
     path('api-openmarket/', include('openmarket.urls', namespace="api-openmarket")),
     path('openmarket/', include('openmarket.urls', namespace="openmarket")),
