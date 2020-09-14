@@ -78,4 +78,8 @@ class EnterpriseList(APIView):
 
     def get(self, request):
         queryset = Enterprise.objects.order_by('-id')
+<<<<<<< HEAD
         return Response({'enterprise': queryset})
+=======
+        return Response({'enterprises': queryset})
+>>>>>>> 80d82ddd3d57a564901efc611a3b0d8a79fd6dc8
