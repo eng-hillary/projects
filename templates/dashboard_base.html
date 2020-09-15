@@ -26,7 +26,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/prism.css' %}">
 
     <!-- Chartist css -->
-    <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/chartist.css' %}"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chartist.css' %}">
 
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
@@ -133,16 +133,8 @@
                     </li>
                     <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>UNFFE Agent</span><i class="fa fa-angle-right pull-right"></i></a>
                         <ul class="sidebar-submenu">
-                            <li><a href="{% url 'unffeagents:create_agentprofile' %}"><i class="fa fa-circle"></i>Register Agent</a></li>
                             <li><a href="order.html"><i class="fa fa-circle"></i>Account Approval</a></li>
                             <li><a href="transactions.html"><i class="fa fa-circle"></i>Alerts and Notifications</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Open Market</span><i class="fa fa-angle-right pull-right"></i></a>
-                        <ul class="sidebar-submenu">
-                            <li><a href="order.html"><i class="fa fa-circle"></i>Register Market</a></li>
-                            <li><a href="transactions.html"><i class="fa fa-circle"></i>Market Price</a></li>
                         </ul>
                     </li>
                    
@@ -207,7 +199,7 @@
 <script src="{% static 'js/sidebar-menu.js' %}"></script>
 
 <!--chartist js-->
-<!-- <script src="{% static 'js/chart/chartist/chartist.js' %}"></script> -->
+<script src="{% static 'js/chart/chartist/chartist.js' %}"></script>
 
 <!--chartjs js-->
 <script src="{% static 'js/chart/chartjs/chart.min.js' %}"></script>
@@ -235,7 +227,7 @@
 <script src="{% static 'js/admin-customizer.js' %}"></script>
 
 <!--dashboard custom js-->
-<!-- <script src="{% static 'js/default.js' %}"></script> -->
+<script src="{% static 'js/default.js' %}"></script>
 
 <!--right sidebar js-->
 <script src="{% static 'js/chat-menu.js' %}"></script>
