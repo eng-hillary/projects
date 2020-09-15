@@ -1,3 +1,4 @@
+
 from django.urls import include, path
 from rest_framework import routers
 from . import views
@@ -18,3 +19,4 @@ urlpatterns = [
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
 
 ]
+

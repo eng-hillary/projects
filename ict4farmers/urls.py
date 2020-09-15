@@ -41,8 +41,4 @@ urlpatterns = [
 
     path('api-resourcesharing/', include('resourcesharing.urls', namespace="api-resourcesharing")),
     path('resourcesharing/', include('resourcesharing.urls', namespace="resourcesharing")),
-
-
-
-
 ]
