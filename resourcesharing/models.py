@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from common.choices import(RESOURCE_CATEGORY, PAYMENT_MEANS,PAYMENT_METHOD)
+from common.choices import(RESOURCE_CATEGORY, PAYMENT_MODE,PAYMENT_OPTIONS)
 from farmer.models import FarmerProfile
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
@@ -17,8 +17,8 @@ class Resource(models.Model):
     owner = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
     contacts = PhoneNumberField(blank = False)
     resource_category = models.CharField(choices=RESOURCE_CATEGORY, max_length=25, null=False, blank=False)
-    lat = models.FloatField(_('Latitude'), blank=True, null=True)
-    lon = models.FloatField(_('Longitude'), blank=True, null=True)
+    latitude = models.FloatField(_('Latitude'), blank=True, null=True)
+    longitude = models.FloatField(_('Longitude'), blank=True, null=True)
     termsandconditions = models.TextField(max_length=400, blank = False)
     resource_status = models.CharField(max_length=20, choices=RESOURCE_STATUS)
     availability_date_and_time = models.DateTimeField(blank =False,null=True) #this should be a dynamic field
@@ -45,8 +45,8 @@ class ResourceBooking(models.Model):
     resource = models.ForeignKey(Resource, on_delete = models.CASCADE)
     farmer = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
     date_needed = models.DateTimeField(blank = True)
-    payment_mode = models.CharField(choices=PAYMENT_MEANS, null=True, blank=True, max_length=25)
-    payment_method = models.CharField(choices=PAYMENT_METHOD, max_length=25,null=True, blank=True)
+    payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, blank=True, max_length=25)
+    payment_method = models.CharField(choices=PAYMENT_OPTIONS, max_length=25,null=True, blank=True)
 
     def __str__(self):
         return self.resource
