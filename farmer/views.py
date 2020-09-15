@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import FarmerProfile
+from .models import Group, FarmerProfile
 from .serializers import GroupSerializer, FarmerProfileSerializer
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -7,6 +7,14 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+# views for groups
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows sectors to be viewed or edited.
+    """
+    queryset = Group.objects.all().order_by('name')
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 class FarmerListView():
 

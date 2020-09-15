@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
+
 from .views import (ProductList,
                     SellerList,
                     BuyerList,
@@ -14,6 +15,7 @@ from .views import (ProductList,
                     PackagingList,
                     MedicalList,
                     SoilScienceList)
+
 
 router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet)
