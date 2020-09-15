@@ -36,13 +36,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'common',
-    'farmer',
+   
+   #Third-party apps
     'rest_framework',
     'phonenumber_field',
+
+    #Local apps
+    'common',
+    'farmer',
     'farm',
     'weather',
     'openmarket',
+    'unffeagents',
+    'resourcesharing',
 
 ]
 
@@ -57,6 +63,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ict4farmers.urls'
+
 
 TEMPLATES = [
     {
@@ -76,7 +83,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ict4farmers.wsgi.application'
 
-
+COMPRESS_ENABLED=True
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -114,6 +121,27 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#rest_framework configuration
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAdminUser',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+#    'DEFAULT_SCHEMA_CLASS':('rest_framework.schemas.coreapi.AutoSchema'),
+   # 'DEFAULT_FILTER_BACKENDS': (
+   #     'django_filters.rest_framework.DjangoFilterBackend',
+    #),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -127,13 +155,26 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
+SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+
+#Email backend----(Sendgrid)
+DEFAULT_FROM_EMAIL='nonereply@unffe.org'
+SENDGRID_API_KEY = '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'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
