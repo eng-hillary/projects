@@ -155,7 +155,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
+SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -169,3 +169,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+
+#Email backend----(Sendgrid)
+DEFAULT_FROM_EMAIL='nonereply@unffe.org'
+SENDGRID_API_KEY = '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'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

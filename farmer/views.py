@@ -17,6 +17,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+class FarmerListView():
+
+    template_name = 'farmers_list.html'
 
 class GroupList(APIView):
     authentication_classes = (BasicAuthentication,)

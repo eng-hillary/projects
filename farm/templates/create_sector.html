@@ -13,7 +13,7 @@
 <form  action="{% url 'farms:create_sector' %}" method="post" novalidate>
     {% csrf_token %}
     {% render_form serializer template_pack='rest_framework/inline' %}
-    <button type="submit" class="btn btn-default">Sign in</button>
+    <button type="submit" class="btn btn-default">Submit</button>
 </form>
 </div>
 </body>
