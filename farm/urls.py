@@ -10,7 +10,7 @@ router = routers.DefaultRouter()
 router.register(r'farms', views.SectorViewSet)
 router.register(r'farms', views.EnterpriseViewSet)
 
-router.register(r'sector', views.SectorViewSet)
+router.register(r'sector', views.SectorViewSet,'api-sector')
 router.register(r'enterprise', views.EnterpriseViewSet)
 
 # Wire up our API using automatic URL routing.
