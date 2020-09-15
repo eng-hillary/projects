@@ -28,9 +28,6 @@ urlpatterns = [
     path('openmarket/', include('openmarket.urls', namespace="openmarket")),
 
     path('api-farm/', include('farm.urls', namespace="api-farm")),
-    path('farms/', include('farm.urls', namespace="farms")),
-    #path('farmers/', include('farmer.urls', namespace="farmers")),
-
     path('farm/', include('farm.urls', namespace="farm")),
 
     path('api-farmer/', include('farmer.urls', namespace="api-farmer")),

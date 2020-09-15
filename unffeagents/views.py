@@ -5,8 +5,11 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from rest_framework.views import APIView
-
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 # views for agentprofiles
 class AgentProfileViewSet(viewsets.ModelViewSet):
     """
@@ -18,6 +21,8 @@ class AgentProfileViewSet(viewsets.ModelViewSet):
 
 
 class AgentProfileList(APIView):
+    authentication_classes = (BasicAuthentication,)
+    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'agentprofile_list.html'
 
@@ -25,6 +30,39 @@ class AgentProfileList(APIView):
         queryset = AgentProfile.objects.order_by('specific_role')
         return Response({'agentprofiles': queryset})
 
+
+class AgentProfileDetail(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'agentprofile_detail.html'
+
+    def get(self, request, pk):
+        agentprofile = get_object_or_404(AgentProfile, pk=pk)
+        serializer = AgentProfileSerializer(agentprofile)
+        return Response({'serializer': serializer, 'agentprofile': agentprofile})
+
+    def post(self, request, pk):
+        agentprofile = get_object_or_404(AgentProfile, pk=pk)
+        serializer = AgentProfileSerializer(agentprofile, data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer, 'agentprofile': agentprofile})
+        serializer.save()
+        return redirect('unffeagents:agentprofile_list')
+
+class CreateAgentProfile(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'create_agentprofile.html'
+
+    def get(self, request):
+        agentprofile = None
+        serializer = AgentProfileSerializer()
+        return Response({'serializer': serializer, 'agentprofile': agentprofile})
+
+    def post(self, request):
+        serializer = AgentProfileSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer})
+        serializer.save()
+        return redirect('unffeagents:agentprofile_list')
 
 # views for market
 class MarketViewSet(viewsets.ModelViewSet):
@@ -37,6 +75,8 @@ class MarketViewSet(viewsets.ModelViewSet):
 
 
 class MarketList(APIView):
+    authentication_classes = (BasicAuthentication,)
+    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'market_list.html'
 
@@ -56,6 +96,8 @@ class MarketPriceViewSet(viewsets.ModelViewSet):
 
 
 class MarketPriceList(APIView):
+    authentication_classes = (BasicAuthentication,)
+    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'marketprice_list.html'
 
@@ -75,6 +117,8 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
 
 class NoticeList(APIView):
+    authentication_classes = (BasicAuthentication,)
+    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'notice_list.html'
 
