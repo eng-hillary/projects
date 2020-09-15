@@ -28,15 +28,34 @@
 
 
 <!-- bootstrap table begin here -->
+<div id="toolbar">
+  <button id="remove" class="btn btn-danger" disabled>
+    <i class="fa fa-trash"></i> Delete
+  </button>
+</div>
 <table
   id="table"
   data-toggle="table"
-  data-url="json/data1.json">
+  data-show-refresh="true"
+  data-show-toggle="true"
+  data-search="true"
+  data-show-fullscreen="true"
+  data-show-columns="true"
+  data-show-columns-toggle-all="true"
+  data-show-export="true"
+  data-click-to-select="true"
+  data-minimum-count-columns="2"
+  data-show-pagination-switch="true"
+  data-pagination="true"
+  data-id-field="id"
+  data-toolbar="#toolbar"
+  data-page-list="[10, 25, 50, 100, all]"
+  data-url="/api-farm/sector/?format=json">
   <thead>
     <tr>
-      <th data-field="id">ID</th>
-      <th data-field="name">Item Name</th>
-      <th data-field="price">Item Price</th>
+      <th data-field="id" data-sortable="true">ID</th>
+      <th data-field="name" data-sortable="true"> Name</th>
+      <th data-field="size" data-sortable="true">Size</th>
     </tr>
   </thead>
 </table>
@@ -48,6 +67,7 @@
 <script src="{% static 'js/bootstrap-table.min.js' %}"></script>
 <script src="{% static 'js/bootstrap-table-export.min.js' %}"></script>
 <script>
+  
 </script>
  
 
