@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel)
 from django.contrib.auth.models import User
-from common .choices import (ACTION_TYPE, TRANSACTION_TYPE, PAYMENT_MEANS)
+from common .choices import (ACTION_TYPE, TRANSACTION_TYPE, PAYMENT_MODE)
 # Create your models here.
 
 
@@ -39,8 +39,8 @@ class Farm(TimeStampedModel, models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
     farmer = models.ForeignKey('farmer.FarmerProfile', on_delete=models.DO_NOTHING, related_name='farm')
-    lat = models.FloatField(_('Latitude'), blank=True, null=True)
-    lon = models.FloatField(_('Longitude'), blank=True, null=True)
+    latitude = models.FloatField(_('Latitude'), blank=True, null=True)
+    longitude = models.FloatField(_('Longitude'), blank=True, null=True)
     initial_capital = models.DecimalField(decimal_places=2, max_digits=4)
     expected_profit = models.DecimalField(decimal_places=2, max_digits=4)
     start_date = models.DateField(blank=False, null=False)
@@ -96,7 +96,7 @@ class FinancialRecord(TimeStampedModel, models.Model):
     transaction_to = models.CharField(max_length=100)
     amount = models.FloatField(blank=False, null=False)
     quantity = models.FloatField()
-    means_of_payment = models.CharField(max_length=20, blank=False, null=False, choices=PAYMENT_MEANS)
+    means_of_payment = models.CharField(max_length=20, blank=False, null=False, choices=PAYMENT_MODE)
     transaction_date = models.DateField()
     description = models.TextField( blank=True, null=True)
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE)

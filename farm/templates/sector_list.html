@@ -3,6 +3,7 @@
     <ul>
         {% for sector in sectors %}
         <li>{{ sector.name }}</li>
+        <li>{{ sector.get_size_display }}</li>
         {% endfor %}
     </ul>
     </body></html>

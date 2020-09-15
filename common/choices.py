@@ -14,6 +14,19 @@ MARITAL_STATUSES = (
     ('widowed', 'Widowed')
 )
 
+STATUS = (
+    (None, "--please select--"),
+    ('active', 'Active'),
+    ('in_active', 'In-Active'),
+    ('rejected', 'Rejected')
+ )
+
+INVENTORY_STATUS = (
+     (None, "--please select--"),
+     ('availabe', 'Available'),
+     ('not_available', 'Not Available')
+)
+
 LAND_TYPES = (
      (None, "---please select---"),
     ('rented', 'Rented'),
@@ -44,18 +57,26 @@ TRANSACTION_TYPE = (
     ('expense', 'expense')
 )
 
-PAYMENT_MEANS = (
+PAYMENT_MODE = (
     (None, '--please select--'),
     ('cash', 'Cash'),
     ('bank', 'Bank Transfer'),
     ('cheque', 'Cheque'),
-    ('credit_card', 'Credit/Debit Card'),
+    ('mobilemoney', 'mobilemoney'),
+    ('credit_card', 'credit card'),
     ('others', 'Others')
 
     )
 
+PAYMENT_OPTIONS = (
+    (None, '--please select--'),
+    ('credit', 'credit'),
+    ('full_payment', 'full_payment'),
+    ('installements', 'installements'),
+    ('exchange', 'exchange')
+    )
 
-WHEATHER_OPTIONS = (
+WEATHER_OPTIONS = (
     (None, '--please select--'),
     ('windy', 'Windy'),
     ('rainy', 'Rainy'),
@@ -70,9 +91,4 @@ RESOURCE_CATEGORY = (
     ('machinery', 'Machinery'),
     ('land', 'Land'),
     ('transportation', 'Transportation'),    
-)
-
-PAYMENT_METHOD = (
-    ('full payment','Full Payment'),
-    ('installments','Installments')
 )
