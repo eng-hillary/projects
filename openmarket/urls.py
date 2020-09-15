@@ -52,4 +52,3 @@ urlpatterns = [
     path('soilsciences', SoilScienceList.as_view(), name='soilscience_list'),
 
 ]
-

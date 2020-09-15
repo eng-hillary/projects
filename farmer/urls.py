@@ -19,4 +19,3 @@ urlpatterns = [
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
 
 ]
-
