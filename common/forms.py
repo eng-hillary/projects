@@ -1,7 +1,12 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Profile
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.phonenumber import PhoneNumber
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
+
 
 # login form
 class LoginForm(forms.ModelForm):
@@ -44,15 +49,25 @@ class LoginForm(forms.ModelForm):
 
 class SignUpForm(UserCreationForm):
 
-    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),required=True)
-    email = forms.EmailField(max_length=254, help_text='Required. Insert a valid email address.')
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),required=True, label='Email/Phone Number')
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control'}),required=False)
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),required=True)
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),required=True)
-   
-  
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}),required=True)
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}),required=True)
+
+
     class Meta:
         model = User
         fields = ['username','first_name', 'last_name', 'email','password', 'password2']
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
-      
+
+class ProfileForm(forms.ModelForm):
+    home_address = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 30}),
+                                        required=False)
+    ##phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True)
+
+    class Meta:
+        model = Profile
+        fields = ('phone_number', 'home_address', 'gender')

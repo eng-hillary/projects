@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -21,7 +22,7 @@
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
        <!-- App css-->
-       <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
 
     <!-- App css-->
     <style>
@@ -29,26 +30,34 @@
           height: 100%;
           margin: 0;
         }
-        
+
         .bg {
           /* The image used */
           background-image:url("/static/images/signup.png");
-        
+
           /* Full height */
-          height: 100%; 
+          height: 100%;
           width: 100%;
           /* Center and scale the image nicely */
           background-position: center;
           background-repeat: no-repeat;
           background-size: cover;
         }
-    
+
         h2 {
             color: #145a32;
         }
         .text-color{
             color:#145a32
         }
+        .error {color: #f00 !important ;}
+.error, .errors {
+  color: red;
+}
+.asteriskField{color: #f00 !important ;}
+.required_color{
+  color: red;
+}
         </style>
     </head>
     <body >
@@ -60,43 +69,57 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="text-color">Email/Phone Number</label>
-                                <input type="email" name="username" class="form-control" id="id_username" aria-describedby="emailHelp">
-                                <small  class="form-text text-danger">{{form.username.errors}}</small>
-                              </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                  <label class="text-color" for="password">Password/Pin</label>
-                                  <input type="password"  name="password" class="form-control" id="id_password" >
-                                </div>
-                                <small  class="form-text text-danger">{{form.password.errors}}</small>
-                             </div>
+                      <div class="col-md-12 text-color">
+                         {{ form.username|as_crispy_field }}
+                      </div>
+                      <div class="col-md-6 text-color">
+                         {{ form.first_name|as_crispy_field }}
+                      </div>
+                      <div class="col-md-6 text-color">
+                         {{ form.last_name|as_crispy_field }}
+                      </div>
+                      <div class="col-md-12 text-color">
+                         {{ form.email|as_crispy_field }}
+                      </div>
+                      <div class="col-md-6 text-color">
+                         {{ profile_form.phone_number|as_crispy_field }}
+                      </div>
+                      <div class="col-md-6 text-color">
+                         {{ profile_form.gender|as_crispy_field }}
+                      </div>
+                      <div class="col-md-12 text-color">
+                         {{ profile_form.home_address|as_crispy_field }}
+                      </div>
+
+
+                      <div class="col-md-6 text-color">
+                         {{ form.password|as_crispy_field }}
+                      </div>
+                      <div class="col-md-6 text-color">
+                         {{ form.password2|as_crispy_field }}
+                      </div>
+                      <div class="col-md-12  m-2">
+                          <h5 class="text-color">Already have an account?<span><a class="text-color" href="{% url 'login' %}">Sign in</a></span></h5>
+                      </div>
+
                              <div class="">
                                 {% if error %}
                                 <p class="text-danger">{{ message }}</p>
                                 {% endif %}
                              </div>
-                             
-                             <div class="col-md-12 offset-md-8">
-                                 <a href="#" class="text-color">Forgot Password</a>
-                             </div>
-                             <div class="col-md-6  offset-md-2">
-                                <input value="Sign In" class="btn-primary btn-lg btn-block" type="submit">
-        
+<br>
+
+                             <div class="col-md-6 offset-md-3">
+                                <input value="Sign up" class="btn-primary btn-lg btn-block" type="submit">
                               </div>
-                              <div class="col-md-12 m-2">
-                                  <h5 class="text-color">New User?<span><a class="text-color" href="#">Create an account</a></span></h5>
-                              </div>
-                            
+
+
 
                     </div>
                 </form>
             </div>
             </div>
-              
+
             </div>
         </div>
     </body>

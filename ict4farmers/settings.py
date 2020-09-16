@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'openmarket',
     'unffeagents',
     'resourcesharing',
+    'crispy_forms',
 
 ]
 
@@ -78,7 +79,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ict4farmers.wsgi.application'
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 COMPRESS_ENABLED=True
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
