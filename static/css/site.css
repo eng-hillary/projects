@@ -4187,7 +4187,7 @@ header {
     .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .offer-content form .form-group {
       margin: 0 auto;
       text-align: center; }
-    
+
       .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .offer-content form .form-group .btn-solid,
       .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .offer-content form .form-group .btn-outline {
         margin-top: 10px;
@@ -6446,7 +6446,7 @@ footer {
   display: inline-flex; }
   .subscribe-form .form-group {
     margin-bottom: 0; }
- 
+
   .subscribe-form.classic-form .btn-solid,
   .subscribe-form.classic-form .btn-outline {
     margin-bottom: 0 !important; }
@@ -6690,14 +6690,14 @@ footer {
         z-index: -1; }
       .footer-theme2.section-light .footer-block .subscribe-white .form-group {
         margin-bottom: 0; }
-  
+
       .footer-theme2.section-light .footer-block .subscribe-white h2 {
         margin-bottom: 30px;
         margin-top: -5px; }
       .footer-theme2.section-light .footer-block .subscribe-white .btn-solid,
       .footer-theme2.section-light .footer-block .subscribe-white .btn-outline {
         margin-top: 10px; }
-     
+
 
 /*=====================
   22.Inner pages CSS start
@@ -7780,7 +7780,7 @@ footer {
     .cart-section tbody tr td .mobile-cart-content .qty-box,
     .wishlist-section tbody tr td .mobile-cart-content .qty-box {
       border-radius: 5px; }
-   
+
     .cart-section tbody tr td .mobile-cart-content .col-xs-3,
     .wishlist-section tbody tr td .mobile-cart-content .col-xs-3 {
       -ms-flex-item-align: center;
@@ -8206,7 +8206,7 @@ footer {
         -ms-flex-pack: unset;
             justify-content: unset;
     width: unset; }
-    
+
 
 .product-right .size-box {
   margin-top: 10px;
@@ -14764,7 +14764,7 @@ a:hover {
     -webkit-box-align: end;
         -ms-flex-align: end;
             align-items: end; }
- 
+
 
 .add-product-form .qty-box .input-group {
   -webkit-box-pack: start;
@@ -19469,7 +19469,7 @@ table tbody .border-bottom-warning td {
           display: none; }
       .page-wrapper .page-main-header .main-header-right .nav-right > ul .search-form .form-group {
         margin-bottom: 0; }
-      
+
       .page-wrapper .page-main-header .main-header-right .nav-right > ul .search-form .mobile-search svg {
         color: #ff8084; }
   .page-wrapper .search-form .form-group {
@@ -19542,7 +19542,7 @@ table tbody .border-bottom-warning td {
     padding: 0; }
   .add-product-form .qty-box {
     width: 162px; }
-  
+
   .add-product-form .description-sm {
     padding: 0 !important; }
   .zoomContainer {
@@ -20076,7 +20076,7 @@ body.rtl .account-setting {
     padding-right: 38px; }
   .cart-section tbody tr td {
     min-width: 175px; }
-    
+
   .cart-section tfoot tr td {
     padding-right: 41px; }
   .product-right .product-icon .product-social li {
@@ -20192,7 +20192,7 @@ body.rtl .account-setting {
     min-height: 1px;
     padding-right: 15px;
     padding-left: 15px; }
-  
+
   .category-bg .image-block.even:after {
     bottom: 91%; }
   .category-bg .contain-block h2 {
@@ -20608,7 +20608,7 @@ body.rtl .account-setting {
     width: 30%; }
   .cart-section tbody tr td {
     min-width: 140px; }
- 
+
   .cart-section tfoot tr td {
     padding-right: 25px; }
   .collection-collapse-block .collection-collapse-block-content .collection-brand-filter .category-list li:first-child {
@@ -23280,14 +23280,14 @@ body.rtl .account-setting {
     max-width: 448px; }
   .footer-theme2.section-light .footer-block .subscribe-white {
     padding: 30px 30px; }
-   
+
   .theme-modal .modal-dialog .modal-content .modal-body .modal-bg {
     padding: 35px; }
     .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .offer-content img {
       margin-bottom: 10px; }
     .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .offer-content h2 {
       margin-bottom: 15px; }
- 
+
     .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .age-content form .btn-solid,
     .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .age-content form .btn-outline {
       padding: 8px 15px; }
@@ -23820,7 +23820,7 @@ body.rtl .account-setting {
     max-width: 330px; }
   .footer-theme2.section-light .footer-block .subscribe-white {
     padding: 20px 20px; }
- 
+
   .footer-end p {
     font-size: 13px; }
   .category-border div .category-banner .category-box h2 {
@@ -23888,7 +23888,7 @@ body.rtl .account-setting {
       padding: 20px; }
       .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .close {
         right: 10px; }
-   
+
       .theme-modal .modal-dialog .modal-content .modal-body .modal-bg .offer-content h2 {
         font-size: 20px;
         margin-bottom: 10px; }
@@ -23981,3 +23981,18 @@ body.rtl .account-setting {
     .collection-banner .contain-banner.banner-4 h2 {
       font-size: 15px; } }
 
+.errorlist{
+        li{
+          font-size: 0.83rem;
+          color:red;
+        }
+      }
+
+      .error {color: #f00 !important ;}
+      .error, .errors {
+        color: red;
+      }
+  .asteriskField{color: #f00 !important ;}
+      .required_color{
+        color: red;
+      }

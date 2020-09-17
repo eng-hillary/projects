@@ -1,6 +1,6 @@
 from django.contrib.auth import views as auth_views
 from common.views import (
-    HomePage, account_activation_sent, activate, signup
+    HomePage, account_activation_sent, activate, signup, UpdateProfileView, ProfileView
 
 )
 
