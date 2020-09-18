@@ -22,8 +22,6 @@ class FarmerListView():
     template_name = 'farmers_list.html'
 
 class GroupList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'group_list.html'
 
@@ -43,8 +41,6 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
 
 
 class FarmerProfileList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'farmerprofile_list.html'
 

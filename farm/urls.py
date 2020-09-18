@@ -14,7 +14,7 @@ router.register(r'enterprise', views.EnterpriseViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 
-app_name = 'farms'
+app_name = 'farm'
 urlpatterns = [
     path('', include(router.urls)),
     path('sectors', SectorList.as_view(), name='sector_list'),

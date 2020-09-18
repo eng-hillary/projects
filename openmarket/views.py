@@ -31,8 +31,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class ProductList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'product_list.html'
 
@@ -51,8 +49,6 @@ class SellerViewSet(viewsets.ModelViewSet):
 
 
 class SellerList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'seller_list.html'
 
@@ -71,8 +67,6 @@ class BuyerViewSet(viewsets.ModelViewSet):
 
 
 class BuyerList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'buyer_list.html'
 
@@ -92,8 +86,6 @@ class SellerPostViewSet(viewsets.ModelViewSet):
 
 
 class SellerPostList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'sellerpost_list.html'
 
@@ -113,8 +105,6 @@ class BuyerPostViewSet(viewsets.ModelViewSet):
 
 
 class BuyerPostList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'buyerpost_list.html'
 
@@ -134,8 +124,6 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
 
 
 class ServiceProviderList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceprovider_list.html'
 
@@ -155,8 +143,6 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
 
 
 class ServiceRegistrationList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceregistration_list.html'
 
@@ -176,8 +162,6 @@ class ContactDetailsViewSet(viewsets.ModelViewSet):
 
 
 class ContactDetailsList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'contactdetails_list.html'
 
@@ -197,8 +181,6 @@ class LogisticsViewSet(viewsets.ModelViewSet):
 
 
 class LogiticsList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'logistics_list.html'
 
@@ -218,8 +200,6 @@ class StorageViewSet(viewsets.ModelViewSet):
 
 
 class StorageList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'storage_list.html'
 
@@ -239,8 +219,6 @@ class PackagingViewSet(viewsets.ModelViewSet):
 
 
 class PackagingList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'packaging_list.html'
 
@@ -260,8 +238,6 @@ class MedicalViewSet(viewsets.ModelViewSet):
 
 
 class MedicalList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'medical_list.html'
 
@@ -281,8 +257,6 @@ class SoilScienceViewSet(viewsets.ModelViewSet):
 
 
 class SoilScienceList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'soilscience_list.html'
 

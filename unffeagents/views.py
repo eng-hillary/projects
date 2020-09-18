@@ -21,8 +21,6 @@ class AgentProfileViewSet(viewsets.ModelViewSet):
 
 
 class AgentProfileList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'agentprofile_list.html'
 
@@ -75,8 +73,6 @@ class MarketViewSet(viewsets.ModelViewSet):
 
 
 class MarketList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'market_list.html'
 
@@ -96,8 +92,6 @@ class MarketPriceViewSet(viewsets.ModelViewSet):
 
 
 class MarketPriceList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'marketprice_list.html'
 
@@ -117,8 +111,6 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
 
 class NoticeList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'notice_list.html'
 
