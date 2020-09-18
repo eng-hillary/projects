@@ -95,7 +95,7 @@ def signup(request):
             user.save()
             profile_form = ProfileForm(request.POST, instance=user)
             profile_form.save_m2m()
-            
+
             current_site = get_current_site(request)
             subject = 'Activate Your Account'
             message = render_to_string('account_activation_email.html', {
@@ -143,7 +143,6 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         context = super(ProfileView, self).get_context_data(**kwargs)
         context["user_obj"] = self.request.user
         return context
-
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
     model = User
