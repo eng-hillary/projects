@@ -21,8 +21,6 @@ class SectorViewSet(viewsets.ModelViewSet):
 
 
 class SectorList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'sector_list.html'
 
@@ -76,8 +74,6 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
 
 
 class EnterpriseList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'enterprise_list.html'
 
