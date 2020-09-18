@@ -3,7 +3,7 @@ from django.views.generic import (
 from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 
-from .forms import LoginForm, SignUpForm, ProfileForm
+from .forms import LoginForm, SignUpForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, authenticate, login
@@ -20,6 +20,8 @@ from django.utils.encoding import force_text
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.urls import reverse_lazy
+from .models import Profile
+from django.views.generic import ( CreateView)
 
 
 class HomePage(TemplateView):
@@ -85,33 +87,56 @@ class LogoutView(LoginRequiredMixin, View):
         return redirect("login")
 
 
-# sign up method
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
-            profile_form = ProfileForm(request.POST, instance=user)
-            profile_form.save_m2m()
+class SignUpView(CreateView):
+    template_name = 'signup.html'
+    success_url = reverse_lazy('common:account_activation_sent')
+    form_class = SignUpForm
+    success_message = "Your profile was created successfully"
 
-            current_site = get_current_site(request)
-            subject = 'Activate Your Account'
-            message = render_to_string('account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
+    def dispatch(self, request, *args, **kwargs):
+        return super(
+            SignUpView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(SignUpView, self).get_form_kwargs()
+
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.is_active = False
+        user.save()
+        profile = Profile()
+        user.refresh_from_db()  # load the profile instance created by the signal
+        profile.phone_number = form.cleaned_data.get('phone_number')
+        profile.home_address = form.cleaned_data.get('home_address')
+        profile.gender = form.cleaned_data.get('gender')
+        profile.user = user
+        profile.save()
+
+        current_site = get_current_site(self.request)
+        subject = 'Activate Your Account'
+        message = render_to_string('account_activation_email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message)
-            return redirect('common:account_activation_sent')
-    # else:
-    #     print(form.errors)
-    else:
-        form = SignUpForm()
-        profile_form = ProfileForm()
-    return render(request, 'signup.html', {'form': form, 'profile_form':profile_form})
+        user.email_user(subject, message)
+        return redirect('common:account_activation_sent')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 def account_activation_sent(request):

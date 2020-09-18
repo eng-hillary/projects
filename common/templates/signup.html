@@ -69,9 +69,7 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="row">
-                      <div class="col-md-12 text-color">
-                         {{ form.username|as_crispy_field }}
-                      </div>
+                     
                       <div class="col-md-6 text-color">
                          {{ form.first_name|as_crispy_field }}
                       </div>
@@ -79,21 +77,24 @@
                          {{ form.last_name|as_crispy_field }}
                       </div>
                       <div class="col-md-12 text-color">
+                        {{ form.username|as_crispy_field }}
+                     </div>
+                      <div class="col-md-12 text-color">
                          {{ form.email|as_crispy_field }}
                       </div>
                       <div class="col-md-6 text-color">
-                         {{ profile_form.phone_number|as_crispy_field }}
+                         {{ form.phone_number|as_crispy_field }}
                       </div>
                       <div class="col-md-6 text-color">
-                         {{ profile_form.gender|as_crispy_field }}
+                         {{ form.gender|as_crispy_field }}
                       </div>
                       <div class="col-md-12 text-color">
-                         {{ profile_form.home_address|as_crispy_field }}
+                         {{ form.home_address|as_crispy_field }}
                       </div>
 
 
                       <div class="col-md-6 text-color">
-                         {{ form.password|as_crispy_field }}
+                         {{ form.password1|as_crispy_field }}
                       </div>
                       <div class="col-md-6 text-color">
                          {{ form.password2|as_crispy_field }}
