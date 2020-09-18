@@ -82,11 +82,5 @@ class Profile(models.Model):
     home_address = models.TextField(max_length=30, blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    def __str__(self):
+        return self.user.username

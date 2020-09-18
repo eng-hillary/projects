@@ -36,10 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'common',
-    'farmer',
+   
+   #Third-party apps
     'rest_framework',
     'phonenumber_field',
+
+    #Local apps
+    'common',
+    'farmer',
     'farm',
     'weather',
     'openmarket',
@@ -81,6 +85,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ict4farmers.wsgi.application'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 COMPRESS_ENABLED=True
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -120,32 +125,24 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #rest_framework configuration
 
+
 REST_FRAMEWORK = {
-    'PAGE_SIZE': 10,
-    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework_json_api.pagination.JsonApiPageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+   # 'PAGE_SIZE': 10,
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAdminUser',
+    ),
     'DEFAULT_PARSER_CLASSES': (
-        'rest_framework_json_api.parsers.JSONParser',
+        'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser'
+        'rest_framework.parsers.MultiPartParser',
     ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework_json_api.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
-    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
-    'DEFAULT_FILTER_BACKENDS': (
-        'rest_framework_json_api.filters.QueryParameterValidationFilter',
-        'rest_framework_json_api.filters.OrderingFilter',
-        'rest_framework_json_api.django_filters.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
-    ),
-    'SEARCH_PARAM': 'filter[search]',
-    'TEST_REQUEST_RENDERER_CLASSES': (
-        'rest_framework_json_api.renderers.JSONRenderer',
-    ),
-    'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
+#    'DEFAULT_SCHEMA_CLASS':('rest_framework.schemas.coreapi.AutoSchema'),
+   # 'DEFAULT_FILTER_BACKENDS': (
+   #     'django_filters.rest_framework.DjangoFilterBackend',
+    #),
 }
 
 # Internationalization
