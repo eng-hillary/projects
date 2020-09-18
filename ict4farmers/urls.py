@@ -17,13 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from common .views import LoginView, LogoutView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # login urls
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('', include('common.urls', namespace="common")),
+    
+    path('api/token', TokenObtainPairView.as_view()),
+    path('api/token/refresh', TokenRefreshView.as_view()),
+
     path('api-openmarket/', include('openmarket.urls', namespace="api-openmarket")),
     path('openmarket/', include('openmarket.urls', namespace="openmarket")),
 
