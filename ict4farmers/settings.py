@@ -40,6 +40,7 @@ INSTALLED_APPS = [
    #Third-party apps
     'rest_framework',
     'phonenumber_field',
+    'compressor',
 
     #Local apps
     'common',
@@ -163,10 +164,12 @@ SITE_ID = 1
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
+COMPRESS_ROOT = BASE_DIR + '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
