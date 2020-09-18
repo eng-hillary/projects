@@ -8,6 +8,7 @@ class SectorSerializer(serializers.ModelSerializer):
         model = Sector
         fields = ['id','name', 'size']
 
+
 class EnterpriseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enterprise

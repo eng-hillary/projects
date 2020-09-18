@@ -3,7 +3,7 @@ from django.views.generic import (
 from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, PasswordResetEmailForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, authenticate, login
@@ -178,3 +178,8 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         context["user_obj"] = self.request.user
         return context
 
+class ForgotPasswordView(TemplateView):
+    template_name = "forgot_password.html"
+    form_class = PasswordResetEmailForm
+    email_template_name = 'password_reset_email.html'
+    from_email = 'nonereply@unffe.org'
