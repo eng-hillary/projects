@@ -22,6 +22,7 @@ from django.db import transaction
 from django.urls import reverse_lazy
 from .models import Profile
 from django.views.generic import ( CreateView)
+from django.core.mail import EmailMessage
 
 
 class HomePage(TemplateView):
@@ -113,14 +114,14 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.is_active = False
-        user.save()
+        #user.save()
         profile = Profile()
-        user.refresh_from_db()  # load the profile instance created by the signal
+        #user.refresh_from_db()  # load the profile instance created by the signal
         profile.phone_number = form.cleaned_data.get('phone_number')
         profile.home_address = form.cleaned_data.get('home_address')
         profile.gender = form.cleaned_data.get('gender')
         profile.user = user
-        profile.save()
+        #profile.save()
             
         current_site = get_current_site(self.request)
         subject = 'Activate Your Account'
@@ -130,7 +131,11 @@ class SignUpView(CreateView):
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
             })
-        user.email_user(subject, message)
+        to_email = form.cleaned_data.get('email')
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.send()
         return redirect('common:account_activation_sent')
 
     def form_invalid(self, form):
@@ -139,8 +144,12 @@ class SignUpView(CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
+
+
 def account_activation_sent(request):
     return render(request, 'account_activation_sent.html')
+
+
 
 
 def activate(request, uidb64, token):
@@ -152,7 +161,6 @@ def activate(request, uidb64, token):
 
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
-        user.email_confirmed = True
         group = Group.objects.get(name='Buyers')
         user.groups.add(group)
         user.save()
