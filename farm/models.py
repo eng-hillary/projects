@@ -1,4 +1,4 @@
-from django.db import models 
+from django.db import models
 from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel)
 from django.contrib.auth.models import User
@@ -14,7 +14,7 @@ class Sector(TimeStampedModel, models.Model):
     )
     name = models.CharField(max_length=50)
     size = models.CharField(choices=SECTOR_SIZE, null=False, max_length=20)
-    
+
     def __str__(self):
         return self.name
 
@@ -23,7 +23,7 @@ class Enterprise(TimeStampedModel, models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
-    
+
 
     def __str__(self):
         return self.name
@@ -64,13 +64,13 @@ class FarmFacility(TimeStampedModel, models.Model):
         return self.name
 
 '''
-These are farm products 
+These are farm products
 '''
 class Produce(TimeStampedModel, models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     description = models.TextField( blank=True, null=True)
     quantity = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
-    
+
     def __str__(self):
         return self.name
 
@@ -113,14 +113,14 @@ class PestAndDisease(TimeStampedModel, models.Model):
     description = models.TextField( blank=True, null=True)
     action_taken = models.TextField( blank=False, null=True)
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
 
     def __str__(self):
         return self.description
 
 
 class FarmRecord(TimeStampedModel, models.Model):
-  
+
     farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_records')
     activity = models.CharField(max_length=200, null=False, blank=False)
     activity_type = models.CharField(max_length=30, choices=ACTION_TYPE)
@@ -131,7 +131,7 @@ class FarmRecord(TimeStampedModel, models.Model):
     description = models.TextField( blank=True, null=True)
     taken_by = models.CharField(blank=False, null=True, max_length=100)
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
 
     def __str__(self):
         return self.activity
