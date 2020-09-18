@@ -79,8 +79,9 @@ class Village(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = PhoneNumberField(blank=False, null=False)
-    home_address = models.TextField(max_length=30, blank=True)
+    home_address = models.TextField(max_length=100, blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
+    profile_pic = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username

@@ -66,19 +66,34 @@
                 <div class="row m-5">
                     <div class="col-md-8 offset-md-1">
                 <h2 >Create A New Account</h2>
-                <form method="post">
+                <form method="post" enctype="multipart/form-data" >
                     {% csrf_token %}
                     <div class="row">
-                     
-                      <div class="col-md-6 text-color">
-                         {{ form.first_name|as_crispy_field }}
-                      </div>
-                      <div class="col-md-6 text-color">
-                         {{ form.last_name|as_crispy_field }}
-                      </div>
-                      <div class="col-md-12 text-color">
-                        {{ form.username|as_crispy_field }}
+                       <div class="col-md-3 text-color">
+                        <div class="col-auto">
+                           <div class="avatar-wrapper" data-tippy-placement="bottom" title="Upload Image">
+                               <img alt="" class="profile-pic" src="{% static 'images/user.png'%}"/>
+                               <div class="upload-button"></div>
+                               <input accept="image/*" class="file-upload" name="profile_pic" type="file"/>
+                           </div>
+                       </div>
+                       </div>
+                     <div class="col-md-9">
+                        <div class="row">
+                           <div class="col-md-6 text-color">
+                           {{ form.first_name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6 text-color">
+                           {{ form.last_name|as_crispy_field }}
+                        </div> 
+                        <div class="col-md-12 text-color">
+                           {{ form.username|as_crispy_field }}
+                        </div>
+                        </div>
+                        
                      </div>
+                    
+                      
                       <div class="col-md-12 text-color">
                          {{ form.email|as_crispy_field }}
                       </div>
@@ -123,5 +138,8 @@
 
             </div>
         </div>
+        <!-- latest jquery-->
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/script.js' %}"></script>
     </body>
     </html>

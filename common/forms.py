@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from django.contrib.auth.forms import PasswordResetForm
 from .choices import *
 
 
@@ -59,11 +60,22 @@ class SignUpForm(UserCreationForm):
                                         required=False)
     phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
     gender = forms.CharField(widget=forms.Select(choices=GENDER_CHOICES, attrs={'class':'form-control'}),required=True)
+    profile_pic = forms.ImageField()
 
 
     class Meta:
         model = User
-        fields = ['username','first_name', 'last_name', 'email','password1', 'password2','phone_number','home_address','gender']
+        fields = ['username','first_name', 'last_name', 'email','password1', 'password2','phone_number','home_address','gender', 'profile_pic']
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
+
+
+class PasswordResetEmailForm(PasswordResetForm):
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email__iexact=email,
+                                   is_active=True).exists():
+            raise forms.ValidationError("User doesn't exist with this Email")
+        return email
