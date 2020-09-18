@@ -66,7 +66,7 @@ class SignUpForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     home_address = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 30}),
                                         required=False)
-    ##phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True)
+    phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True)
 
     class Meta:
         model = Profile
