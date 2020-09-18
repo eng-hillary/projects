@@ -3,7 +3,7 @@ from django.views.generic import (
 from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, PasswordResetEmailForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, authenticate, login
@@ -114,14 +114,15 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.is_active = False
-        #user.save()
+        user.save()
         profile = Profile()
-        #user.refresh_from_db()  # load the profile instance created by the signal
+        user.refresh_from_db()  # load the profile instance created by the signal
         profile.phone_number = form.cleaned_data.get('phone_number')
         profile.home_address = form.cleaned_data.get('home_address')
         profile.gender = form.cleaned_data.get('gender')
+        profile.profile_pic = form.cleaned_data.get('profile_pic')
         profile.user = user
-        #profile.save()
+        profile.save()
             
         current_site = get_current_site(self.request)
         subject = 'Activate Your Account'
@@ -177,3 +178,8 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         context["user_obj"] = self.request.user
         return context
 
+class ForgotPasswordView(TemplateView):
+    template_name = "forgot_password.html"
+    form_class = PasswordResetEmailForm
+    email_template_name = 'password_reset_email.html'
+    from_email = 'nonereply@unffe.org'
