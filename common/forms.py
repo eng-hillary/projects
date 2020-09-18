@@ -59,11 +59,12 @@ class SignUpForm(UserCreationForm):
                                         required=False)
     phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
     gender = forms.CharField(widget=forms.Select(choices=GENDER_CHOICES, attrs={'class':'form-control'}),required=True)
+    profile_pic = forms.ImageField()
 
 
     class Meta:
         model = User
-        fields = ['username','first_name', 'last_name', 'email','password1', 'password2','phone_number','home_address','gender']
+        fields = ['username','first_name', 'last_name', 'email','password1', 'password2','phone_number','home_address','gender', 'profile_pic']
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
