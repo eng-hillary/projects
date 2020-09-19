@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+
 # views for groups
 class GroupViewSet(viewsets.ModelViewSet):
     """
@@ -40,10 +43,27 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class FarmerProfileList(APIView):
+class FarmerProfileList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'farmerprofile_list.html'
 
     def get(self, request):
         queryset = FarmerProfile.objects.order_by('region')
         return Response({'farmerprofiles': queryset})
+
+
+class CreateFarmerProfile(LoginRequiredMixin,APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'create_farmer_profile.html'
+
+    def get(self, request):
+        sector = None
+        serializer = FarmerProfileSerializer()
+        return Response({'serializer': serializer, 'farmer': farmer})
+
+    def post(self, request):
+        serializer = FarmerProfileSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer})
+        serializer.save()
+        return redirect('farmer:farmerprofile_list')
