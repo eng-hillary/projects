@@ -18,6 +18,8 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from common .views import LoginView, LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,7 +29,8 @@ urlpatterns = [
     
     path('api/token', TokenObtainPairView.as_view()),
     path('api/token/refresh', TokenRefreshView.as_view()),
-
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('api-openmarket/', include('openmarket.urls', namespace="api-openmarket")),
     path('openmarket/', include('openmarket.urls', namespace="openmarket")),
 
@@ -45,4 +48,4 @@ urlpatterns = [
 
     path('api-resourcesharing/', include('resourcesharing.urls', namespace="api-resourcesharing")),
     path('resourcesharing/', include('resourcesharing.urls', namespace="resourcesharing")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

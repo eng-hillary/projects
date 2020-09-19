@@ -23,6 +23,7 @@ from django.urls import reverse_lazy
 from .models import Profile
 from django.views.generic import ( CreateView)
 from django.core.mail import EmailMessage
+from django.contrib.auth.views import PasswordResetView
 
 
 class HomePage(TemplateView):
@@ -178,7 +179,8 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         context["user_obj"] = self.request.user
         return context
 
-class ForgotPasswordView(TemplateView):
+
+class PasswordResetView(PasswordResetView):
     template_name = "forgot_password.html"
     form_class = PasswordResetEmailForm
     email_template_name = 'password_reset_email.html'

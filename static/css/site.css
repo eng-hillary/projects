@@ -14684,7 +14684,7 @@ body.dark {
             transform: scale(1, 1); }
 
 a:hover {
-  color: #ff8084; }
+  color: #000000; }
 
 .btn-popup {
   margin-bottom: 30px; }
@@ -18997,7 +18997,7 @@ table tbody .border-bottom-warning td {
       -ms-flex-pack: center;
           justify-content: center; }
   .authentication-box .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
-    background-color: #ff8084; }
+    background-color: #145a32; }
   .authentication-box .back-btn {
     float: right;
     margin: 0;
