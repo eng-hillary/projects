@@ -60,7 +60,7 @@ class SignUpForm(UserCreationForm):
                                         required=False)
     phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
     gender = forms.CharField(widget=forms.Select(choices=GENDER_CHOICES, attrs={'class':'form-control'}),required=True)
-    profile_pic = forms.ImageField()
+    profile_pic = forms.ImageField(required=False)
 
 
     class Meta:
@@ -68,6 +68,15 @@ class SignUpForm(UserCreationForm):
         fields = ['username','first_name', 'last_name', 'email','password1', 'password2','phone_number','home_address','gender', 'profile_pic']
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
+
+class ProfileForm(forms.ModelForm):
+    home_address = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 30}),
+                                        required=False)
+    phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True)
+
+    class Meta:
+        model = Profile
+        fields = ('phone_number', 'home_address', 'gender')
 
 
 
@@ -79,3 +88,4 @@ class PasswordResetEmailForm(PasswordResetForm):
                                    is_active=True).exists():
             raise forms.ValidationError("User doesn't exist with this Email")
         return email
+
