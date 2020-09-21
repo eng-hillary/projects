@@ -45,7 +45,7 @@ class SellerViewSet(viewsets.ModelViewSet):
     """
     queryset = Seller.objects.all().order_by('seller_type')
     serializer_class = SellerSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
 
 
 class SellerList(APIView):
