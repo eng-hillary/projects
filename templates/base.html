@@ -35,10 +35,11 @@
     <!-- App css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
     {% endcompress %}
+    {% block stylesheet %}{% endblock %}
 </head>
 
 <body>
-
+{% block body %}
 <!-- page-wrapper Start-->
 <div class="page-wrapper">
 
@@ -184,33 +185,17 @@
 
 
         </div>
-
-        <!-- footer start-->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6 footer-copyright">
-                        <p class="mb-0">Copyright  {% now "Y" %} © Uganda National Farmers Federation (UNFFE) </p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="pull-right mb-0">ICT4FARMERS</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- footer end-->
-    </div>
-
-</div>
+        {% endblock  %}
 
 <!-- latest jquery-->
 <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
 
-<!--select 2-->
-<script src="{% static 'js/select2.min.js' %}"></script>
+
 <!-- Bootstrap js-->
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.js' %}"></script>
+
+
 
 <!-- feather icon js-->
 <script src="{% static 'js/icons/feather-icon/feather.min.js' %}"></script>
@@ -261,6 +246,28 @@
 
 <!--script admin-->
 <script src="{% static 'js/script.js' %}"></script>
+{% block javascript %}{% endblock %}
+
+        <!-- footer start-->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 footer-copyright">
+                        <p class="mb-0">Copyright  {% now "Y" %} © Uganda National Farmers Federation (UNFFE) </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="pull-right mb-0">ICT4FARMERS</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer end-->
+    </div>
+
+</div>
+
+
+
 
 </body>
 
