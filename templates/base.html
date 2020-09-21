@@ -81,6 +81,9 @@
                     </li>
                     <li class="onhover-dropdown">
                         {% if user.profile.profile_pic %}
+                        <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="{{user.profile.profile_pic.url}}" alt="header-user">
+                            <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
+                        </div>
                         {% else %}
 
                         <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="{% static 'images/man.png' %}" alt="header-user">
@@ -106,11 +109,9 @@
         <!-- Page Sidebar Start-->
         <div class="page-sidebar">
             <div class="main-header-left d-none d-lg-block">
-                {% if user.profile.profile_pic %}
-
-                {% else %}
+             
                 <div class="logo-wrapper"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo.png' %}" style="background-color: #ffffff; margin-top: 20px;" width="100%"  alt=""></a></div>
-                {% endif %}
+            
             </div>
             <div class="sidebar custom-scrollbar">
                 <div class="sidebar-user text-center">
@@ -125,7 +126,7 @@
                
                     <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Farmer</span><i class="fa fa-angle-right pull-right"></i></a>
                         <ul class="sidebar-submenu">
-                            <li><a href="order.html"><i class="fa fa-circle"></i>Registration</a></li>
+                            <li><a href="{% url 'farmer:create_farmer' %}"><i class="fa fa-circle"></i>Registration</a></li>
                             <li><a href="transactions.html"><i class="fa fa-circle"></i>My Application</a></li>
                         </ul>
                     </li>
