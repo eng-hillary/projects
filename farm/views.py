@@ -32,6 +32,7 @@ class SectorList(APIView):
 class SectorDetail(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'sector_detail.html'
+    context_object_name = "sectorrecord"
 
     def get(self, request, pk):
         sector = get_object_or_404(Sector, pk=pk)

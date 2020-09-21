@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'resourcesharing',
     'crispy_forms',
 
+
+
 ]
 
 MIDDLEWARE = [

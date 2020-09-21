@@ -3,7 +3,7 @@ from django.views.generic import (
 from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, ProfileForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout, authenticate, login
