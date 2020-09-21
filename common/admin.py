@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Region, District, County, SubCounty, Parish, Village
+from .models import Region, District, County, SubCounty, Parish, Village,Profile
 
 class RegionAdmin(admin.ModelAdmin):
     list_display = [
@@ -59,3 +59,16 @@ class VillageAdmin(admin.ModelAdmin):
    ]
     search_fields = ['name', 'parish']
 admin.site.register(Village, VillageAdmin)
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'phone_number',
+        'gender',
+        'home_address'
+        
+        
+        
+   ]
+    search_fields = ['user__first_name','phone_number','gender']
+admin.site.register(Profile, ProfileAdmin)

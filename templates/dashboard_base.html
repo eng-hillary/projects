@@ -78,11 +78,17 @@
                         </ul>
                     </li>
                     <li class="onhover-dropdown">
+                        {% if request.user.profile.profile_pic %}
+                        <diuv class="media align-items-center"><img class="align-self-center pull-right img-60 rounded-circle blur-up lazyloaded" src="{{ request.user.profile.profile_pic.url }}" alt="header-user">
+                            <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
+                       </diuv>
+                        {% else %}
                         <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="{% static 'images/man.png' %}" alt="header-user">
                             <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
-                        </div>
+                       </div>
+                       {% endif %}
                         <ul class="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
-                            <li><a href="#"><i data-feather="user"></i>Edit Profile</a></li>
+                            <li><a href="#"><i data-feather="user"></i>{{ request.user.first_name}}</a></li>
                             <li><a href="#"><i data-feather="settings"></i>Settings</a></li>
                             <li><a href="{% url 'logout' %}"><i data-feather="log-out"></i>Logout</a></li>
                         </ul>
@@ -203,7 +209,7 @@
 
 <!--chartjs js-->
 <script src="{% static 'js/chart/chartjs/chart.min.js' %}"></script>
-
+crispy_forms
 <!-- lazyload js-->
 <script src="{% static 'js/lazysizes.min.js' %}"></script>
 
