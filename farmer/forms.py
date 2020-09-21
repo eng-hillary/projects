@@ -12,7 +12,7 @@ class FarmerProfileForm(forms.ModelForm):
 
     class Meta:
         model = FarmerProfile
-        exclude = ['user','status','status','approver','approved_date']
+        exclude = ['user','status','approver','approved_date']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)

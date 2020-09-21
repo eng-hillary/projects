@@ -40,7 +40,7 @@ class HomePage(TemplateView):
 
 # login view
 class LoginView(TemplateView):
-    template_name = "registration/login.html"
+    template_name = "login.html"
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)

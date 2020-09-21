@@ -25,12 +25,13 @@ class ProductSerializer(serializers.ModelSerializer):
          'date_created', 'date_updated')
 
 class SellerSerializer(serializers.ModelSerializer):
-    enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
+    enterprise = serializers.PrimaryKeyRelatedField(many=True, queryset=Enterprise.objects.all())
+    #enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
         fields = ('user', 'business_number', 'business_location', 'seller_type', 'date_of_birth','region',
          'district', 'county', 'sub_county', 'parish', 'village', 'gender','marital_status', 'enterprise',
-          'major_products')
+          'major_products', 'status', 'approver', 'approved_date')
 
 class BuyerSerializer(serializers.ModelSerializer):
     class Meta:
