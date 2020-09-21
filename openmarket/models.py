@@ -34,8 +34,8 @@ class Seller(models.Model):
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     seller_type = models.CharField(max_length=15, null=False)
-    enterprise = models.TextField(null= True)
-    major_products = models.ManyToManyField(Product, related_name='seller')
+    enterprise = models.ForeignKey(to='farm.Enterprise',on_delete=models.CASCADE)
+    major_products = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     #Location
     business_number = PhoneNumberField()

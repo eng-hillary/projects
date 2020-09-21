@@ -31,7 +31,7 @@ from rest_framework.schemas import ManualSchema
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-
+from .forms import ProfileForm
 
 class HomePage(TemplateView):
 
@@ -221,7 +221,6 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
         if "errors" in kwargs:
             context["errors"] = kwargs["errors"]
         return context
-=======
 
 class ForgotPasswordView(PasswordResetView):
     template_name = "forgot_password.html"

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Seller
+from .models import Seller,Product
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
@@ -19,8 +19,12 @@ class SellerProfileForm(forms.ModelForm):
     
 
 class ProductProfileForm(forms.ModelForm):
+    
+     class Meta:
+        model = Product
+        exclude = ['date_created', 'date_updated']
 
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super(ProductProfileForm, self).__init__(*args, **kwargs)
+     def __init__(self, *args, **kwargs):
+         self.request = kwargs.pop('request', None)
+         super(ProductProfileForm, self).__init__(*args, **kwargs)
        
