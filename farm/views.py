@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 # views for sector
 class SectorViewSet(viewsets.ModelViewSet):
     """
@@ -19,16 +20,16 @@ class SectorViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class SectorList(APIView):
+class SectorList(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'sector_list.html'
 
     def get(self, request):
-        queryset = Sector.objects.order_by('-id')
-        return Response({'sectors': queryset})
+       # queryset = Sector.objects.order_by('-id')
+        return Response()
 
 
-class SectorDetail(APIView):
+class SectorDetail(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'sector_detail.html'
 
@@ -46,7 +47,7 @@ class SectorDetail(APIView):
         return redirect('farms:sector_list')
 
 
-class CreateSector(APIView):
+class CreateSector(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'create_sector.html'
 
@@ -72,7 +73,7 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class EnterpriseList(APIView):
+class EnterpriseList(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'enterprise_list.html'
 
