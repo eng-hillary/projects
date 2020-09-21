@@ -60,7 +60,7 @@ class SignUpForm(UserCreationForm):
                                         required=False)
     phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
     gender = forms.CharField(widget=forms.Select(choices=GENDER_CHOICES, attrs={'class':'form-control'}),required=True)
-    profile_pic = forms.ImageField()
+    profile_pic = forms.ImageField(required=False)
 
 
     class Meta:
