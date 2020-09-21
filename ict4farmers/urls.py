@@ -17,35 +17,45 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from common .views import LoginView, LogoutView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf.urls.static import static
 from django.conf import settings
+from common.views import obtain_auth_token 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # authentication urls
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('', include('common.urls', namespace="common")),
-    
-    path('api/token', TokenObtainPairView.as_view()),
-    path('api/token/refresh', TokenRefreshView.as_view()),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    # api authentication urls
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+
+    # common urls
+    path('', include('common.urls', namespace="common")),
+
+    # open market urls
     path('api-openmarket/', include('openmarket.urls', namespace="api-openmarket")),
     path('openmarket/', include('openmarket.urls', namespace="openmarket")),
 
+    # farm urls
     path('api-farm/', include('farm.urls', namespace="api-farm")),
     path('farm/', include('farm.urls', namespace="farm")),
 
+    # farmer urls
     path('api-farmer/', include('farmer.urls', namespace="api-farmer")),
     path('farmer/', include('farmer.urls', namespace="farmer")),
 
+    # unffeagents urls
     path('api-unffeagents/', include('unffeagents.urls', namespace="api-unffeagents")),
     path('unffeagents/', include('unffeagents.urls', namespace="unffeagents")),
 
+    # open weather urls
     path('api-weather/', include('weather.urls', namespace="api-weather")),
     path('weather/', include('weather.urls', namespace="weather")),
 
+    # resorce sharing urls
     path('api-resourcesharing/', include('resourcesharing.urls', namespace="api-resourcesharing")),
     path('resourcesharing/', include('resourcesharing.urls', namespace="resourcesharing")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

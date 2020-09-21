@@ -24,6 +24,14 @@ from .models import Profile
 from django.views.generic import ( CreateView)
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import PasswordResetView
+from rest_framework.views import APIView
+from rest_framework import parsers, renderers
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.compat import coreapi, coreschema
+from rest_framework.schemas import ManualSchema
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 
 
 class HomePage(TemplateView):
@@ -101,7 +109,6 @@ class SignUpView(CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(SignUpView, self).get_form_kwargs()
-
         return kwargs
 
     def post(self, request, *args, **kwargs):
@@ -118,13 +125,14 @@ class SignUpView(CreateView):
         user.save()
         profile = Profile()
         user.refresh_from_db()  # load the profile instance created by the signal
+        Token.objects.get_or_create(user=user)
         profile.phone_number = form.cleaned_data.get('phone_number')
         profile.home_address = form.cleaned_data.get('home_address')
         profile.gender = form.cleaned_data.get('gender')
         profile.profile_pic = form.cleaned_data.get('profile_pic')
         profile.user = user
         profile.save()
-            
+
         current_site = get_current_site(self.request)
         subject = 'Activate Your Account'
         message = render_to_string('account_activation_email.html', {
@@ -180,8 +188,54 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class PasswordResetView(PasswordResetView):
+class ForgotPasswordView(PasswordResetView):
     template_name = "forgot_password.html"
     form_class = PasswordResetEmailForm
     email_template_name = 'password_reset_email.html'
     from_email = 'nonereply@unffe.org'
+
+
+
+# used to obtain authentication token
+class ObtainAuthToken(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+    if coreapi is not None and coreschema is not None:
+        schema = ManualSchema(
+            fields=[
+                coreapi.Field(
+                    name="username",
+                    required=True,
+                    location='form',
+                    schema=coreschema.String(
+                        title="Username",
+                        description="Valid username for authentication",
+                    ),
+                ),
+                coreapi.Field(
+                    name="password",
+                    required=True,
+                    location='form',
+                    schema=coreschema.String(
+                        title="Password",
+                        description="Valid password for authentication",
+                    ),
+                ),
+            ],
+            encoding="application/json",
+        )
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        #
+        return Response({'token': token.key,'created': created,'user_id':user.pk, 'email':user.email})
+
+
+obtain_auth_token = ObtainAuthToken.as_view()
