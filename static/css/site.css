@@ -21271,10 +21271,7 @@ body.rtl .account-setting {
   .collection-product-wrapper .product-top-filter .popup-filter .product-page-per-view,
   .collection-product-wrapper .product-top-filter .popup-filter .product-page-filter {
     width: 50%; }
-    .collection-product-wrapper .product-top-filter .popup-filter .product-page-per-view select,
-    .collection-product-wrapper .product-top-filter .popup-filter .product-page-filter select {
-      padding-top: 10px;
-      padding-bottom: 10px; }
+
     .collection-product-wrapper .product-top-filter .popup-filter .product-page-per-view:before,
     .collection-product-wrapper .product-top-filter .popup-filter .product-page-filter:before {
       top: 13px; }
@@ -21495,11 +21492,7 @@ body.rtl .account-setting {
     border-left: none; }
   .rtl .collection-product-wrapper .product-filter-content .collection-view {
     padding-right: 20px !important; }
-  .rtl .collection-product-wrapper .product-top-filter .product-filter-content .product-page-filter select,
-  .rtl .collection-product-wrapper .product-top-filter .product-filter-content .product-page-per-view select,
-  .rtl .collection-product-wrapper .product-top-filter .popup-filter .product-page-filter select,
-  .rtl .collection-product-wrapper .product-top-filter .popup-filter .product-page-per-view select {
-    padding: 21px 34px 21px 34px; }
+
   .rtl .collection-product-wrapper .product-top-filter .product-filter-content .product-page-per-view,
   .rtl .collection-product-wrapper .product-top-filter .popup-filter .product-page-per-view {
     border-right: 1px solid #dddddd; }
@@ -21507,9 +21500,7 @@ body.rtl .account-setting {
     border-right: none; }
   .rtl .collection-product-wrapper .product-top-filter .popup-filter .search-count h5 {
     text-align: center; }
-  .rtl .collection-product-wrapper .product-top-filter .popup-filter .product-page-filter select,
-  .rtl .collection-product-wrapper .product-top-filter .popup-filter .product-page-per-view select {
-    padding: 10px 34px 10px 34px; }
+
   .rtl .collection-product-wrapper .product-top-filter .popup-filter .sidebar-popup {
     background: none var(--theme-deafult); }
   .rtl .banner-timer .timer {
@@ -21531,9 +21522,7 @@ body.rtl .account-setting {
     text-align: center; }
   .dark .collection-filter {
     background-color: #2b2b2b; }
-  .dark .collection-product-wrapper .product-top-filter .product-filter-content .product-page-per-view select,
-  .dark .collection-product-wrapper .product-top-filter .product-filter-content .product-page-filter select {
-    border-color: #404040; }
+
   .dark .collection-mobile-back {
     border-color: #404040; }
     .dark .collection-mobile-back span {
