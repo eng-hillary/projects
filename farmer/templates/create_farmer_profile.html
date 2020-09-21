@@ -139,16 +139,18 @@
             <!-- Container-fluid Ends-->
             {% endblock %}
 
-{% block js_block %}
+
+<!--select 2-->
+<script src="{% static 'js/select2.min.js' %}"></script>
 <script type="text/javascript">
 
   $(document).ready(function () {
-      $('#id_sector').select2();
+      $('#id_sector').hide();
   });
 
 
 </script>
-{% endblock js_block %}
+
 
 
 
