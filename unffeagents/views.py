@@ -8,8 +8,19 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from rest_framework.views import APIView
-from rest_framework.authentication import BasicAuthentication
+from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.permissions import IsAuthenticated
+from .forms import (AgentProfileForm)
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
+                         Http404)
+
+from django.views.generic import (
+    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
 # views for agentprofiles
 class AgentProfileViewSet(viewsets.ModelViewSet):
     """
@@ -29,39 +40,55 @@ class AgentProfileList(APIView):
         return Response({'agentprofiles': queryset})
 
 
-class AgentProfileDetail(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'agentprofile_detail.html'
-
-    def get(self, request, pk):
-        agentprofile = get_object_or_404(AgentProfile, pk=pk)
-        serializer = AgentProfileSerializer(agentprofile)
-        return Response({'serializer': serializer, 'agentprofile': agentprofile})
-
-    def post(self, request, pk):
-        agentprofile = get_object_or_404(AgentProfile, pk=pk)
-        serializer = AgentProfileSerializer(agentprofile, data=request.data)
-        if not serializer.is_valid():
-            return Response({'serializer': serializer, 'agentprofile': agentprofile})
-        serializer.save()
-        return redirect('unffeagents:agentprofile_list')
-
-class CreateAgentProfile(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
+class CreateAgentProfile(LoginRequiredMixin,CreateView):
     template_name = 'create_agentprofile.html'
+    success_url = reverse_lazy('unffeagents:agentprofile_list')
+    form_class = AgentProfileForm
+    success_message = "Your profile was created successfully"
 
-    def get(self, request):
-        agentprofile = None
-        serializer = AgentProfileSerializer()
-        return Response({'serializer': serializer, 'agentprofile': agentprofile})
 
-    def post(self, request):
-        serializer = AgentProfileSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response({'serializer': serializer})
-        serializer.save()
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateAgentProfile, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateAgentProfile, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        # setting farmer profile to in-active
+        profile.user = self.request.user
+        profile.save()
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Registrated Successful'
+        message = render_to_string('profile_created_successful.html', {
+            'user': profile.user,
+            'domain': current_site.domain
+            })
+        to_email = profile.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.send()
         return redirect('unffeagents:agentprofile_list')
 
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
 # views for market
 class MarketViewSet(viewsets.ModelViewSet):
     """
