@@ -16,7 +16,14 @@ class SellerProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(SellerProfileForm, self).__init__(*args, **kwargs)
-    
+        self.fields['district'].empty_label = '--please select--'
+        self.fields['region'].empty_label = '--please select--'
+        self.fields['county'].empty_label = '--please select--'
+        self.fields['sub_county'].empty_label = '--please select--'
+        self.fields['parish'].empty_label = '--please select--'
+        self.fields['village'].empty_label = '--please select--'
+        self.fields['enterprise'].empty_label = '--please select--'
+        self.fields['major_products'].empty_label = '--please select--'
 
 class ProductProfileForm(forms.ModelForm):
     

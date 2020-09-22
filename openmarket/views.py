@@ -81,11 +81,10 @@ class CreateProductProfile(CreateView):
 
     def form_valid(self, form):
         profile = form.save(commit=False)
-        # setting product profile to in-active
-        profile.status = 'in_active'
+        # setting product profile to pending
+        profile.status = 'pending'
         profile.user = self.request.user
         profile.save()
-        
         return redirect('openmarket:product_list')
 
     def form_invalid(self, form):

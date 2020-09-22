@@ -18,6 +18,7 @@ from farm.models import Enterprise
 
 class ProductSerializer(serializers.ModelSerializer):
     enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
+    enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     
     class Meta:
         model = Product
@@ -26,6 +27,17 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class SellerSerializer(serializers.ModelSerializer):
     enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
+    enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    major_products = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    user = serializers.SlugRelatedField(many=False,read_only=True, slug_field='username')
+    region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    
+
    # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
