@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from common.models import(Region, District, County, SubCounty, Parish, Village, TimeStampedModel)
 from common.choices import(GENDER_CHOICES,
-                           MARITAL_STATUSES,
-                           STATUS,INVENTORY_STATUS, 
+                           MARITAL_STATUSES,REGISTER_STATUS,
+                           STATUS,INVENTORY_STATUS, TYPE,
                            PAYMENT_MODE, 
                            PAYMENT_OPTIONS)
 from django.core.validators import RegexValidator
@@ -33,7 +33,7 @@ class Seller(models.Model):
     date_of_birth = models.DateField(max_length=8)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
-    seller_type = models.CharField(max_length=15, null=False)
+    seller_type = models.CharField(choices=TYPE,max_length=15, null=False)
     enterprise = models.ForeignKey(to='farm.Enterprise',on_delete=models.CASCADE)
     major_products = models.ForeignKey(Product, on_delete=models.CASCADE)
 
@@ -47,7 +47,7 @@ class Seller(models.Model):
     parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
     village = models.ForeignKey(Village, on_delete=models.CASCADE)
     
-    status = models.CharField(choices=STATUS, default='in_active', max_length=20,null=False)
+    status = models.CharField(choices=REGISTER_STATUS, default='in_active', max_length=20,null=False)
       # handle approving of a seller
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)

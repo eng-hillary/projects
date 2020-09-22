@@ -21,6 +21,19 @@ STATUS = (
     ('Rejected', 'Rejected')
  )
 
+REGISTER_STATUS = (
+    (None, "--please select--"),
+    ('Pending', 'Pending'),
+    ('Approved', 'Approved'),
+
+ )
+
+TYPE = (
+    (None, "--please select--"),
+    ('wholeseller', 'wholeseller'),
+    ('retail', 'retail'),
+)
+
 INVENTORY_STATUS = (
      (None, "--please select--"),
      ('availabe', 'Available'),
