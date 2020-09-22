@@ -10,7 +10,7 @@ from django.core.validators import RegexValidator
 from farm.models import Enterprise
 from phonenumber_field.modelfields import PhoneNumberField
 
-# Create your models here.
+# Create your models here.phone_2 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
 
 class Product(models.Model):
     name = models.CharField(max_length=50, null=True)
@@ -28,22 +28,29 @@ class Product(models.Model):
 
 
 class Seller(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller')
-    #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    business_number = PhoneNumberField() # validators should be a list
-    business_location = models.CharField(null=True, max_length=50)
-    seller_type = models.CharField(max_length=15, null=False)
+    #personal information
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller')
     date_of_birth = models.DateField(max_length=8)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
+    marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
+    seller_type = models.CharField(max_length=15, null=False)
+    enterprise = models.ForeignKey(to='farm.Enterprise',on_delete=models.CASCADE)
+    major_products = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    #Location
+    business_number = PhoneNumberField()
+    business_location = models.CharField(null=True, max_length=50)
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
     sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE)
     parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
     village = models.ForeignKey(Village, on_delete=models.CASCADE)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
-    marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
-    enterprise = models.TextField(null= True)
-    major_products = models.ManyToManyField(Product, related_name='seller')
+    
+    status = models.CharField(choices=STATUS, default='in_active', max_length=20,null=False)
+      # handle approving of a seller
+    approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
+    approved_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         ordering = ('seller_type',)
