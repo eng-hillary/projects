@@ -99,7 +99,7 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Successful'
-        message = render_to_string('profile_created_successful.html', {
+        message = render_to_string('profile_created_successful_email.html', {
             'user': profile.user,
             'domain': current_site.domain
             })
@@ -107,6 +107,7 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
+        email.content_subtype = "html"
         email.send()
         return redirect('farmer:farmerprofile_list')
 
