@@ -16,9 +16,9 @@ MARITAL_STATUSES = (
 
 STATUS = (
     (None, "--please select--"),
-    ('active', 'Active'),
-    ('in_active', 'In-Active'),
-    ('rejected', 'Rejected')
+    ('Active', 'Active'),
+    ('Pending', 'Pending'),
+    ('Rejected', 'Rejected')
  )
 
 INVENTORY_STATUS = (

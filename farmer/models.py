@@ -23,32 +23,38 @@ class Group(TimeStampedModel, models.Model):
 
 
 class FarmerProfile(TimeStampedModel, models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='farmer')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='farmer')
+    # personal information
+
+    nin = models.CharField(_('National Identity Number (NIN)'),max_length=50, null=False, blank=False)
     date_of_birth = models.DateField()
-    nin = models.CharField(max_length=50, null=False, blank=False)
-    sector = models.ManyToManyField(Sector, related_name='farmer_sectors')
+    level_of_education = models.CharField(max_length=100, null=False, blank=False)
+    marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
+    phone_1 = PhoneNumberField(_('Phone number 1'), blank=False, null=False)
+    phone_2 = PhoneNumberField(_('Phone number 2'), blank=True, null=True)
+    number_of_dependants = models.PositiveIntegerField()
+    credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=False, blank=False)
+    experience = models.FloatField(_('Experience in years'),null=False, blank=False)
+
+    # location
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
     sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE)
     parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
     village = models.ForeignKey(Village, on_delete=models.CASCADE)
-    level_of_education = models.CharField(max_length=100, null=False, blank=False)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
-    marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
-    size_of_land = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
-    phone_1 = PhoneNumberField(blank = False)
-    phone_2 = PhoneNumberField(blank=True, null=True)
+
+    # farming information
+    sector = models.ManyToManyField(Sector, related_name='farmer_sectors')
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, null=True, blank=True)
+    size_of_land = models.DecimalField(_('Size of land in acres') ,decimal_places=2, max_digits=20, blank=False)
     type_of_land = models.CharField(choices=LAND_TYPES, max_length=20)
     production_scale = models.CharField(choices=PRODUCTION_SCALE, max_length=20)
-    number_of_dependants = models.PositiveIntegerField()
+    general_remarks = models.TextField(null=True, blank=True)
     # initial capital moved to farm
     #initial_total_capital = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
-    credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=False, blank=False)
-    experience = models.FloatField(_('Experience in years'),null=False, blank=False)
-    status = models.CharField(choices=STATUS, default='True', max_length=20,null=False)
-    general_remarks = models.TextField(null=True, blank=True)
+
+    status = models.CharField(choices=STATUS, default='in_active', max_length=20,null=False)
     # handle approving of a farmer
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)

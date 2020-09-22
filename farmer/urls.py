@@ -1,7 +1,8 @@
+
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import GroupList, FarmerProfileList
+from .views import (GroupList, FarmerProfileList, CreateFarmerProfile)
 
 
 router = routers.DefaultRouter()
@@ -16,5 +17,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('groups', GroupList.as_view(), name='group_list'),
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
+    path('create/profile', CreateFarmerProfile.as_view(), name="create_farmer"),
 
 ]
