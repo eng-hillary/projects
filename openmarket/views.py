@@ -56,7 +56,7 @@ Create Product profile. Used class based view.
 '''
 class CreateProductProfile(CreateView):
     template_name = 'create_product_profile.html'
-    success_url = reverse_lazy('product:productprofile_list')
+    success_url = reverse_lazy('openmarket:profile_list')
     form_class = ProductProfileForm
     success_message = "Product profile was created successfully"
 
@@ -85,7 +85,8 @@ class CreateProductProfile(CreateView):
         profile.status = 'in_active'
         profile.user = self.request.user
         profile.save()
-
+        
+        return redirect('openmarket:product_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
@@ -115,7 +116,7 @@ Create Seller profile. Used class based view.
 '''
 class CreateSellerProfile(LoginRequiredMixin,CreateView):
     template_name = 'create_seller_profile.html'
-    success_url = reverse_lazy('seller:sellerprofile_list')
+    success_url = reverse_lazy('openmarket:seller_list')
     form_class = SellerProfileForm
     success_message = "Your profile was created successfully"
 
@@ -157,7 +158,7 @@ class CreateSellerProfile(LoginRequiredMixin,CreateView):
                 subject, message, to=[to_email]
             )
         email.send()
-        return redirect('seller:sellerprofile_list')
+        return redirect('openmarket:seller_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
