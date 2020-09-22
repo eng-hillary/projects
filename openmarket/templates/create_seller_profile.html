@@ -18,7 +18,7 @@
                         <div class="col-lg-6">
                             <ol class="breadcrumb pull-right">
                                 <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                                <li class="breadcrumb-item">Farmers </li>
+                                <li class="breadcrumb-item">Sellers </li>
                                 <li class="breadcrumb-item active">Add Profile </li>
                             </ol>
                         </div>
@@ -35,43 +35,40 @@
                             <div class="card-header">
                                 <h5> Add Profile</h5>
                             </div>
-                            <form method="POST" novalidate enctype="multipart/form-data" class="card-body">
-                                {% csrf_token %}
+                            <form class="card-body">
+                                
                                 <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
                                     <li class="nav-item"><a class="nav-link active show" id="personalinfo-tab" data-toggle="tab" href="#personalinfo" role="tab" aria-controls="personalinfo" aria-selected="true" data-original-title="" title="">Personal Information</a></li>
                                     <li class="nav-item"><a class="nav-link" id="address-tabs" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false" data-original-title="" title="">address</a></li>
-                                    <li class="nav-item"><a class="nav-link" id="farming-tabs" data-toggle="tab" href="#farming" role="tab" aria-controls="farming" aria-selected="false" data-original-title="" title="">Farming Information</a></li>
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade active show" id="personalinfo" role="tabpanel" aria-labelledby="personalinfo-tab">
                                         <div class="row">
                                         
                                             <div class="col-xl-6 col-md-6">
-                                                {{ form.nin|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
                                                 {{ form.date_of_birth|as_crispy_field }}
                                             </div>
                                             <div class="col-xl-6 col-md-6">
-                                                {{ form.level_of_education|as_crispy_field }}
+                                                {{ form.gender|as_crispy_field }}
                                             </div>
+
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.marital_status|as_crispy_field }}
                                             </div>
                                             <div class="col-xl-6 col-md-6">
-                                                {{ form.phone_1|as_crispy_field }}
+                                                {{ form.seller_type|as_crispy_field }}
                                             </div>
                                             <div class="col-xl-6 col-md-6">
-                                                {{ form.phone_2|as_crispy_field }}
+                                                {{ form.enterprise|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-4 col-md-4">
-                                                {{ form.number_of_dependants|as_crispy_field }}
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.major_products|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-4 col-md-4">
-                                                {{ form.credit_access|as_crispy_field }}
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.business_number|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-4 col-md-4">
-                                                {{ form.experience|as_crispy_field }}
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.business_location|as_crispy_field }}
                                             </div>
                                         </div>
                                     </div>
@@ -101,38 +98,9 @@
                                             </div>
                                       
                                     </div>
-                                    <div class="tab-pane fade" id="farming" role="tabpanel" aria-labelledby="farming-tabs">
-                                       
-                                          
-                                        <div class="row">
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.sector|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.group|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-4 col-md-4">
-                                                {{ form.size_of_land|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-4 col-md-4">
-                                                {{ form.type_of_land|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-4 col-md-4">
-                                                {{ form.production_scale|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-12 col-md-12">
-                                                {{ form.general_remarks|as_crispy_field }}
-                                            </div>
-                                        
-                                        </div>
-                                  
-                                </div>
-                                </div>
+                                
                                 <div class="pull-right">
-
-                                    <input type="submit" value="Submit" class="btn btn-primary">
-
-
+                                   <input type='submit' class="btn btn-primary" value='save' />
                                 </div>
                             </form>
                         </div>
@@ -143,20 +111,6 @@
             {% endblock %}
            
 
-<!--select 2-->
-<!-- latest jquery-->
-{% block javascript %}
-<!--select 2-->
-<script src="{% static 'js/select2.min.js' %}"></script>
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        //$("#id_group").select2();
-    });
-  
-  
-  </script>
-{% endblock %}
 
 
 

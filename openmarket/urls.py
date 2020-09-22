@@ -4,6 +4,8 @@ from . import views
 
 from .views import (ProductList,
                     SellerList,
+                    CreateSellerProfile,
+                    CreateProductProfile,
                     BuyerList,
                     ServiceProviderList,
                     ServiceRegistrationList,
@@ -38,7 +40,9 @@ app_name = 'openmarket'
 urlpatterns = [
     path('', include(router.urls)),
     path('products', ProductList.as_view(), name='product_list'),
+    path('create/products', CreateProductProfile.as_view(), name="create_product"),
     path('sellers', SellerList.as_view(), name='seller_list'),
+    path('create/profile', CreateSellerProfile.as_view(), name="create_seller"),
     path('buyers', BuyerList.as_view(), name='buyer_list'),
     path('sellerposts', SellerPostList.as_view(), name='sellerpost_list'),
     path('buyerposts', BuyerPostList.as_view(), name='buyerpost_list'),

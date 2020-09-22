@@ -51,6 +51,14 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
     serializer_class = FarmerProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
+                         Http404)
+from django.views.generic import (
+    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
+from .forms import(FarmerProfileForm)
+
 
 class FarmerProfileList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]

@@ -69,6 +69,15 @@ class SignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
 
+class ProfileForm(forms.ModelForm):
+    home_address = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 30}),
+                                        required=False)
+    phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True)
+
+    class Meta:
+        model = Profile
+        fields = ('phone_number', 'home_address', 'gender')
+
 
 
 class PasswordResetEmailForm(PasswordResetForm):
@@ -79,3 +88,4 @@ class PasswordResetEmailForm(PasswordResetForm):
                                    is_active=True).exists():
             raise forms.ValidationError("User doesn't exist with this Email")
         return email
+

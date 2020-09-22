@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 # views for sector
@@ -33,6 +32,7 @@ class SectorList(LoginRequiredMixin, APIView):
 class SectorDetail(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'sector_detail.html'
+    context_object_name = "sectorrecord"
 
     def get(self, request, pk):
         sector = get_object_or_404(Sector, pk=pk)
