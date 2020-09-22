@@ -35,8 +35,8 @@
                             <div class="card-header">
                                 <h5> Add Profile</h5>
                             </div>
-                            <form class="card-body">
-                                
+                            <form method="POST" novalidate enctype="multipart/form-data" class="card-body">
+                                {% csrf_token %}
                                 <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
                                     <li class="nav-item"><a class="nav-link active show" id="personalinfo-tab" data-toggle="tab" href="#personalinfo" role="tab" aria-controls="personalinfo" aria-selected="true" data-original-title="" title="">Personal Information</a></li>
                                     <li class="nav-item"><a class="nav-link" id="address-tabs" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false" data-original-title="" title="">address</a></li>
@@ -111,17 +111,17 @@
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.group|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.county|as_crispy_field }}
+                                            <div class="col-xl-4 col-md-4">
+                                                {{ form.size_of_land|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.sub_county|as_crispy_field }}
+                                            <div class="col-xl-4 col-md-4">
+                                                {{ form.type_of_land|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.parish|as_crispy_field }}
+                                            <div class="col-xl-4 col-md-4">
+                                                {{ form.production_scale|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.village|as_crispy_field }}
+                                            <div class="col-xl-12 col-md-12">
+                                                {{ form.general_remarks|as_crispy_field }}
                                             </div>
                                         
                                         </div>
@@ -129,7 +129,10 @@
                                 </div>
                                 </div>
                                 <div class="pull-right">
-                                    <button type="button" class="btn btn-primary">Save</button>
+
+                                    <input type="submit" value="Submit" class="btn btn-primary">
+
+
                                 </div>
                             </form>
                         </div>
@@ -138,18 +141,23 @@
             </div>
             <!-- Container-fluid Ends-->
             {% endblock %}
+           
 
-
+<!--select 2-->
+<!-- latest jquery-->
+{% block javascript %}
 <!--select 2-->
 <script src="{% static 'js/select2.min.js' %}"></script>
 <script type="text/javascript">
 
-  $(document).ready(function () {
-      $('#id_sector').hide();
-  });
+    $(document).ready(function () {
+        //$("#id_group").select2();
+    });
+  
+  
+  </script>
+{% endblock %}
 
-
-</script>
 
 
 
