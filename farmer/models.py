@@ -47,7 +47,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     # farming information
     sector = models.ManyToManyField(Sector, related_name='farmer_sectors')
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, null=True, blank=True)
-    size_of_land = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    size_of_land = models.DecimalField(_('Size of land in acres') ,decimal_places=2, max_digits=20, blank=False)
     type_of_land = models.CharField(choices=LAND_TYPES, max_length=20)
     production_scale = models.CharField(choices=PRODUCTION_SCALE, max_length=20)
     general_remarks = models.TextField(null=True, blank=True)

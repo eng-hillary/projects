@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Group, FarmerProfile
 from django.contrib.auth.models import User
+from farm .models import Sector
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -11,7 +12,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class FarmerProfileSerializer(serializers.ModelSerializer):
-    sector = serializers.PrimaryKeyRelatedField(many=False, queryset=FarmerProfile.objects.all())
+    sector = serializers.PrimaryKeyRelatedField(many=True, queryset=Sector.objects.all())
     class Meta:
         model = FarmerProfile
         fields = ('user', 'date_of_birth', 'nin', 'sector', 'region', 'district', 'county', 
