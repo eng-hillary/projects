@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
+     
+      migrations.RemoveField(
             model_name='farmerprofile',
             name='gender',
         ),
@@ -22,7 +23,38 @@ class Migration(migrations.Migration):
             name='nin',
             field=models.CharField(max_length=50, verbose_name='National Identity Number (NIN)'),
         ),
+    
         migrations.AlterField(
+            model_name='farmerprofile',
+            name='user',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='farmer', to=settings.AUTH_USER_MODEL),
+        ),
+            migrations.AlterField(
+            model_name='farmerprofile',
+            name='phone_1',
+            field=phonenumber_field.modelfields.PhoneNumberField(max_length=128, region=None, verbose_name='Phone number 1'),
+        ),
+        migrations.AlterField(
+            model_name='farmerprofile',
+            name='phone_2',
+            field=phonenumber_field.modelfields.PhoneNumberField(blank=True, max_length=128, null=True, region=None, verbose_name='Phone number 2'),
+        ),
+        migrations.AlterField(
+            model_name='farmerprofile',
+            name='size_of_land',
+            field=models.DecimalField(decimal_places=2, max_digits=20, verbose_name='Size of land in acres'),
+        ),
+        migrations.AlterField(
+            model_name='farmerprofile',
+            name='status',
+            field=models.CharField(choices=[(None, '--please select--'), ('active', 'Active'), ('in_active', 'In-Active'), ('rejected', 'Rejected')], default='in_active', max_length=20),
+        ),
+        migrations.AlterField(
+            model_name='farmerprofile',
+            name='user',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='farmer', to=settings.AUTH_USER_MODEL),
+        ),
+          migrations.AlterField(
             model_name='farmerprofile',
             name='phone_1',
             field=phonenumber_field.modelfields.PhoneNumberField(max_length=128, region=None, verbose_name='Phone number 1'),
