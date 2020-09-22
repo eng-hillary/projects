@@ -24037,3 +24037,7 @@ body.rtl .account-setting {
   pointer-events: none;
   position: absolute;
 }
+a.detail-icon { 
+  color: #145a32;
+}
+ 
