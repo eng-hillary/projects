@@ -92,7 +92,7 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
     def form_valid(self, form):
         profile = form.save(commit=False)
         # setting farmer profile to in-active
-        profile.status = 'in_active'
+        profile.status = 'Pending'
         profile.user = self.request.user
         profile.save()
 
