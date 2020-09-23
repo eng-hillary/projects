@@ -1,6 +1,9 @@
 
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 {% block content %}
+<div style="background-image: url('static/images/dashboardbackground.jpg');">
+
+
             <!-- Container-fluid starts-->
             <div class="container-fluid">
                 <div class="page-header">
@@ -25,7 +28,7 @@
               <!-- Container-fluid starts-->
               <div class="container-fluid">
                 <div class="row">
-                
+ 
                     <div class="col-xl-3 col-md-6 xl-50">
                         <div class="card order-graph sales-carousel">
                             <div class="card-header">
@@ -540,5 +543,5 @@
                 </div>
             </div>
             <!-- Container-fluid Ends-->
-
+        </div>
             {% endblock %}

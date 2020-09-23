@@ -6,7 +6,8 @@ from .models import (Sector, Enterprise, Farm, FarmFacility, Produce, FarmProduc
 class SectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sector
-        fields = ['name', 'size']
+        fields = ['id','name', 'size']
+
 
 class EnterpriseSerializer(serializers.ModelSerializer):
     class Meta:
