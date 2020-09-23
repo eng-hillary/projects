@@ -39,7 +39,7 @@ class HomePage(TemplateView):
 
 # login view
 class LoginView(TemplateView):
-    template_name = "login.html"
+    template_name = "registration/login.html"
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)
@@ -129,6 +129,7 @@ class SignUpView(CreateView):
         profile.home_address = form.cleaned_data.get('home_address')
         profile.gender = form.cleaned_data.get('gender')
         profile.profile_pic = form.cleaned_data.get('profile_pic')
+        profile.user = user
         profile.save()
         current_site = get_current_site(self.request)
         subject = 'Activate Your Account'

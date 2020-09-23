@@ -7,10 +7,11 @@ from .models import FarmerProfile,Group
 class FarmerProfileAdmin(admin.ModelAdmin):
     list_display = [
         'user',
+        'nin'
         
 
     ]
-    search_fields = ['first_name']
+    search_fields = ['user__username','nin']
 
 
 admin.site.register(FarmerProfile, FarmerProfileAdmin)

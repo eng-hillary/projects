@@ -16,7 +16,7 @@ class DistrictAdmin(admin.ModelAdmin):
         'region'
         
    ]
-    search_fields = ['name', 'region']
+    search_fields = ['name', 'region__name']
 admin.site.register(District, DistrictAdmin)
 
 
@@ -26,7 +26,7 @@ class CountyAdmin(admin.ModelAdmin):
         'district'
         
    ]
-    search_fields = ['name', 'district']
+    search_fields = ['name', 'district__name']
 admin.site.register(County, CountyAdmin)
 
 

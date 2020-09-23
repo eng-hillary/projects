@@ -36,9 +36,9 @@
 <table
   id="table"
   data-toggle="table"
-  data-show-refresh="true"
   data-show-toggle="true"
   data-search="true"
+  data-show-refresh="true"
   data-show-fullscreen="true"
   data-show-columns="true"
   data-show-columns-toggle-all="true"
@@ -46,39 +46,41 @@
   data-click-to-select="true"
   data-minimum-count-columns="2"
   data-show-pagination-switch="true"
+  data-detail-view="true"
+  data-detail-formatter="detailFormatter"
   data-pagination="true"
   data-id-field="id"
   data-toolbar="#toolbar"
+  data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/api-farmer/farmerprofiles/?format=json">
+  data-url="/api-farmer/farmerprofiles/?format=json"
+  data-response-handler="responseHandler">
   <thead>
     <tr>
-      <th data-field="user" data-sortable="true">user</th>
-      <th data-field="date_of_birth" data-sortable="true">date_of_birth</th>
-      <th data-field="nin" data-sortable="true">nin</th>
-      <th data-field="sector" data-sortable="true">sector</th>
-      <th data-field="region" data-sortable="true">region</th>
-      <th data-field="district" data-sortable="true">district</th>
-      <th data-field="county" data-sortable="true">county</th>
-      <th data-field="sub_county" data-sortable="true">sub_county</th>
-      <th data-field="region" data-sortable="true">region</th>
-      <th data-field="parish" data-sortable="true">parish</th>
-      <th data-field="village" data-sortable="true">village</th>
-      <th data-field="level_of_education" data-sortable="true">level_of_education</th>
-      <th data-field="marital_status" data-sortable="true">marital_status</th>
-      <th data-field="size_of_land" data-sortable="true">size_of_land</th>
-      <th data-field="phone_1" data-sortable="true">phone_1</th>
-      <th data-field="phone_2" data-sortable="true">phone_2</th>
-      <th data-field="group" data-sortable="true">group</th>
-      <th data-field="type_of_land" data-sortable="true">type_of_land</th>
-      <th data-field="production_scale" data-sortable="true">production_scale</th>
-      <th data-field="number_of_dependants" data-sortable="true">number_of_dependants</th>
-      <th data-field="credit_access" data-sortable="true">credit_access</th>
-      <th data-field="experience" data-sortable="true">experience</th>
-      <th data-field="status" data-sortable="true">status</th>
-    
-
-                
+      <th data-field="state" data-checkbox="true"></th>
+      <th data-field="user" data-sortable="true">User</th>
+      <th data-field="date_of_birth" data-visible="false"  data-sortable="true">DOB</th>
+      <th data-field="nin" data-visible="false"  data-sortable="true">NIN</th>
+      <th data-field="sector" data-sortable="true">Sector</th>
+      <th data-field="region" data-sortable="true">Region</th>
+      <th data-field="district" data-sortable="true">District</th>
+      <th data-field="county" data-visible="false" data-sortable="true">County</th>
+      <th data-field="sub_county" data-visible="false" data-sortable="true">Sub County</th>
+      <th data-field="parish" data-visible="false" data-sortable="true">Parish</th>
+      <th data-field="village" data-visible="false" data-sortable="true">Village</th>
+      <th data-field="level_of_education" data-visible="false"  data-sortable="true">Education Level</th>
+      <th data-field="marital_status" data-visible="false" data-sortable="true">Marital Status</th>
+      <th data-field="size_of_land" data-visible="false"  data-sortable="true">Size of Land</th>
+      <th data-field="phone_1" data-sortable="true">Phone</th>
+      <th data-field="phone_2" data-visible="false" data-sortable="true">Phone 2</th>
+      <th data-field="group" data-sortable="true">Group</th>
+      <th data-field="type_of_land" data-visible="false" data-sortable="true">Land Type</th>
+      <th data-field="production_scale" data-visible="false"  data-sortable="true">Production Scale</th>
+      <th data-field="number_of_dependants" data-visible="false" data-sortable="true">Number of Dependants</th>
+      <th data-field="credit_access" data-visible="false" data-sortable="true">Access to Credit</th>
+      <th data-field="experience" data-visible="false"  data-sortable="true">experience</th>
+      <th data-field="status" data-sortable="true">status</th>       
+      <th data-formatter="operateFormatter" data-events="operateEvents">Action</th>     
                 
     </tr>
   </thead>
@@ -91,7 +93,130 @@
 <script src="{% static 'js/bootstrap-table.min.js' %}"></script>
 <script src="{% static 'js/bootstrap-table-export.min.js' %}"></script>
 <script>
-  
+ var $table = $('#table')
+  var $remove = $('#remove')
+  var selections = []
+
+  function getIdSelections() {
+    return $.map($table.bootstrapTable('getSelections'), function (row) {
+      return row.id
+    })
+  }
+
+  function responseHandler(res) {
+    $.each(res.rows, function (i, row) {
+      row.state = $.inArray(row.id, selections) !== -1
+    })
+    return res
+  }
+
+  function detailFormatter(index, row) {
+    var html = []
+    $.each(row, function (key, value) {
+      html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+    })
+    return html.join('')
+  }
+
+  function operateFormatter(value, row, index) {
+    return [
+      '<a class="Edit m-1" href="javascript:void(0)" title="Like">',
+      '<i class="fa fa-pencil"></i>',
+      '</a>  ',
+      '<a class="remove" href="javascript:void(0)" title="Remove">',
+      '<i class="fa fa-trash"></i>',
+      '</a>'
+    ].join('')
+  }
+
+  window.operateEvents = {
+    'click .Edit': function (e, value, row, index) {
+      alert('You click like action, row: ' + JSON.stringify(row))
+    },
+    'click .remove': function (e, value, row, index) {
+      $table.bootstrapTable('remove', {
+        field: 'id',
+        values: [row.id]
+      })
+    }
+  }
+
+  ///used cookies to get crsf token
+  function getCookie(c_name)
+    {
+      if (document.cookie.length > 0)
+        {
+          c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+         {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) c_end = document.cookie.length;
+            return unescape(document.cookie.substring(c_start,c_end));
+         }
+     }
+      return "";
+   }
+
+  function initTable() {
+
+    $table.on('check.bs.table uncheck.bs.table ' +
+      'check-all.bs.table uncheck-all.bs.table',
+    function () {
+      $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+      // save your data, here just save the current page
+      selections = getIdSelections()
+      // push or splice the selections if you want to save all data selections
+    })
+    $table.on('all.bs.table', function (e, name, args) {
+      console.log(name, args)
+    })
+    ///multiple delete
+    $remove.click(function () {
+      var ids = getIdSelections()
+      $remove.prop('disabled', true)
+    
+      swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover these records!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    for(id=0; id<ids.length; id++){
+        console.log(ids[id]);
+
+    $.ajax({
+        url: "/api-farmer/farmerprofiles/"+ids[id],
+        data: {},
+        headers:{"X-CSRFToken": getCookie("csrftoken")},
+        type: 'DELETE',
+        contentType: 'application/json',
+        success: function(result) {
+          console.log('deleted successfule');
+        },
+       });
+    swal("Your record/s have been deleted successfully!", {
+      icon: "success",
+    });}
+  } else {
+    swal("You have cancelled the deletion of records!");
+  }
+});
+      
+    })
+  }
+
+  $(function() {
+    initTable()
+
+    $('#locale').change(initTable)
+  })
+
+
 </script>
  
 
