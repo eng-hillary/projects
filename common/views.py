@@ -129,6 +129,7 @@ class SignUpView(CreateView):
         profile.home_address = form.cleaned_data.get('home_address')
         profile.gender = form.cleaned_data.get('gender')
         profile.profile_pic = form.cleaned_data.get('profile_pic')
+        profile.user = user
         profile.save()
         current_site = get_current_site(self.request)
         subject = 'Activate Your Account'
