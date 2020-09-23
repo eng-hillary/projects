@@ -20,7 +20,19 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-#views for products
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import(SellerProfileForm,ProductProfileForm)
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
+                         Http404)
+
+from django.views.generic import (
+    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
+    
 class ProductViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -31,8 +43,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class ProductList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'product_list.html'
 
@@ -40,6 +50,48 @@ class ProductList(APIView):
         queryset = Product.objects.order_by('-id')
         return Response({'products': queryset})
 
+
+'''
+Create Product profile. Used class based view.
+'''
+class CreateProductProfile(CreateView):
+    template_name = 'create_product_profile.html'
+    success_url = reverse_lazy('openmarket:profile_list')
+    form_class = ProductProfileForm
+    success_message = "Product profile was created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateProductProfile, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateProductProfile, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        # setting product profile to pending
+        profile.status = 'pending'
+        profile.user = self.request.user
+        profile.save()
+        return redirect('openmarket:product_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+        
 #views for sellers
 class SellerViewSet(viewsets.ModelViewSet):
     """
@@ -47,12 +99,10 @@ class SellerViewSet(viewsets.ModelViewSet):
     """
     queryset = Seller.objects.all().order_by('seller_type')
     serializer_class = SellerSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
 
 
 class SellerList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'seller_list.html'
 
@@ -60,6 +110,59 @@ class SellerList(APIView):
         queryset = Seller.objects.order_by('seller_type')
         return Response({'sellers': queryset})
 
+'''
+Create Seller profile. Used class based view.
+'''
+class CreateSellerProfile(LoginRequiredMixin,CreateView):
+    template_name = 'create_seller_profile.html'
+    success_url = reverse_lazy('openmarket:seller_list')
+    form_class = SellerProfileForm
+    success_message = "Your profile was created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateSellerProfile, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateSellerProfile, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        # setting farmer profile to in-active
+        profile.status = 'in_active'
+        profile.user = self.request.user
+        profile.save()
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Registrated Successful'
+        message = render_to_string('profile_created_successful.html', {
+            'user': profile.user,
+            'domain': current_site.domain
+            })
+        to_email = profile.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.send()
+        return redirect('openmarket:seller_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
 #views for buyers
 class BuyerViewSet(viewsets.ModelViewSet):
     """
@@ -71,8 +174,6 @@ class BuyerViewSet(viewsets.ModelViewSet):
 
 
 class BuyerList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'buyer_list.html'
 
@@ -92,8 +193,6 @@ class SellerPostViewSet(viewsets.ModelViewSet):
 
 
 class SellerPostList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'sellerpost_list.html'
 
@@ -113,8 +212,6 @@ class BuyerPostViewSet(viewsets.ModelViewSet):
 
 
 class BuyerPostList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'buyerpost_list.html'
 
@@ -134,8 +231,6 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
 
 
 class ServiceProviderList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceprovider_list.html'
 
@@ -155,8 +250,6 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
 
 
 class ServiceRegistrationList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceregistration_list.html'
 
@@ -176,8 +269,6 @@ class ContactDetailsViewSet(viewsets.ModelViewSet):
 
 
 class ContactDetailsList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'contactdetails_list.html'
 
@@ -197,8 +288,6 @@ class LogisticsViewSet(viewsets.ModelViewSet):
 
 
 class LogiticsList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'logistics_list.html'
 
@@ -218,8 +307,6 @@ class StorageViewSet(viewsets.ModelViewSet):
 
 
 class StorageList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'storage_list.html'
 
@@ -239,8 +326,6 @@ class PackagingViewSet(viewsets.ModelViewSet):
 
 
 class PackagingList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'packaging_list.html'
 
@@ -260,8 +345,6 @@ class MedicalViewSet(viewsets.ModelViewSet):
 
 
 class MedicalList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'medical_list.html'
 
@@ -281,8 +364,6 @@ class SoilScienceViewSet(viewsets.ModelViewSet):
 
 
 class SoilScienceList(APIView):
-    authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'soilscience_list.html'
 

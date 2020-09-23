@@ -16,10 +16,23 @@ MARITAL_STATUSES = (
 
 STATUS = (
     (None, "--please select--"),
-    ('active', 'Active'),
-    ('in_active', 'In-Active'),
-    ('rejected', 'Rejected')
+    ('Active', 'Active'),
+    ('Pending', 'Pending'),
+    ('Rejected', 'Rejected')
  )
+
+REGISTER_STATUS = (
+    (None, "--please select--"),
+    ('Pending', 'Pending'),
+    ('Approved', 'Approved'),
+
+ )
+
+TYPE = (
+    (None, "--please select--"),
+    ('wholeseller', 'wholeseller'),
+    ('retail', 'retail'),
+)
 
 INVENTORY_STATUS = (
      (None, "--please select--"),

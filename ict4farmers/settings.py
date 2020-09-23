@@ -39,7 +39,9 @@ INSTALLED_APPS = [
    
    #Third-party apps
     'rest_framework',
+    'rest_framework.authtoken',
     'phonenumber_field',
+    'compressor',
 
     #Local apps
     'common',
@@ -49,6 +51,9 @@ INSTALLED_APPS = [
     'openmarket',
     'unffeagents',
     'resourcesharing',
+    'crispy_forms',
+
+
 
 ]
 
@@ -82,8 +87,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ict4farmers.wsgi.application'
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 COMPRESS_ENABLED=True
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -126,11 +132,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100,
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+    ,
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
-        # 'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.IsAdminUser',
+        #'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
@@ -162,10 +172,16 @@ SITE_ID = 1
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
+
+#LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = '/login/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
+COMPRESS_ROOT = BASE_DIR + '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
