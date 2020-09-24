@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Group, FarmerProfile
-from .serializers import GroupSerializer, FarmerProfileSerializer
+from .serializers import GroupSerializer, FarmerProfileSerializer, FarmerApprovalSerializer
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -19,6 +19,16 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
 from .forms import(FarmerProfileForm)
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
+                         Http404)
+from django.views.generic import (
+    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
+from .forms import(FarmerProfileForm)
+import datetime
+
+
 
 # views for groups
 class GroupViewSet(viewsets.ModelViewSet):
@@ -29,9 +39,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-class FarmerListView():
 
-    template_name = 'farmers_list.html'
 
 class GroupList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -51,13 +59,37 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
     serializer_class = FarmerProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
-from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
-                         Http404)
-from django.views.generic import (
-    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from .forms import(FarmerProfileForm)
+    def approved(self, request, pk, format=None):
+        profile = self.get_object()
+        serializer = FarmerApprovalSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def decline(self, request, pk, format=None):
+        profile = self.get_object()
+        serializer = FarmerApprovalSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+
+# class FarmerApproval(viewsets.ModelViewSet, UpdateModelMixin):
+#     permission_classes = [permissions.IsAuthenticated]
+#     serializer_class = FarmerProfileSerializer
+#     queryset = FarmerProfile.objects.all().order_by('region')
+
+#     def perform_update(self, serializer):
+#          # get the object itself
+#         instance = self.get_object()
+#         # modify fields during the update
+#         modified_instance = serializer.save(
+#             status='Active',
+#             approver=self.request.user,
+#             approved_date =datetime.now()
+#            )
 
 
 class FarmerProfileList(APIView, LoginRequiredMixin):
@@ -65,8 +97,7 @@ class FarmerProfileList(APIView, LoginRequiredMixin):
     template_name = 'farmerprofile_list.html'
 
     def get(self, request):
-        queryset = FarmerProfile.objects.order_by('region')
-        return Response({'farmerprofiles': queryset})
+        return Response()
 
 
 '''

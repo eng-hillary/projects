@@ -41,3 +41,7 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
             return "No"
        
     
+class FarmerApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FarmerProfile
+        fields =('status','approver','approved_date')
