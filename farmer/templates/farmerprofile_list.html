@@ -228,11 +228,11 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
       $approve.prop('disabled', true)
     
       swal({
-  title: "Are you sure?",
-  text: "Once deleted, you will not be able to recover these records!",
-  icon: "warning",
+  title: "Approve Farmer Applications?",
+  text: "Are you sure you want to approve these applications!",
+  icon: "success",
   buttons: true,
-  dangerMode: true,
+  dangerMode: false,
 })
 .then((willDelete) => {
   if (willDelete) {
@@ -266,11 +266,11 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
       $decline.prop('disabled', true)
     
       swal({
-  title: "Are you sure?",
-  text: "Once deleted, you will not be able to recover these records!",
+  title: "Decline Application",
+  text: "Are you sure You want to decline these Applications?",
   icon: "warning",
   buttons: true,
-  dangerMode: true,
+  dangerMode: false,
 })
 .then((willDelete) => {
   if (willDelete) {
@@ -287,7 +287,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
           console.log('approved successfully');
         },
        });
-    swal("You have approve farmer/s successfully!", {
+    swal("You have approved farmer/s successfully!", {
       icon: "success",
     });}
   } else {
