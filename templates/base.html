@@ -133,9 +133,10 @@
                     </li>
                     <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Service Provider</span><i class="fa fa-angle-right pull-right"></i></a>
                         <ul class="sidebar-submenu">
-                            <li><a href="#"><i class="fa fa-circle"></i>Registration</a></li>
-                            <li><a href="transactions.html"><i class="fa fa-circle"></i>My Applications</a></li>
-                            
+
+                            <li><a href="{% url 'openmarket:serviceprovider_registration' %}"><i class="fa fa-circle"></i>Registration</a></li>
+                            <li><a href="{% url 'openmarket:serviceprovider_list' %}"><i class="fa fa-circle"></i>My Applications</a></li>
+                   
                         </ul>
                     </li>
                     <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Seller</span><i class="fa fa-angle-right pull-right"></i></a>

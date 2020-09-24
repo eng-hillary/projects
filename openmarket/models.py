@@ -5,10 +5,12 @@ from common.choices import(GENDER_CHOICES,
                            MARITAL_STATUSES,REGISTER_STATUS,
                            STATUS,INVENTORY_STATUS, TYPE,
                            PAYMENT_MODE, 
-                           PAYMENT_OPTIONS)
+                           PAYMENT_OPTIONS,
+                           YES_OR_NO)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.translation import ugettext as _
 
 # Create your models here.phone_2 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
 
@@ -92,13 +94,31 @@ class BuyerPost(models.Model):
         ordering =("name",)
 
 class ServiceProvider(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='serviceprovider')
-    location = models.CharField(null=True, max_length=50)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='serviceprovider')
+    nin = models.CharField(_('National Identity Number (NIN)'),max_length=50, null=True, blank=False)
+    service_provider_location = models.CharField(null=True, max_length=50)
     list_of_service = models.CharField(blank=True, max_length=50)
     service_type = models.CharField(max_length=50, null=True)
+    phone_1 = PhoneNumberField(_('Phone number 1'), blank=False, null=True)
+    phone_2 = PhoneNumberField(_('Phone number 2'), blank=True, null=True)
+    is_the_service_available = models.BooleanField(choices=YES_OR_NO, null=True)
+    service_location = models.CharField(max_length=100, null=True)
+    is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
+
+
+    # location
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
+    district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
+    county = models.ForeignKey(County, on_delete=models.CASCADE,null=True)
+    sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE, null=True)
+    parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True)
+    village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True)
+
 
     class meta:
-        ordering =("service_type",)
+        ordering =("service_type")
+
+
 
 class ServiceRegistration(models.Model):
     service_id = models.CharField(max_length=50, null=True, blank=True)
@@ -106,7 +126,6 @@ class ServiceRegistration(models.Model):
 
     class Meta:
         ordering =("service_id",)
-
 class ContactDetails(models.Model):
     name = models.CharField(max_length=25, null=True)
     #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")

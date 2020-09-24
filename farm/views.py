@@ -62,7 +62,7 @@ class CreateSector(LoginRequiredMixin, APIView):
         if not serializer.is_valid():
             return Response({'serializer': serializer})
         serializer.save()
-        return redirect('farms:sector_list')
+        return redirect('farm:sector_list')
 
 # views for enterprise
 class EnterpriseViewSet(viewsets.ModelViewSet):
