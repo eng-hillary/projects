@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col">
+                <div class="page-header-left">
+                    <h3>Create Service
+                        <small>{{ user.groups.all.0 }} </small>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <ol class="breadcrumb pull-right">
+                    <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item">Service Providers </li>
+                    <li class="breadcrumb-item active">Add a Service </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->
+
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card tab2-card">
+                <div class="card-header">
+                    <h5> Add Service</h5>
+                </div>
+                <form method="POST" novalidate enctype="multipart/form-data" class="card-body">
+                    {% csrf_token %}
+                    <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
+                        <li class="nav-item"><a class="nav-link active show" id="personalinfo-tab" data-toggle="tab"
+                                href="#personalinfo" role="tab" aria-controls="personalinfo" aria-selected="true"
+                                data-original-title="" title="">Personal Information</a></li>
+
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade active show" id="personalinfo" role="tabpanel"
+                            aria-labelledby="personalinfo-tab">
+                            <div class="row">
+
+                                <div class="col-xl-6 col-md-6">
+                                    {{ form.service_name|as_crispy_field }}
+                                </div>
+
+                                <div class="col-xl-6 col-md-6">
+                                    {{ form.category|as_crispy_field }}
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    {{ form.service_type|as_crispy_field }}
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    {{ form.size|as_crispy_field }}
+                                </div>
+                                <div class="col-xl-6 col-md-6">
+                                    {{ form.picture|as_crispy_field }}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+
+                        <input type="submit" value="Submit" class="btn btn-primary">
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->
+{% endblock %}
+
+
+<!--select 2-->
+<!-- latest jquery-->
+{% block javascript %}
+<!--select 2-->
+<script src="{% static 'js/select2.min.js' %}"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //$("#id_group").select2();
+    });
+</script>
+{% endblock %}

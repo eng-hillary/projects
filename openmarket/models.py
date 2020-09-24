@@ -6,7 +6,8 @@ from common.choices import(GENDER_CHOICES,
                            STATUS,INVENTORY_STATUS, TYPE,
                            PAYMENT_MODE, 
                            PAYMENT_OPTIONS,
-                           YES_OR_NO)
+                           YES_OR_NO,
+                           SERVICE_CATEGORY)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise
 from phonenumber_field.modelfields import PhoneNumberField
@@ -97,14 +98,14 @@ class ServiceProvider(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='serviceprovider')
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=50, null=True, blank=False)
     service_provider_location = models.CharField(null=True, max_length=50)
-    list_of_service = models.CharField(blank=True, max_length=50)
+    list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
     service_type = models.CharField(max_length=50, null=True)
     phone_1 = PhoneNumberField(_('Phone number 1'), blank=False, null=True)
     phone_2 = PhoneNumberField(_('Phone number 2'), blank=True, null=True)
     is_the_service_available = models.BooleanField(choices=YES_OR_NO, null=True)
     service_location = models.CharField(max_length=100, null=True)
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
-
+    category = models.CharField(choices=SERVICE_CATEGORY,null=True,max_length=50)
 
     # location
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
@@ -118,8 +119,24 @@ class ServiceProvider(models.Model):
     class meta:
         ordering =("service_type")
 
+class Service(models.Model):
+    service_provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, null=True)
+    category = models.CharField(choices=SERVICE_CATEGORY,null=True, max_length=50)
+    service_name = models.CharField(max_length=200, null=True)
+    service_type = models.CharField(max_length=50, null=True)
+    size =  models.FloatField(max_length=50, null=True)
+    picture = models.ImageField(null=True, blank=True)
 
+    class meta:
+        ordering =("service_type")
 
+"""
+location
+contact details
+availability date and time
+terms and conditions
+
+"""
 class ServiceRegistration(models.Model):
     service_id = models.CharField(max_length=50, null=True, blank=True)
     type = models.CharField(max_length=50)
