@@ -24045,7 +24045,11 @@ a.detail-icon {
  
     
     /* Style the input fields */
-   
+   /* Style the form */
+     /* Style the form */
+      #form {
+        background-color: #ffffff;
+      }
     /* Mark input boxes that gets an error on validation: */
     input.invalid {
         background-color: #ffdddd;
