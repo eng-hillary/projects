@@ -2,7 +2,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import (GroupList, FarmerProfileList, CreateFarmerProfile)
+from .views import (GroupList, FarmerProfileList, CreateFarmerProfile, UpdateFarmerProfile)
 
 
 router = routers.DefaultRouter()
@@ -18,5 +18,6 @@ urlpatterns = [
     path('groups', GroupList.as_view(), name='group_list'),
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
     path('create/profile', CreateFarmerProfile.as_view(), name="create_farmer"),
+    path('<int:pk>/edit/', UpdateFarmerProfile.as_view(), name="edit_farmer_profile"),
 
 ]

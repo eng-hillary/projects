@@ -133,9 +133,10 @@
                     </li>
                     <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Service Provider</span><i class="fa fa-angle-right pull-right"></i></a>
                         <ul class="sidebar-submenu">
-                            <li><a href="#"><i class="fa fa-circle"></i>Registration</a></li>
-                            <li><a href="transactions.html"><i class="fa fa-circle"></i>My Applications</a></li>
-                            
+
+                            <li><a href="{% url 'openmarket:serviceprovider_registration' %}"><i class="fa fa-circle"></i>Registration</a></li>
+                            <li><a href="{% url 'openmarket:serviceprovider_list' %}"><i class="fa fa-circle"></i>My Applications</a></li>
+                   
                         </ul>
                     </li>
                     <li><a class="sidebar-header" href=""><i data-feather="users"></i><span>Seller</span><i class="fa fa-angle-right pull-right"></i></a>
@@ -198,7 +199,8 @@
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.js' %}"></script>
 
-
+<!--sweet Alert-->
+<script src="{% static 'js/sweetalert.min.js' %}"></script>
 
 <!-- feather icon js-->
 <script src="{% static 'js/icons/feather-icon/feather.min.js' %}"></script>
