@@ -120,7 +120,7 @@
 
   function operateFormatter(value, row, index) {
     return [
-      '<a class="Edit m-1" href="javascript:void(0)" title="Like">',
+      '<a class="Edit m-1" href="javascript:void(0)" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
       '<a class="remove" href="javascript:void(0)" title="Remove">',
@@ -131,7 +131,8 @@
 
   window.operateEvents = {
     'click .Edit': function (e, value, row, index) {
-      alert('You click like action, row: ' + JSON.stringify(row))
+      window.location.href ="/farmer/"+row.id+"/edit";
+      
     },
     'click .remove': function (e, value, row, index) {
       $table.bootstrapTable('remove', {
