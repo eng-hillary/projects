@@ -21,7 +21,7 @@ from rest_framework.views import APIView
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import(SellerProfileForm,ProductProfileForm)
+from .forms import(SellerProfileForm,ProductProfileForm, ServiceProviderProfileForm)
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
@@ -248,6 +248,71 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+#service provider list
+class ServiceProviderProfileList(APIView, LoginRequiredMixin):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'serviceprovider_list.html'
+
+    def get(self, request):
+        queryset = FarmerProfile.objects.order_by('region')
+        return Response({'serviceproviders': queryset})
+
+
+#views for creating a service provider profile
+
+
+
+class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
+    template_name = 'register_service_provider.html'
+    success_url = reverse_lazy('openmarket:serviceprovider_list')
+    form_class = ServiceProviderProfileForm
+    success_message = "Your profile was created successfully"
+    
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateServiceProviderProfile, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateServiceProviderProfile, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        # setting farmer profile to in-active
+        profile.status = 'Pending'
+        profile.user = self.request.user
+        profile.save()
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Registrated Successful'
+        message = render_to_string('profile_created_successful_email.html', {
+            'user': profile.user,
+            'domain': current_site.domain
+            })
+        to_email = profile.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('openmarket:serviceprovider_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
 
 class ServiceRegistrationList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
