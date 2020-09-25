@@ -19,7 +19,7 @@ from django.utils.encoding import force_text
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.urls import reverse_lazy
-from .models import Profile
+from .models import (Profile, District, Region, County, SubCounty, Parish, Village)
 from django.views.generic import ( CreateView)
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import PasswordResetView
@@ -275,3 +275,34 @@ class ObtainAuthToken(APIView):
 
 obtain_auth_token = ObtainAuthToken.as_view()
 
+
+'''
+Am using these methods to load data for cascading dropdowns of districts, counties and others
+'''
+def load_districts(request):
+    region_id = request.GET.get('region')
+    districts = District.objects.filter(region_id=region_id).order_by('name')
+    return render(request, 'destrict_dropdown_list_options.html', {'districts': districts})
+
+
+def load_counties(request):
+    district_id = request.GET.get('district')
+    counties = County.objects.filter(district_id=district_id).order_by('name')
+    return render(request, 'county_dropdown_list_options.html', {'counties': counties})
+
+
+def load_sub_counties(request):
+    county_id = request.GET.get('county')
+    sub_counties = SubCounty.objects.filter(county_id=county_id).order_by('name')
+    return render(request, 'sub_county_dropdown_list_options.html', {'sub_counties': sub_counties})
+
+
+def load_parishes(request):
+    sub_county_id = request.GET.get('sub_county')
+    parishes = Parish.objects.filter(sub_county_id=sub_county_id).order_by('name')
+    return render(request, 'parish_dropdown_list_options.html', {'parishes': parishes})
+
+def load_villages(request):
+    parish_id = request.GET.get('parish')
+    villages = Village.objects.filter(parish_id=parish_id).order_by('name')
+    return render(request, 'village_dropdown_list_options.html', {'villages': villages})
