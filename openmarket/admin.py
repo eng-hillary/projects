@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django_cascading_dropdown_widget.widgets import DjangoCascadingDropdownWidget
-from django_cascading_dropdown_widget.widgets import CascadingModelchoices
 from .models import Seller, Product, ServiceProvider
 from common.models import Region, District
 from django import forms
