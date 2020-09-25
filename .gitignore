@@ -8,6 +8,6 @@ db.sqlite3
 uploads/
 lydiaenv/
 static/CACHE
-myvenv/
 node_modules
 angelenv/
+myvenv/
