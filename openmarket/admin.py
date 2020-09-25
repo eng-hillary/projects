@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Seller, Product
+from django_cascading_dropdown_widget.widgets import DjangoCascadingDropdownWidget
+from django_cascading_dropdown_widget.widgets import CascadingModelchoices
+from .models import Seller, Product, ServiceProvider
+from common.models import Region, District
+from django import forms
+#from .forms import ServiceProviderProfileForm
 # Register your models here.
 
 
@@ -29,3 +34,12 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['name', 'slug']
 
 admin.site.register(Product, ProductAdmin)
+
+class ServiceProviderAdmin(admin.ModelAdmin):
+    list_display = [
+       'user'
+]
+    search_fields = ['user']
+
+admin.site.register(ServiceProvider, ServiceProviderAdmin)
+

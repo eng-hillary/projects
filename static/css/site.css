@@ -38,7 +38,7 @@ h3 {
 
 h4 {
   font-size: 18px;
-  text-transform: capitalize;
+  text-transform: c3pitalize;
   font-weight: 400;
   letter-spacing: 0.03em;
   line-height: 1; }
@@ -24041,7 +24041,6 @@ a.detail-icon {
   color: #145a32;
 }
  
-
  
     
     /* Style the input fields */
@@ -24083,11 +24082,9 @@ a.detail-icon {
     }
 
 
-
-
-
-
-
-
-
-
+a.Edit{
+  color:#0062cc;
+}
+a.remove{
+  color:#dc3545;
+}
