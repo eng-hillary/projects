@@ -1,9 +1,14 @@
 {% extends 'root_email.html' %}
-{% block content%}
-<h4>
-    Dear {{user}}
-</h4>
-<p>
-    Your application as a farmer on ICT4Farmers, has been successfully received
-</p>
-{% endblock %}
+{% block heading %}
+Dear {{ user.first_name }} {{user.last_name}},
+{% endblock heading %}
+{% block content_body %}
+
+Your Profile as a farmer in the ICT4Farmers System has been accepted successfully
+<br>
+
+If you think, it's not you, then just ignore this email.
+<br>
+Kind Regards,
+ICT4Farmers Team
+{% endblock content_body %}
