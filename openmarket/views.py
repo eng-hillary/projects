@@ -18,7 +18,7 @@ from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.authentication import BasicAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import(SellerProfileForm,ProductProfileForm, ServiceProviderProfileForm)
@@ -43,6 +43,8 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class ProductList(APIView):
+    permission_classes = (IsAuthenticated,) 
+    authentication_classes = (TokenAuthentication,) 
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'product_list.html'
 
@@ -141,7 +143,7 @@ class CreateSellerProfile(LoginRequiredMixin,CreateView):
     def form_valid(self, form):
         profile = form.save(commit=False)
         # setting farmer profile to in-active
-        profile.status = 'in_active'
+        profile.status = 'pending'
         profile.user = self.request.user
         profile.save()
 

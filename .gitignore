@@ -6,6 +6,8 @@ db.sqlite3
 .DS_Store
 .vscode/
 uploads/
+lydiaenv/
 static/CACHE
+node_modules
 angelenv/
 myvenv/

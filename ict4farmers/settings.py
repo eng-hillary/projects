@@ -137,8 +137,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication', 
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
-    ,
+    ),
+    'PAGE_SIZE:10'
+    
     'DEFAULT_PERMISSION_CLASSES': (
         #'rest_framework.permissions.AllowAny',
         'rest_framework.permissions.IsAuthenticated',
