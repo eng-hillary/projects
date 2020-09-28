@@ -26,7 +26,7 @@ SECRET_KEY = '9fakf1yzy-cr@g7=&#^bn5d7ck60=fm#(nh&2zzc*23hltrveh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = ['127.0.0.1','app.unffeict4farmers.org','46.101.14.149']
 
 # Application definition
 
@@ -184,7 +184,7 @@ LOGIN_URL = '/login/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
-STATIC_ROOT = os.path.join('/home/unffeagent/projects/ICT4Farmers/ICT4Farmers/static')
+STATIC_ROOT = os.path.join('/home/unffeagent/projects/ICT4Farmers/ICT4Farmers/staticfiles')
 COMPRESS_ROOT = BASE_DIR + '/static/'
 
 MEDIA_URL = '/media/'
