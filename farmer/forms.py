@@ -1,5 +1,5 @@
 from django import forms
-from .models import FarmerProfile
+from .models import FarmerProfile, Group
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from common .models import(District, County, SubCounty, Parish, Village)
@@ -39,7 +39,7 @@ class FarmerProfileForm(forms.ModelForm):
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty district queryset
         elif self.instance.pk:
-            self.fields['district'].queryset = self.instance.Region.district_set.order_by('name')
+            self.fields['district'].queryset = self.instance.region.district_set.order_by('name')
 
         if 'district' in self.data:
             try:
@@ -48,7 +48,7 @@ class FarmerProfileForm(forms.ModelForm):
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty district queryset
         elif self.instance.pk:
-            self.fields['county'].queryset = self.instance.District.county_set.order_by('name')
+            self.fields['county'].queryset = self.instance.district.county_set.order_by('name')
         
         if 'county' in self.data:
             try:
@@ -57,7 +57,7 @@ class FarmerProfileForm(forms.ModelForm):
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty district queryset
         elif self.instance.pk:
-            self.fields['sub_county'].queryset = self.instance.County.sub_county_set.order_by('name')
+            self.fields['sub_county'].queryset = self.instance.county.subcounty_set.order_by('name')
 
         
         if 'sub_county' in self.data:
@@ -67,7 +67,8 @@ class FarmerProfileForm(forms.ModelForm):
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty district queryset
         elif self.instance.pk:
-            self.fields['parish'].queryset = self.instance.SubCounty.parish_set.order_by('name')
+            self.fields['parish'].queryset = self.instance.sub_county.parish_set.order_by('name')
+            print(self.instance.sub_county.parish_set)
 
 
         if 'parish' in self.data:
@@ -77,4 +78,20 @@ class FarmerProfileForm(forms.ModelForm):
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty district queryset
         elif self.instance.pk:
-            self.fields['village'].queryset = self.instance.Parish.village_set.order_by('name')
+            self.fields['village'].queryset = self.instance.parish.village_set.order_by('name')
+
+
+class FarmerGroupForm(forms.ModelForm):
+
+    contact_person_phone = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
+
+
+    class Meta:
+        model = Group
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(FarmerGroupForm, self).__init__(*args, **kwargs)
+        self.fields['description'].widget.attrs.update({'rows': '2'})
+            
