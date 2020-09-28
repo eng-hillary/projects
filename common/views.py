@@ -33,7 +33,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from .forms import ProfileForm
 
-class HomePage(TemplateView):
+class HomePage(LoginRequiredMixin, TemplateView):
 
     template_name = 'home.html'
 
