@@ -184,6 +184,7 @@ LOGIN_URL = '/login/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
+STATIC_ROOT = os.path.join('/home/projects/ICT4Farmers/ICT4Farmers/static')
 COMPRESS_ROOT = BASE_DIR + '/static/'
 
 MEDIA_URL = '/media/'
