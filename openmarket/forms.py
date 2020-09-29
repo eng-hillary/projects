@@ -4,8 +4,6 @@ from common.models import Region, District
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
-
-
 class ServiceProviderProfileForm(forms.ModelForm):
     #date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     phone_1 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
@@ -48,11 +46,12 @@ class ProductProfileForm(forms.ModelForm):
          super(ProductProfileForm, self).__init__(*args, **kwargs)
 
 class ServiceProfileForm(forms.ModelForm):
+    availability_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     
-     class Meta:
+    class Meta:
         model = Service
         exclude = ['date_created', 'date_updated']
 
-     def __init__(self, *args, **kwargs):
-         self.request = kwargs.pop('request', None)
-         super(ServiceProfileForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ServiceProfileForm, self).__init__(*args, **kwargs)
