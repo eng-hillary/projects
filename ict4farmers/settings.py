@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +26,7 @@ SECRET_KEY = '9fakf1yzy-cr@g7=&#^bn5d7ck60=fm#(nh&2zzc*23hltrveh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = ['127.0.0.1','app.unffeict4farmers.org','46.101.14.149']
 
 # Application definition
 
@@ -137,8 +138,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication', 
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
-    ,
+    ],
+    'PAGE_SIZE:10'
+    
     'DEFAULT_PERMISSION_CLASSES': (
         #'rest_framework.permissions.AllowAny',
         'rest_framework.permissions.IsAuthenticated',
@@ -182,6 +184,7 @@ LOGIN_URL = '/login/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
+STATIC_ROOT = os.path.join('/home/unffeagent/projects/ICT4Farmers/ICT4Farmers/staticfiles')
 COMPRESS_ROOT = BASE_DIR + '/static/'
 
 MEDIA_URL = '/media/'
@@ -195,3 +198,8 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
