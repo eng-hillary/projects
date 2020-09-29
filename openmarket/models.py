@@ -130,8 +130,8 @@ class Service(models.Model):
     service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True)
     terms_and_conditions = models.BooleanField(default=True)
-    availability_date = models.DateField(max_length=8, null=True)
-    availability_time = models.DateTimeField(auto_now_add=True, null=True)
+    availability_date = models.DateField(blank=True, null=True)
+    availability_time = models.DateTimeField(auto_now_add=True, null=True) 
     picture = models.ImageField(null=True, blank=True)
 
     class meta:
@@ -144,12 +144,6 @@ availability date and time
 terms and conditions
 
 """
-class ServiceRegistration(models.Model):
-    service_id = models.CharField(max_length=50, null=True, blank=True)
-    type = models.CharField(max_length=50)
-
-    class Meta:
-        ordering =("service_id",)
 class ContactDetails(models.Model):
     name = models.CharField(max_length=25, null=True)
     #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
