@@ -36,7 +36,7 @@ router.register(r'packagings', views.PackagingViewSet)
 router.register(r'medicals', views.MedicalViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
 # Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
+# Additionalbusiness_locationlude login URLs for the browsable API.
 
 app_name = 'openmarket'
 urlpatterns = [

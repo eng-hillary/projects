@@ -36,6 +36,7 @@ class SellerSerializer(serializers.ModelSerializer):
     sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     
 
    # enterprise = EnterpriseSerializer()
