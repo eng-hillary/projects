@@ -54,8 +54,8 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(widget=forms.TextInput(attrs={'class':'form-control'}),required=False)
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),required=True)
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),required=True)
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}),required=True)
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}),required=True)
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}),required=True, label="Enter Password")
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}),required=True, label="Confirm Password")
     home_address = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 30}),
                                         required=False)
     phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
