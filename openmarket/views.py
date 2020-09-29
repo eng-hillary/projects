@@ -45,7 +45,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 class ProductList(APIView):
     permission_classes = (IsAuthenticated,) 
-    authentication_classes = (TokenAuthentication,) 
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'product_list.html'
 
