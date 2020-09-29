@@ -84,7 +84,7 @@ SERVICE_CATEGORY = (
     (None, '--please select--'),
     ('storage', 'Storage'),
     ('transport', 'Transport'),
-    ('packaging', 'Packaging'),
+    ('value addition', 'Value Addition'),
     ('sorting and graining', 'Sorting and Graining'),
     ('Medical Services', 'Medical Services'),
     ('machinery', 'Machinery'),

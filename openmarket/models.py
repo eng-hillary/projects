@@ -107,6 +107,10 @@ class ServiceProvider(models.Model):
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
     category = models.CharField(choices=SERVICE_CATEGORY,null=True,max_length=50)
 
+    status = models.CharField(choices=STATUS, default='in_active', max_length=20,null=False)
+    # handle approving of a farmer
+    approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent_service_provider",null=True,blank=True)
+    approved_date = models.DateTimeField(blank=True, null=True)
     # location
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
     district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
@@ -125,6 +129,9 @@ class Service(models.Model):
     service_name = models.CharField(max_length=200, null=True)
     service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True)
+    terms_and_conditions = models.BooleanField(default=True)
+    availability_date = models.DateField(max_length=8, null=True)
+    availability_time = models.DateTimeField(auto_now_add=True, null=True)
     picture = models.ImageField(null=True, blank=True)
 
     class meta:

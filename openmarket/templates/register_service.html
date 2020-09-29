@@ -39,7 +39,7 @@
                     <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
                         <li class="nav-item"><a class="nav-link active show" id="personalinfo-tab" data-toggle="tab"
                                 href="#personalinfo" role="tab" aria-controls="personalinfo" aria-selected="true"
-                                data-original-title="" title="">Personal Information</a></li>
+                                data-original-title="" title="">Service Information</a></li>
 
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -60,9 +60,14 @@
                                 <div class="col-xl-6 col-md-6">
                                     {{ form.size|as_crispy_field }}
                                 </div>
+                    
                                 <div class="col-xl-6 col-md-6">
                                     {{ form.picture|as_crispy_field }}
                                 </div>
+                                <div class="col-xl-6 col-md-6">
+                                    {{ form.terms_and_conditions|as_crispy_field }}
+                                </div>
+                                
 
                             </div>
                         </div>
