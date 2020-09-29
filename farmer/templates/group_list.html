@@ -8,7 +8,7 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     <h3>Group List
-                        <small><a class="add-new" href="#">Add new</a></small>
+                        <small><a class="add-new" href="{% url 'farmer:create_farmer_group' %}">Add new</a></small>
                     </h3>
                 </div>
             </div>
@@ -97,7 +97,8 @@ data-page-list="[10, 25, 50, 100, all]"
     return '<img class="img-thumbnail" src="'+url+'">'
   }
   function operateFormatter(value, row, index) {
-    var url =row.logo;
+    console.log(row.id);
+    var url ="/farmer/group/" + row.id +"/edit";
     return [
    
       '<a class="Edit " href="'+url+'" title="Edit">',
