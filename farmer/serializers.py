@@ -6,6 +6,7 @@ from common .serializers import UserSerializer
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Group
         fields = ('name', 'description', 'logo', 'address', 'contact_person', 'contact_person_email', 

@@ -37,7 +37,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
 
 
 
@@ -75,21 +75,6 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
-
-# class FarmerApproval(viewsets.ModelViewSet, UpdateModelMixin):
-#     permission_classes = [permissions.IsAuthenticated]
-#     serializer_class = FarmerProfileSerializer
-#     queryset = FarmerProfile.objects.all().order_by('region')
-
-#     def perform_update(self, serializer):
-#          # get the object itself
-#         instance = self.get_object()
-#         # modify fields during the update
-#         modified_instance = serializer.save(
-#             status='Active',
-#             approver=self.request.user,
-#             approved_date =datetime.now()
-#            )
 
 
 class FarmerProfileList(APIView, LoginRequiredMixin):
@@ -137,7 +122,7 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
-        subject = 'Registrated Successful'
+        subject = 'Registered Successfully'
         message = render_to_string('profile_created_successful_email.html', {
             'user': profile.user,
             'domain': current_site.domain
