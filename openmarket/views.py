@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, ServiceRegistration, ContactDetails, Logistics, Storage, Packaging, Medical, SoilScience
+from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, Storage, Packaging, Medical, SoilScience
 from common.models import Region, District
 from .serializers import (ProductSerializer,
                         SellerSerializer, 
@@ -246,7 +246,7 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
     template_name = 'register_service.html'
     success_url = reverse_lazy('openmarket:serviceregistration_list')
     form_class = ServiceProfileForm
-    success_message = "Your service was created successfully"
+    success_message = "Your profile was created successfully"
     
 
     def dispatch(self, request, *args, **kwargs):
@@ -276,7 +276,7 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
-        subject = 'Registrated Successful'
+        subject = 'Registrated Service Successful'
         message = render_to_string('profile_created_successful_email.html', {
             'user': profile.user,
             'domain': current_site.domain
@@ -294,13 +294,14 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
 
+
 #views for service registration 
 
 class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = ServiceRegistration.objects.all().order_by('service_id')
+    queryset = Service.objects.all().order_by('service_provider_id')
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -310,7 +311,7 @@ class ServiceProviderProfileList(APIView, LoginRequiredMixin):
     template_name = 'serviceprovider_list.html'
 
     def get(self, request):
-        queryset = FarmerProfile.objects.order_by('region')
+        queryset = ServiceProvider.objects.order_by('region')
         return Response({'serviceproviders': queryset})
 
 
@@ -379,13 +380,14 @@ def load_districts(request):
 
 
 
-class ServiceRegistrationList(APIView):
+
+class ServiceRegistrationList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceregistration_list.html'
 
     def get(self, request):
-        queryset = ServiceRegistration.objects.order_by('service_id')
-        return Response({'serviceregistrations': queryset})
+        return Response()
+
 
 
 #views for ContactDetails
