@@ -13,7 +13,9 @@ from .serializers import (ProductSerializer,
                         StorageSerializer,
                         MedicalSerializer,
                         PackagingSerializer,
-                        SoilScienceSerializer)
+                        SoilScienceSerializer,
+                        ServiceProviderApprovalSerializer
+                        )
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -231,6 +233,25 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
     queryset = ServiceProvider.objects.all().order_by('service_type')
     serializer_class = ServiceProviderSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+    def approved(self, request, pk, format=None):
+        profile = self.get_object()
+        serializer = ServiceProviderApprovalSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def decline(self, request, pk, format=None):
+        profile = self.get_object()
+        serializer = ServiceProviderApprovalSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+
 
 
 class ServiceProviderList(APIView):
