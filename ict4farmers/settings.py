@@ -188,7 +188,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 STATIC_ROOT = os.path.join('/home/unffeagent/projects/ICT4Farmers/ICT4Farmers/staticfiles')
 COMPRESS_ROOT = BASE_DIR + '/static/'
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
 #Email backend----(Sendgrid)
