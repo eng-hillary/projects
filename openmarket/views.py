@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, ServiceRegistration, ContactDetails, Logistics, Storage, Packaging, Medical, SoilScience
+from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, Storage, Packaging, Medical, SoilScience
+from common.models import Region, District
 from .serializers import (ProductSerializer,
                         SellerSerializer, 
                         BuyerSerializer, 
@@ -18,10 +19,10 @@ from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.authentication import BasicAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import(SellerProfileForm,ProductProfileForm, ServiceProviderProfileForm)
+from .forms import(SellerProfileForm,ProductProfileForm, ServiceProviderProfileForm, ServiceProfileForm)
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
@@ -43,6 +44,8 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class ProductList(APIView):
+    permission_classes = (IsAuthenticated,) 
+    authentication_classes = (TokenAuthentication,) 
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'product_list.html'
 
@@ -141,7 +144,7 @@ class CreateSellerProfile(LoginRequiredMixin,CreateView):
     def form_valid(self, form):
         profile = form.save(commit=False)
         # setting farmer profile to in-active
-        profile.status = 'in_active'
+        profile.status = 'pending'
         profile.user = self.request.user
         profile.save()
 
@@ -238,13 +241,67 @@ class ServiceProviderList(APIView):
         queryset = ServiceProvider.objects.order_by('service_type')
         return Response({'serviceproviders': queryset})
 
+#View for creating a service
+class CreateServiceView(LoginRequiredMixin,CreateView):
+    template_name = 'register_service.html'
+    success_url = reverse_lazy('openmarket:serviceregistration_list')
+    form_class = ServiceProfileForm
+    success_message = "Your profile was created successfully"
+    
 
-#views for service registration
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateServiceView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateServiceView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        # setting farmer profile to in-active
+        profile.status = 'Pending'
+        profile.user = self.request.user
+        profile.save()
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Registrated Service Successful'
+        message = render_to_string('profile_created_successful_email.html', {
+            'user': profile.user,
+            'domain': current_site.domain
+            })
+        to_email = profile.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('openmarket:serviceregistration_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+#views for service registration 
+
 class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = ServiceRegistration.objects.all().order_by('service_id')
+    queryset = Service.objects.all().order_by('service_provider_id')
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -254,7 +311,7 @@ class ServiceProviderProfileList(APIView, LoginRequiredMixin):
     template_name = 'serviceprovider_list.html'
 
     def get(self, request):
-        queryset = FarmerProfile.objects.order_by('region')
+        queryset = ServiceProvider.objects.order_by('region')
         return Response({'serviceproviders': queryset})
 
 
@@ -314,13 +371,23 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
 
-class ServiceRegistrationList(APIView):
+
+#view for loading 
+def load_districts(request):
+    region_id = request.GET.get('region')
+    districts = District.objects.filter(region_id=region_id).order_by('name')
+    return render(request, 'city_dropdown_list_options.html', {'cities': cities})
+
+
+
+
+class ServiceRegistrationList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceregistration_list.html'
 
     def get(self, request):
-        queryset = ServiceRegistration.objects.order_by('service_id')
-        return Response({'serviceregistrations': queryset})
+        return Response()
+
 
 
 #views for ContactDetails

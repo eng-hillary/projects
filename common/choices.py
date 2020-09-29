@@ -80,6 +80,19 @@ PAYMENT_MODE = (
     ('others', 'Others')
 
     )
+SERVICE_CATEGORY = (
+    (None, '--please select--'),
+    ('storage', 'Storage'),
+    ('transport', 'Transport'),
+    ('value addition', 'Value Addition'),
+    ('sorting and graining', 'Sorting and Graining'),
+    ('Medical Services', 'Medical Services'),
+    ('machinery', 'Machinery'),
+    ('land', 'Land'),
+    ('others', 'Others')
+
+    )
+
 
 PAYMENT_OPTIONS = (
     (None, '--please select--'),
