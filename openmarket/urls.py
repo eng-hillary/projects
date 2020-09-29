@@ -18,10 +18,7 @@ from .views import (ProductList,
                     MedicalList,
                     SoilScienceList,
                     ServiceProviderProfileList,
-                    CreateServiceProviderProfile,
-                    load_districts,
-                    CreateServiceView,
-                            )       
+                    CreateServiceProviderProfile)
 
 
 router = routers.DefaultRouter()
@@ -39,7 +36,7 @@ router.register(r'packagings', views.PackagingViewSet)
 router.register(r'medicals', views.MedicalViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
 # Wire up our API using automatic URL routing.
-# Additionalbusiness_locationlude login URLs for the browsable API.
+# Additionally, we include login URLs for the browsable API.
 
 app_name = 'openmarket'
 urlpatterns = [
@@ -54,15 +51,11 @@ urlpatterns = [
     path('serviceproviders', ServiceProviderList.as_view(), name='serviceprovider_list'),
     path('serviceregistration', ServiceRegistrationList.as_view(), name='serviceregistration_list'),
     path('serviceproviderregistration', CreateServiceProviderProfile.as_view(), name='serviceprovider_registration'),
-    path('create/service', CreateServiceView.as_view(), name='service_registration'),
     path('contactdetails', ContactDetailsList.as_view(), name='contactdetails_list'),
     path('logistics', LogiticsList.as_view(), name='logistics_list'),
     path('storages', StorageList.as_view(), name='storage_list'),
     path('packagings', PackagingList.as_view(), name='packaging_list'),
     path('medicals', MedicalList.as_view(), name='medical_list'),
     path('soilsciences', SoilScienceList.as_view(), name='soilscience_list'),
-
-
-    path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
 
 ]
