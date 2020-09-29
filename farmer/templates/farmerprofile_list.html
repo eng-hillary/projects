@@ -30,7 +30,7 @@
 <!-- bootstrap table begin here -->
 <div id="toolbar">
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
-    <i class="fa fa-trash"></i> 
+    <i class="fa fa-trash"></i>
   </button>
   <button id="decline" class="btn btn-decline" title="Decline" disabled>
     <i class="fa fa-times"></i>
@@ -83,9 +83,9 @@
       <th data-field="number_of_dependants" data-visible="false" data-sortable="true">Number of Dependants</th>
       <th data-field="credit_access" data-visible="false" data-sortable="true">Access to Credit</th>
       <th data-field="experience" data-visible="false"  data-sortable="true">experience</th>
-      <th data-field="status" data-sortable="true">status</th>       
-      <th data-formatter="operateFormatter" data-events="operateEvents" class="text-center">Action</th>     
-                
+      <th data-field="status" data-sortable="true">status</th>
+      <th data-formatter="operateFormatter"  class="text-center">Action</th>
+
     </tr>
   </thead>
 </table>
@@ -97,7 +97,7 @@
 <script src="{% static 'js/bootstrap-table.min.js' %}"></script>
 <script src="{% static 'js/bootstrap-table-export.min.js' %}"></script>
 <script>
- var $table = $('#table')
+  var $table = $('#table')
   var $remove = $('#remove')
   var $approve = $('#approve')
   var $decline = $('#decline')
@@ -119,38 +119,16 @@
 
 
   function operateFormatter(value, row, index) {
+    var url ="/farmer/"+row.id+"/edit"
     return [
-   
-      '<a class="Edit " href="javascript:void(0)" title="Edit">',
+
+      '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
 
     ].join('')
   }
 
-  window.operateEvents = {
-    'click .Detail': function (e, value, row, index) {
-      //try
-      $('#my_modal').on('show.bs.modal', function(e) {
-
-       //get data-id attribute of the clicked element
-var bookId = $(e.relatedTarget).data('book-id');
-
-//populate the textbox
-$(e.currentTarget).find('input[name="bookId"]').val(bookId);
-});
-    
-      
-      $('#detailsModel').modal('show');
-    
-      console.log(row.user);
-      
-    },
-    'click .Edit': function (e, value, row, index) {
-      window.location.href ="/farmer/"+row.id+"/edit";
-      
-    },
-  }
 
   ///used cookies to get crsf token
   function getCookie(c_name)
@@ -189,7 +167,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     $remove.click(function () {
       var ids = getIdSelections()
       $remove.prop('disabled', true)
-    
+
       swal({
   title: "Are you sure?",
   text: "Once deleted, you will not be able to recover these records!",
@@ -219,14 +197,14 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     swal("You have cancelled the deletion of records!");
   }
 });
-      
+
     })
 
     ///approve farmer profiles
     $approve.click(function () {
       var ids = getIdSelections()
       $approve.prop('disabled', true)
-    
+
       swal({
   title: "Approve Farmer Applications?",
   text: "Are you sure you want to approve these applications!",
@@ -256,7 +234,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     swal("You have cancelled farmer approvals!");
   }
 });
-      
+
     })
 
 
@@ -264,7 +242,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     $decline.click(function () {
       var ids = getIdSelections()
       $decline.prop('disabled', true)
-    
+
       swal({
   title: "Decline Application",
   text: "Are you sure You want to decline these Applications?",
@@ -294,7 +272,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     swal("You have cancelled farmer approvals!");
   }
 });
-      
+
     })
 
   }
@@ -307,6 +285,6 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
 
 
 </script>
- 
+
 
 {% endblock %}

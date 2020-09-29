@@ -25,7 +25,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from .forms import(FarmerProfileForm)
+from .forms import(FarmerProfileForm,FarmerGroupForm)
 import datetime
 
 
@@ -37,7 +37,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
 
 
 
@@ -48,6 +48,45 @@ class GroupList(APIView):
     def get(self, request):
         queryset = Group.objects.order_by('-id')
         return Response({'groups': queryset})
+
+
+# create farmer groups
+class CreateFarmerGroup(LoginRequiredMixin,CreateView):
+    template_name = 'create_farmer_group.html'
+    success_url = reverse_lazy('farmer:group_list')
+    form_class = FarmerGroupForm
+    success_message = "Group has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateFarmerGroup, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateFarmerGroup, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        group = form.save(commit=False)
+        group.save()
+
+        return redirect('farmer:group_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
 
 
 # views for farmerprofile
@@ -75,21 +114,6 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
-
-# class FarmerApproval(viewsets.ModelViewSet, UpdateModelMixin):
-#     permission_classes = [permissions.IsAuthenticated]
-#     serializer_class = FarmerProfileSerializer
-#     queryset = FarmerProfile.objects.all().order_by('region')
-
-#     def perform_update(self, serializer):
-#          # get the object itself
-#         instance = self.get_object()
-#         # modify fields during the update
-#         modified_instance = serializer.save(
-#             status='Active',
-#             approver=self.request.user,
-#             approved_date =datetime.now()
-#            )
 
 
 class FarmerProfileList(APIView, LoginRequiredMixin):
@@ -137,7 +161,7 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
-        subject = 'Registrated Successful'
+        subject = 'Registered Successfully'
         message = render_to_string('profile_created_successful_email.html', {
             'user': profile.user,
             'domain': current_site.domain

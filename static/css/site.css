@@ -24094,5 +24094,8 @@ a.Detail{
   color: #28a745;
 }
 .btn-decline {
-  background-color:  #ffc107  !important;
-  border-color:  #ffc107 !important; }
+  background-color:  #FF5733   !important;
+  border-color:   #FF5733  !important; }
+.add-new{
+  color: #2124b6;
+}
