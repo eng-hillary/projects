@@ -61,8 +61,5 @@ urlpatterns = [
     path('packagings', PackagingList.as_view(), name='packaging_list'),
     path('medicals', MedicalList.as_view(), name='medical_list'),
     path('soilsciences', SoilScienceList.as_view(), name='soilscience_list'),
-
-
     path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
-
 ]
