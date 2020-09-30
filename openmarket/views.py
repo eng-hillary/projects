@@ -367,12 +367,12 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         profile = form.save(commit=False)
-        # setting farmer profile to in-active
+        # setting Service Provider profile to in-active
         profile.status = 'Pending'
         profile.user = self.request.user
         profile.save()
 
-        # send email to farmer after registration
+        # send email to service provider after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Successful'
         message = render_to_string('profile_created_successful_email.html', {
