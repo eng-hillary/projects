@@ -3,7 +3,7 @@ from django.urls import include, path
 from rest_framework import routers
 from . import views
 from .views import (GroupList, FarmerProfileList, CreateFarmerProfile, UpdateFarmerProfile,FarmerProfileViewSet
-,CreateFarmerGroup)
+,CreateFarmerGroup,EditFarmerGroup)
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('groups', GroupList.as_view(), name='group_list'),
     path('create/group', CreateFarmerGroup.as_view(), name="create_farmer_group"),
+    path('group/<int:pk>/edit', EditFarmerGroup.as_view(), name="edit_farmer_group"),
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
     path('create/profile', CreateFarmerProfile.as_view(), name="create_farmer"),
     path('<int:pk>/edit/', UpdateFarmerProfile.as_view(), name="edit_farmer_profile"),
