@@ -81,7 +81,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
         model = ServiceProvider
         fields = ('id','user', 'nin', 'region', 'district', 'county', 
         'sub_county', 'region', 'parish', 'village','service_provider_location', 'list_of_services_if_more_than_one',
-       'phone_1', 'phone_2', 'service_type', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status'
+       'phone_1', 'phone_2', 'service_type', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
        )
     '''
     returns yes or no for boolean fields
@@ -91,6 +91,13 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
             return "Yes"
         else:
             return "No"
+
+
+class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceProvider
+        fields =('status','approver','approved_date')
+
 
 
 
