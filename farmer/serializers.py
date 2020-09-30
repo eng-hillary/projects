@@ -14,7 +14,8 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class FarmerProfileSerializer(serializers.ModelSerializer):
-    #sector = serializers.PrimaryKeyRelatedField(many=True, queryset=Sector.objects.all())
+    
+    user_id = serializers.SerializerMethodField(method_name='get_id')
     sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
     user = serializers.SlugRelatedField(many=False,read_only=True, slug_field='username')
     region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
@@ -28,7 +29,7 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FarmerProfile
-        fields = ('id','user', 'date_of_birth', 'nin', 'sector', 'region', 'district', 'county', 
+        fields = ('user_id','user', 'date_of_birth', 'nin', 'sector', 'region', 'district', 'county', 
         'sub_county', 'region', 'parish', 'village', 'level_of_education', 'marital_status', 
         'size_of_land', 'phone_1', 'phone_2', 'group', 'type_of_land', 'production_scale', 'number_of_dependants',
         'credit_access', 'experience', 'status', 'general_remarks', 'approver', 'approved_date')
@@ -40,6 +41,14 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
             return "Yes"
         else:
             return "No"
+
+    def get_id(self, obj):
+        return '{}'.format(obj.user.id)
+
+
+    def get_user_full_name(self, object):
+        return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+
        
     
 class FarmerApprovalSerializer(serializers.ModelSerializer):

@@ -7,16 +7,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Group List
-                        <small><a class="add-new" href="{% url 'farmer:create_farmer_group' %}">Add new</a></small>
+                    <h3>Farm List
+                        <small><a class="add-new" href="{% url 'farm:create_farm' %}">Add new</a></small>
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Groups</li>
-                    <li class="breadcrumb-item active">Group List</li>
+                    <li class="breadcrumb-item">Farms</li>
+                    <li class="breadcrumb-item active">Farm List</li>
                 </ol>
             </div>
         </div>
@@ -52,7 +52,7 @@ data-toolbar="#toolbar"
 data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
 data-page-list="[10, 25, 50, 100, all]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/api-farmer/groups/"
+  data-url="/farm/api/farms/"
   data-response-handler="responseHandler">
   <thead>
     <tr>
@@ -63,7 +63,7 @@ data-page-list="[10, 25, 50, 100, all]"
       <th data-field="contact_person_phone" data-sortable="true">Phone</th>
       <th data-field="contact_person_email" data-sortable="true">Email</th>
       <th data-field="description" data-visible="false" data-sortable="true">Description</th>
-      <th data-field="logo" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Logo</th>
+      <th data-field="image" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
     </tr>
@@ -94,7 +94,7 @@ data-page-list="[10, 25, 50, 100, all]"
   }
   //displays an image
     function imageFormatter(value, row) {
-      var url =row.logo;
+      var url =row.image;
     return '<img class="img-thumbnail" src="'+url+'">'
   }
   function operateFormatter(value, row, index) {

@@ -12,14 +12,16 @@ class SectorSerializer(serializers.ModelSerializer):
 class EnterpriseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enterprise
-        fields = ('name', 'sector', 'description')
+        fields = ('name','animal_seed_density', 'sector','expected_profit', 'description')
 
 
 class FarmSerializer(serializers.ModelSerializer):
+    sector = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+
     class Meta:
         model = Farm
-        fields = ('name', 'enterprise', 'farmer', 'latitude', 'longitude', 'initial_capital',
-        'expexted_profit', 'start_date', 'animal_seed_density', 'image', 'status', 'general_remarks')
+        fields = ('id', 'name', 'sector', 'farmer', 'latitude', 'longitude',
+         'start_date','close_date',  'image','availability_of_services','availability_of_water','land_occupied', 'status', 'general_remarks')
 
 
 class FarmFacilitySerializer(serializers.ModelSerializer):

@@ -94,4 +94,5 @@ class FarmerGroupForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(FarmerGroupForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs.update({'rows': '2'})
+        self.fields['address'].widget.attrs.update({'rows': '2'})
             

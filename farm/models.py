@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel)
 from django.contrib.auth.models import User
-from common .choices import (ACTION_TYPE, TRANSACTION_TYPE, PAYMENT_MODE)
+from common .choices import (ACTION_TYPE, TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO)
 # Create your models here.
 
 
@@ -22,6 +22,9 @@ class Sector(TimeStampedModel, models.Model):
 class Enterprise(TimeStampedModel, models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
+    animal_seed_density = models.PositiveIntegerField(blank=True, null=True, verbose_name='Number of animals/seedling per enterprise in a particular period of time.')
+    expected_profit = models.DecimalField(decimal_places=2, max_digits=4, null=True)
+    land_occupied = models.FloatField( blank=False, null=True)
     description = models.TextField(null=True, blank=True)
 
 
@@ -37,18 +40,19 @@ class Farm(TimeStampedModel, models.Model):
         ('closed', 'Closed')
      )
     name = models.CharField(max_length=100, null=False, blank=False)
-    enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
-    farmer = models.ForeignKey('farmer.FarmerProfile', on_delete=models.DO_NOTHING, related_name='farm')
-    latitude = models.FloatField(_('Latitude'), blank=True, null=True)
-    longitude = models.FloatField(_('Longitude'), blank=True, null=True)
-    initial_capital = models.DecimalField(decimal_places=2, max_digits=4)
-    expected_profit = models.DecimalField(decimal_places=2, max_digits=4)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
+    farmer = models.ForeignKey('farmer.FarmerProfile', on_delete=models.CASCADE, related_name='farm')
+    latitude = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your location")
+    longitude = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your location")
     start_date = models.DateField(blank=False, null=False)
-    animal_seed_density = models.PositiveIntegerField(blank=True, null=True, verbose_name='Number of animals/seedling per enterprise in a particular period or time.')
-    image = models.ImageField()
-    status = models.CharField( _('Farm Status'), max_length=20, choices=FARM_STATUS)
+    close_date = models.DateField(blank=True, null=True)
+    image = models.ImageField(null=True, blank=False)
+    status = models.CharField(_('Farm Status'), default='active', max_length=20, choices=FARM_STATUS)
     general_remarks = models.TextField(null=True, blank=True)
-
+    availability_of_services = models.BooleanField(_('Have access to Services ?.'), choices=YES_OR_NO, null=False, blank=False, default=True)
+    availability_of_water = models.BooleanField(_('Does a the farm have a water source ?.'), choices=YES_OR_NO, null=False, blank=False, default=True)
+    land_occupied = models.FloatField( _('Amount of land occupied(acres)'), blank=False, null=True)
+    
 
     def __str__(self):
         return self.name
