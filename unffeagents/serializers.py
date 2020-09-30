@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 
 
 class AgentProfileSerializer(serializers.ModelSerializer):
+    region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    user = serializers.SlugRelatedField(many=False,read_only=True, slug_field='username')
+    district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     class Meta:
         model = AgentProfile
         fields = ['user', 'contact', 'region', 'district', 'specific_role']

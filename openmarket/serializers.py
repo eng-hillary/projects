@@ -22,7 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ('name', 'enterprise', 'slug', 'image', 'description', 'price', 'available',
+        fields = ('id', 'name', 'enterprise', 'slug', 'image', 'description', 'price', 'available',
          'date_created', 'date_updated')
 
 class SellerSerializer(serializers.ModelSerializer):
@@ -36,6 +36,7 @@ class SellerSerializer(serializers.ModelSerializer):
     sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     
 
    # enterprise = EnterpriseSerializer()
