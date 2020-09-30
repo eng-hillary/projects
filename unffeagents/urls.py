@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from . import views
 from .views import (AgentProfileList, MarketList, MarketPriceList, 
-NoticeList,AgentProfileDetail,CreateAgentProfile)
+NoticeList,CreateAgentProfile)
 
 
 router = routers.DefaultRouter()
@@ -19,7 +19,6 @@ app_name = 'unffeagents'
 urlpatterns = [
     path('', include(router.urls)),
     path('agentprofile', AgentProfileList.as_view(), name='agentprofile_list'),
-    path('<int:pk>/edit/agentprofile', AgentProfileDetail.as_view(), name="edit_agentprofile"),
     path('create/agentprofile', CreateAgentProfile.as_view(), name="create_agentprofile"),
 
     path('market', MarketList.as_view(), name='market_list'),
