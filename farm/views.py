@@ -142,10 +142,8 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         farm = form.save(commit=False)
-        # getting farmer profile instance
-        #farmer = FarmerProfile.objects.filter(user = self.request.user).values_list('',flat=True)
-        #print(farmer)
-        #farm.farmer = farmer
+        # assign total land to available land
+        farm.available_land = farm.land_occupied
         farm.save()
 
         # send email to farmer after registration
@@ -153,7 +151,8 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
         subject = 'Farm Created Successfully'
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
-            'domain': current_site.domain
+            'domain': current_site.domain,
+            'message': 'Your '+farm.name + ' has been registered sucessfully',
             })
         to_email = farm.farmer.user.email
         email = EmailMessage(
@@ -162,6 +161,60 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
         email.content_subtype = "html"
         email.send()
         return redirect('farm:farm_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+# update farm view
+class EditFarmView(LoginRequiredMixin,UpdateView):
+    model =Farm
+    template_name = 'create_farm.html'
+    success_url = reverse_lazy('farm:farm_list')
+    form_class = FarmForm
+    success_message = "Farm has been updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditFarmView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditFarmView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+        farm.save()
+
+         # send email to farmer  a message after an update
+        current_site = get_current_site(self.request)
+        subject = 'Farm Updated Successfully'
+        message = render_to_string('farm_created_successful_email.html', {
+            'user': farm.farmer.user,
+            'domain': current_site.domain,
+            'message': 'Your '+farm.name + ' Details have been updated sucessfully',
+            })
+        to_email = farm.farmer.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('farm:farm_list')
+
 
     def form_invalid(self, form):
         if self.request.is_ajax():

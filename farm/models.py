@@ -19,19 +19,6 @@ class Sector(TimeStampedModel, models.Model):
         return self.name
 
 
-class Enterprise(TimeStampedModel, models.Model):
-    name = models.CharField(max_length=50, null=False, blank=False)
-    sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
-    animal_seed_density = models.PositiveIntegerField(blank=True, null=True, verbose_name='Number of animals/seedling per enterprise in a particular period of time.')
-    expected_profit = models.DecimalField(decimal_places=2, max_digits=4, null=True)
-    land_occupied = models.FloatField( blank=False, null=True)
-    description = models.TextField(null=True, blank=True)
-
-
-    def __str__(self):
-        return self.name
-
-
 
 class Farm(TimeStampedModel, models.Model):
     FARM_STATUS = (
@@ -52,10 +39,24 @@ class Farm(TimeStampedModel, models.Model):
     availability_of_services = models.BooleanField(_('Have access to Services ?.'), choices=YES_OR_NO, null=False, blank=False, default=True)
     availability_of_water = models.BooleanField(_('Does a the farm have a water source ?.'), choices=YES_OR_NO, null=False, blank=False, default=True)
     land_occupied = models.FloatField( _('Amount of land occupied(acres)'), blank=False, null=True)
-    
+    available_land = models.FloatField( _('Size of land Available'), blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+
+class Enterprise(TimeStampedModel, models.Model):
+    name = models.CharField(max_length=50, null=False, blank=False)
+    farm = models.ForeignKey(Farm, on_delete=models.CASCADE)
+    animal_seed_density = models.PositiveIntegerField(blank=True, null=True, verbose_name='Number of animals/seedling per enterprise in a particular period of time.')
+    expected_profit = models.DecimalField(decimal_places=2, max_digits=4, null=True)
+    land_occupied = models.FloatField( blank=False, null=True)
+    description = models.TextField(null=True, blank=True)
+
+
+    def __str__(self):
+        return self.name
+
 
 
 class FarmFacility(TimeStampedModel, models.Model):

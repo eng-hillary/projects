@@ -17,7 +17,7 @@ admin.site.register(Sector, SectorAdmin)
 class EnterpriseAdmin(admin.ModelAdmin):
     list_display = [
         'name',
-        'sector',
+        'farm',
         'description'
         
 
