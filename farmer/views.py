@@ -35,11 +35,11 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 
-class GroupList(APIView):
+class GroupList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'group_list.html'
 
@@ -85,7 +85,44 @@ class CreateFarmerGroup(LoginRequiredMixin,CreateView):
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
 
+# edit farmer group
 
+class EditFarmerGroup(LoginRequiredMixin,UpdateView):
+    model =Group
+    template_name = 'create_farmer_group.html'
+    success_url = reverse_lazy('farmer:group_list')
+    form_class = FarmerGroupForm
+    success_message = "Group has been updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditFarmerGroup, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditFarmerGroup, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        group = form.save(commit=False)
+        group.save()
+
+        return redirect('farmer:group_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
 
 # views for farmerprofile
 class FarmerProfileViewSet(viewsets.ModelViewSet):
