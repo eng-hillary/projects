@@ -10,16 +10,15 @@
                     <div class="row">
                         <div class="col">
                             <div class="page-header-left">
-                                <h3>Create Group
-                                    <small>{{ user.groups.all.0 }} </small>
+                                <h3>Create Farm
                                 </h3>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <ol class="breadcrumb pull-right">
-                                <li class="breadcrumb-item"><a href="{% url 'farmer:group_list' %}"><i data-feather="home"></i></a></li>
-                                <li class="breadcrumb-item add-new">Groups</li>
-                                <li class="breadcrumb-item active">Add Group </li>
+                                <li class="breadcrumb-item"><a href="{% url 'farm:farm_list' %}"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item add-new">Farms</li>
+                                <li class="breadcrumb-item active">Add Farm </li>
                             </ol>
                         </div>
                     </div>
@@ -33,7 +32,7 @@
                     <div class="col-sm-12">
                         <div class="card tab2-card">
                             <div class="card-header">
-                                <h5> Add Farmer Group</h5>
+                                <h5> Add Farm</h5>
                             </div>
                             <form method="POST" id="group_form"  novalidate enctype="multipart/form-data" class="card-body">
                                 {% csrf_token %}
@@ -43,23 +42,36 @@
                                         {{ form.name|as_crispy_field }}
                                     </div>
                                     <div class="col-xl-6 col-md-6">
-                                        {{ form.contact_person|as_crispy_field }}
+                                        {{ form.land_occupied|as_crispy_field }}
                                     </div>
                                     <div class="col-xl-6 col-md-6">
-                                        {{ form.contact_person_email|as_crispy_field }}
+                                        {{ form.sector|as_crispy_field }}
                                     </div>
                                     <div class="col-xl-6 col-md-6">
-                                        {{ form.contact_person_phone|as_crispy_field }}
+                                        {{ form.start_date|as_crispy_field }}
+                                    </div>
+                                  
+                                
+                                    <div class="col-xl-6 col-md-6">
+                                        {{ form.latitude|as_crispy_field }}
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        {{ form.longitude|as_crispy_field }}
+                                    </div>
+                                  
+                                    <div class="col-xl-6 col-md-6">
+                                        {{ form.availability_of_services|as_crispy_field }}
+                                    </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        {{ form.availability_of_water|as_crispy_field }}
                                     </div>
                                     <div class="col-xl-12 col-md-12">
-                                        {{ form.address|as_crispy_field }}
+                                        {{ form.general_remarks|as_crispy_field }}
                                     </div>
                                     <div class="col-xl-12 col-md-12">
-                                        {{ form.description|as_crispy_field }}
+                                        {{ form.image|as_crispy_field }}
                                     </div>
-                                    <div class="col-xl-12 col-md-12">
-                                        {{ form.logo|as_crispy_field }}
-                                    </div>
+                                    <input name="farmer" value="{{user.id}}" type="hidden">
 
                                 </div>
                               

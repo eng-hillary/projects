@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Sector, Enterprise
-from .serializers import SectorSerializer, EnterpriseSerializer
+from .models import (Sector, Enterprise, Farm)
+from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -10,6 +10,17 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
+from django.urls import reverse_lazy
+from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
+                         Http404)
+from django.views.generic import (
+    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
+from .forms import (FarmForm)
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from farmer .models import FarmerProfile
+
 # views for sector
 class SectorViewSet(viewsets.ModelViewSet):
     """
@@ -81,3 +92,78 @@ class EnterpriseList(LoginRequiredMixin, APIView):
     def get(self, request):
         queryset = Enterprise.objects.order_by('-id')
         return Response({'enterprise': queryset})
+
+
+
+# farm api viewset
+class FarmViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = Farm.objects.all().order_by('-id')
+    serializer_class = FarmSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+# list of farms
+class FarmListView(APIView, LoginRequiredMixin):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'farm_list.html'
+
+    def get(self, request):
+        return Response()
+
+
+
+# create farm 
+class CreateFarmView(LoginRequiredMixin,CreateView):
+    template_name = 'create_farm.html'
+    success_url = reverse_lazy('farm:farm_list')
+    form_class = FarmForm
+    success_message = "Farm has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateFarmView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateFarmView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+        # getting farmer profile instance
+        #farmer = FarmerProfile.objects.filter(user = self.request.user).values_list('',flat=True)
+        #print(farmer)
+        #farm.farmer = farmer
+        farm.save()
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Farm Created Successfully'
+        message = render_to_string('farm_created_successful_email.html', {
+            'user': farm.farmer.user,
+            'domain': current_site.domain
+            })
+        to_email = farm.farmer.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('farm:farm_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
