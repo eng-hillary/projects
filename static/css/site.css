@@ -24099,3 +24099,14 @@ a.Detail{
 .add-new{
   color: #2124b6;
 }
+#container {
+  height: 800px; 
+  min-width: 310px; 
+  max-width: 1000px; 
+  margin: 0 auto; 
+}
+.loading {
+  margin-top: 10em;
+  text-align: center;
+  color: gray;
+}

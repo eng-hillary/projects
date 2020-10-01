@@ -32,6 +32,6 @@ urlpatterns = [
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
     path('create/profile', CreateFarmerProfile.as_view(), name="create_farmer"),
     path('<int:pk>/edit/', UpdateFarmerProfile.as_view(), name="edit_farmer_profile"),
-    path('<int:pk>/approve/', approve_farmer, name='aprrove'),
+    path('<int:pk>/approve/', approve_farmer, name='approve'),
 
 ]

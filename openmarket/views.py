@@ -14,7 +14,8 @@ from .serializers import (ProductSerializer,
                         MedicalSerializer,
                         PackagingSerializer,
                         SoilScienceSerializer,
-                        ServiceProviderApprovalSerializer
+                        ServiceProviderApprovalSerializer,
+                        SellerApprovalSerializer
                         )
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -35,7 +36,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-    
+import datetime
 class ProductViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -106,6 +107,22 @@ class SellerViewSet(viewsets.ModelViewSet):
     #permission_classes = [permissions.IsAuthenticated]
 
 
+    def approved(self, request, pk, format=None):
+        profile = self.get_object()
+        serializer = SellerApprovalSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def decline(self, request, pk, format=None):
+        profile = self.get_object()
+        serializer = SellerApprovalSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
 class SellerList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'seller_list.html'
