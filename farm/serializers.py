@@ -16,7 +16,7 @@ class SectorSerializer(serializers.ModelSerializer):
 class EnterpriseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enterprise
-        fields = ('name','animal_seed_density', 'sector','expected_profit', 'description')
+        fields = ('name','animal_seed_density', 'farm','expected_profit', 'description')
 
 
 class FarmSerializer(serializers.ModelSerializer):
