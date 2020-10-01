@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
+from common.tokens import account_activation_token
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
@@ -213,6 +214,28 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+
+'''
+Activate farmer profile
+'''
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        group = Group.objects.get(name='Buyers')
+        user.groups.add(group)
+        user.save()
+        login(request, user)
+        return redirect('common:home')
+    else:
+        return render(request, 'account_activation_invalid.html')
+
 
 '''
 Edit farmer profile profile

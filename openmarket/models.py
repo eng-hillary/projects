@@ -107,7 +107,7 @@ class ServiceProvider(models.Model):
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
     category = models.CharField(choices=SERVICE_CATEGORY,null=True,max_length=50)
 
-    status = models.CharField(choices=STATUS, default='in_active', max_length=20,null=False)
+    status = models.CharField(choices=STATUS, default='Pending', max_length=20,null=False)
     # handle approving of a farmer
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent_service_provider",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
