@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Seller, Product, ServiceProvider
+from .models import Seller, Product, ServiceProvider,Service
 from common.models import Region, District
 from django import forms
 #from .forms import ServiceProviderProfileForm
@@ -40,4 +40,6 @@ class ServiceProviderAdmin(admin.ModelAdmin):
     search_fields = ['user']
 
 admin.site.register(ServiceProvider, ServiceProviderAdmin)
+
+admin.site.register(Service)
 

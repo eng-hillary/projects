@@ -5,7 +5,7 @@ from .models import (Product,
                      SellerPost, 
                      BuyerPost, 
                      ServiceProvider, 
-                     ServiceRegistration, 
+                     Service,
                      ContactDetails, 
                      Logistics, 
                      Storage, 
@@ -22,7 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ('name', 'enterprise', 'slug', 'image', 'description', 'price', 'available',
+        fields = ('id', 'name', 'enterprise', 'slug', 'image', 'description', 'price', 'available',
          'date_created', 'date_updated')
 
 class SellerSerializer(serializers.ModelSerializer):
@@ -36,6 +36,7 @@ class SellerSerializer(serializers.ModelSerializer):
     sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     
 
    # enterprise = EnterpriseSerializer()
@@ -79,8 +80,8 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProvider
         fields = ('id','user', 'nin', 'region', 'district', 'county', 
-        'sub_county', 'region', 'parish', 'village','service_provider_location', 'list_of_service',
-       'phone_1', 'phone_2', 'service_type', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee'
+        'sub_county', 'region', 'parish', 'village','service_provider_location', 'list_of_services_if_more_than_one',
+       'phone_1', 'phone_2', 'service_type', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
        )
     '''
     returns yes or no for boolean fields
@@ -92,12 +93,25 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
             return "No"
 
 
+class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceProvider
+        fields =('status','approver','approved_date')
+
+
+
 
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ServiceRegistration
-        fields = ('service_id', 'type')
-      
+        model = Service
+        fields = ('service_provider','category', 'service_name', 'service_type', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture')
+    
+#Farmer Approval Serializer
+class FarmerApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceProvider
+        fields =('status','approver','approved_date')
+
 
 class ContactDetailsSerializer(serializers.ModelSerializer):
     class Meta:

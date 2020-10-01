@@ -56,7 +56,7 @@
       <th data-field="name" data-sortable="true">Name</th>
       <th data-field="enterprise" data-sortable="true">Enterprise</th>
       <th data-field="slug" data-sortable="true">Slug</th>
-      <th data-field="image" data-sortable="true">Image</th>
+      <th data-field="image" data-visible="true"  data-formatter="imageFormatter" data-sortable="true">Image</th>
       <th data-field="description" data-sortable="true">Description</th>
       <th data-field="price" data-sortable="true">Price</th>
       <th data-field="available" data-sortable="true">Available</th>
@@ -73,6 +73,12 @@
 <script src="{% static 'js/bootstrap-table.min.js' %}"></script>
 <script src="{% static 'js/bootstrap-table-export.min.js' %}"></script>
 <script>
+
+  //displays an image
+  function imageFormatter(value, row) {
+    var url =row.image;
+  return '<img class="img-thumbnail" src="'+url+'">'
+}
   
 </script>
  
