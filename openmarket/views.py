@@ -37,6 +37,8 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
+
+import datetime
     
 class ProductViewSet(viewsets.ModelViewSet):
     """
@@ -307,7 +309,7 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Service Successful'
-        message = render_to_string('profile_created_successful_email.html', {
+        message = render_to_string('profile_created_successful.html', {
             'user': profile.user,
             'domain': current_site.domain
             })
@@ -331,7 +333,7 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = Service.objects.all().order_by('service_provider_id')
+    queryset = Service.objects.all().order_by('service_name')
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
 

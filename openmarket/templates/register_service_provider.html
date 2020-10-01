@@ -125,12 +125,19 @@
                                   
                                 </div>
                                 </div>
-                                <div class="pull-right">
 
-                                    <input type="submit" value="Submit" class="btn btn-primary">
-
-
-                                </div>
+                                <div style="overflow:auto;">
+                                  <div style="float:right;">
+                                  <button type="button" class="btn btn-dark" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                                  <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                                  </div>
+                              </div>
+                              <!-- Circles which indicates the steps of the form: -->
+                              <div style="text-align:center;margin-top:40px;">
+                                  <span class="step"></span>
+                                  <span class="step"></span>
+                              </div>
+                   
                             </form>
                         </div>
                     </div>
