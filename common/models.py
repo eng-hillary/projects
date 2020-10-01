@@ -84,4 +84,7 @@ class Profile(models.Model):
     profile_pic = models.ImageField(null=True, blank=True)
 
     def __str__(self):
-        return self.user.username
+        return '{} {}'.format(self.user.first_name, self.user.last_name)
+
+    def get_full_name(self):
+        return '{} {}'.format(self.user.first_name, self.user.last_name)

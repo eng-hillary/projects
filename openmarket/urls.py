@@ -21,7 +21,7 @@ from .views import (ProductList,
                     load_districts,
                     CreateServiceView,
                     ServiceProviderViewSet  )
-                                            
+
 router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet)
 router.register(r'sellers', views.SellerViewSet)
@@ -46,6 +46,7 @@ approve_serviceprovider= ServiceProviderViewSet.as_view({
     'delete': 'destroy',
     'get':'list'})
     
+
 app_name = 'openmarket'
 
 urlpatterns = [
@@ -67,7 +68,7 @@ urlpatterns = [
     path('packagings', PackagingList.as_view(), name='packaging_list'),
     path('medicals', MedicalList.as_view(), name='medical_list'),
     path('soilsciences', SoilScienceList.as_view(), name='soilscience_list'),
-    path('<int:pk>/approve/', approve_serviceprovider, name='aprrove'),    path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
-    
-    
-    ]
+    path('<int:pk>/approve/', approve_serviceprovider, name='aprrove'),    
+    path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
+]
+

@@ -396,7 +396,6 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
         email.send()
         return redirect('openmarket:serviceprovider_list')
 
-
 #view for loading 
 def load_districts(request):
     region_id = request.GET.get('region')
