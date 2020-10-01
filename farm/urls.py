@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from . import views
 from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
-CreateFarmView)
+CreateFarmView, EditFarmView)
 
 
 
@@ -22,6 +22,7 @@ urlpatterns = [
     path('list', FarmListView.as_view(), name='farm_list'),
     path('create', CreateFarmView.as_view(), name="create_farm"),
     path('sectors', SectorList.as_view(), name='sector_list'),
+    path('<int:pk>/edit/farm', EditFarmView.as_view(), name="edit_farm"),
     path('<int:pk>/edit/sector', SectorDetail.as_view(), name="edit_sector"),
     path('create/sector', CreateSector.as_view(), name="create_sector"),
     path('enterprises', EnterpriseList.as_view(), name='enterprise_list'),
