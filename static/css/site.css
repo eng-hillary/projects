@@ -24148,8 +24148,16 @@ font-weight: 600;
   background: #f1f7ff;
 }
 
-
-input[type="number"] {
-min-width: 50px;
+.select2-container{
+  width: 100% !important;
+  border-radius: 0;
+  border: 1px solid #ced4da;
 }
-
+.select2-container--default .select2-selection--multiple{
+  border-radius: 0 important;
+  border: none !important;
+}
+.select2-container--open{
+  width: inherit !important;
+  display: block !important;
+}
