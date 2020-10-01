@@ -133,6 +133,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     },
     'click .Edit': function (e, value, row, index) {
       window.location.href ="/openmarket/"+row.id+"/edit";
+
       
     },
   }
@@ -189,6 +190,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
 
     $.ajax({
         url: "/api-openmarket/serviceproviders/"+ids[id],
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'DELETE',
@@ -226,6 +228,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
 
     $.ajax({
         url: "/openmarket/"+ids[id]+'/approve/',
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PATCH',
@@ -264,6 +267,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
 
     $.ajax({
         url: "/openmarket/"+ids[id]+'/approve/',
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PUT',

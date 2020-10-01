@@ -58,11 +58,14 @@ data-page-list="[10, 25, 50, 100, all]"
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="name" data-sortable="true">Name</th>
-      <th data-field="address" data-sortable="true">Address</th>
-      <th data-field="contact_person" data-sortable="true">Contact Person</th>
-      <th data-field="contact_person_phone" data-sortable="true">Phone</th>
-      <th data-field="contact_person_email" data-sortable="true">Email</th>
-      <th data-field="description" data-visible="false" data-sortable="true">Description</th>
+      <th data-field="farmer.user.full_name" data-sortable="true">Farmer</th>
+      <th data-field="location" data-sortable="true">Location</th>
+      <th data-field="land_occupied" data-sortable="true">Land Size(acres)</th>
+      <th data-field="available_land"  data-sortable="true">Available Land(acres)</th>
+      <th data-field="start_date"  data-visible="false" data-sortable="true">Start Date</th>
+      <th data-field="status" data-sortable="true">Status</th>
+      <th data-field="availability_of_services" data-visible="false" data-sortable="true">Services Available</th>
+      <th data-field="availability_of_water" data-visible="false" data-sortable="true">Water Available</th>
       <th data-field="image" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
@@ -99,7 +102,7 @@ data-page-list="[10, 25, 50, 100, all]"
   }
   function operateFormatter(value, row, index) {
     console.log(row.id);
-    var url ="/farmer/group/" + row.id +"/edit";
+    var url ="/farm/"+row.id+"/edit/farm";
     return [
    
       '<a class="Edit " href="'+url+'" title="Edit">',
@@ -158,7 +161,7 @@ for(id=0; id<ids.length; id++){
     console.log(ids[id]);
 
 $.ajax({
-    url: "/api-farmer/groups/"+ids[id],
+    url: "/farm/api/farms/"+ids[id],
     data: {},
     headers:{"X-CSRFToken": getCookie("csrftoken")},
     type: 'DELETE',

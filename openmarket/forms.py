@@ -1,6 +1,7 @@
 from django import forms
 from .models import Seller,Product,ServiceProvider, Service
 from common.models import Region, District, County, SubCounty, Parish, Village
+
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
@@ -12,7 +13,6 @@ class ServiceProviderProfileForm(forms.ModelForm):
     class Meta:
         model = ServiceProvider
         exclude = ['user','status','status','approver','approved_date']
-
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
