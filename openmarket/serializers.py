@@ -42,9 +42,16 @@ class SellerSerializer(serializers.ModelSerializer):
    # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
-        fields = ('user', 'business_number', 'business_location', 'seller_type', 'date_of_birth','region',
+        fields = ('id','user', 'business_number', 'business_location', 'seller_type', 'date_of_birth','region',
          'district', 'county', 'sub_county', 'parish', 'village', 'gender','marital_status', 'enterprise',
           'major_products', 'status', 'approver','approved_date')
+
+
+class SellerApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seller
+        fields =('status','approver','approved_date')
+
 
 class BuyerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,19 +106,11 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
         fields =('status','approver','approved_date')
 
 
-
-
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = ('service_provider','category', 'service_name', 'service_type', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture')
     
-#Farmer Approval Serializer
-class FarmerApprovalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceProvider
-        fields =('status','approver','approved_date')
-
 
 class ContactDetailsSerializer(serializers.ModelSerializer):
     class Meta:

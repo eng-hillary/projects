@@ -8,7 +8,7 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     <h3>ServiceProvider List
-                        <small>{{ user.groups.all.0 }} Dashboard</small>
+                      <small><a class="add-new" href="{% url 'openmarket:serviceprovider_registration' %}">Add new</a></small>
                     </h3>
                 </div>
             </div>
@@ -62,7 +62,7 @@
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="user" data-sortable="true">User</th>
       <th data-field="service_provider_location" data-sortable="true">Location</th>
-      <th data-field="list_of_service" data-sortable="true">List_of_service</th>
+      <th data-field="list_of_services_if_more_than_one" data-sortable="true">List_of_services</th>
       <th data-field="nin" data-sortable="true">NIN Number</th>
       <th data-field="region" data-sortable="true">Region</th>
       <th data-field="district" data-sortable="true">District</th>
@@ -132,7 +132,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
       
     },
     'click .Edit': function (e, value, row, index) {
-      window.location.href ="/farmer/"+row.id+"/edit";
+      window.location.href ="/openmarket/"+row.id+"/edit";
+
       
     },
   }
@@ -188,7 +189,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/api-farmer/farmerprofiles/"+ids[id],
+        url: "/api-openmarket/serviceproviders/"+ids[id],
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'DELETE',
@@ -225,7 +227,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/farmer/"+ids[id]+'/approve/',
+        url: "/openmarket/"+ids[id]+'/approve/',
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PATCH',
@@ -263,7 +266,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/farmer/"+ids[id]+'/approve/',
+        url: "/openmarket/"+ids[id]+'/approve/',
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PUT',

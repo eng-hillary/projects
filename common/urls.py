@@ -2,7 +2,7 @@ from django.contrib.auth import views as auth_views
 from common.views import (
     HomePage, account_activation_sent, activate, SignUpView, ProfileView,
     ForgotPasswordView, load_districts, load_counties,load_sub_counties,
-    load_parishes,load_villages
+    load_parishes,load_villages, activate
 )
 
 from django.urls import path
