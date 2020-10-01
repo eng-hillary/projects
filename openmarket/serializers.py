@@ -99,8 +99,6 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
         fields =('status','approver','approved_date')
 
 
-
-
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service

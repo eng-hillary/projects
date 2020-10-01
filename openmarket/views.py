@@ -376,15 +376,15 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         profile = form.save(commit=False)
-        # setting Service Provider profile to in-active
+        # setting farmer profile to in-active
         profile.status = 'Pending'
         profile.user = self.request.user
         profile.save()
 
-        # send email to service provider after registration
+        # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Successful'
-        message = render_to_string('profile_created_successful_email.html', {
+        message = render_to_string('service_provider_reg_email.html', {
             'user': profile.user,
             'domain': current_site.domain
             })
@@ -395,11 +395,6 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
         email.content_subtype = "html"
         email.send()
         return redirect('openmarket:serviceprovider_list')
-
-    def form_invalid(self, form):
-        if self.request.is_ajax():
-            return JsonResponse({'error': True, 'errors': form.errors})
-        return self.render_to_response(self.get_context_data(form=form))
 
 
 #view for loading 
