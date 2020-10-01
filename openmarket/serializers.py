@@ -109,7 +109,7 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = ('service_provider','category', 'service_name', 'service_type', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture')
+        fields = ('user','category', 'service_name', 'service_type', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture')
     
 
 class ContactDetailsSerializer(serializers.ModelSerializer):
