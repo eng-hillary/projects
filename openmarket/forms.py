@@ -120,7 +120,7 @@ class ServiceProfileForm(forms.ModelForm):
     
     class Meta:
         model = Service
-        exclude = ['date_created', 'date_updated']
+        exclude = ['date_created', 'date_updated','user']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)

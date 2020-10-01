@@ -24153,6 +24153,7 @@ font-weight: 600;
   border-radius: 0;
   border: 1px solid #ced4da;
 }
+
 .select2-container--default .select2-selection--multiple{
   border-radius: 0 important;
   border: none !important;
@@ -24161,3 +24162,4 @@ font-weight: 600;
   width: inherit !important;
   display: block !important;
 }
+
