@@ -36,9 +36,11 @@ router.register(r'storages', views.StorageViewSet)
 router.register(r'packagings', views.PackagingViewSet)
 router.register(r'medicals', views.MedicalViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API
 # 
+
 approve_serviceprovider= ServiceProviderViewSet.as_view({
     'patch': 'approved',
     'get': 'retrieve',
@@ -71,4 +73,5 @@ urlpatterns = [
     path('<int:pk>/approve/', approve_serviceprovider, name='aprrove'),    
     path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
 ]
+
 

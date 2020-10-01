@@ -55,8 +55,10 @@
   data-pagination="true"
   data-id-field="id"
   data-toolbar="#toolbar"
+  data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/api-openmarket/sellers/?format=json">
+  data-url="/api-openmarket/sellers/?format=json"
+  data-response-handler="responseHandler">
   <thead>
     <tr>
       <th data-field="state" data-checkbox="true"></th>
@@ -76,7 +78,7 @@
       <th data-field="enterprise" data-sortable="true">Enterprise</th>
       <th data-field="major_products" data-sortable="true">Major_products</th>
       <th data-field="status" data-sortable="true">Status</th>
-      <th data-formatter="operateFormatter" data-events="operateEvents" class="text-center">Action</th>     
+      <th data-formatter="operateFormatter"  class="text-center">Action</th>     
     </tr>
   </thead>
 </table>
@@ -110,37 +112,14 @@
 
 
   function operateFormatter(value, row, index) {
+    var url ="/openmarket/"+row.id+"/edit"
     return [
-   
-      '<a class="Edit " href="javascript:void(0)" title="Edit">',
+
+      '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
 
     ].join('')
-  }
-
-  window.operateEvents = {
-    'click .Detail': function (e, value, row, index) {
-      //try
-      $('#my_modal').on('show.bs.modal', function(e) {
-
-       //get data-id attribute of the clicked element
-var bookId = $(e.relatedTarget).data('book-id');
-
-//populate the textbox
-$(e.currentTarget).find('input[name="bookId"]').val(bookId);
-});
-    
-      
-      $('#detailsModel').modal('show');
-    
-      console.log(row.user);
-      
-    },
-    'click .Edit': function (e, value, row, index) {
-      window.location.href ="/openmarket/"+row.id+"/edit";
-      
-    },
   }
 
   ///used cookies to get crsf token
@@ -205,7 +184,9 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
        });
     swal("Your record/s have been deleted successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+            window.location.reload()})
+    ;}
   } else {
     swal("You have cancelled the deletion of records!");
   }

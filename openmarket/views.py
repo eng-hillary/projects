@@ -14,7 +14,8 @@ from .serializers import (ProductSerializer,
                         MedicalSerializer,
                         PackagingSerializer,
                         SoilScienceSerializer,
-                        ServiceProviderApprovalSerializer
+                        ServiceProviderApprovalSerializer,
+                        SellerApprovalSerializer
                         )
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -26,8 +27,6 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import(SellerProfileForm,ProductProfileForm, ServiceProviderProfileForm, ServiceProfileForm)
 from django.shortcuts import redirect
-from django.db import IntegrityError
-from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -37,7 +36,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-    
+import datetime
 class ProductViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -108,6 +107,22 @@ class SellerViewSet(viewsets.ModelViewSet):
     #permission_classes = [permissions.IsAuthenticated]
 
 
+    def approved(self, request, pk, format=None):
+        profile = self.get_object()
+        serializer = SellerApprovalSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def decline(self, request, pk, format=None):
+        profile = self.get_object()
+        serializer = SellerApprovalSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
 class SellerList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'seller_list.html'
@@ -145,37 +160,29 @@ class CreateSellerProfile(LoginRequiredMixin,CreateView):
 
 
     def form_valid(self, form):
-        try:
-            profile = form.save(commit=False)
-            # setting farmer profile to in-active
-            profile.status = 'pending'
-            profile.user = self.request.user
-            profile.save()
+        profile = form.save(commit=False)
+        # setting farmer profile to in-active
+        profile.status = 'pending'
+        profile.user = self.request.user
+        profile.save()
 
-            # send email to farmer after registration
-            current_site = get_current_site(self.request)
-            subject = 'Registrated Successful'
-            message = render_to_string('profile_created_successful.html', {
-                'user': profile.user,
-                'domain': current_site.domain
-                })
-            to_email = profile.user.email
-            email = EmailMessage(
-                    subject, message, to=[to_email]
-                )
-            email.send()
-            return redirect('openmarket:seller_list')
-            messages.add_message(self.request, messages.SUCCESS, 'Submitted successfully.')
-            return redirect("openmarket:seller_list")
-        except IntegrityError:
-            messages.add_message(self.request, messages.WARNING, 'please fill the form again')
-            return redirect("openmarket:seller_list")
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Registrated Successful'
+        message = render_to_string('profile_created_successful.html', {
+            'user': profile.user,
+            'domain': current_site.domain
+            })
+        to_email = profile.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.send()
+        return redirect('openmarket:seller_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
-        messages.add_message(self.request, messages.WARNING, 'please fill the form again')
-        
         return self.render_to_response(self.get_context_data(form=form))
 #views for buyers
 class BuyerViewSet(viewsets.ModelViewSet):

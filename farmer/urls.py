@@ -33,6 +33,6 @@ urlpatterns = [
     path('create/profile', CreateFarmerProfile.as_view(), name="create_farmer"),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('<int:pk>/edit/', UpdateFarmerProfile.as_view(), name="edit_farmer_profile"),
-    path('<int:pk>/approve/', approve_farmer, name='aprrove'),
+    path('<int:pk>/approve/', approve_farmer, name='approve'),
 
 ]

@@ -140,7 +140,6 @@
                         <ul class="sidebar-submenu">
                             <li><a href="{% url 'openmarket:create_seller' %}"><i class="fa fa-circle"></i>Seller Registration</a></li>
                             <li><a href="{% url 'openmarket:seller_list' %}"><i class="fa fa-circle"></i>My Application</a></li>
-                            <li><a href="{% url 'openmarket:create_product' %}"><i class="fa fa-circle"></i>Product Registration</a></li>
                             <li><a href="{% url 'openmarket:product_list' %}"><i class="fa fa-circle"></i>My Products</a></li>
                         </ul>
                     </li>
@@ -219,6 +218,10 @@
 
 <!-- latest jquery-->
 <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/ug/ug-all.js"></script>
+
 
 <!--Piecharts-->
 <script src="https://code.highcharts.com/highcharts.js"></script>
