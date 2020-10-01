@@ -176,7 +176,7 @@ def activate(request, uidb64, token):
         return redirect('common:home')
     else:
         return render(request, 'account_activation_invalid.html')
-
+        
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = "signup.html"
 
@@ -306,3 +306,19 @@ def load_villages(request):
     parish_id = request.GET.get('parish')
     villages = Village.objects.filter(parish_id=parish_id).order_by('name')
     return render(request, 'village_dropdown_list_options.html', {'villages': villages})
+
+#View for piechart
+
+def pie_chart(request):
+    labels = []
+    data = []
+
+    queryset = District.objects.order_by('-population')[:5]
+    for district in queryset:
+        labels.append(district.name)
+        data.append(district.population)
+
+    return render(request, 'pie_chart.html', {
+        'labels': labels,
+        'data': data,
+    })

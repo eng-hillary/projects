@@ -60,4 +60,4 @@ class FarmerProfile(TimeStampedModel, models.Model):
     approved_date = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return str(self.user)
+        return str(self.user.last_name)

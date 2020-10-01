@@ -8,7 +8,7 @@ class FarmForm(forms.ModelForm):
 
     class Meta:
         model = Farm
-        exclude = ['status']
+        exclude = ['status','available_land']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)

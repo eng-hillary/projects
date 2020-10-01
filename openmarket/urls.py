@@ -1,7 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-
 from .views import (ProductList,
                     SellerList,
                     CreateSellerProfile,
@@ -21,10 +20,7 @@ from .views import (ProductList,
                     CreateServiceProviderProfile,
                     load_districts,
                     CreateServiceView,
-                    ServiceProviderViewSet
-
-                            )       
-
+                    ServiceProviderViewSet  )
 
 router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet)
@@ -41,19 +37,20 @@ router.register(r'packagings', views.PackagingViewSet)
 router.register(r'medicals', views.MedicalViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
 
-
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API
+# 
 
 approve_serviceprovider= ServiceProviderViewSet.as_view({
     'patch': 'approved',
     'get': 'retrieve',
     'put': 'decline',
     'delete': 'destroy',
-    'get':'list'
-
-})
-
+    'get':'list'})
+    
 
 app_name = 'openmarket'
+
 urlpatterns = [
     path('', include(router.urls)),
     path('products', ProductList.as_view(), name='product_list'),
@@ -73,7 +70,8 @@ urlpatterns = [
     path('packagings', PackagingList.as_view(), name='packaging_list'),
     path('medicals', MedicalList.as_view(), name='medical_list'),
     path('soilsciences', SoilScienceList.as_view(), name='soilscience_list'),
-    path('<int:pk>/approve/', approve_serviceprovider, name='approve'),
-    path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),
-
+    path('<int:pk>/approve/', approve_serviceprovider, name='aprrove'),    
+    path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
 ]
+
+
