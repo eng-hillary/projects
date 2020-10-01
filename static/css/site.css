@@ -24100,6 +24100,19 @@ a.Detail{
   color: #2124b6;
 }
 
+#container {
+  height: 800px; 
+  min-width: 310px; 
+  max-width: 1000px; 
+  margin: 0 auto; 
+}
+.loading {
+  margin-top: 10em;
+  text-align: center;
+  color: gray;
+}
+
+
 
 .highcharts-figure, .highcharts-data-table table {
   min-width: 320px; 
@@ -24139,3 +24152,4 @@ font-weight: 600;
 input[type="number"] {
 min-width: 50px;
 }
+
