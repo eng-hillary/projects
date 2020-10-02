@@ -87,6 +87,7 @@ Highcharts.chart('barcontainer', {
         title: {
             text: 'Total percent market share'
         }
+<<<<<<< HEAD
 
     },
     legend: {
@@ -102,6 +103,23 @@ Highcharts.chart('barcontainer', {
         }
     },
 
+=======
+
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                format: '{point.y:.1f}%'
+            }
+        }
+    },
+
+>>>>>>> 4fe43ad85b4bff7c6c07cc83676ec4fd32abe063
     tooltip: {
         headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
         pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
@@ -574,9 +592,6 @@ for (i = 0; i < x.length; i++) {
 //... and adds the "active" class to the current step:
 x[n].className += " active";
 }
-
-
-
 
 //Piechart Js
 Highcharts.chart('piecontainer', {
