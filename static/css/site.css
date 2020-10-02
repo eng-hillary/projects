@@ -19249,6 +19249,7 @@ table tbody .border-bottom-warning td {
       .page-wrapper .page-body-wrapper .page-sidebar ~ .page-body .page-header .row .page-header-left {
         display: inherit; }
   .page-wrapper .page-body-wrapper .sidebar {
+    margin-top: 160px;
     height: calc(100vh - 60px); }
   .page-wrapper .page-body-wrapper .page-sidebar.open ~ .page-body {
     margin-top: 60px; }
@@ -19266,9 +19267,11 @@ table tbody .border-bottom-warning td {
     width: 100%;
     z-index: 11; }
     .page-wrapper .page-main-header .main-header-left .logo-wrapper img {
-      height: 50px;
+      height: 180;
       margin-top: 0;
-      margin-right: 0; }
+      margin-right: 0;
+      margin-bottom: 12px;
+     }
     .page-wrapper .page-main-header .main-header-right .nav-right {
       position: unset;
       padding: 0; }
