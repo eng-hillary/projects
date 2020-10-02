@@ -36,7 +36,7 @@
 </head>
 
 <body>
-
+{% block body %}
 <!-- page-wrapper Start-->
 <div class="page-wrapper">
 
@@ -198,23 +198,7 @@
 
         </div>
 
-        <!-- footer start-->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6 footer-copyright">
-                        <p class="mb-0">Copyright  {% now "Y" %} © Uganda National Farmers Federation (UNFFE) </p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="pull-right mb-0">powered by Eight Tech Consults Ltd</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- footer end-->
-    </div>
-
-</div>
+        {% endblock  %}
 
 <!-- latest jquery-->
 <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
@@ -281,7 +265,27 @@
 <script src="{% static 'js/lazysizes.min.js' %}"></script>
 
 <!--script admin-->
+
+<script src="{% static 'js/mapscript.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>
+{% block javascript %}{% endblock %}
+        <!-- footer start-->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 footer-copyright">
+                        <p class="mb-0">Copyright  {% now "Y" %} © Uganda National Farmers Federation (UNFFE) </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="pull-right mb-0">powered by Eight Tech Consults Ltd</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer end-->
+    </div>
+
+</div>
 
 </body>
 
