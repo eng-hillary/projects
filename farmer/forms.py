@@ -9,6 +9,7 @@ class FarmerProfileForm(forms.ModelForm):
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     phone_1 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
     phone_2 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=False, initial='+256')
+    
 
 
     class Meta:
@@ -30,7 +31,10 @@ class FarmerProfileForm(forms.ModelForm):
         self.fields['parish'].queryset = Parish.objects.none()
         self.fields['village'].empty_label = '--please select--'
         self.fields['village'].queryset = Village.objects.none()
-        self.fields['group'].empty_label = '--please select--'
+        self.fields['group'].empty_label = None
+       
+      
+        
 
         if 'region' in self.data:
             try:
