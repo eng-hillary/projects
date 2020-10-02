@@ -20,7 +20,7 @@ class EnterpriseSerializer(serializers.ModelSerializer):
 
 
 class FarmSerializer(serializers.ModelSerializer):
-    sector = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    #sector = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     location = serializers.SerializerMethodField(method_name='get_farm_location')
     farmer = FarmerProfileSerializer()
     status = serializers.CharField(source='get_status_display')
@@ -29,7 +29,7 @@ class FarmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Farm
-        fields = ('id', 'name', 'sector', 'farmer', 'latitude', 'longitude','location',
+        fields = ('id', 'name', 'farmer', 'latitude', 'longitude','location',
          'start_date','close_date',  'image','availability_of_services','availability_of_water','land_occupied','available_land', 'status', 'general_remarks')
 
     
