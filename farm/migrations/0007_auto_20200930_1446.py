@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='enterprise',
             name='farm',
-            field=models.ForeignKey(default=4, on_delete=django.db.models.deletion.CASCADE, to='farm.Farm'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='farm.Farm'),
             preserve_default=False,
         ),
         migrations.AddField(

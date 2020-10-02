@@ -36,7 +36,6 @@
 </head>
 
 <body>
-
 <!-- page-wrapper Start-->
 <div class="page-wrapper">
 
@@ -198,27 +197,15 @@
 
         </div>
 
-        <!-- footer start-->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6 footer-copyright">
-                        <p class="mb-0">Copyright  {% now "Y" %} © Uganda National Farmers Federation (UNFFE) </p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="pull-right mb-0">powered by Eight Tech Consults Ltd</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- footer end-->
-    </div>
-
-</div>
 
 <!-- latest jquery-->
 <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
 
+<!--maps-->
+<script src="{% static 'js/mapscript.js' %}"></script>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<!-- <script src="https://code.highcharts.com/maps/modules/exporting.js"></script> -->
+<script src="https://code.highcharts.com/mapdata/countries/ug/ug-all.js"></script>
 
 
 <!--Piecharts-->
@@ -227,9 +214,6 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-<script src="https://code.highcharts.com/maps/highmaps.js"></script>
-<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/ug/ug-all.js"></script>
 <!-- Bootstrap js-->
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.js' %}"></script>
@@ -281,7 +265,26 @@
 <script src="{% static 'js/lazysizes.min.js' %}"></script>
 
 <!--script admin-->
+<script src="{% static 'js/mapscript.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>
+{% block javascript %}{% endblock %}
+        <!-- footer start-->
+        <footer class="footer" style="margin-left: -3% !important;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 footer-copyright">
+                        <p class="mb-0">Copyright  {% now "Y" %} © Uganda National Farmers Federation (UNFFE) </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="pull-right mb-0">powered by Eight Tech Consults Ltd</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer end-->
+    </div>
+
+</div>
 
 </body>
 
