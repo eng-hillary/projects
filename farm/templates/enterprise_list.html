@@ -66,7 +66,7 @@ data-page-list="[10, 25, 50, 100, all]"
       <th data-field="status" data-sortable="true">Status</th>
       <th data-field="availability_of_services" data-visible="false" data-sortable="true">Services Available</th>
       <th data-field="availability_of_water" data-visible="false" data-sortable="true">Water Available</th>
-      <th data-field="image" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
+      <th data-field="image" data-visible="false"  data-formatter="" data-sortable="true">Picture</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
     </tr>
@@ -96,7 +96,7 @@ data-page-list="[10, 25, 50, 100, all]"
     return res
   }
   //displays an image
-    function imageFormatter(value, row) {
+    function (value, row) {
       var url =row.image;
     return '<img class="img-thumbnail" src="'+url+'">'
   }
