@@ -250,20 +250,18 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
 
 
     def form_valid(self, form):
-        farm = form.save(commit=False)
-        # assign total land to available land
-        farm.available_land = farm.land_occupied
-        farm.save()
+        enterprise = form.save(commit=False)
+        enterprise.save()
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
-        subject = 'Farm Created Successfully'
-        message = render_to_string('farm_created_successful_email.html', {
-            'user': farm.farmer.user,
+        subject = 'Enterprise Created Successfully'
+        message = render_to_string('enterprise_created_successful_email.html', {
+            'user': enterprise.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.name + ' has been registered sucessfully',
+            'message': 'Your '+enterprise.name + ' has been registered sucessfully',
             })
-        to_email = farm.farmer.user.email
+        to_email = enterprise.farm.farmer.user.email
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
@@ -277,20 +275,20 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-# update farm view
-class EditFarmView(LoginRequiredMixin,UpdateView):
-    model =Farm
-    template_name = 'create_farm.html'
+# update Enterprise view
+class EditEnterpriseView(LoginRequiredMixin,UpdateView):
+    model =EnterpriseForm
+    template_name = 'create_enterprise.html'
     success_url = reverse_lazy('farm:farm_list')
-    form_class = FarmForm
-    success_message = "Farm has been updated successfully"
+    form_class = EnterpriseForm
+    success_message = "Enterprise has been updated successfully"
 
 
     def dispatch(self, request, *args, **kwargs):
-        return super(EditFarmView, self).dispatch(request, *args, **kwargs)
+        return super(EditEnterpriseView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(EditFarmView, self).get_form_kwargs()
+        kwargs = super(EditEnterpriseView, self).get_form_kwargs()
         return kwargs
 
 
@@ -305,18 +303,18 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
 
 
     def form_valid(self, form):
-        farm = form.save(commit=False)
-        farm.save()
+        enterprise = form.save(commit=False)
+        enterprise.save()
 
          # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
-        subject = 'Farm Updated Successfully'
-        message = render_to_string('farm_created_successful_email.html', {
-            'user': farm.farmer.user,
+        subject = 'Enterprise Updated Successfully'
+        message = render_to_string('enterprise_created_successful_email.html', {
+            'user': enterprise.farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.name + ' Details have been updated sucessfully',
+            'message': 'Your '+enterprise.farm.name + ' Details have been updated sucessfully',
             })
-        to_email = farm.farmer.user.email
+        to_email = enterprise.farm.farmer.user.email
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
