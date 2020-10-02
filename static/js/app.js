@@ -67,14 +67,7 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	// Select 2
-	
-	if($('.select').length > 0) {
-		$('.select').select2({
-			minimumResultsForSearch: -1,
-			width: '100%'
-		});
-	}
+
 	
 	// Modal Popup hide show
 
@@ -210,15 +203,6 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	// Multiselect
-
-	if($('#customleave_select').length > 0) {
-		$('#customleave_select').multiselect();
-	}
-	if($('#edit_customleave_select').length > 0) {
-		$('#edit_customleave_select').multiselect();
-	}
-
 	// Leave Settings button show
 	
 	$(document).on('click', '.leave-edit-btn', function() {
