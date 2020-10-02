@@ -29,8 +29,8 @@
     <!-- Prism css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/prism.css' %}">
 
-      <!--select2 css-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/select2.min.css' %}"> 
+    <!-- Chartist css -->
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/chartist.css' %}"> -->
 
    
 
@@ -111,9 +111,9 @@
 
         <!-- Page Sidebar Start-->
         <div class="page-sidebar">
-            <div class="main-header-left d-none d-lg-block" style="margin-top: 10px; background-color: #014421;">
+            <div class="main-header-left d-none d-lg-block">
 
-                <div class="logo-wrapper ml-3" style="background-color: #014421;"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo_circle.png' %}" style="margin-top: 10px; background-color: #014421;" width="100%" height="180"  alt=""></a></div>
+                <div class="logo-wrapper ml-3"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo_circle.png' %}" style="margin-top: 10px;" width="100%" height="180"  alt=""></a></div>
 
             </div>
             <div class="sidebar custom-scrollbar">
@@ -222,10 +222,11 @@
 <!-- Sidebar jquery-->
 <script src="{% static 'js/sidebar-menu.js' %}"></script>
 
-<!--select2 js-->
-<script src="{% static 'js/select2.min.js' %}"></script> 
+<!--chartist js-->
+<!-- <script src="{% static 'js/chart/chartist/chartist.js' %}"></script> -->
 
-
+<!--chartjs js-->
+<script src="{% static 'js/chart/chartjs/chart.min.js' %}"></script>
 
 <!-- lazyload js-->
 <script src="{% static 'js/lazysizes.min.js' %}"></script>
@@ -240,6 +241,11 @@
 <script src="{% static 'js/counter/jquery.counterup.min.js' %}"></script>
 <script src="{% static 'js/counter/counter-custom.js' %}"></script>
 
+<!--peity chart js-->
+<script src="{% static 'js/chart/peity-chart/peity.jquery.js' %}"></script>
+
+<!--sparkline chart js-->
+<script src="{% static 'js/chart/sparkline/sparkline.js' %}"></script>
 
 <!--Customizer admin-->
 <script src="{% static 'js/admin-customizer.js' %}"></script>
