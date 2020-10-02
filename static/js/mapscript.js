@@ -1,4 +1,3 @@
-
 var data = [
     ['ug-2595', 0],
     ['ug-7073', 1],
@@ -153,5 +152,3 @@ Highcharts.mapChart('container', {
         }
     }]
 });
-
-
