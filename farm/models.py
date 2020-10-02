@@ -54,7 +54,7 @@ class Enterprise(TimeStampedModel, models.Model):
     farm = models.ForeignKey(Farm, on_delete=models.CASCADE, null=True)
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE, null=True)
     animal_seed_density = models.PositiveIntegerField(blank=True, null=True, verbose_name='Number of animals/seedling per enterprise in a particular period of time.')
-    expected_profit = models.DecimalField(decimal_places=2, max_digits=4, null=True)
+    expected_profit = models.DecimalField(decimal_places=2, max_digits=1000, null=True)
     land_occupied = models.FloatField( blank=False, null=True)
     start_date = models.DateField(blank=False, null=True)
     close_date = models.DateField(blank=True, null=True)
