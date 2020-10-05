@@ -1,4 +1,4 @@
-from .models  import Farm
+from .models  import Farm, Enterprise
 from django import forms
 
 
@@ -16,3 +16,16 @@ class FarmForm(forms.ModelForm):
         self.fields['general_remarks'].widget.attrs.update({'rows': '2'})
         self.fields['sector'].empty_label = '--please select--'
         
+
+class EnterpriseForm(forms.ModelForm):
+    start_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+
+    class Meta:
+        model = Enterprise
+        exclude = ['status','available_land']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(EnterpriseForm, self).__init__(*args, **kwargs)
+        self.fields['general_remarks'].widget.attrs.update({'rows': '2'})
+        self.fields['farm'].empty_label = '--please select--'

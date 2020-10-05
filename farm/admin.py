@@ -30,7 +30,6 @@ admin.site.register(Enterprise, EnterpriseAdmin)
 class FarmAdmin(admin.ModelAdmin):
     list_display = [
         'name',
-        'sector',
         'farmer',
         'start_date',
         'close_date',
@@ -43,7 +42,7 @@ class FarmAdmin(admin.ModelAdmin):
         
 
     ]
-    search_fields = ['name','sector__name','status','latitude','longitude']
+    search_fields = ['name','status','latitude','longitude']
 
 
 admin.site.register(Farm, FarmAdmin)

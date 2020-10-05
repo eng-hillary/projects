@@ -1,19 +1,19 @@
 
 var data = [
     ['ug-2595', 0],
-    ['ug-7073', 1],
-    ['ug-7074', 2],
-    ['ug-7075', 3],
-    ['ug-2785', 4],
+    ['ug-7073', 0],
+    ['ug-7074', 0],
+    ['ug-7075', 0],
+    ['ug-2785', 0],
     ['ug-2791', 5],
     ['ug-3385', 6],
     ['ug-3388', 7],
     ['ug-2786', 8],
     ['ug-7056', 9],
     ['ug-7083', 10],
-    ['ug-7084', 11],
-    ['ug-7058', 12],
-    ['ug-1678', 13],
+    ['ug-7084', 0],
+    ['ug-7058', 0],
+    ['ug-1678', 0],
     ['ug-1682', 14],
     ['ug-1683', 15],
     ['ug-1685', 16],
@@ -42,18 +42,18 @@ var data = [
     ['ug-7080', 39],
     ['ug-7081', 40],
     ['ug-1684', 41],
-    ['ug-7082', 42],
+    ['ug-7082', 0],
     ['ug-1688', 43],
     ['ug-7079', 44],
     ['ug-7068', 45],
     ['ug-7070', 46],
     ['ug-7049', 47],
-    ['ug-2787', 48],
-    ['ug-7055', 49],
+    ['ug-2787', 0],
+    ['ug-7055', 0],
     ['ug-2769', 50],
     ['ug-7052', 51],
     ['ug-2774', 52],
-    ['ug-7059', 53],
+    ['ug-7059', 0],
     ['ug-7060', 54],
     ['ug-7057', 55],
     ['ug-2790', 56],
@@ -79,11 +79,11 @@ var data = [
     ['ug-2752', 76],
     ['ug-2754', 77],
     ['ug-1687', 78],
-    ['ug-2757', 79],
+    ['ug-2757', 0],
     ['ug-1689', 80],
     ['ug-2760', 81],
     ['ug-2761', 82],
-    ['ug-2766', 83],
+    ['ug-2766', 0],
     ['ug-2765', 84],
     ['ug-2764', 85],
     ['ug-2749', 86],
@@ -93,7 +93,7 @@ var data = [
     ['ug-2771', 90],
     ['ug-2772', 91],
     ['ug-2775', 92],
-    ['ug-2788', 93],
+    ['ug-2788', 0],
     ['ug-2789', 94],
     ['ug-3381', 95],
     ['ug-3387', 96],
@@ -108,9 +108,9 @@ var data = [
     ['ug-2756', 105],
     ['ug-2770', 106],
     ['ug-7072', 107],
-    ['ug-7053', 108],
+    ['ug-7053', 0],
     ['ug-2753', 109],
-    ['ug-2755', 110],
+    ['ug-2755', 0],
     ['ug-2773', 111]
 ];
 
@@ -141,7 +141,7 @@ Highcharts.mapChart('container', {
 
     series: [{
         data: data,
-        name: 'Random data',
+        name: 'Farmers',
         states: {
             hover: {
                 color: ' #228B22'
@@ -309,8 +309,8 @@ Highcharts.chart('barcontainer', {
     drilldown: {
         series: [
             {
-                name: "Chrome",
-                id: "Chrome",
+                name: "Bushenyi",
+                id: "Bushenyi",
                 data: [
                     [
                         "v65.0",
@@ -387,8 +387,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Firefox",
-                id: "Firefox",
+                name: "Sheema",
+                id: "Sheema",
                 data: [
                     [
                         "v58.0",
@@ -433,8 +433,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Internet Explorer",
-                id: "Internet Explorer",
+                name: "Arua",
+                id: "Arua",
                 data: [
                     [
                         "v11.0",
@@ -455,8 +455,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Safari",
-                id: "Safari",
+                name: "Apac",
+                id: "Apac",
                 data: [
                     [
                         "v11.0",
@@ -485,8 +485,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Edge",
-                id: "Edge",
+                name: "Kitgum",
+                id: "Kitgum",
                 data: [
                     [
                         "v16",
@@ -507,8 +507,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Opera",
-                id: "Opera",
+                name: "Kololo",
+                id: "Kololo",
                 data: [
                     [
                         "v50.0",

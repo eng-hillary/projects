@@ -15,7 +15,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from .forms import (FarmForm)
+from .forms import (FarmForm,EnterpriseForm)
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -208,6 +208,113 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
             'message': 'Your '+farm.name + ' Details have been updated sucessfully',
             })
         to_email = farm.farmer.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('farm:farm_list')
+
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+
+# create enterprise
+class CreateEnterpriseView(LoginRequiredMixin,CreateView):
+    template_name = 'create_enterprise.html'
+    success_url = reverse_lazy('farm:farm_list')
+    form_class = EnterpriseForm
+    success_message = "Farm has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateEnterpriseView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateEnterpriseView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        enterprise = form.save(commit=False)
+        enterprise.save()
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Enterprise Created Successfully'
+        message = render_to_string('enterprise_created_successful_email.html', {
+            'user': enterprise.farmer.user,
+            'domain': current_site.domain,
+            'message': 'Your '+enterprise.name + ' has been registered sucessfully',
+            })
+        to_email = enterprise.farm.farmer.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('farm:farm_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+# update Enterprise view
+class EditEnterpriseView(LoginRequiredMixin,UpdateView):
+    model =EnterpriseForm
+    template_name = 'create_enterprise.html'
+    success_url = reverse_lazy('farm:farm_list')
+    form_class = EnterpriseForm
+    success_message = "Enterprise has been updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditEnterpriseView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditEnterpriseView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        enterprise = form.save(commit=False)
+        enterprise.save()
+
+         # send email to farmer  a message after an update
+        current_site = get_current_site(self.request)
+        subject = 'Enterprise Updated Successfully'
+        message = render_to_string('enterprise_created_successful_email.html', {
+            'user': enterprise.farm.farmer.user,
+            'domain': current_site.domain,
+            'message': 'Your '+enterprise.farm.name + ' Details have been updated sucessfully',
+            })
+        to_email = enterprise.farm.farmer.user.email
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
