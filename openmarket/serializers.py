@@ -15,6 +15,7 @@ from .models import (Product,
 from django.contrib.auth.models import User
 from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
+from common.serializers import UserSerializer
 
 class ProductSerializer(serializers.ModelSerializer):
     enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
@@ -73,7 +74,7 @@ class BuyerPostSerializer(serializers.ModelSerializer):
 class ServiceProviderSerializer(serializers.ModelSerializer):
     #sector = serializers.PrimaryKeyRelatedField(many=True, queryset=Sector.objects.all())
     #sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
-    user = serializers.SlugRelatedField(many=False,read_only=True, slug_field='username')
+    user = UserSerializer()
     region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
@@ -107,6 +108,7 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
 
 
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Service
         fields = ('user','category', 'service_name', 'service_type', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture')

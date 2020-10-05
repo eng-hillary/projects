@@ -4,21 +4,22 @@
 {% block content %}
 {% load crispy_forms_tags %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/multi_form.css' %}">
             <!-- Container-fluid starts-->
             <div class="container-fluid">
                 <div class="page-header">
                     <div class="row">
                         <div class="col">
                             <div class="page-header-left">
-                                <h3>Create Profile
-                                    <small>{{ user.groups.all.0 }} </small>
+                                <h3> Create Service Provider Profile
+                                 
                                 </h3>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <ol class="breadcrumb pull-right">
                                 <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                                <li class="breadcrumb-item">Farmers </li>
+                                <li class="breadcrumb-item">Service Providers </li>
                                 <li class="breadcrumb-item active">Add Profile </li>
                             </ol>
                         </div>
@@ -35,110 +36,105 @@
                             <div class="card-header">
                                 <h5> Add Profile</h5>
                             </div>
-                            <form method="POST" id="farmer_profile" data-districts-url="{% url 'common:ajax_load_districts' %}" novalidate enctype="multipart/form-data" class="card-body"
+                            <form method="POST"  id="form"  data-districts-url="{% url 'common:ajax_load_districts' %}" novalidate enctype="multipart/form-data" class="card-body"
                             data-counties-url="{% url 'common:ajax_load_counties' %}"
                             data-sub_counties-url="{% url 'common:ajax_load_sub_counties' %}"
                             data-parishes-url="{% url 'common:ajax_load_parishes' %}"
-                            data-villages-url="{% url 'common:ajax_load_villages' %}"
-                            >
+                            data-villages-url="{% url 'common:ajax_load_villages' %}">
                                 {% csrf_token %}
-
-                                <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
-                                    <li class="nav-item"><a class="nav-link active show" id="personalinfo-tab" data-toggle="tab" href="#personalinfo" role="tab" aria-controls="personalinfo" aria-selected="true" data-original-title="" title="">Personal Information</a></li>
-                                    <li class="nav-item"><a class="nav-link" id="address-tabs" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false" data-original-title="" title="">address</a></li>
-                                    <li class="nav-item"><a class="nav-link" id="farming-tabs" data-toggle="tab" href="#farming" role="tab" aria-controls="farming" aria-selected="false" data-original-title="" title="">Service Information</a></li>
-                                </ul>
+ 
                                 <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade active show" id="personalinfo" role="tabpanel" aria-labelledby="personalinfo-tab">
-                                        <div class="row">
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.nin|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.service_provider_location|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.phone_1|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.phone_2|as_crispy_field }}
-                                            </div>
-                                            
-                                            
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.category|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.service_type|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-12 col-md-6">
-                                                {{ form.list_of_services_if_more_than_one|as_crispy_field }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                   
-                                    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tabs">
-                                      
+                                  <div class="tab" id="personalinfo" role="tabpanel" aria-labelledby="personalinfo-tab">
+                                      <div class="row">
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.nin|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.service_provider_location|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.phone_1|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.phone_2|as_crispy_field }}
+                                          </div>
                                           
-                                        <div class="row">
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.region|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.district|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.county|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.sub_county|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.parish|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.village|as_crispy_field }}
-                                            </div>
-            
-                                        </div>
-                                      
-                                    </div>
-                                    <div class="tab-pane fade" id="farming" role="tabpanel" aria-labelledby="farming-tabs">
-                                       
                                           
-                                        <div class="row">
-                                
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.service_type|as_crispy_field }}
-                                            </div>
-                                            
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.service_location|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.is_the_service_at_a_fee|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.is_the_service_available|as_crispy_field }}
-                                            </div>
-            
-                                        </div>
-                                  
-                                </div>
-                                </div>
-
-                                <div style="overflow:auto;">
-                                  <div style="float:right;">
-                                  <button type="button" class="btn btn-dark" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                                  <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.category|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.service_type|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-12 col-md-6">
+                                              {{ form.list_of_services_if_more_than_one|as_crispy_field }}
+                                          </div>
+                                      </div>
                                   </div>
+                                 
+                                  <div class="tab" id="address" role="tabpanel" aria-labelledby="address-tabs">
+                                    
+                                        
+                                      <div class="row">
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.region|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.district|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.county|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.sub_county|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.parish|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.village|as_crispy_field }}
+                                          </div>
+          
+                                      </div>
+                                    
+                                  </div>
+                                  <div class="tab" id="farming" role="tabpanel" aria-labelledby="farming-tabs">
+                                     
+                                        
+                                      <div class="row">
+                              
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.service_type|as_crispy_field }}
+                                          </div>
+                                          
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.service_location|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.is_the_service_at_a_fee|as_crispy_field }}
+                                          </div>
+                                          <div class="col-xl-6 col-md-6">
+                                              {{ form.is_the_service_available|as_crispy_field }}
+                                          </div>
+          
+                                      </div>
+                                
                               </div>
-                              <!-- Circles which indicates the steps of the form: -->
-                              <div style="text-align:center;margin-top:40px;">
-                                  <span class="step"></span>
-                                  <span class="step"></span>
                               </div>
-                   
+                                <div style="overflow:auto;">
+                                    <div style="float:right;">
+                                      <button type="button" class="btn previous">Previous</button>
+                                      <button type="button" class="next btn btn-primary">Next</button>
+                                      <button type="button" class="btn btn-primary preview">Preview</button>
+                                      <button type="button" class="btn btn-success submit">Submit</button>
+                                    </div>
+                                </div>
+                                <!-- Circles which indicates the steps of the form: -->
+                                <div style="text-align:center;margin-top:40px;">
+                                    <span class="step">1</span>
+                                    <span class="step">2</span>
+                                    <span class="step">3</span>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -152,14 +148,16 @@
 <!-- latest jquery-->
 {% block javascript %}
 <!--select 2-->
-<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/validate.min.js' %}"></script>
 
+<script type="text/javascript" src="{% static 'js/multi_form.js' %}"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
+       
     //load districts
     $("#id_region").change(function () {
-      var url = $("#farmer_profile").attr("data-districts-url");  // get the url of the `load_cities` view
+      var url = $("#form").attr("data-districts-url");  // get the url of the `load_cities` view
       var regionId = $(this).val();  // get the selected country ID from the HTML input
 
       $.ajax({                       // initialize an AJAX request
@@ -175,7 +173,7 @@
     });
     //load counties
     $("#id_district").change(function () {
-      var url = $("#farmer_profile").attr("data-counties-url");  // get the url of the `load_cities` view
+      var url = $("#form").attr("data-counties-url");  // get the url of the `load_cities` view
       var districtId = $(this).val();  // get the selected  ID from the HTML input
 
       $.ajax({                       // initialize an AJAX request
@@ -191,7 +189,7 @@
     });
     // load sub counties
     $("#id_county").change(function () {
-      var url = $("#farmer_profile").attr("data-sub_counties-url");  // get the url of the `load_cities` view
+      var url = $("#form").attr("data-sub_counties-url");  // get the url of the `load_cities` view
       var countyId = $(this).val();  // get the selected  ID from the HTML input
 
       $.ajax({                       // initialize an AJAX request
@@ -208,7 +206,7 @@
 
     // load parishes ajax
     $("#id_sub_county").change(function () {
-      var url = $("#farmer_profile").attr("data-parishes-url");  // get the url of the `load_cities` view
+      var url = $("#form").attr("data-parishes-url");  // get the url of the `load_cities` view
       var sub_countyId = $(this).val();  // get the selected  ID from the HTML input
 
       $.ajax({                       // initialize an AJAX request
@@ -225,7 +223,7 @@
 
       // load villages ajax
       $("#id_parish").change(function () {
-      var url = $("#farmer_profile").attr("data-villages-url");  // get the url of the `load_cities` view
+      var url = $("#form").attr("data-villages-url");  // get the url of the `load_cities` view
       var parishId = $(this).val();  // get the selected  ID from the HTML input
 
       $.ajax({                       // initialize an AJAX request
@@ -240,26 +238,69 @@
       });
     });
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script>
 
-  $("#id_country").change(function () {
-    var url = $("#personForm").attr("data-cities-url");  // get the url of the `load_districts` view
-    var regionId = $(this).val();  // get the selected country ID from the HTML input
+    //form stepwise validation
+      ///form validation 
+    // example of adding a custom  validation method to the form
+    // $.validator.addMethod('year', function (value, element, param) {
+    //             return (value != 0) && (value >= 1900) && (value == parseInt(value, 10));
+    //         }, 'Please enter a valid year not less than 1900!');
+    //         $.validator.addMethod('username', function (value, element, param) {
+    //             var nameRegex = /^[a-zA-Z0-9]+$/;
+    //             return value.match(nameRegex);
+    //         }, 'Only a-z, A-Z, 0-9 characters are allowed');
 
-    $.ajax({                       // initialize an AJAX request
-      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-      data: {
-        'region': regionId       // add the country id to the GET parameters
-      },
-      success: function (data) {   // `data` is the return of the `load_cities` view function
-        $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
-      }
+
+    var val = {
+                // Specify validation rules
+                rules: {
+                  phone_1_1: {
+                        required: true,
+                        minlength:9,
+                        digits: true
+                    },
+                    phone_2_1: {
+                      required: true,
+                        minlength:9,
+                        digits: true
+
+                    },
+                    nin: {
+                        required: true,
+                        minlength:15,
+                    }
+                },
+                // Specify validation error messages
+                messages: {
+                  phone_1_1:
+                        "Please enter a valid phone number",
+                   phone_2_1: {
+                        required: "Please enter a valid phone numbe"
+                    },
+                    nin: {
+                        required: "Please a valid NIN"
+                    }
+                }
+            }
+    // calling multistep 
+    $("#form").multiStepForm(
+                {
+                    // defaultStep:0,
+                    beforeSubmit: function (form, submit) {
+                        console.log("called before submiting the form");
+                        console.log(form);
+                        console.log(submit);
+                    },
+                    validations: val,
+                }
+            ).navigateTo(0);
+
+
 
     });
-
-  });
-</script>
+  
+  
+  </script>
 {% endblock %}
 
 

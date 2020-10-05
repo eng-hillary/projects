@@ -309,8 +309,8 @@ Highcharts.chart('barcontainer', {
     drilldown: {
         series: [
             {
-                name: "Chrome",
-                id: "Chrome",
+                name: "Bushenyi",
+                id: "Bushenyi",
                 data: [
                     [
                         "v65.0",
@@ -387,8 +387,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Firefox",
-                id: "Firefox",
+                name: "Sheema",
+                id: "Sheema",
                 data: [
                     [
                         "v58.0",
@@ -433,8 +433,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Internet Explorer",
-                id: "Internet Explorer",
+                name: "Arua",
+                id: "Arua",
                 data: [
                     [
                         "v11.0",
@@ -455,8 +455,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Safari",
-                id: "Safari",
+                name: "Apac",
+                id: "Apac",
                 data: [
                     [
                         "v11.0",
@@ -485,8 +485,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Edge",
-                id: "Edge",
+                name: "Kitgum",
+                id: "Kitgum",
                 data: [
                     [
                         "v16",
@@ -507,8 +507,8 @@ Highcharts.chart('barcontainer', {
                 ]
             },
             {
-                name: "Opera",
-                id: "Opera",
+                name: "Kololo",
+                id: "Kololo",
                 data: [
                     [
                         "v50.0",

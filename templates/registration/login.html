@@ -77,7 +77,9 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                   <label class="text-color" for="password">Password/Pin</label>
-                                  <input type="password"  name="password" class="form-control" id="id_password" >
+                                  <input type="password"  name="password" class="form-control" id="password-field" >
+                                  <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                  
                                 </div>
                                 <small  class="form-text text-danger">{{form.password.errors}}</small>
                              </div>
@@ -112,5 +114,22 @@
 
             </div>
         </div>
+
+
+        <script src="/lib/jquery.min.js"></script>
+        <script src="/lib/jquery.plugin.js"></script>
+    <script> 
+        // Change the type of input to password or text 
+        $(".toggle-password").click(function() {
+
+$(this).toggleClass("fa-eye fa-eye-slash");
+var input = $($(this).attr("toggle"));
+if (input.attr("type") == "password") {
+  input.attr("type", "text");
+} else {
+  input.attr("type", "password");
+}
+});
+    </script> 
     </body>
     </html>

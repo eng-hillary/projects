@@ -7,16 +7,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Registered Services
-                        <small>{{ user.groups.all.0 }} Dashboard</small>
+                    <h3>ServiceProvider List
+                      <small><a class="add-new" href="{% url 'openmarket:serviceprovider_registration' %}">Add new</a></small>
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Service Information</li>
-                    <li class="breadcrumb-item active">Services List</li>
+                    <li class="breadcrumb-item">ServiceProvider</li>
+                    <li class="breadcrumb-item active">serviceprovider List</li>
                 </ol>
             </div>
         </div>
@@ -32,14 +32,19 @@
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i> 
   </button>
- 
+  <button id="decline" class="btn btn-decline" title="Decline" disabled>
+    <i class="fa fa-times"></i>
+  </button>
+  <button id="approve" class="btn btn-primary" title="Approve" disabled>
+    <i class="fa fa-check"></i>
+  </button>
 </div>
 <table
   id="table"
   data-toggle="table"
+  data-show-refresh="true"
   data-show-toggle="true"
   data-search="true"
-  data-show-refresh="true"
   data-show-fullscreen="true"
   data-show-columns="true"
   data-show-columns-toggle-all="true"
@@ -50,21 +55,18 @@
   data-pagination="true"
   data-id-field="id"
   data-toolbar="#toolbar"
-  data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/api-openmarket/serviceregistration/?format=json"
-  data-response-handler="responseHandler">
+  data-url="/api-openmarket/serviceregistration/?format=json">
   <thead>
-    <tr>
+   <tr>
       <th data-field="state" data-checkbox="true"></th>
-      <th data-field="service_provider" data-sortable="true">Service Provider</th>
+      <th data-field="user.full_name" data-sortable="true">Service Provider</th>
       <th data-field="service_name" data-visible="false"  data-sortable="true">Service Name</th>
       <th data-field="category" data-visible="false"  data-sortable="true">Category</th>
       <th data-field="service_type" data-sortable="true">Service Type</th>
       <th data-field="size" data-sortable="true">Size</th>
       <th data-field="availability_date" data-sortable="true">Availability Date</th>
-      <th data-field="picture" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
-      <th data-field="status" data-sortable="true">status</th>       
+      <th data-field="picture" data-visible="true"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
       <th data-formatter="operateFormatter" data-events="operateEvents" class="text-center">Action</th>     
                 
     </tr>
@@ -97,11 +99,13 @@
     return res
   }
 
-//displays an image
+
+  //function used to display the image
   function imageFormatter(value, row) {
-        var url =row.picture;
-      return '<img class="img-thumbnail" src="'+url+'">'
-    }
+    var url =row.image;
+  return '<img class="img-thumbnail" src="'+url+'">'
+}
+
 
   function operateFormatter(value, row, index) {
     return [
@@ -132,7 +136,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
       
     },
     'click .Edit': function (e, value, row, index) {
-      window.location.href ="/farmer/"+row.id+"/edit";
+      window.location.href ="/openmarket/"+row.id+"/edit";
+
       
     },
   }
@@ -188,7 +193,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/api-farmer/farmerprofiles/"+ids[id],
+        url: "/api-openmarket/serviceregistration/"+ids[id],
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'DELETE',
@@ -225,7 +231,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/farmer/"+ids[id]+'/approve/',
+        url: "/openmarket/"+ids[id]+'/approve/',
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PATCH',
@@ -263,7 +270,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/farmer/"+ids[id]+'/approve/',
+        url: "/openmarket/"+ids[id]+'/approve/',
+
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PUT',
@@ -290,8 +298,9 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     $('#locale').change(initTable)
   })
 
-
-</script>
+ 
+ </script>
+  
  
 
 {% endblock %}
