@@ -24075,6 +24075,18 @@ a.Detail{
   color: gray;
 }
 
+/* #container {
+  height: 500px;
+  min-width: 310px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.loading {
+  margin-top: 10em;
+  text-align: center;
+  color: gray;
+} */
+
 
 /* High charts */
 .highcharts-figure, .highcharts-data-table table {

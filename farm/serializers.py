@@ -79,3 +79,17 @@ class FarmProduceSerializer(serializers.ModelSerializer):
     class Meta:
         model = FarmProduce
         fields = ('farm', 'produce', 'quantity', 'description', 'production_date', 'taken_by', 'reported_by')
+
+# serialiser for the maps 
+class FarmMapSerializer(serializers.ModelSerializer):
+
+    farmer = serializers.SerializerMethodField(method_name='get_user_full_name',source='farmer__user')
+   
+    class Meta:
+        model = Farm
+        fields = ('name','farmer',  'latitude', 'longitude','land_occupied')
+
+
+
+    def get_user_full_name(self, obj):
+        return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
