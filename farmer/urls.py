@@ -34,5 +34,6 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('<int:pk>/edit/', UpdateFarmerProfile.as_view(), name="edit_farmer_profile"),
     path('<int:pk>/approve/', approve_farmer, name='approve'),
+    path('columnchart/', views.farmer_class_view)
 
 ]

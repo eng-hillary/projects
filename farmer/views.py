@@ -26,6 +26,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from .forms import(FarmerProfileForm,FarmerGroupForm)
 import datetime
+from django.db.models import Count, Q
 
 
 
@@ -290,3 +291,16 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+
+
+
+
+
+#Quering the farmers table for the data. 
+def farmer_class_view(request):
+    dataset = FarmerProfile.objects \
+        .values('region') \
+        .annotate(credit_access_count=Count('region', filter=Q(credit_access=True)),
+                  no_credit_access_count=Count('region', filter=Q(credit_access=False))) \
+        .order_by('region')
+    return render(request, 'credit.html', {'dataset': dataset})

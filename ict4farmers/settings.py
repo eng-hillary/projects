@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'phonenumber_field',
     'compressor',
+    'django.contrib.gis',
    
     #Local apps
     'common',
@@ -54,8 +55,6 @@ INSTALLED_APPS = [
     'unffeagents',
     'resourcesharing',
     'crispy_forms',
-
-
 
 ]
 

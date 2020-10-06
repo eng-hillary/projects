@@ -20,7 +20,6 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.urls import reverse_lazy
 from .models import (Profile, District, Region, County, SubCounty, Parish, Village)
-from django.views.generic import ( CreateView)
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import PasswordResetView
 from rest_framework.views import APIView
@@ -32,10 +31,26 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from .forms import ProfileForm
+from farmer.views import FarmerProfile
+from django.db.models import Count, Q
 
 class HomePage(LoginRequiredMixin, TemplateView):
 
     template_name = 'home.html'
+
+    
+    def get_context_data(self, **kwargs):
+        context = super(HomePage, self).get_context_data(**kwargs)
+        dataset = FarmerProfile.objects \
+        .values('region') \
+        .annotate(credit_access_count=Count('region', filter=Q(credit_access=True)),
+                  no_credit_access_count=Count('region', filter=Q(credit_access=False))) \
+        .order_by('region')
+
+        context["dataset"]=dataset
+        return context
+    
+
 
 # login view
 class LoginView(TemplateView):
