@@ -26,6 +26,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from .forms import(FarmerProfileForm,FarmerGroupForm)
 import datetime
+from django.contrib import messages
 
 
 
@@ -130,7 +131,7 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows sectors to be viewed or edited.
     """
-    queryset = FarmerProfile.objects.all().order_by('region')
+    #queryset = FarmerProfile.objects.all().order_by('region')
     serializer_class = FarmerProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -149,6 +150,20 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
             serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the farmers profiles
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        farmers = FarmerProfile.objects.all().order_by('region')
+        if  self.request.user.has_perm('farmer.delete_farmerprofile'):
+            queryset = farmers
+        else:
+            queryset = farmers.filter(user=user)
+        
+        return queryset
 
 
 
@@ -165,7 +180,7 @@ Create farmer profile. Used class based view.
 '''
 class CreateFarmerProfile(LoginRequiredMixin,CreateView):
     template_name = 'create_farmer_profile.html'
-    success_url = reverse_lazy('farmer:farmerprofile_list')
+    success_url = reverse_lazy('farm:create_farm')
     form_class = FarmerProfileForm
     success_message = "Your profile was created successfully"
 
@@ -200,7 +215,9 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
         subject = 'Registered Successfully'
         message = render_to_string('profile_created_successful_email.html', {
             'user': profile.user,
-            'domain': current_site.domain
+            'domain': current_site.domain,
+            'message':'Your Profile as a farmer in the ICT4Farmers System has been recieved successfully\n'+
+            'please Register your farm/s for approval as a farmer by UNFFE Agents.'
             })
         to_email = profile.user.email
         email = EmailMessage(
@@ -208,7 +225,8 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
             )
         email.content_subtype = "html"
         email.send()
-        return redirect('farmer:farmerprofile_list')
+        messages.add_message(self.request, messages.INFO, 'Please Register your farm from here, note that you can register more than one')
+        return redirect('farm:create_farm')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
