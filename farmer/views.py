@@ -233,26 +233,7 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
 
-'''
-Activate farmer profile
-'''
 
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        group = Group.objects.get(name='Buyers')
-        user.groups.add(group)
-        user.save()
-        login(request, user)
-        return redirect('common:home')
-    else:
-        return render(request, 'account_activation_invalid.html')
 
 
 '''
@@ -308,3 +289,17 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+
+
+class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
+    model = FarmerProfile
+    context_object_name = "profilerecord"
+    template_name = "view_farmer_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(FarmerProfileDetailView, self).get_context_data(**kwargs)
+
+        context.update({
+
+        })
+        return context
