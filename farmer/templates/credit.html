@@ -1,0 +1,30 @@
+<div id="container"></div>
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script>
+  Highcharts.chart('barcontainer', {
+      chart: {
+          type: 'column'
+      },
+      title: {
+          text: 'Farmers who have credit access by region'
+      },
+      xAxis: {
+          categories: [
+            {% for entry in dataset %}'{{ entry.region }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+          ]
+      },
+      series: [{
+          name: 'Credit Access',
+          data: [
+            {% for entry in dataset %}{{ entry.credit_access_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          ],
+          color: 'green'
+      }, {
+          name: 'No Credit access',
+          data: [
+            {% for entry in dataset %}{{ entry.no_credit_access_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          ],
+          color: 'red'
+      }]
+  });
+</script>

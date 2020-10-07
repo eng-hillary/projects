@@ -63,7 +63,9 @@ class FarmerProfile(TimeStampedModel, models.Model):
         return str(self.user.last_name)
 
 
+
     class Meta:
         permissions = (
             ("can_approve_farmers", "Can approve farmers"),
         )
+

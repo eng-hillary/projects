@@ -147,7 +147,7 @@ Highcharts.chart('piecontainer', {
       }
     },
     series: [{
-      name: 'Brands',
+      name: 'Districts',
       colorByPoint: true,
       data: [{
         name: 'Chrome',
@@ -624,3 +624,42 @@ var districtData = [
     ['ug-2755', 110],
     ['ug-2773', 111]
 ];
+
+//line gragh
+$(function () {
+    var processed_json = new Array();   
+    $.getJSON('/api-weather/communityweather/?format=json"', function(data) {
+        // Populate series
+        for (i = 0; i < data.length; i++){
+            processed_json.push([data[i].key, data[i].value]);
+        }
+     
+        // draw chart
+        $('#linecontainer').highcharts({
+        chart: {
+            type: "line"
+        },
+        title: {
+            text: "Student data"
+        },
+        xAxis: {
+            type: 'weather',
+            allowDecimals: false,
+            title: {
+                text: ""
+            }
+        },
+        yAxis: {
+            title: {
+                text: "weather"
+            }
+        },
+        series: [{
+            name: 'Weather',
+            data: processed_json
+        }]
+    }); 
+});
+});
+
+
