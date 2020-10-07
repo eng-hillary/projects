@@ -29,7 +29,7 @@ class FarmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Farm
-        fields = ('id', 'name', 'farmer', 'latitude', 'longitude','location',
+        fields = ('id', 'farm_name', 'farmer', 'lat', 'lon','location',
          'start_date','close_date',  'image','availability_of_services','availability_of_water','land_occupied','available_land', 'status', 'general_remarks')
 
     
@@ -48,8 +48,8 @@ class FarmSerializer(serializers.ModelSerializer):
     
     def get_farm_location(self, obj):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        lat = str(obj.latitude)
-        lon = str(obj.longitude)
+        lat = str(obj.lat)
+        lon = str(obj.lon)
         print("52.509669"+"," + "13.376294")
        
         try:
@@ -57,7 +57,7 @@ class FarmSerializer(serializers.ModelSerializer):
             location = geolocator.reverse(lat + "," + lon)
             return '{}'.format(location)
         except:
-            location = str(obj.latitude) + "," + str(obj.longitude)
+            location = str(obj.lat) + "," + str(obj.lon)
             return 'slow network, loading location ...'
 
         # return '{}'.format(location)
@@ -84,12 +84,15 @@ class FarmProduceSerializer(serializers.ModelSerializer):
 class FarmMapSerializer(serializers.ModelSerializer):
 
     farmer = serializers.SerializerMethodField(method_name='get_user_full_name',source='farmer__user')
-   
+    district = serializers.SerializerMethodField(method_name='get_district',source='farmer')
     class Meta:
         model = Farm
-        fields = ('name','farmer',  'latitude', 'longitude','land_occupied')
+        fields = ('district','farm_name','farmer',  'lat', 'lon','land_occupied')
 
 
 
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
+
+    def get_district(self, obj):
+        return '{}'.format(obj.farmer.district.name)
