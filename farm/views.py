@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm)
-from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer)
+from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
+,FarmMapSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -103,6 +104,18 @@ class FarmViewSet(viewsets.ModelViewSet):
     queryset = Farm.objects.all().order_by('-id')
     serializer_class = FarmSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+# farm api for maps
+class FarmMapViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = Farm.objects.all()
+    serializer_class = FarmMapSerializer
+    
+
+
 
 # list of farms
 class FarmListView(APIView, LoginRequiredMixin):

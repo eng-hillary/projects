@@ -19249,7 +19249,6 @@ table tbody .border-bottom-warning td {
       .page-wrapper .page-body-wrapper .page-sidebar ~ .page-body .page-header .row .page-header-left {
         display: inherit; }
   .page-wrapper .page-body-wrapper .sidebar {
-    margin-top: 160px;
     height: calc(100vh - 60px); }
   .page-wrapper .page-body-wrapper .page-sidebar.open ~ .page-body {
     margin-top: 60px; }
@@ -19267,11 +19266,9 @@ table tbody .border-bottom-warning td {
     width: 100%;
     z-index: 11; }
     .page-wrapper .page-main-header .main-header-left .logo-wrapper img {
-      height: 180;
+      height: 50px;
       margin-top: 0;
-      margin-right: 0;
-      margin-bottom: 12px;
-     }
+      margin-right: 0; }
     .page-wrapper .page-main-header .main-header-right .nav-right {
       position: unset;
       padding: 0; }
@@ -24078,6 +24075,18 @@ a.Detail{
   color: gray;
 }
 
+/* #container {
+  height: 500px;
+  min-width: 310px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.loading {
+  margin-top: 10em;
+  text-align: center;
+  color: gray;
+} */
+
 
 /* High charts */
 .highcharts-figure, .highcharts-data-table table {
@@ -24121,11 +24130,17 @@ font-weight: 600;
   border: 1px solid #ced4da;
 }
 
-.select2-container--default .select2-selection--multiple{
-  border-radius: 0 important;
-  border: none !important;
+input[type="number"] {
+min-width: 50px;
 }
-.select2-container--open{
-  width: inherit !important;
-  display: block !important;
+
+
+
+.field-icon {
+  float: right;
+  margin-left: -25px;
+  margin-top: -25px;
+  position: relative;
+  z-index: 2;
 }
+
