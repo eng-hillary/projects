@@ -298,7 +298,7 @@ class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(FarmerProfileDetailView, self).get_context_data(**kwargs)
-
+        
         context.update({
 
         })

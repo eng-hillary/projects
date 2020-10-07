@@ -3,6 +3,7 @@ from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel)
 from django.contrib.auth.models import User
 from common .choices import (ACTION_TYPE, TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO)
+from geopy.geocoders import Nominatim
 # Create your models here.
 
 
@@ -27,7 +28,7 @@ class Farm(TimeStampedModel, models.Model):
         ('closed', 'Closed')
      )
     farm_name = models.CharField(max_length=100, null=False, blank=False)
-    farmer = models.ForeignKey('farmer.FarmerProfile', on_delete=models.CASCADE, related_name='farm')
+    farmer = models.ForeignKey('farmer.FarmerProfile', on_delete=models.CASCADE, related_name='farms')
     lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your location")
     lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your location")
     start_date = models.DateField(blank=False, null=False)
@@ -42,6 +43,20 @@ class Farm(TimeStampedModel, models.Model):
 
     def __str__(self):
         return self.farm_name
+
+    @property
+    def compute_location(self):
+        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
+        lat = str(self.lat)
+        lon = str(self.lon)
+       
+        try:
+
+            location = geolocator.reverse(lat + "," + lon)
+            return '{}'.format(location)
+        except:
+            location = str(self.lat) + "," + str(self.lon)
+            return 'slow network, loading location ...'
 
 
 class Enterprise(TimeStampedModel, models.Model):
