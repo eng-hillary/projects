@@ -3,14 +3,14 @@ from django.urls import include, path
 from rest_framework import routers
 from . import views
 from .views import (GroupList, FarmerProfileList, CreateFarmerProfile, UpdateFarmerProfile,FarmerProfileViewSet
-,CreateFarmerGroup, activate, EditFarmerGroup)
+,CreateFarmerGroup,FarmerProfileDetailView, EditFarmerGroup)
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
 
 router = routers.DefaultRouter()
 router.register(r'groups', views.GroupViewSet)
-router.register(r'farmerprofiles', views.FarmerProfileViewSet)
+router.register(r'farmerprofiles', views.FarmerProfileViewSet, basename='FarmerProfile')
 
 approve_farmer= FarmerProfileViewSet.as_view({
     'patch': 'approved',
@@ -31,9 +31,11 @@ urlpatterns = [
     path('group/<int:pk>/edit', EditFarmerGroup.as_view(), name="edit_farmer_group"),
     path('farmerprofile', FarmerProfileList.as_view(), name='farmerprofile_list'),
     path('create/profile', CreateFarmerProfile.as_view(), name="create_farmer"),
-    path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('<int:pk>/edit/', UpdateFarmerProfile.as_view(), name="edit_farmer_profile"),
     path('<int:pk>/approve/', approve_farmer, name='approve'),
+
+    path('<int:pk>/view/', FarmerProfileDetailView.as_view(), name="view_farmer_profile"),
+
     path('columnchart/', views.farmer_class_view)
 
 ]

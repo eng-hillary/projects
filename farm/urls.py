@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from . import views
 from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
-CreateFarmView, EditFarmView)
+CreateFarmView, EditFarmView,FarmMapViewSet)
 
 
 
@@ -10,6 +10,7 @@ CreateFarmView, EditFarmView)
 router = routers.DefaultRouter()
 
 router.register(r'farms', views.FarmViewSet,'farm-api')
+router.register(r'maps', views.FarmMapViewSet,'maps-api')
 router.register(r'sector', views.SectorViewSet,'apisector')
 router.register(r'enterprise', views.EnterpriseViewSet)
 

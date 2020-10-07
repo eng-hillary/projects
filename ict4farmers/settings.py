@@ -44,8 +44,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'phonenumber_field',
     'compressor',
+
+    'navutils',
     'django.contrib.gis',
-   
+
     #Local apps
     'common',
     'farmer',
@@ -82,6 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'navutils.context_processors.menus',
             ],
         },
     },

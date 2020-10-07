@@ -26,10 +26,10 @@ class Farm(TimeStampedModel, models.Model):
         ('active', 'Active'),
         ('closed', 'Closed')
      )
-    name = models.CharField(max_length=100, null=False, blank=False)
+    farm_name = models.CharField(max_length=100, null=False, blank=False)
     farmer = models.ForeignKey('farmer.FarmerProfile', on_delete=models.CASCADE, related_name='farm')
-    latitude = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your location")
-    longitude = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your location")
+    lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your location")
+    lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your location")
     start_date = models.DateField(blank=False, null=False)
     close_date = models.DateField(blank=True, null=True)
     image = models.ImageField(null=True, blank=False)
@@ -41,7 +41,7 @@ class Farm(TimeStampedModel, models.Model):
     available_land = models.FloatField( _('Size of land Available'), blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.farm_name
 
 
 class Enterprise(TimeStampedModel, models.Model):

@@ -14,9 +14,9 @@ class FarmForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(FarmForm, self).__init__(*args, **kwargs)
         self.fields['general_remarks'].widget.attrs.update({'rows': '2'})
-        self.fields['sector'].empty_label = '--please select--'
-        
+      
 
+      
 class EnterpriseForm(forms.ModelForm):
     start_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 
