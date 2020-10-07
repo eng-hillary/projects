@@ -33,6 +33,7 @@ from rest_framework.authtoken.models import Token
 from .forms import ProfileForm
 from farmer.views import FarmerProfile
 from django.db.models import Count, Q
+import json
 
 class HomePage(LoginRequiredMixin, TemplateView):
 
@@ -46,11 +47,43 @@ class HomePage(LoginRequiredMixin, TemplateView):
         .annotate(credit_access_count=Count('region', filter=Q(credit_access=True)),
                   no_credit_access_count=Count('region', filter=Q(credit_access=False))) \
         .order_by('region')
-
-        context["dataset"]=dataset
-        return context
     
+        categories = list()
+        credit_access_series_data = list()
+        no_credit_access_series_data = list()
 
+#Looping through the created dataset from above
+        for entry in dataset:
+            categories.append('%s Farmers' % entry['region'])
+            credit_access_series_data.append(entry['credit_access_count'])
+            no_credit_access_series_data.append(entry['no_credit_access_count'])
+
+
+        credit_access_series = {
+            'name': 'Credit Access',
+            'data': credit_access_series_data,
+            'color': 'green'
+        }
+
+        no_credit_access_series = {
+            'name': 'No credit Access',
+            'data': no_credit_access_series_data,
+            'color': 'red'
+        }
+
+        chart = {
+            'chart': {'type': 'column'},
+            'title': {'text': 'Farmers Credit Access by Region'},
+            'xAxis': {'categories': categories},
+            'series': [credit_access_series, no_credit_access_series]
+        }
+
+        dump = json.dumps(chart)
+        context["dataset"]=dataset
+        context["chart"] = json.dumps(chart)
+            
+        return context
+        
 
 # login view
 class LoginView(TemplateView):
