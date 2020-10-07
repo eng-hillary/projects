@@ -33,6 +33,16 @@
                         <div class="card tab2-card">
                             <div class="card-header">
                                 <h5> Add Farm</h5>
+                                {% if messages %}
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    {% for message in messages %}
+                                    <strong>{{message}}</strong>
+                                    {% endfor %}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  {% endif %}
                             </div>
                             <form method="POST" id="group_form"  novalidate enctype="multipart/form-data" class="card-body">
                                 {% csrf_token %}
@@ -44,19 +54,17 @@
                                     <div class="col-xl-6 col-md-6">
                                         {{ form.land_occupied|as_crispy_field }}
                                     </div>
-                                    <div class="col-xl-6 col-md-6">
-                                        {{ form.sector|as_crispy_field }}
-                                    </div>
+                                 
                                     <div class="col-xl-6 col-md-6">
                                         {{ form.start_date|as_crispy_field }}
                                     </div>
                                   
                                 
                                     <div class="col-xl-6 col-md-6">
-                                        {{ form.latitude|as_crispy_field }}
+                                        {{ form.lat|as_crispy_field }}
                                     </div>
                                     <div class="col-xl-6 col-md-6">
-                                        {{ form.longitude|as_crispy_field }}
+                                        {{ form.lon|as_crispy_field }}
                                     </div>
                                   
                                     <div class="col-xl-6 col-md-6">
@@ -65,12 +73,13 @@
                                     <div class="col-xl-6 col-md-6">
                                         {{ form.availability_of_water|as_crispy_field }}
                                     </div>
+                                    <div class="col-xl-6 col-md-6">
+                                        {{ form.image|as_crispy_field }}
+                                    </div>
                                     <div class="col-xl-12 col-md-12">
                                         {{ form.general_remarks|as_crispy_field }}
                                     </div>
-                                    <div class="col-xl-12 col-md-12">
-                                        {{ form.image|as_crispy_field }}
-                                    </div>
+                                   
                                     <input name="farmer" value="{{user.id}}" type="hidden">
 
                                 </div>

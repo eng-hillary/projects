@@ -1,5 +1,211 @@
-//map
-var data = [
+var H = Highcharts,
+    map = H.maps['countries/ug/ug-all'],
+    chart;
+
+// Add series with state capital bubbles
+Highcharts.getJSON('/farm/api/maps/', function (json) {
+    var data = [];
+    json.forEach(function (p) {
+        p.z = p.land_occupied;
+        data.push(p);
+    })
+
+
+//console.log(data);
+    chart = Highcharts.mapChart('container', {
+        title: {
+            text: 'Farmers Locations'
+        },
+        
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+       
+        tooltip: {
+            pointFormat: 'district: {point.district}<br>' +
+                'farmer: {point.farmer}<br>' +
+                'farm name: {point.farm_name}<br>' +
+                'latittude: {point.lat}<br>' +
+                'longitude: {point.lon}<br>'+ 
+                'land occupied: {point.land_occupied}'+ ' acres'
+        },
+
+        xAxis: {
+            crosshair: {
+                zIndex: 5,
+                dashStyle: 'dot',
+                snap: false,
+                color: 'gray'
+            }
+        },
+
+        yAxis: {
+            crosshair: {
+                zIndex: 5,
+                dashStyle: 'dot',
+                snap: false,
+                color: 'gray'
+            }
+        },
+
+        series: [{
+            name: 'Basemap',
+            mapData: map,
+            borderColor: '#B0B0B0',
+            nullColor: 'rgba(200, 200, 200, 0.2)',
+            showInLegend: false
+        }, {
+            name: 'Separators',
+            type: 'mapline',
+            data: H.geojson(map, 'mapline'),
+            color: '#101010',
+            enableMouseTracking: false,
+            showInLegend: false
+        }, {
+            type: 'mapbubble',
+            dataLabels: {
+                enabled: true,
+                format: '{point.farm_name}'
+            },
+            name: 'Farms',
+            data: data,
+            maxSize: '5%',
+            color: H.getOptions().colors[0]
+        }]
+    });
+});
+
+
+// Display custom label with lat/lon next to crosshairs
+document.getElementById('container').addEventListener('mousemove', function (e) {
+    var position;
+    if (chart) {
+        if (!chart.lab) {
+            chart.lab = chart.renderer.text('', 0, 0)
+                .attr({
+                    zIndex: 5
+                })
+                .css({
+                    color: '#505050'
+                })
+                .add();
+        }
+
+        e = chart.pointer.normalize(e);
+        position = chart.fromPointToLatLon({
+            x: chart.xAxis[0].toValue(e.chartX),
+            y: chart.yAxis[0].toValue(e.chartY)
+        });
+      
+        chart.lab.attr({
+            x: e.chartX + 5,
+            y: e.chartY - 22,
+            text: 'Lat: ' + position.lat.toFixed(2) + '<br>Lon: ' + position.lon.toFixed(2)
+        });
+    }
+});
+
+document.getElementById('container').addEventListener('mouseout', function () {
+    if (chart && chart.lab) {
+        chart.lab.destroy();
+        chart.lab = null;
+    }
+});
+
+
+
+//Piechart Js
+Highcharts.chart('piecontainer', {
+    chart: {
+      plotBackgroundColor: null,
+      plotBorderWidth: null,
+      plotShadow: false,
+      type: 'pie'
+    },
+    title: {
+      text: 'Coffee Growers Percentage in sample by July, 2020'
+    },
+    tooltip: {
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+      point: {
+        valueSuffix: '%'
+      }
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+        }
+      }
+    },
+    series: [{
+      name: 'Districts',
+      colorByPoint: true,
+      data: [{
+        name: 'Chrome',
+        y: 61.41,
+        sliced: true,
+        selected: true
+      }, {
+        name: 'Bushenyi',
+        y: 11.84
+      }, {
+        name: 'Sheema',
+        y: 10.85
+      }, {
+        name: 'Arua',
+        y: 4.67
+      }, {
+        name: 'Rukungiri',
+        y: 4.18
+      }, {
+        name: 'Apac',
+        y: 1.64
+      }, {
+        name: 'Kalangala',
+        y: 1.6
+      }, {
+        name: 'Moroto',
+        y: 1.2
+      }, {
+        name: 'Others',
+        y: 2.61
+      }]
+    }]
+  });
+
+  //Bar chart
+  // Create the chart
+
+
+
+var farmData =
+[
+    {
+        "name": "piggery farm",
+        "farmer": "karungi lydia",
+        "lat": 0.37421,
+        "lon": 32.64925,
+        "land_occupied": 27.0
+    },
+    {
+        "name": "poultry farm",
+        "farmer": "musa rahim",
+        "lat": 0.66367,
+        "lon": 30.28204,
+        "land_occupied": 42.0
+    }
+]
+
+var districtData = [
     ['ug-2595', 0],
     ['ug-7073', 1],
     ['ug-7074', 2],
@@ -113,116 +319,6 @@ var data = [
     ['ug-2755', 110],
     ['ug-2773', 111]
 ];
-
-// Create the chart
-Highcharts.mapChart('container', {
-    chart: {
-        map: 'countries/ug/ug-all'
-    },
-
-    title: {
-        text: 'Farmer Locations'
-    },
-
-    subtitle: {
-        text: 'Source map: <a href="https://code.highcharts.com/mapdata/countries/ug/ug-all.js">Uganda</a>'
-    },
-
-    mapNavigation: {
-        enabled: true,
-        buttonOptions: {
-            verticalAlign: 'bottom'
-        }
-    },
-
-    colorAxis: {
-        min: 0
-    },
-
-    series: [{
-        data: data,
-        name: 'Random data',
-        states: {
-            hover: {
-                color: ' #228B22'
-            }
-        },
-        dataLabels: {
-            enabled: true,
-            format: '{point.name}'
-        }
-    }]
-});
-
-//Piechart Js
-Highcharts.chart('piecontainer', {
-    chart: {
-      plotBackgroundColor: null,
-      plotBorderWidth: null,
-      plotShadow: false,
-      type: 'pie'
-    },
-    title: {
-      text: 'Coffee Growers Percentage in sample by July, 2020'
-    },
-    tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-    },
-    accessibility: {
-      point: {
-        valueSuffix: '%'
-      }
-    },
-    plotOptions: {
-      pie: {
-        allowPointSelect: true,
-        cursor: 'pointer',
-        dataLabels: {
-          enabled: true,
-          format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-        }
-      }
-    },
-    series: [{
-      name: 'Districts',
-      colorByPoint: true,
-      data: [{
-        name: 'Chrome',
-        y: 61.41,
-        sliced: true,
-        selected: true
-      }, {
-        name: 'Bushenyi',
-        y: 11.84
-      }, {
-        name: 'Sheema',
-        y: 10.85
-      }, {
-        name: 'Arua',
-        y: 4.67
-      }, {
-        name: 'Rukungiri',
-        y: 4.18
-      }, {
-        name: 'Apac',
-        y: 1.64
-      }, {
-        name: 'Kalangala',
-        y: 1.6
-      }, {
-        name: 'Moroto',
-        y: 1.2
-      }, {
-        name: 'Others',
-        y: 2.61
-      }]
-    }]
-  });
-
-  //Bar chart
-  // Create the chart
-
-
 
 //line gragh
 
