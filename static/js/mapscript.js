@@ -27,10 +27,10 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         tooltip: {
             pointFormat: 'district: {point.district}<br>' +
                 'farmer: {point.farmer}<br>' +
-                'farm_name: {point.farm_name}<br>' +
-                'lat: {point.lat}<br>' +
-                'lon: {point.lon}<br>'+ 
-                'land_occupied: {point.land_occupied}'
+                'farm name: {point.farm_name}<br>' +
+                'latittude: {point.lat}<br>' +
+                'longitude: {point.lon}<br>'+ 
+                'land occupied: {point.land_occupied}'+ ' acres'
         },
 
         xAxis: {
