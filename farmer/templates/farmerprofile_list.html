@@ -29,15 +29,20 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
+  {% if request.user.is_superuser or perms.farmer.delete_farmerprofile %}
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i>
   </button>
+
+  {% endif %}
+  {% if request.user.is_superuser or perms.farmer.can_approve_farmers %}
   <button id="decline" class="btn btn-decline" title="Decline" disabled>
     <i class="fa fa-times"></i>
   </button>
   <button id="approve" class="btn btn-primary" title="Approve" disabled>
     <i class="fa fa-check"></i>
   </button>
+  {% endif %}
 </div>
 <table
   id="table"
@@ -61,7 +66,9 @@
   data-response-handler="responseHandler">
   <thead>
     <tr>
+      {% if request.user.is_superuser or perms.farmer.delete_farmerprofile %}
       <th data-field="state" data-checkbox="true"></th>
+      {% endif %}
       <th data-field="full_name" data-sortable="true">Name</th>
       <th data-field="date_of_birth" data-visible="false"  data-sortable="true">DOB</th>
       <th data-field="nin" data-visible="false"  data-sortable="true">NIN</th>
@@ -121,11 +128,11 @@
   function operateFormatter(value, row, index) {
     var url ="/farmer/"+row.user_id+"/edit"
     return [
-
-      '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+    {% if request.user.is_superuser or perms.farmer.change_farmerprofile %}
+      '<a class="Edit " href="'+url+'" title="Update">',
+      '<i class="fa fa-edit"></i>',
       '</a>  ',
-
+        {% endif %}
     ].join('')
   }
 

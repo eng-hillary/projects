@@ -10,7 +10,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 router = routers.DefaultRouter()
 router.register(r'groups', views.GroupViewSet)
-router.register(r'farmerprofiles', views.FarmerProfileViewSet)
+router.register(r'farmerprofiles', views.FarmerProfileViewSet, basename='FarmerProfile')
 
 approve_farmer= FarmerProfileViewSet.as_view({
     'patch': 'approved',
