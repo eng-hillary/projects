@@ -7,16 +7,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>ServiceProvider List
-                      <small><a class="add-new" href="{% url 'openmarket:serviceprovider_registration' %}">Add new</a></small>
+                    <h3>Services List
+                      <small><a class="add-new" href="{% url 'openmarket:service_registration' %}">Add new</a></small>
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">ServiceProvider</li>
-                    <li class="breadcrumb-item active">serviceprovider List</li>
+                    <li class="breadcrumb-item">Services</li>
+                    <li class="breadcrumb-item active">services List</li>
                 </ol>
             </div>
         </div>
@@ -32,12 +32,7 @@
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i> 
   </button>
-  <button id="decline" class="btn btn-decline" title="Decline" disabled>
-    <i class="fa fa-times"></i>
-  </button>
-  <button id="approve" class="btn btn-primary" title="Approve" disabled>
-    <i class="fa fa-check"></i>
-  </button>
+ 
 </div>
 <table
   id="table"
@@ -98,14 +93,11 @@
     })
     return res
   }
-
-
-  //function used to display the image
+  //displays the image
   function imageFormatter(value, row) {
-    var url =row.image;
+    var url =row.picture;
   return '<img class="img-thumbnail" src="'+url+'">'
 }
-
 
   function operateFormatter(value, row, index) {
     return [

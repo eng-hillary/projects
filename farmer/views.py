@@ -27,7 +27,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 from .forms import(FarmerProfileForm,FarmerGroupForm)
 import datetime
 from django.db.models import Count, Q
-
+import json
 
 
 # views for groups
@@ -293,14 +293,45 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-
-
-
 #Quering the farmers table for the data. 
 def farmer_class_view(request):
+    #Filtering the needed columns for the bargraph
     dataset = FarmerProfile.objects \
         .values('region') \
         .annotate(credit_access_count=Count('region', filter=Q(credit_access=True)),
                   no_credit_access_count=Count('region', filter=Q(credit_access=False))) \
         .order_by('region')
-    return render(request, 'credit.html', {'dataset': dataset})
+#Creating lists 
+    categories = list()
+    credit_access_series_data = list()
+    no_credit_access_series_data = list()
+
+#Looping through the created dataset from above
+    for entry in dataset:
+        categories.append('%s Farmers' % entry['region'])
+        credit_access_series_data.append(entry['credit_access_count'])
+        no_credit_access_series_data.append(entry['no_credit_access_count'])
+
+
+    credit_access_series = {
+        'name': 'Credit Access',
+        'data': credit_access_series_data,
+        'color': 'green'
+    }
+
+    no_credit_access_series = {
+        'name': 'No credit Access',
+        'data': no_credit_access_series_data,
+        'color': 'red'
+    }
+
+    chart = {
+        'chart': {'type': 'column'},
+        'title': {'text': 'Farmers Credit Access by Region'},
+        'xAxis': {'categories': categories},
+        'series': [credit_access_series, no_credit_access_series]
+    }
+
+    dump = json.dumps(chart)
+    return render(request, 'credit.html', {'chart': dump})
+    
