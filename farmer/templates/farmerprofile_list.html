@@ -127,12 +127,18 @@
 
   function operateFormatter(value, row, index) {
     var url ="/farmer/"+row.user_id+"/edit"
+    var view_url ="/farmer/"+row.user_id+"/view"
     return [
     {% if request.user.is_superuser or perms.farmer.change_farmerprofile %}
       '<a class="Edit " href="'+url+'" title="Update">',
       '<i class="fa fa-edit"></i>',
       '</a>  ',
         {% endif %}
+        {% if request.user.is_superuser or perms.farmer.view_farmerprofile %}
+        '<a class="Edit " href="'+view_url+'" title="De"tails>',
+      '<i class="fa fa-eye"></i>',
+      '</a>  ',
+      {% endif %}
     ].join('')
   }
 
