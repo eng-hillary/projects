@@ -16004,7 +16004,7 @@ input:focus {
 ==========================**/
 .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu > li:hover > a, .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu > li.active > a {
   color: #ffffff;
-  border-left-color: #2a3142;
+  border-left-color: #808080;
   -webkit-transition: 0.3s;
   transition: 0.3s; }
 
@@ -16577,7 +16577,7 @@ ul.notification-dropdown.onhover-show-div {
       text-transform: capitalize; }
     .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu li.sidebar-header {
       margin-bottom: 0;
-      padding: 15px;
+      padding: 0px;
       color: #ffffff;
       font-weight: 600;
       -webkit-transition: 0.3s;
@@ -24038,12 +24038,12 @@ body.rtl .account-setting {
   pointer-events: none;
   position: absolute;
 }
-a.detail-icon { 
+a.detail-icon {
   color: #145a32;
 }
- 
- 
-    
+
+
+
 
 
 a.Edit{
@@ -24064,10 +24064,10 @@ a.Detail{
 }
 
 #container {
-  height: 800px; 
-  min-width: 310px; 
-  max-width: 1000px; 
-  margin: 0 auto; 
+  height: 800px;
+  min-width: 310px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 .loading {
   margin-top: 10em;
@@ -24090,7 +24090,7 @@ a.Detail{
 
 /* High charts */
 .highcharts-figure, .highcharts-data-table table {
-  min-width: 320px; 
+  min-width: 320px;
   max-width: 800px;
   margin: 1em auto;
 }
@@ -24144,7 +24144,3 @@ min-width: 50px;
   z-index: 2;
 }
 
-.container{
-  padding-top:50px;
-  margin: auto;
-}
