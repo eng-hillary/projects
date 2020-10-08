@@ -72,11 +72,12 @@ class EnterpriseType(TimeStampedModel, models.Model):
 class Enterprise(TimeStampedModel, models.Model):
     Enterprise_STATUS = (
         (None, '--please select--'),
-        ('active', 'Active'),
+        ('open', 'Open'),
         ('closed', 'Closed')
      )
     name = models.CharField(max_length=50, null=False, blank=False)
     farm = models.ForeignKey(Farm, on_delete=models.CASCADE, null=True)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE, null=True, blank=False)
     enterprise_type = models.ForeignKey(EnterpriseType, on_delete=models.CASCADE, null=True)
     animal_seed_density = models.PositiveIntegerField(blank=True, null=True, verbose_name='Number of animals/seedling per enterprise in a particular period of time.')
     capital_invested = models.DecimalField(decimal_places=2, max_digits=1000, null=True)
