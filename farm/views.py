@@ -286,6 +286,13 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+    
+    def get_initial(self, *args, **kwargs):
+        initial = super(CreateEnterpriseView, self).get_initial(**kwargs)
+        initial['farm'] = Farm.objects.get(pk=self.kwargs['farm_pk'])
+        return initial
+
+
 
 
 # update Enterprise view

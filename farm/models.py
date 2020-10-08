@@ -59,6 +59,16 @@ class Farm(TimeStampedModel, models.Model):
             return 'slow network, loading location ...'
 
 
+class EnterpriseType(TimeStampedModel, models.Model):
+
+    name = models.CharField(max_length=50, null=False, blank=False)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE, null=True)
+  
+    def __str__(self):
+        return self.name
+
+
+
 class Enterprise(TimeStampedModel, models.Model):
     Enterprise_STATUS = (
         (None, '--please select--'),
@@ -67,11 +77,14 @@ class Enterprise(TimeStampedModel, models.Model):
      )
     name = models.CharField(max_length=50, null=False, blank=False)
     farm = models.ForeignKey(Farm, on_delete=models.CASCADE, null=True)
-    sector = models.ForeignKey(Sector, on_delete=models.CASCADE, null=True)
+    enterprise_type = models.ForeignKey(EnterpriseType, on_delete=models.CASCADE, null=True)
     animal_seed_density = models.PositiveIntegerField(blank=True, null=True, verbose_name='Number of animals/seedling per enterprise in a particular period of time.')
-    expected_profit = models.DecimalField(decimal_places=2, max_digits=1000, null=True)
+    capital_invested = models.DecimalField(decimal_places=2, max_digits=1000, null=True)
+    return_on_investment = models.DecimalField(_('Expected Return on Investment'), decimal_places=2, max_digits=1000, null=True)
+    from_period = models.DateField(blank=False, null=True)
+    to_period = models.DateField(blank=False, null=True)
     land_occupied = models.FloatField( blank=False, null=True)
-    start_date = models.DateField(blank=False, null=True)
+    start_date = models.DateField(_('Farm Start Date'), blank=False, null=True)
     close_date = models.DateField(blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     status = models.CharField(_('Enterprise Status'), default='active', max_length=20, choices=Enterprise_STATUS)

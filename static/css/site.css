@@ -15912,7 +15912,7 @@ footer {
   width: 885px !important; }
 
 .page-wrapper .page-body-wrapper footer {
-  margin-left: 255px;
+  margin-left: 230px;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
   bottom: 0;
@@ -16055,14 +16055,14 @@ input:focus {
   z-index: 10;
   -webkit-box-shadow: 0 0 10px 1px rgba(68, 102, 242, 0.05);
           box-shadow: 0 0 10px 1px rgba(68, 102, 242, 0.05);
-  width: calc(100% - 255px);
+  width: calc(100% - 230px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-left: 255px;
+  margin-left: 230px;
   -webkit-transition: 0.3s;
   transition: 0.3s; }
   .page-wrapper .page-main-header.open {
@@ -16132,7 +16132,7 @@ input:focus {
     width: 100%;
     z-index: 10;
     right: 0;
-    left: 255px; }
+    left: 230px; }
 
 .page-main-header {
   max-width: 100vw; }
@@ -16474,7 +16474,7 @@ ul.notification-dropdown.onhover-show-div {
           box-shadow: 0 0 11px rgba(143, 164, 232, 0.08); }
 
 .page-wrapper .page-body-wrapper .page-sidebar {
-  width: 255px;
+  width: 230px;
   position: fixed;
   background: #014421;
   top: 0;
@@ -16656,7 +16656,7 @@ ul.notification-dropdown.onhover-show-div {
         .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu .sidebar-submenu > li.active > a.active {
           color: #ffffff; }
   .page-wrapper .page-body-wrapper .page-sidebar ~ .page-body {
-    margin-left: 255px;
+    margin-left: 230px;
     -webkit-transition: 0.3s;
     transition: 0.3s; }
   .page-wrapper .page-body-wrapper .page-sidebar.open {
@@ -16675,8 +16675,8 @@ ul.notification-dropdown.onhover-show-div {
 .page-wrapper .page-body-wrapper .sidebar-close .page-sidebar {
   -webkit-transition: 0.3s;
   transition: 0.3s;
-  -webkit-transform: translate(-255px);
-          transform: translate(-255px); }
+  -webkit-transform: translate(-230px);
+          transform: translate(-230px); }
 
 .page-wrapper .page-body-wrapper .sidebar-close .page-body {
   -webkit-transition: 0.3s;
@@ -19785,7 +19785,7 @@ body.rtl .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu .sidebar-h
   margin-left: 14px; }
 
 body.rtl .page-wrapper .page-body-wrapper .page-sidebar ~ .page-body {
-  margin-right: 255px;
+  margin-right: 230px;
   margin-left: unset; }
 
 body.rtl .page-wrapper .page-body-wrapper .page-sidebar.open {
@@ -19798,14 +19798,14 @@ body.rtl .page-wrapper .page-body-wrapper .page-header .row h3 {
   text-align: right; }
 
 body.rtl .page-wrapper .page-body-wrapper footer {
-  margin-right: 255px;
+  margin-right: 230px;
   margin-left: unset; }
   body.rtl .page-wrapper .page-body-wrapper footer p i {
     margin-right: 5px;
     margin-left: unset; }
 
 body.rtl .page-main-header {
-  margin-right: 255px;
+  margin-right: 230px;
   margin-left: unset; }
   body.rtl .page-main-header .main-header-right .nav-right {
     text-align: left; }

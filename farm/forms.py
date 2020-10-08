@@ -22,10 +22,11 @@ class EnterpriseForm(forms.ModelForm):
 
     class Meta:
         model = Enterprise
-        exclude = ['status','available_land']
+        exclude = ['status']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(EnterpriseForm, self).__init__(*args, **kwargs)
-        self.fields['general_remarks'].widget.attrs.update({'rows': '2'})
-        self.fields['farm'].empty_label = '--please select--'
+        self.fields['description'].widget.attrs.update({'rows': '2'})
+        self.fields['farm'].empty_label = None
+        self.fields['enterprise_type'].empty_label = '--please select--'
