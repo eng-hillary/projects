@@ -289,7 +289,6 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
     
     def get_initial(self, *args, **kwargs):
         initial = super(CreateEnterpriseView, self).get_initial(**kwargs)
-        initial['name'] = Farm.objects.get(pk=self.kwargs['farm_pk'])
         initial['farm'] = Farm.objects.get(pk=self.kwargs['farm_pk'])
         return initial
 
