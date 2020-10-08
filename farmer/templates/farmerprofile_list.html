@@ -24,7 +24,7 @@
 </div>
 
 <!-- Container-fluid Ends-->
-<link href="{% static 'css/bootstrap-table.css' %}" rel="stylesheet">
+
 
 
 <!-- bootstrap table begin here -->
@@ -98,11 +98,10 @@
 </table>
  <!--bootstrap table ends here-->
 
+ {% endblock %}
+
 <!-- latest jquery-->
-<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-<script src="{% static 'js/tableExport.min.js' %}"></script>
-<script src="{% static 'js/bootstrap-table.min.js' %}"></script>
-<script src="{% static 'js/bootstrap-table-export.min.js' %}"></script>
+{% block javascript %}
 <script>
   var $table = $('#table')
   var $remove = $('#remove')
@@ -127,12 +126,18 @@
 
   function operateFormatter(value, row, index) {
     var url ="/farmer/"+row.user_id+"/edit"
+    var view_url ="/farmer/"+row.user_id+"/view"
     return [
     {% if request.user.is_superuser or perms.farmer.change_farmerprofile %}
       '<a class="Edit " href="'+url+'" title="Update">',
       '<i class="fa fa-edit"></i>',
       '</a>  ',
         {% endif %}
+        {% if request.user.is_superuser or perms.farmer.view_farmerprofile %}
+        '<a class="Edit " href="'+view_url+'" title="De"tails>',
+      '<i class="fa fa-eye"></i>',
+      '</a>  ',
+      {% endif %}
     ].join('')
   }
 
@@ -292,6 +297,4 @@
 
 
 </script>
-
-
 {% endblock %}

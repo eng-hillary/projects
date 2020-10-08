@@ -180,6 +180,7 @@
                     <div class="card">
                         
                         <div class="card-body">
+                          
                             <div id="barcontainer">
                             </div>
                     </div>
@@ -493,4 +494,11 @@
             </div>
             <!-- Container-fluid Ends-->
         </div>
+<div class="card">
+    {{ chart }}
+</div>
+<script>
+  Highcharts.chart('barcontainer', {{ chart|safe }});
+</script>
+        
             {% endblock %}

@@ -24,7 +24,7 @@
 </div>
 
 <!-- Container-fluid Ends-->
-<link href="{% static 'css/bootstrap-table.css' %}" rel="stylesheet">
+
 
 
 <!-- bootstrap table begin here -->
@@ -76,12 +76,9 @@
   </thead>
 </table>
  <!--bootstrap table ends here-->
-
+ {% endblock %}
 <!-- latest jquery-->
-<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-<script src="{% static 'js/tableExport.min.js' %}"></script>
-<script src="{% static 'js/bootstrap-table.min.js' %}"></script>
-<script src="{% static 'js/bootstrap-table-export.min.js' %}"></script>
+{% block javascript %}
 <script>
  var $table = $('#table')
   var $remove = $('#remove')
