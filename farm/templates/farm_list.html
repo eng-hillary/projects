@@ -98,10 +98,15 @@ data-page-list="[10, 25, 50, 100, all]"
   function operateFormatter(value, row, index) {
     console.log(row.id);
     var url ="/farm/"+row.id+"/edit/farm";
+    var create_enterprise_url ="/farm/create/enterprise/"+row.id;
     return [
    
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
+      '</a>  ',
+
+      '<a class="Edit " href="'+create_enterprise_url+'" title="Add Enterprise">',
+      '<i class="fa fa-plus"></i>',
       '</a>  ',
 
     ].join('')
