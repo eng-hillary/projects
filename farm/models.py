@@ -88,6 +88,7 @@ class Enterprise(TimeStampedModel, models.Model):
     start_date = models.DateField(_('Farm Start Date'), blank=False, null=True)
     close_date = models.DateField(blank=True, null=True)
     description = models.TextField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=False)
     status = models.CharField(_('Enterprise Status'), default='active', max_length=20, choices=Enterprise_STATUS)
 
 
