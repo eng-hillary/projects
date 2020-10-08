@@ -32,8 +32,9 @@
           
                 <div class="col-auto">
                     <div class="avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
+                      {% if profilerecord.user.profile.profile_pic %}
                         <img alt="" class="profile-pic" src="{{profilerecord.user.profile.profile_pic.url}}"/>
-                       
+                       {% endif %}
                     </div>
                 </div>
                
