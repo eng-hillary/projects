@@ -31,7 +31,7 @@
 
     <!-- Prism css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/prism.css' %}">
-
+    <link href="{% static 'css/bootstrap-table.css' %}" rel="stylesheet">
     <!-- Chartist css -->
     <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/chartist.css' %}"> -->
 
@@ -211,7 +211,15 @@
 <!--script admin-->
 <script src="{% static 'js/script.js' %}"></script>
  <script src="{% static 'js/notify.js' %}"></script>
+
+ <script src="{% static 'js/validate.min.js' %}"></script>
  <script src="{% static 'js/select2.min.js' %}"></script>
+ <script type="text/javascript" src="{% static 'js/multi_form.js' %}"></script>
+ <!-- bootstrap tables -->
+
+<script src="{% static 'js/tableExport.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-table.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-table-export.min.js' %}"></script>
 {% block javascript %}{% endblock %}
 
         <!-- footer start-->
