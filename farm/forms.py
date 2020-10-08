@@ -32,7 +32,6 @@ class EnterpriseForm(forms.ModelForm):
         super(EnterpriseForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs.update({'rows': '2'})
         self.fields['farm'].empty_label = None
-        self.fields['enterprise_type'].empty_label = '--please select--'
         self.fields['sector'].empty_label = '--please select--'
         farmersectors = FarmerProfile.objects.filter(user=self.request.user).values('sector')
         self.fields['sector'].queryset = Sector.objects.filter(id__in=farmersectors)
