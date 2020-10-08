@@ -348,3 +348,16 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+
+class FarmProfileDetailView(DetailView):
+    model = Farm
+    context_object_name = "profilerecord"
+    template_name = "view_farm_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(FarmProfileDetailView, self).get_context_data(**kwargs)
+        
+        context.update({
+
+        })
+        return context
