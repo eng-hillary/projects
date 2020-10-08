@@ -21,7 +21,8 @@ class EnterpriseSerializer(serializers.ModelSerializer):
 
 class FarmSerializer(serializers.ModelSerializer):
     #sector = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    location = serializers.SerializerMethodField(method_name='get_farm_location')
+
+    location = serializers.CharField(source='compute_location')
     farmer = FarmerProfileSerializer()
     status = serializers.CharField(source='get_status_display')
     availability_of_services = serializers.SerializerMethodField(method_name='conversion_bool',source='availability_of_services')
@@ -45,22 +46,6 @@ class FarmSerializer(serializers.ModelSerializer):
         else:
             return "No"
 
-    
-    def get_farm_location(self, obj):
-        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        lat = str(obj.lat)
-        lon = str(obj.lon)
-        print("52.509669"+"," + "13.376294")
-       
-        try:
-
-            location = geolocator.reverse(lat + "," + lon)
-            return '{}'.format(location)
-        except:
-            location = str(obj.lat) + "," + str(obj.lon)
-            return 'slow network, loading location ...'
-
-        # return '{}'.format(location)
 
 
 class FarmFacilitySerializer(serializers.ModelSerializer):
