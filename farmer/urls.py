@@ -36,6 +36,6 @@ urlpatterns = [
 
     path('<int:pk>/view/', FarmerProfileDetailView.as_view(), name="view_farmer_profile"),
 
-    path('columnchart/', views.farmer_class_view)
+    path('columnchart/', views.farmer_class_view, name ="column_chart")
 
 ]
