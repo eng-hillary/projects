@@ -53,7 +53,6 @@ class EnterpriseTypeSerializer(serializers.ModelSerializer):
 class EnterpriseSerializer(serializers.ModelSerializer):
     farm = FarmSerializer()
     sector = SectorSerializer()
-    enterprise_type = EnterpriseTypeSerializer()
     class Meta:
         model = Enterprise
         fields = '__all__'

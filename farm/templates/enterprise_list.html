@@ -57,15 +57,20 @@ data-page-list="[10, 25, 50, 100, all]"
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="name" data-sortable="true">Name</th>
-      <th data-field="farm.farm_name" data-sortable="true">Farmer</th>
-      <th data-field="location" data-sortable="true">Location</th>
-      <th data-field="land_occupied" data-sortable="true">Land Size(acres)</th>
-      <th data-field="available_land" data-sortable="true">Available Land(acres)</th>
+      <th data-field="sector.name" data-sortable="true">Sector</th>
+      <th data-field="farm.farm_name" data-sortable="true">Farm</th>
+      <th data-field="enterprise_type" data-sortable="true">Type</th>
+      <th data-field="land_occupied" data-sortable="true">Land Occupied(acres)</th>
+      
       <th data-field="start_date" data-sortable="true">Start Date</th>
       <th data-field="status" data-sortable="true">Status</th>
-      <th data-field="availability_of_services" data-visible="false" data-sortable="true">Services Available</th>
-      <th data-field="availability_of_water" data-visible="false" data-sortable="true">Water Available</th>
-      <th data-field="image" data-visible="false"  data-formatter="" data-sortable="true">Picture</th>
+      <th data-field="animal_seed_density" data-visible="false" data-sortable="true">Animal/Seed Density</th>
+      <th data-field="capital_invested" data-visible="false" data-sortable="true">Capital Invested</th>
+      <th data-field="return_on_investment" data-visible="false" data-sortable="true">Expected Return on Investment</th>
+      <th data-field="from_period" data-visible="false" data-sortable="true">Period</th>
+      <th data-field="description" data-visible="false" data-sortable="true">Description</th>
+      <th data-field="image" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
+      <th data-field="close_date" data-visible="false" data-sortable="true">Closing Date</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
     </tr>
@@ -92,7 +97,7 @@ data-page-list="[10, 25, 50, 100, all]"
     return res
   }
   //displays an image
-    function (value, row) {
+ function imageFormatter(value, row) {
       var url =row.image;
     return '<img class="img-thumbnail" src="'+url+'">'
   }
