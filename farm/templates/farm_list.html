@@ -8,7 +8,9 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     <h3>Farm List
+                      {% if request.user.is_superuser or perms.farm.add_farm %}
                         <small><a class="add-new" href="{% url 'farm:create_farm' %}">Add new</a></small>
+                        {% endif %}
                     </h3>
                 </div>
             </div>
@@ -28,9 +30,11 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
+  {% if request.user.is_superuser or perms.farm.delete_farm %}
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
+  {% endif %}
 </div>
 <table
 id="table"
@@ -55,7 +59,9 @@ data-page-list="[10, 25, 50, 100, all]"
   data-response-handler="responseHandler">
   <thead>
     <tr>
+      {% if request.user.is_superuser or perms.farm.delete_farm %}
       <th data-field="state" data-checkbox="true"></th>
+      {% endif %}
       <th data-field="farm_name" data-sortable="true">Name</th>
       <th data-field="farmer.user.full_name" data-sortable="true">Farmer</th>
       <th data-field="location" data-sortable="true">Location</th>
@@ -100,15 +106,16 @@ data-page-list="[10, 25, 50, 100, all]"
     var url ="/farm/"+row.id+"/edit/farm";
     var create_enterprise_url ="/farm/create/enterprise/"+row.id;
     return [
-   
+    {% if request.user.is_superuser or perms.farm.change_farm %}
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
-
+        {% endif %}
+        {% if request.user.is_superuser or perms.farm.add_enterprise %}
       '<a class="Edit " href="'+create_enterprise_url+'" title="Add Enterprise">',
       '<i class="fa fa-plus"></i>',
       '</a>  ',
-
+        {% endif %}
     ].join('')
   }
 

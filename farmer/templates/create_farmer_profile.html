@@ -11,8 +11,8 @@
                     <div class="row">
                         <div class="col">
                             <div class="page-header-left">
-                                <h3>Create Profile
-                                    <small>{{ user.groups.all.0 }} </small>
+                                <h3>{% if farmerprofile %} Edit {% else %}Create {% endif %} Profile
+                                   
                                 </h3>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                     <div class="col-sm-12">
                         <div class="card tab2-card">
                             <div class="card-header">
-                                <h5> Add Profile</h5>
+                                <h5> {% if farmerprofile %} Update {% else %} Add {% endif %}Farmer Profile</h5>
                             </div>
                             <form method="POST"  id="form"  data-districts-url="{% url 'common:ajax_load_districts' %}" novalidate enctype="multipart/form-data" class="card-body"
                             data-counties-url="{% url 'common:ajax_load_counties' %}"
