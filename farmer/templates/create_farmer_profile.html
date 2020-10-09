@@ -170,8 +170,8 @@
 
     $(document).ready(function () {
       // add select 2 to dropdown fields
-      //$('#id_sector').select2( );
-        // $('#id_group').select2();
+      $('#id_sector').select2( );
+      $('#id_group').select2();
     //load districts
     $("#id_region").change(function () {
       var url = $("#form").attr("data-districts-url");  // get the url of the `load_cities` view
@@ -282,7 +282,7 @@
                     },
                     nin: {
                         required: true,
-                        minlength:15,
+                        
                     }
                 },
                 // Specify validation error messages
