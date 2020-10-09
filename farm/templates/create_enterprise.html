@@ -47,21 +47,25 @@
                             <form method="POST" id="enterprise_form"  novalidate enctype="multipart/form-data" class="card-body">
                                 {% csrf_token %}
                                 <div class="row">
-                                        
                                     <div class="col-xl-6 col-md-6">
-                                        {{ form.name|as_crispy_field }}
-                                    </div>
+                                        {{ form.sector|as_crispy_field }}
+                                    </div> 
                                     <div class="col-xl-6 col-md-6">
                                         {{ form.farm|as_crispy_field }}
                                     </div>
-                                    <div class="col-xl-4 col-md-4">
+                                    <div class="col-xl-6 col-md-6">
+                                        {{ form.name|as_crispy_field }}
+                                    </div>
+                                   
+                                   
+                                    <div class="col-xl-6 col-md-6">
                                         {{ form.enterprise_type|as_crispy_field }}
                                     </div>
                                      
-                                    <div class="col-xl-4 col-md-4">
+                                    <div class="col-xl-6 col-md-6">
                                         {{ form.land_occupied|as_crispy_field }}
                                     </div>
-                                    <div class="col-xl-4 col-md-4">
+                                    <div class="col-xl-6 col-md-6">
                                         {{ form.start_date|as_crispy_field }}
                                     </div>
                                     <div class="col-xl-12 col-md-12">
@@ -84,7 +88,9 @@
                                     <div class="col-xl-12 col-md-12">
                                         {{ form.description|as_crispy_field }}
                                     </div>
-                            
+                                    <div class="col-xl-12 col-md-12">
+                                        {{ form.image|as_crispy_field }}
+                                    </div>
 
                                 </div>
                               
