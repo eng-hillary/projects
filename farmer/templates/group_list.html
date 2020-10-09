@@ -8,7 +8,9 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     <h3>Group List
+                      {% if request.user.is_superuser or perms.farmer.add_group %}
                         <small><a class="add-new" href="{% url 'farmer:create_farmer_group' %}">Add new</a></small>
+                        {% endif %}
                     </h3>
                 </div>
             </div>
@@ -23,8 +25,6 @@
     </div>
 </div>
 
-<!-- Container-fluid Ends-->
-<link href="{% static 'css/bootstrap-table.css' %}" rel="stylesheet">
 
 
 <!-- bootstrap table begin here -->
@@ -64,18 +64,16 @@ data-page-list="[10, 25, 50, 100, all]"
       <th data-field="contact_person_email" data-sortable="true">Email</th>
       <th data-field="description" data-visible="false" data-sortable="true">Description</th>
       <th data-field="logo" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Logo</th>
+      {% if request.user.is_superuser or perms.farmer.change_group %}
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
+      {% endif %}
                 
     </tr>
   </thead>
 </table>
  <!--bootstrap table ends here-->
 
-<!-- latest jquery-->
-<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-<script src="{% static 'js/tableExport.min.js' %}"></script>
-<script src="{% static 'js/bootstrap-table.min.js' %}"></script>
-<script src="{% static 'js/bootstrap-table-export.min.js' %}"></script>
+
 <script>
   var $table = $('#table');
   var $remove = $('#remove')
@@ -101,11 +99,11 @@ data-page-list="[10, 25, 50, 100, all]"
     console.log(row.id);
     var url ="/farmer/group/" + row.id +"/edit";
     return [
-   
+    {% if request.user.is_superuser or perms.farmer.change_group %}
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
-
+        {% endif %}
     ].join('')
   }
 

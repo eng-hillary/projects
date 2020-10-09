@@ -10,8 +10,8 @@
                     <div class="row">
                         <div class="col">
                             <div class="page-header-left">
-                                <h3>Create Group
-                                    <small>{{ user.groups.all.0 }} </small>
+                                <h3>{% if group %}Edit {% else %}Create {% endif %}Group
+                                   
                                 </h3>
                             </div>
                         </div>
@@ -19,7 +19,7 @@
                             <ol class="breadcrumb pull-right">
                                 <li class="breadcrumb-item"><a href="{% url 'farmer:group_list' %}"><i data-feather="home"></i></a></li>
                                 <li class="breadcrumb-item add-new">Groups</li>
-                                <li class="breadcrumb-item active">Add Group </li>
+                                <li class="breadcrumb-item active">{% if group %} Edit {% else %}Add {% endif %}Group </li>
                             </ol>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                     <div class="col-sm-12">
                         <div class="card tab2-card">
                             <div class="card-header">
-                                <h5> Add Farmer Group</h5>
+                                <h5> {% if group %} Update {% else %}Add {% endif %} Farmer Group</h5>
                             </div>
                             <form method="POST" id="group_form"  novalidate enctype="multipart/form-data" class="card-body">
                                 {% csrf_token %}
