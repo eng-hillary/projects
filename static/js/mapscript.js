@@ -25,10 +25,12 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         },
        
         tooltip: {
-            pointFormat: 'district: {point.district}<br>' +
+            pointFormat: 'id: {point.id}<br>' +
+                'district: {point.district}<br>' +
                 'farmer: {point.farmer}<br>' +
                 'farm name: {point.farm_name}<br>' +
                 'land occupied: {point.land_occupied}'+ ' acres'
+      
         },
 
         xAxis: {
@@ -52,9 +54,10 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
             series:{
                 point:{
                     events:{
-                        click: function(){
-                            var url = "/farm/"+1 +"/view/";
+                        click: function(event){
+                             var url = "/farm/"+ event.point.id +"/view/";
                              window.location.href = url;
+                            //alert(event.point.id);
                         }
                     }
                 }

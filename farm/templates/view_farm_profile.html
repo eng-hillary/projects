@@ -5,14 +5,14 @@
 <div class="container-fluid">
     <div class="page-header">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <div class="page-header-left">
                     <h3>Farm Detail
                         
                     </h3>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-9">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Farm</li>
@@ -29,7 +29,7 @@
     <div class="card">
         <div class="row product-page-main card-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
           
                     <div class="col-auto">
                         <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
@@ -39,13 +39,13 @@
                     </div>
                    
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="product-page-details product-right mb-0">
                         <h2>{{profilerecord.user.profile}}</h2>
                         <hr>
                         <h3 class="product-title">farmer Details</h3>
                             <b>Farmer</b>: {{farmobject.farmer.user.profile}} <br>
-                            <b>Email</b>: {{farmobject.farmer.user.email}} <br>
+                            <b>Email</b>: <a href = "mailto: {{farmobject.farmer.user.email}}" style="color:blue;">{{farmobject.farmer.user.email}} </a><br>
                             <b>Phone</b>: {{farmobject.farmer.phone_1}}{% if farmobject.farmer.phone_2 %}/{{farmobject.farmer.phone_2}}{% endif %} <br>
                             <hr>
                         <h3 class="product-title">Address</h3>
@@ -73,7 +73,7 @@
 
                     <hr>
                    <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
           
                         <div class="col-auto">
                             <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
@@ -84,12 +84,12 @@
                        
                     </div>
     
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                     <div class="product-page-details product-right mb-0">
                         <h2>{{profilerecord.user.profile}}</h2>
                         <hr>
                         <h3 class="product-title">farm Details</h3>
-                            <b>Farme Name</b>: {{farm.farm_name}} <br>
+                            <b>Farm Name</b>: {{farm.farm_name}} <br>
                             <b>Location</b>: {{farm.compute_location}} <br>
                             <b>Land Size(acres)</b>: {{farm.land_occupied}} <br>
                             <b>Start Date</b>: {{farm.start_date}} <br>
@@ -111,7 +111,7 @@
           data-show-columns-toggle-all="true"
           data-show-columns="true">
           <thead>
-           
+            
             <tr>
               <th>Enterprise Name</th>
               <th>Farm</th>
@@ -121,37 +121,44 @@
               <th>from_period</th>
               <th>to_period</th>
               <th>land_occupied</th>
-              <th>start_date</th>
-              <th>close_date</th>
-              <th>description</th>
-              <th>status</th>
+              <th data-visible="false">start_date</th>
+              <th data-visible="false">close_date</th>
+              <th data-visible="false">description</th>
+              <th data-visible="false">status</th>
+              <th data-visible="false" >Picture</thdata-visible="false"  data-formatter="imageFormatter">
             </tr>
           </thead>
           <tbody>
               {% for enterprise in farm.enterprises.all %}
             <tr>
-                <td>{{farm.name}}</td>
-                <td>{{farm.farm}}</td>
-                <td>{{farm.enterprise_type}} </td>
-                <td>{{farm.animal_seed_density}}</td>
-                <td>{{farm.capital_invested}}</td>
-                <td>{{farm.return_on_investment}}</td>
-                <td>{{farm.from_period}}</td>
-                <td>{{farm.to_period}}</td>
-                <td>{{farm.land_occupied}}</td>
-                <td>{{farm.start_date}}</td>
-                <td>{{farm.close_date}}</td>
-                <td>{{farm.description}}</td>
-                <td>{{farm.status}}</td>
+                <td>{{enterprise.name}}</td>
+                <td>{{enterprise.farm}}</td>
+                <td>{{enterprise.enterprise_type}} </td>
+                <td>{{enterprise.animal_seed_density}}</td>
+                <td>{{enterprise.capital_invested}}</td>
+                <td>{{enterprise.return_on_investment}}</td>
+                <td>{{enterprise.from_period}}</td>
+                <td>{{enterprise.to_period}}</td>
+                <td>{{enterprise.land_occupied}}</td>
+                <td>{{enterprise.start_date}}</td>
+                <td>{{enterprise.close_date}}</td>
+                <td>{{enterprise.description}}</td>
+                <td>{{enterprise.status}}</td>
+                <td>
+                  <img src="{{enterprise.image.url}}" class="img-thumbnail">
+              </td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
         <hr>
-    </div>
- </div> 
         </div>
+      </div> 
+     </div>
     </div>
+ </div>
+
+
 </div>
 <!-- Container-fluid Ends-->
 
