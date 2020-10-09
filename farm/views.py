@@ -350,13 +350,10 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
 
 class FarmProfileDetailView(DetailView):
     model = Farm
-    context_object_name = "profilerecord"
     template_name = "view_farm_profile.html"
 
     def get_context_data(self, **kwargs):
         context = super(FarmProfileDetailView, self).get_context_data(**kwargs)
+        context['farmobject'] = self.object
         
-        context.update({
-
-        })
         return context

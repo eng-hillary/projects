@@ -72,7 +72,7 @@ class FarmMapSerializer(serializers.ModelSerializer):
     district = serializers.SerializerMethodField(method_name='get_district',source='farmer')
     class Meta:
         model = Farm
-        fields = ('district','farm_name','farmer',  'lat', 'lon','land_occupied')
+        fields = ('id','district','farm_name','farmer',  'lat', 'lon','land_occupied')
 
 
 

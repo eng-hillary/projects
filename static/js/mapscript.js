@@ -48,7 +48,18 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
                 color: 'gray'
             }
         },
-
+        plotOptions:{
+            series:{
+                point:{
+                    events:{
+                        click: function(){
+                            var url = "/farm/"+1 +"/view/";
+                             window.location.href = url;
+                        }
+                    }
+                }
+            }
+        },
         series: [{
             name: 'Basemap',
             mapData: map,
@@ -106,10 +117,11 @@ document.getElementById('container').addEventListener('mousemove', function (e) 
     }
 });
 
-document.getElementById('container').addEventListener('click', function (e) {
-    alert("success");
+// document.getElementById('container').addEventListener('click', function (e) {
+//     var url = "/farm/"+ point.id +"/view/";
+//     window.location.href = url;
 
-});
+// });
 
 document.getElementById('container').addEventListener('mouseout', function () {
     if (chart && chart.lab) {

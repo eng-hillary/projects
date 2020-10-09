@@ -28,108 +28,128 @@
 <div class="container-fluid">
     <div class="card">
         <div class="row product-page-main card-body">
-            <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-6">
           
-                <div class="col-auto">
-                    <div class="avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
-                        <img alt="" class="profile-pic" src="{{profilerecord.user.profile.profile_pic.url}}"/>
+                    <div class="col-auto">
+                        <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
+                            <img alt="" class="profile-pic" src="{{farmobject.farmer.user.profile.profile_pic.url}}"/>
+                           
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="col-md-6">
+                    <div class="product-page-details product-right mb-0">
+                        <h2>{{profilerecord.user.profile}}</h2>
+                        <hr>
+                        <h3 class="product-title">farmer Details</h3>
+                            <b>Farmer</b>: {{farmobject.farmer.user.profile}} <br>
+                            <b>Email</b>: {{farmobject.farmer.user.email}} <br>
+                            <b>Phone</b>: {{farmobject.farmer.phone_1}}{% if farmobject.farmer.phone_2 %}/{{farmobject.farmer.phone_2}}{% endif %} <br>
+                            <hr>
+                        <h3 class="product-title">Address</h3>
+                            <b>Region</b>: {{farmobject.farmer.region}} <br>
+                            <b>District</b>: {{farmobject.farmer.district}} <br>
+                            <b>County</b>: {{farmobject.farmer.county}} <br>
+                            <b>Sub county</b>: {{farmobject.farmer.sub_county}} <br>
+                            <b>Parish</b>: {{farmobject.farmer.parish}} <br>
+                            <b>Village</b>: {{farmobject.farmer.village}} <br>
+                            <hr>
+                        <h3 class="product-title">Farming Information</h3>
+                        <b>Sectors</b>:
+                             {% for sector in farmobject.farmer.sector.all %}
+                             {{sector.name}},
+                             {% endfor %}
+                        <br>
+                        <b>Experience in years</b>: {{farmobject.farmer.experience|floatformat}} <br>
+                        <b>Farmers Group</b>: {{farmobject.farmer.group}} <br>
+                        <b>Type of land</b>: {{farmobject.farmer.get_type_of_land_display}} <br>
+                        <b>Size of land </b>: {{farmobject.farmer.size_of_land|floatformat:1}} acres<br>
+                        <b>Production scale </b>: {{farmobject.farmer.get_production_scale_display}}<br>
+                        <b>Status </b>: {{farmobject.farmer.get_status_display}}<br>
+                       </div>
+                   </div>
+
+                    <hr>
+                   <div class="row">
+                    <div class="col-md-6">
+          
+                        <div class="col-auto">
+                            <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
+                                <img alt="" class="profile-pic" src="{{farmobject.image.url}}"/>
+                               
+                            </div>
+                        </div>
                        
                     </div>
-                </div>
-               
-            </div>
-            <div class="col-md-9">
-                <div class="product-page-details product-right mb-0">
-                    <h2>{{profilerecord.user.profile}}</h2>
-                    <hr>
-                    <h6 class="product-title">farmer Details</h6>
-                 
-                    <b>Full Name</b>: {{profilerecord.user.profile}} <br>
-                    <b>Email</b>: {{profilerecord.user.email}} <br>
-                    <b>Phone</b>: {{profilerecord.phone_1}}{% if profilerecord.phone_2 %}/{{profilerecord.phone_2}}{% endif %} <br>
-                    <b>NIN</b>: {{profilerecord.nin}}<br>
-                    <b>Level of Education</b>: {{profilerecord.level_of_education}} <br>
-                    <b>Marital Status</b>: {{profilerecord.get_marital_status_display}} <br>
-                    <b>Number of dependants</b>: {{profilerecord.number_of_dependants}} <br>
-                    <b>Have access to credit ?</b>: {% if profilerecord.credit_access is True%} Yes {% else %} No {% endif %} <br>
-                    <h6 class="product-title">Address</h6>
-                    <b>Region</b>: {{profilerecord.region}} <br>
-                    <b>District</b>: {{profilerecord.district}} <br>
-                    <b>County</b>: {{profilerecord.county}} <br>
-                    <b>Sub county</b>: {{profilerecord.sub_county}} <br>
-                    <b>Parish</b>: {{profilerecord.parish}} <br>
-                    <b>Village</b>: {{profilerecord.village}} <br>
-                    <h6 class="product-title">Farming Information</h6>
-                    <b>Sectors</b>:
-                         {% for sector in profilerecord.sector.all %}
-                         {{sector.name}},
-                         {% endfor %}
-                    <br>
-                    <b>Experience in years</b>: {{profilerecord.experience|floatformat}} <br>
-                    <b>Farmers Group</b>: {{profilerecord.group}} <br>
-                    <b>Type of land</b>: {{profilerecord.get_type_of_land_display}} <br>
-                    <b>Size of land </b>: {{profilerecord.size_of_land|floatformat:1}} acres<br>
-                    <b>Production scale </b>: {{profilerecord.get_production_scale_display}}<br>
-                    <b>Status </b>: {{profilerecord.get_status_display}}<br>
-                    <b>General remarks</b><br>
-                    {{profilerecord.general_remarks}}
-                    <hr>
-                    <h6 class="product-title size-text">Farms Owned  </h6>
-                    <table
-  data-toggle="table"
-  data-show-toggle="true"
-  data-search="true"
-  data-show-columns-toggle-all="true"
-  data-show-columns="true">
-  <thead>
-   
-    <tr>
-      <th>Farm Name</th>
-      <th>Location</th>
-      <th >Land Size(acres)</th>
-      <th>Start Date</th>
-      <th>Status</th>
-      <th data-visible="false">Services Available</th>
-      <th data-visible="false"> Water Available</th>
-      <th data-visible="false" >Picture</thdata-visible="false"  data-formatter="imageFormatter">
-    </tr>
-  </thead>
-  <tbody>
-      {% for farm in profilerecord.farms.all %}
-    <tr>
-        <td>{{farm.farm_name}}</td>
-        <td>{{farm.compute_location}}</td>
-        <td>{{farm.land_occupied}} </td>
-        <td>{{farm.start_date}}</td>
-        <td>{{farm.get_status_display}}</td>
-        <td>{% if farm.availability_of_services is True %}
-            Yes {% else %}
-            NO
-            {% endif %}
-        </td>
-        <td>{% if farm.availability_of_water is True %}
-            Yes {% else %}
-            NO
-            {% endif %}
-        </td>
-        <td>
-            <img src="{{farm.image.url}}" class="img-thumbnail">
-        </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-                 
-               
-                    <hr>
-                
-                    <div class="m-t-15">
-                        <button class="btn btn-primary m-r-10" id="approve_btn" type="button">Approve</button>
-                        <button class="btn btn-decline" id="decline_btn" type="button">Decline</button>
-                    </div>
-                </div>
-            </div>
+    
+                    <div class="col-md-6">
+                    <div class="product-page-details product-right mb-0">
+                        <h2>{{profilerecord.user.profile}}</h2>
+                        <hr>
+                        <h3 class="product-title">farm Details</h3>
+                            <b>Farme Name</b>: {{farm.farm_name}} <br>
+                            <b>Location</b>: {{farm.compute_location}} <br>
+                            <b>Land Size(acres)</b>: {{farm.land_occupied}} <br>
+                            <b>Start Date</b>: {{farm.start_date}} <br>
+                            <b>Status</b>: {{farm.get_status_display}} <br>
+                            <b>Services Available</b>: {% if farm.availability_of_services is True %}
+                            Yes {% else %}
+                            NO
+                            {% endif %}<br>
+                            <b>Water Available</b>:{% if farm.availability_of_water is True %}
+                            Yes {% else %}
+                            NO
+                            {% endif %}<br>
+                            <hr>
+                            <h6 class="product-title size-text">Enterprises Owned</h6>
+                            <table
+          data-toggle="table"
+          data-show-toggle="true"
+          data-search="true"
+          data-show-columns-toggle-all="true"
+          data-show-columns="true">
+          <thead>
+           
+            <tr>
+              <th>Enterprise Name</th>
+              <th>Farm</th>
+              <th>Animal Seed Density</th>
+              <th>Capital Invested</th>
+              <th>Return On Investment</th>
+              <th>from_period</th>
+              <th>to_period</th>
+              <th>land_occupied</th>
+              <th>start_date</th>
+              <th>close_date</th>
+              <th>description</th>
+              <th>status</th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for enterprise in farm.enterprises.all %}
+            <tr>
+                <td>{{farm.name}}</td>
+                <td>{{farm.farm}}</td>
+                <td>{{farm.enterprise_type}} </td>
+                <td>{{farm.animal_seed_density}}</td>
+                <td>{{farm.capital_invested}}</td>
+                <td>{{farm.return_on_investment}}</td>
+                <td>{{farm.from_period}}</td>
+                <td>{{farm.to_period}}</td>
+                <td>{{farm.land_occupied}}</td>
+                <td>{{farm.start_date}}</td>
+                <td>{{farm.close_date}}</td>
+                <td>{{farm.description}}</td>
+                <td>{{farm.status}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <hr>
+    </div>
+ </div> 
         </div>
     </div>
 </div>

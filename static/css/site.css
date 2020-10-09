@@ -23996,6 +23996,7 @@ body.rtl .account-setting {
   box-shadow: none;
   margin: 0 10px 30px 0;
   transition: all .3s ease;
+ 
 }
 
 .avatar-wrapper:hover {
@@ -24151,4 +24152,24 @@ min-width: 50px;
 .select2-container--open{
   width: inherit !important;
   display: block !important;
+}
+
+.farm_avatar-wrapper {
+  position: relative;
+  width: 400px;
+  height: 500px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: none;
+  margin: 15px 10px 30px 0;
+  transition: all .3s ease;
+ 
+}
+
+
+.farm_avatar-wrapper .profile-pic {
+  height: 100%;
+  width: 100%;
+  transition: all .3s ease;
+  object-fit: cover;
 }

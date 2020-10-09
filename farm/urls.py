@@ -28,5 +28,5 @@ urlpatterns = [
     path('create/sector', CreateSector.as_view(), name="create_sector"),
     path('enterprises', EnterpriseList.as_view(), name='enterprise_list'),
     path('create/enterprise/<int:farm_pk>', CreateEnterpriseView.as_view(), name="create_enterprise"),
-    path('<int:pk>/view/farm', FarmProfileDetailView.as_view(), name="view_farm_profile"),    
+    path('<int:pk>/view/', FarmProfileDetailView.as_view(), name="view_farm_profile"),    
 ]
