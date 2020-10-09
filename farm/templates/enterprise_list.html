@@ -15,7 +15,7 @@
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Farms</li>
-                    <li class="breadcrumb-item active">Farm List</li>
+                    <li class="breadcrumb-item active">Enterprise List</li>
                 </ol>
             </div>
         </div>
@@ -51,13 +51,13 @@ data-toolbar="#toolbar"
 data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
 data-page-list="[10, 25, 50, 100, all]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/farm/api/farms/"
+  data-url="/farm/api/enterprise/"
   data-response-handler="responseHandler">
   <thead>
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="name" data-sortable="true">Name</th>
-      <th data-field="farmer.user" data-sortable="true">Farmer</th>
+      <th data-field="farm.farm_name" data-sortable="true">Farmer</th>
       <th data-field="location" data-sortable="true">Location</th>
       <th data-field="land_occupied" data-sortable="true">Land Size(acres)</th>
       <th data-field="available_land" data-sortable="true">Available Land(acres)</th>
@@ -157,7 +157,7 @@ for(id=0; id<ids.length; id++){
     console.log(ids[id]);
 
 $.ajax({
-    url: "/farm/api/farms/"+ids[id],
+    url: "/farm/api/enterprise/"+ids[id],
     data: {},
     headers:{"X-CSRFToken": getCookie("csrftoken")},
     type: 'DELETE',

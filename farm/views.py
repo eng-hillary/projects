@@ -249,6 +249,7 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(CreateEnterpriseView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
 
@@ -265,12 +266,20 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
     def form_valid(self, form):
         enterprise = form.save(commit=False)
         enterprise.save()
-
+        # calculating remaining land on the farm
+        # get the farm first
+        farm = Farm.objects.get(id=enterprise.farm_id)
+        farm_land_occupied = farm.land_occupied
+        # subtracting the enterprise land from the farm land
+        farm_available_land = farm_land_occupied - enterprise.land_occupied
+        # update the farm object
+        Farm.objects.filter(id=enterprise.farm_id).update(available_land=farm_available_land)
+        print(farm_available_land)
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Enterprise Created Successfully'
-        message = render_to_string('enterprise_created_successful_email.html', {
-            'user': enterprise.farmer.user,
+        message = render_to_string('enterprise_email.html', {
+            'user': enterprise.farm.farmer.user,
             'domain': current_site.domain,
             'message': 'Your '+enterprise.name + ' has been registered sucessfully',
             })
@@ -280,7 +289,7 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
             )
         email.content_subtype = "html"
         email.send()
-        return redirect('farm:farm_list')
+        return redirect('farm:enterprise_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
