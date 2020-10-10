@@ -10,6 +10,11 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         data.push(p);
     })
 
+    data.forEach((region) => {
+      if(region.name == 'western'){
+        region.color = 'yellow'
+      }
+    })
 
 //console.log(data);
     chart = Highcharts.mapChart('container', {

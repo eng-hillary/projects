@@ -218,7 +218,7 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.name + ' Details have been updated sucessfully',
+            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
             })
         to_email = farm.farmer.user.email
         email = EmailMessage(

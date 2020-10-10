@@ -5,14 +5,14 @@
 <div class="container-fluid">
     <div class="page-header">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Farm Detail
+                    <h3>Farmer Detail
                         
                     </h3>
                 </div>
             </div>
-            <div class="col-lg-9">
+            <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Farm</li>
@@ -28,246 +28,137 @@
 <div class="container-fluid">
     <div class="card">
         <div class="row product-page-main card-body">
-            <div class="row">
-                <div class="col-md-4">
+            <div class="col-md-4">
           
-                    <div class="col-auto">
-                        <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
-                            <img alt="" class="profile-pic" src="{{farmobject.farmer.user.profile.profile_pic.url}}"/>
-                           
-                        </div>
-                    </div>
+              <div class="col-auto">
+                <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
+                    <img alt="" class="profile-pic" src="{{farmobject.farmer.user.profile.profile_pic.url}}"/>
                    
                 </div>
-                <div class="col-md-8">
-                    <div class="product-page-details product-right mb-0">
-                        <h2>{{profilerecord.user.profile}}</h2>
-                        <hr>
-                        <h3 class="product-title">farmer Details</h3>
-                            <b>Farmer</b>: {{farmobject.farmer.user.profile}} <br>
-                            <b>Email</b>: <a href = "mailto: {{farmobject.farmer.user.email}}" style="color:blue;">{{farmobject.farmer.user.email}} </a><br>
-                            <b>Phone</b>: {{farmobject.farmer.phone_1}}{% if farmobject.farmer.phone_2 %}/{{farmobject.farmer.phone_2}}{% endif %} <br>
-                            <hr>
-                        <h3 class="product-title">Address</h3>
-                            <b>Region</b>: {{farmobject.farmer.region}} <br>
-                            <b>District</b>: {{farmobject.farmer.district}} <br>
-                            <b>County</b>: {{farmobject.farmer.county}} <br>
-                            <b>Sub county</b>: {{farmobject.farmer.sub_county}} <br>
-                            <b>Parish</b>: {{farmobject.farmer.parish}} <br>
-                            <b>Village</b>: {{farmobject.farmer.village}} <br>
-                            <hr>
-                        <h3 class="product-title">Farming Information</h3>
+            </div>
+               
+            </div>
+            <div class="col-md-8">
+                <div class="product-page-details product-right mb-0">
+                    <h2>{{profilerecord.user.profile}}</h2>
+                    <hr>
+                    <h6 class="product-title">farmer Details</h6>
+                      <b>Farmer</b>: {{farmobject.farmer.user.profile}} <br>
+                      <b>Email</b>: <a href = "mailto: {{farmobject.farmer.user.email}}" style="color:blue;">{{farmobject.farmer.user.email}} </a><br>
+                      <b>Phone</b>: {{farmobject.farmer.phone_1}}{% if farmobject.farmer.phone_2 %}/{{farmobject.farmer.phone_2}}{% endif %} <br>
+                    <hr>
+                    
+                    <h6 class="product-title">Address</h6>
+                      <b>Region</b>: {{farmobject.farmer.region}} <br>
+                      <b>District</b>: {{farmobject.farmer.district}} <br>
+                      <b>County</b>: {{farmobject.farmer.county}} <br>
+                      <b>Sub county</b>: {{farmobject.farmer.sub_county}} <br>
+                      <b>Parish</b>: {{farmobject.farmer.parish}} <br>
+                      <b>Village</b>: {{farmobject.farmer.village}} <br>
+                      <hr>
+
+                    <h6 class="product-title">Farming Information</h6>
                         <b>Sectors</b>:
-                             {% for sector in farmobject.farmer.sector.all %}
-                             {{sector.name}},
-                             {% endfor %}
-                        <br>
+                                {% for sector in farmobject.farmer.sector.all %}
+                                {{sector.name}},
+                                {% endfor %}
+                            <br>
                         <b>Experience in years</b>: {{farmobject.farmer.experience|floatformat}} <br>
                         <b>Farmers Group</b>: {{farmobject.farmer.group}} <br>
                         <b>Type of land</b>: {{farmobject.farmer.get_type_of_land_display}} <br>
                         <b>Size of land </b>: {{farmobject.farmer.size_of_land|floatformat:1}} acres<br>
                         <b>Production scale </b>: {{farmobject.farmer.get_production_scale_display}}<br>
                         <b>Status </b>: {{farmobject.farmer.get_status_display}}<br>
-                       </div>
-                   </div>
-
+                       <hr>
+                      </div>
+                    </div>
                     <hr>
-                   <div class="row">
+
                     <div class="col-md-4">
           
-                        <div class="col-auto">
-                            <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
-                                <img alt="" class="profile-pic" src="{{farmobject.image.url}}"/>
-                               
-                            </div>
+                      <div class="col-auto">
+                        <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
+                            <img alt="" class="profile-pic" src="{{farmobject.image.url}}"/>
+                           
                         </div>
-                       
                     </div>
+                     
+                  </div>
+                  <div class="col-md-8">
+                      <div class="product-page-details product-right mb-0">
+                          <h2>{{profilerecord.user.profile}}</h2>
+                          <hr>
+                          <h6 class="product-title">farm Details</h6>
+                          <b>Farm Name</b>: {{farm.farm_name}} <br>
+                          <b>Location</b>: {{farm.compute_location}} <br>
+                          <b>Land Size(acres)</b>: {{farm.land_occupied}} <br>
+                          <b>Start Date</b>: {{farm.start_date}} <br>
+                          <b>Status</b>: {{farm.get_status_display}} <br>
+                          <b>Services Available</b>: {% if farm.availability_of_services is True %}
+                          Yes {% else %}
+                          NO
+                          {% endif %}<br>
+                          <b>Water Available</b>:{% if farm.availability_of_water is True %}
+                          Yes {% else %}
+                          NO
+                          {% endif %}<br>
+                          <hr>
+                        </div>
+                        <h6 class="product-title size-text">Farms Owned  </h6>
+                        <table
+      data-toggle="table"
+      data-show-toggle="true"
+      data-search="true"
+      data-show-columns-toggle-all="true"
+      data-show-columns="true">
+      <thead>
+       
+        <tr>
+          <th>Enterprise Name</th>
+          <th>Farm</th>
+          <th >Enterprise type</th>
+          <th>Animal Seed Density</th>
+          <th>Capital Invested</th>
+          <th data-visible="false">Return On Investment</th>
+          <th data-visible="false">from_period</th>
+          <th data-visible="false">to_period</th>
+          <th data-visible="false">land_occupied</th>
+          <th data-visible="false">start_date</th>
+          <th data-visible="false">close_date</th>
+          <th data-visible="false">description</th>
+          <th data-visible="false"> status</th>
+          <th data-visible="false" >Picture</thdata-visible="false"  data-formatter="imageFormatter">
+        </tr>
+      </thead>
+      <tbody>
+          {% for enterprise in farm.enterprises.all %}
+        <tr>
+            <td>{{enterprise.name}}</td>
+            <td>{{enterprise.farm}}</td>
+            <td>{{enterprise.enterprise_type}} </td>
+            <td>{{enterprise.animal_seed_density}}</td>
+            <td>{{enterprise.capital_invested}}</td>
+            <td>{{enterprise.return_on_investment}}</td>
+            <td>{{enterprise.from_period}}</td>
+            <td>{{enterprise.to_period}}</td>
+            <td>{{enterprise.land_occupied}}</td>
+            <td>{{enterprise.start_date}}</td>
+            <td>{{enterprise.close_date}}</td>
+            <td>{{enterprise.description}}</td>
+            <td>{{enterprise.get_status_display}}</td>
+            <td><img src="{{enterprise.image.url}}" class="img-thumbnail"></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
     
-                    <div class="col-md-8">
-                    <div class="product-page-details product-right mb-0">
-                        <h2>{{profilerecord.user.profile}}</h2>
-                        <hr>
-                        <h3 class="product-title">farm Details</h3>
-                            <b>Farm Name</b>: {{farm.farm_name}} <br>
-                            <b>Location</b>: {{farm.compute_location}} <br>
-                            <b>Land Size(acres)</b>: {{farm.land_occupied}} <br>
-                            <b>Start Date</b>: {{farm.start_date}} <br>
-                            <b>Status</b>: {{farm.get_status_display}} <br>
-                            <b>Services Available</b>: {% if farm.availability_of_services is True %}
-                            Yes {% else %}
-                            NO
-                            {% endif %}<br>
-                            <b>Water Available</b>:{% if farm.availability_of_water is True %}
-                            Yes {% else %}
-                            NO
-                            {% endif %}<br>
-                            <hr>
-                            <h6 class="product-title size-text">Enterprises Owned</h6>
-                            <table
-          data-toggle="table"
-          data-show-toggle="true"
-          data-search="true"
-          data-show-columns-toggle-all="true"
-          data-show-columns="true">
-          <thead>
-            
-            <tr>
-              <th>Enterprise Name</th>
-              <th>Farm</th>
-              <th>Animal Seed Density</th>
-              <th>Capital Invested</th>
-              <th>Return On Investment</th>
-              <th>from_period</th>
-              <th>to_period</th>
-              <th>land_occupied</th>
-              <th data-visible="false">start_date</th>
-              <th data-visible="false">close_date</th>
-              <th data-visible="false">description</th>
-              <th data-visible="false">status</th>
-              <th data-visible="false" >Picture</thdata-visible="false"  data-formatter="imageFormatter">
-            </tr>
-          </thead>
-          <tbody>
-              {% for enterprise in farm.enterprises.all %}
-            <tr>
-                <td>{{enterprise.name}}</td>
-                <td>{{enterprise.farm}}</td>
-                <td>{{enterprise.enterprise_type}} </td>
-                <td>{{enterprise.animal_seed_density}}</td>
-                <td>{{enterprise.capital_invested}}</td>
-                <td>{{enterprise.return_on_investment}}</td>
-                <td>{{enterprise.from_period}}</td>
-                <td>{{enterprise.to_period}}</td>
-                <td>{{enterprise.land_occupied}}</td>
-                <td>{{enterprise.start_date}}</td>
-                <td>{{enterprise.close_date}}</td>
-                <td>{{enterprise.description}}</td>
-                <td>{{enterprise.status}}</td>
-                <td>
-                  <img src="{{enterprise.image.url}}" class="img-thumbnail">
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <hr>
+                      </div>
+
+                </div>
+            </div>
         </div>
-      </div> 
-     </div>
     </div>
- </div>
-
-
 </div>
 <!-- Container-fluid Ends-->
 
-{% endblock %}
-{% block javascript %}
-<script>
- 
-  var $approve = $('#approve_btn')
-  var $decline = $('#decline_btn')
-
-
-
-  ///used cookies to get crsf token
-  function getCookie(c_name)
-    {
-      if (document.cookie.length > 0)
-        {
-          c_start = document.cookie.indexOf(c_name + "=");
-            if (c_start != -1)
-         {
-            c_start = c_start + c_name.length + 1;
-            c_end = document.cookie.indexOf(";", c_start);
-            if (c_end == -1) c_end = document.cookie.length;
-            return unescape(document.cookie.substring(c_start,c_end));
-         }
-     }
-      return "";
-   }
-
-  function initTable() {
-
-    ///approve farmer profiles
-    $approve.click(function () {
-     
-      $approve.prop('disabled', true)
-
-      swal({
-  title: "Approve Farmer Applications?",
-  text: "Are you sure you want to approve these applications!",
-  icon: "success",
-  buttons: true,
-  dangerMode: false,
-})
-.then((willDelete) => {
-  if (willDelete) {
- 
-    $.ajax({
-        url: "/farmer/"+{{profilerecord.user.id}}+'/approve/',
-        data: {},
-        headers:{"X-CSRFToken": getCookie("csrftoken")},
-        type: 'PATCH',
-        //contentType: 'application/json',
-        success: function(result) {
-          console.log('approved successfully');
-        },
-       });
-    swal("You have approve farmer/s successfully!", {
-      icon: "success",
-    });
-  } else {
-    swal("You have cancelled farmer approvals!");
-  }
-});
-
-    })
-
-
-    ///decline farmer request
-    $decline.click(function () {
-
-      $decline.prop('disabled', true)
-
-      swal({
-  title: "Decline Application",
-  text: "Are you sure You want to decline these Applications?",
-  icon: "warning",
-  buttons: true,
-  dangerMode: false,
-})
-.then((willDelete) => {
-  if (willDelete) {
- 
-    $.ajax({
-        url: "/farmer/"+{{profilerecord.user.id}}+'/approve/',
-        data: {},
-        headers:{"X-CSRFToken": getCookie("csrftoken")},
-        type: 'PUT',
-        //contentType: 'application/json',
-        success: function(result) {
-          console.log('approved successfully');
-        },
-       });
-    swal("You have approved farmer/s successfully!", {
-      icon: "success",
-    });
-  } else {
-    swal("You have cancelled farmer approvals!");
-  }
-});
-
-    })
-
-  }
-
-  $(function() {
-    initTable()
-
-  })
-
-
-</script>
 {% endblock %}
