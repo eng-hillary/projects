@@ -133,6 +133,39 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
 
 
 
+# update farm view
+class EditQueryView(LoginRequiredMixin,UpdateView):
+    model =Farm
+    template_name = 'create_query.html'
+    success_url = reverse_lazy('farm:query_list')
+    form_class = FarmForm
+    success_message = "Query has been updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditQueryView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditQueryView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+        farm.save()
+        return redirect('farm:query_list')
+
+
 # views for enterprise
 class EnterpriseViewSet(viewsets.ModelViewSet):
     """

@@ -75,8 +75,8 @@
 <!-- latest jquery-->
 {% block javascript %}
 <script>
-
   var $table = $('#table');
+  var $remove = $('#remove')
   var selections = []
 
   function getIdSelections() {
@@ -91,22 +91,115 @@
     return res
   }
   //displays an image
-  function imageFormatter(value, row) {
-    var url =row.image;
-  return '<img class="img-thumbnail" src="'+url+'">'
+    function imageFormatter(value, row) {
+      var url =row.image;
+    return '<img class="img-thumbnail" src="'+url+'">'
+  }
+  function operateFormatter(value, row, index) {
+    console.log(row.id);
+    var url ="/farm/"+row.id+"/edit/query";
+    var create_query_url ="/farm/create/query/"+row.id;
+    return [
+    {% if request.user.is_superuser or perms.farm.change_farm %}
+      '<a class="Edit " href="'+url+'" title="Edit">',
+      '<i class="fa fa-pencil"></i>',
+      '</a>  ',
+        {% endif %}
+        {% if request.user.is_superuser or perms.farm.add_enterprise %}
+      '<a class="Edit " href="'+create_enterprise_url+'" title="Add Query">',
+      '<i class="fa fa-plus"></i>',
+      '</a>  ',
+        {% endif %}
+    ].join('')
+  }
+
+  ///used cookies to get crsf token
+  function getCookie(c_name)
+    {
+      if (document.cookie.length > 0)
+        {
+          c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+         {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) c_end = document.cookie.length;
+            return unescape(document.cookie.substring(c_start,c_end));
+         }
+     }
+      return "";
+   }
+   function initTable() {
+
+$table.on('check.bs.table uncheck.bs.table ' +
+  'check-all.bs.table uncheck-all.bs.table',
+function () {
+  $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+
+  // save your data, here just save the current page
+  selections = getIdSelections()
+  // push or splice the selections if you want to save all data selections
+})
+$table.on('all.bs.table', function (e, name, args) {
+  console.log(name, args)
+})
+///multiple delete
+$remove.click(function () {
+  var ids = getIdSelections()
+  $remove.prop('disabled', true)
+
+  swal({
+title: "Are you sure?",
+text: "Once deleted, you will not be able to recover these records!",
+icon: "warning",
+buttons: true,
+dangerMode: true,
+})
+.then((willDelete) => {
+if (willDelete) {
+for(id=0; id<ids.length; id++){
+    console.log(ids[id]);
+
+$.ajax({
+    url: "/farm/api/query/"+ids[id],
+    data: {},
+    headers:{"X-CSRFToken": getCookie("csrftoken")},
+    type: 'DELETE',
+    contentType: 'application/json',
+    success: function(result) {
+      console.log('deleted successful');
+    },
+   });
+swal("Your record/s have been deleted successfully!", {
+  icon: "success",
+}).then(() =>{
+        window.location.reload()});
+;}
+} else {
+swal("You have cancelled the deletion of records!");
+}
+});
+
+})
+
+
+
+
+
+
 }
 
-function operateFormatter(value, row, index) {
-  console.log(row.id);
-  var url ="/openmarket/product/" + row.id +"/edit";
-  return [
- 
-    '<a class="Edit " href="'+url+'" title="Edit">',
-    '<i class="fa fa-pencil"></i>',
-    '</a>  ',
+$(function() {
+initTable()
 
-  ].join('')
-}
-  
+$('#locale').change(initTable)
+})
+
+
+
+
 </script>
-  {% endblock %}
+ 
+
+ {% endblock %}
