@@ -31,10 +31,11 @@
             <div class="col-md-4">
           
               <div class="col-auto">
-                <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
-                    <img alt="" class="profile-pic" src="{{farmobject.farmer.user.profile.profile_pic.url}}"/>
-                   
-                </div>
+                 <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
+                  {% if farmobject.farmer.user.profile.profile_pic %} 
+                   <img alt="" class="profile-pic" src="{{farmobject.farmer.user.profile.profile_pic.url}}"/>
+                  {% endif %}
+                 </div>
             </div>
                
             </div>
@@ -46,7 +47,7 @@
                 <input style="border-radius: 25px;" type="submit" class="btn-primary" value="get directions" />
                 </form>
                 <div class="product-page-details product-right mb-0">
-                    <h2>{{profilerecord.user.profile}}</h2>
+                    <h2>{{farmobject.farmer.profile}}</h2>
                     <hr>
                     <h3 class="product-title">farmer Details</h3>
                       <b>Farmer</b>: {{farmobject.farmer.user.profile}} <br>
