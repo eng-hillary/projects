@@ -39,10 +39,16 @@
                
             </div>
             <div class="col-md-8">
+              <form action="http://maps.google.com/maps" method="get" target="_blank">
+                Enter your starting address:
+                <input type="text" name="saddr" />
+                <input type="hidden" name="daddr" value=" {{farm.compute_location}}" />
+                <input style="border-radius: 25px;" type="submit" class="btn-primary" value="get directions" />
+                </form>
                 <div class="product-page-details product-right mb-0">
                     <h2>{{profilerecord.user.profile}}</h2>
                     <hr>
-                    <h6 class="product-title">farmer Details</h6>
+                    <h3 class="product-title">farmer Details</h3>
                       <b>Farmer</b>: {{farmobject.farmer.user.profile}} <br>
                       <b>Email</b>: <a href = "mailto: {{farmobject.farmer.user.email}}" style="color:blue;">{{farmobject.farmer.user.email}} </a><br>
                       <b>Phone</b>: {{farmobject.farmer.phone_1}}{% if farmobject.farmer.phone_2 %}/{{farmobject.farmer.phone_2}}{% endif %} <br>
@@ -88,7 +94,7 @@
                       <div class="product-page-details product-right mb-0">
                           <h2>{{profilerecord.user.profile}}</h2>
                           <hr>
-                          <h6 class="product-title">farm Details</h6>
+                          <h3 class="product-title">farm Details</h3>
                           <b>Farm Name</b>: {{farm.farm_name}} <br>
                           <b>Location</b>: {{farm.compute_location}} <br>
                           <b>Land Size(acres)</b>: {{farm.land_occupied}} <br>
@@ -104,7 +110,7 @@
                           {% endif %}<br>
                           <hr>
                         </div>
-                        <h6 class="product-title size-text">Farms Owned  </h6>
+                        <h3 class="product-title size-text">Enterprises Owned  </h3>
                         <table
       data-toggle="table"
       data-show-toggle="true"

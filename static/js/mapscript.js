@@ -10,12 +10,6 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         data.push(p);
     })
 
-    data.forEach((region) => {
-      if(region.name == 'western'){
-        region.color = 'yellow'
-      }
-    })
-
 //console.log(data);
     chart = Highcharts.mapChart('container', {
         title: {
@@ -125,11 +119,6 @@ document.getElementById('container').addEventListener('mousemove', function (e) 
     }
 });
 
-// document.getElementById('container').addEventListener('click', function (e) {
-//     var url = "/farm/"+ point.id +"/view/";
-//     window.location.href = url;
-
-// });
 
 document.getElementById('container').addEventListener('mouseout', function () {
     if (chart && chart.lab) {
