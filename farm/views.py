@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm)
+from .models import (Sector, Enterprise, Farm, PestAndDisease)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer)
+,FarmMapSerializer,  PestAndDiseaseSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -16,7 +16,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from .forms import (FarmForm,EnterpriseForm)
+from .forms import (FarmForm,EnterpriseForm,QueryForm)
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -75,6 +75,58 @@ class CreateSector(LoginRequiredMixin, APIView):
             return Response({'serializer': serializer})
         serializer.save()
         return redirect('farm:sector_list')
+
+
+
+# farm api for queries
+class QueryViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = PestAndDisease.objects.all()
+    serializer_class = PestAndDiseaseSerializer
+    
+
+
+# create farm 
+class CreateQueryView(LoginRequiredMixin,CreateView):
+    template_name = 'create_query.html'
+    success_url = reverse_lazy('farm:query_list')
+    form_class = QueryForm
+    success_message = "Query has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateQueryView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateQueryView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+        # assign total land to available land
+        farm.available_land = farm.land_occupied
+        farm.save()
+        return redirect('farm:query_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
 
 # views for enterprise
 class EnterpriseViewSet(viewsets.ModelViewSet):
@@ -218,7 +270,7 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
+            'message': 'Your '+farm.name + ' Details have been updated sucessfully',
             })
         to_email = farm.farmer.user.email
         email = EmailMessage(
