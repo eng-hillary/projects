@@ -27,6 +27,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 from .forms import(FarmerProfileForm,FarmerGroupForm)
 import datetime
 from django.contrib import messages
+from django.contrib.auth.models import Group as UserGroup
 
 
 
@@ -139,7 +140,10 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
         profile = self.get_object()
         serializer = FarmerApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
-            serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
+            farmer_group = UserGroup.objects.get(name='Farmers')
+            profile.user.groups.add(farmer_group)
+            serializer.save(status ='Active', approved_date = datetime.datetime.now(),
+            approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 

@@ -26,7 +26,7 @@ def can_add_farmer_profile(user, context):
 def can_view_farms(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('farm.view_farm')
+    return user.has_perm('farm.view_farm') or user.farmer
 
 def can_view_enterprise(user, context):
     if user.is_superuser:
@@ -179,7 +179,7 @@ menus = [
         css_class="sidebar-header",
         label='<i data-feather="users"></i><span>UNFFE Agent</span><i class="fa fa-angle-right pull-right"></i>',
         url='#',
-        test=can_view_farms,
+        test=can_view_unffeagents,
         children=[
             menu.PassTestNode(id='agent_registration',
                               label='<i class="fa fa-circle"></i>Register Agent',
