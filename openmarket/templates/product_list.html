@@ -7,16 +7,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Product List
-                      <small><a class="add-new" href="{% url 'openmarket:create_product' %}">Add new</a></small>
+                    <h3>Farmer profile List
+                        <small>{{ user.groups.all.0 }} Dashboard</small>
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Products</li>
-                    <li class="breadcrumb-item active">Product List</li>
+                    <li class="breadcrumb-item">Farmer profile</li>
+                    <li class="breadcrumb-item active">Farmer profile List</li>
                 </ol>
             </div>
         </div>
@@ -29,16 +29,27 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
-  <button id="remove" class="btn btn-danger" disabled>
-    <i class="fa fa-trash"></i> Delete
+  {% if request.user.is_superuser or perms.farmer.delete_farmerprofile %}
+  <button id="remove" class="btn btn-danger" title="Delete" disabled>
+    <i class="fa fa-trash"></i>
   </button>
+
+  {% endif %}
+  {% if request.user.is_superuser or perms.farmer.can_approve_farmers %}
+  <button id="decline" class="btn btn-decline" title="Decline" disabled>
+    <i class="fa fa-times"></i>
+  </button>
+  <button id="approve" class="btn btn-primary" title="Approve" disabled>
+    <i class="fa fa-check"></i>
+  </button>
+  {% endif %}
 </div>
 <table
   id="table"
   data-toggle="table"
-  data-show-refresh="true"
   data-show-toggle="true"
   data-search="true"
+  data-show-refresh="true"
   data-show-fullscreen="true"
   data-show-columns="true"
   data-show-columns-toggle-all="true"
@@ -47,10 +58,9 @@
   data-minimum-count-columns="2"
   data-show-pagination-switch="true"
   data-pagination="true"
-  data-id-field="id"
+  data-id-field="user"
   data-toolbar="#toolbar"
   data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
-  data-page-list="[10, 25, 50, 100, all]"
   data-page-list="[10, 25, 50, 100, all]"
   data-url="/api-openmarket/products/"
   data-response-handler="responseHandler">
@@ -73,41 +83,207 @@
  <!--bootstrap table ends here-->
 
  {% endblock %}
+
 <!-- latest jquery-->
 {% block javascript %}
 <script>
-
-  var $table = $('#table');
+  var $table = $('#table')
+  var $remove = $('#remove')
+  var $approve = $('#approve')
+  var $decline = $('#decline')
   var selections = []
 
   function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
-      return row.id
+      return row.user_id
     })
   }
+
   function responseHandler(res) {
     $.each(res.rows, function (i, row) {
-      row.state = $.inArray(row.id, selections) !== -1
+      row.state = $.inArray(row.user_id, selections) !== -1
     })
     return res
   }
-  //displays an image
+
+
+
+  function operateFormatter(value, row, index) {
+    var url ="/farmer/"+row.user_id+"/edit"
+    var view_url ="/farmer/"+row.user_id+"/view"
+    return [
+    {% if request.user.is_superuser or perms.farmer.change_farmerprofile %}
+      '<a class="Edit " href="'+url+'" title="Update">',
+      '<i class="fa fa-edit"></i>',
+      '</a>  ',
+        {% endif %}
+        {% if request.user.is_superuser or perms.farmer.view_farmerprofile %}
+        '<a class="Edit " href="'+view_url+'" title="De"tails>',
+      '<i class="fa fa-eye"></i>',
+      '</a>  ',
+      {% endif %}
+    ].join('')
+  }
   function imageFormatter(value, row) {
     var url =row.image;
   return '<img class="img-thumbnail" src="'+url+'">'
 }
 
-function operateFormatter(value, row, index) {
-  console.log(row.id);
-  var url ="/openmarket/product/" + row.id +"/edit";
-  return [
- 
-    '<a class="Edit " href="'+url+'" title="Edit">',
-    '<i class="fa fa-pencil"></i>',
-    '</a>  ',
 
-  ].join('')
-}
-  
+
+  ///used cookies to get crsf token
+  function getCookie(c_name)
+    {
+      if (document.cookie.length > 0)
+        {
+          c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+         {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) c_end = document.cookie.length;
+            return unescape(document.cookie.substring(c_start,c_end));
+         }
+     }
+      return "";
+   }
+
+  function initTable() {
+
+    $table.on('check.bs.table uncheck.bs.table ' +
+      'check-all.bs.table uncheck-all.bs.table',
+    function () {
+      $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+      $approve.prop('disabled', !$table.bootstrapTable('getSelections').length)
+      $decline.prop('disabled', !$table.bootstrapTable('getSelections').length)
+
+      // save your data, here just save the current page
+      selections = getIdSelections()
+      // push or splice the selections if you want to save all data selections
+    })
+    $table.on('all.bs.table', function (e, name, args) {
+      console.log(name, args)
+    })
+    ///multiple delete
+    $remove.click(function () {
+      var ids = getIdSelections()
+      $remove.prop('disabled', true)
+
+      swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover these records!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    for(id=0; id<ids.length; id++){
+        console.log(ids[id]);
+
+    $.ajax({
+        url: "/api-openmarket/products/"+ids[id],
+        data: {},
+        headers:{"X-CSRFToken": getCookie("csrftoken")},
+        type: 'DELETE',
+        contentType: 'application/json',
+        success: function(result) {
+          console.log('deleted successfule');
+        },
+       });
+    swal("Your record/s have been deleted successfully!", {
+      icon: "success",
+    });}
+  } else {
+    swal("You have cancelled the deletion of records!");
+  }
+});
+
+    })
+
+    ///approve farmer profiles
+    $approve.click(function () {
+      var ids = getIdSelections()
+      $approve.prop('disabled', true)
+
+      swal({
+  title: "Approve Farmer Applications?",
+  text: "Are you sure you want to approve these applications!",
+  icon: "success",
+  buttons: true,
+  dangerMode: false,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    for(id=0; id<ids.length; id++){
+        console.log(ids[id]);
+
+    $.ajax({
+        url: "/farmer/"+ids[id]+'/approve/',
+        data: {},
+        headers:{"X-CSRFToken": getCookie("csrftoken")},
+        type: 'PATCH',
+        //contentType: 'application/json',
+        success: function(result) {
+          console.log('approved successfully');
+        },
+       });
+    swal("You have approve farmer/s successfully!", {
+      icon: "success",
+    });}
+  } else {
+    swal("You have cancelled farmer approvals!");
+  }
+});
+
+    })
+
+
+    ///decline farmer request
+    $decline.click(function () {
+      var ids = getIdSelections()
+      $decline.prop('disabled', true)
+
+      swal({
+  title: "Decline Application",
+  text: "Are you sure You want to decline these Applications?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: false,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    for(id=0; id<ids.length; id++){
+        console.log(ids[id]);
+
+    $.ajax({
+        url: "/farmer/"+ids[id]+'/approve/',
+        data: {},
+        headers:{"X-CSRFToken": getCookie("csrftoken")},
+        type: 'PUT',
+        //contentType: 'application/json',
+        success: function(result) {
+          console.log('approved successfully');
+        },
+       });
+    swal("You have approved farmer/s successfully!", {
+      icon: "success",
+    });}
+  } else {
+    swal("You have cancelled farmer approvals!");
+  }
+});
+
+    })
+
+  }
+
+  $(function() {
+    initTable()
+
+    $('#locale').change(initTable)
+  })
+
+
 </script>
-  {% endblock %}
+{% endblock %}
