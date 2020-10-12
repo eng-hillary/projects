@@ -152,13 +152,14 @@ class FinancialRecord(TimeStampedModel, models.Model):
 
 
 class PestAndDisease(TimeStampedModel, models.Model):
+    query_category = models.CharField(choices=QUERIES, max_length=25, null=True, blank=False)
     farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_pests_and_diseases')
-    picture = models.ImageField()
-    date_discovered = models.DateField()
-    reporting_date = models.DateField(auto_now=True)
     description = models.TextField( blank=True, null=True)
+    date_discovered = models.DateField()
     action_taken = models.TextField( blank=False, null=True)
-    reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, blank=False)
+    reporting_date = models.DateField(auto_now=True)
+    solution = models.TextField( blank=True, null=True)
 
 
     def __str__(self):

@@ -77,6 +77,13 @@ class CreateSector(LoginRequiredMixin, APIView):
         return redirect('farm:sector_list')
 
 
+class QueryList(LoginRequiredMixin, APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'query_list.html'
+
+    def get(self, request):
+       # queryset = Sector.objects.order_by('-id')
+        return Response()
 
 # farm api for queries
 class QueryViewSet(viewsets.ModelViewSet):
@@ -116,8 +123,6 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         farm = form.save(commit=False)
-        # assign total land to available land
-        farm.available_land = farm.land_occupied
         farm.save()
         return redirect('farm:query_list')
 
