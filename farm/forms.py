@@ -35,6 +35,7 @@ class EnterpriseForm(forms.ModelForm):
     start_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     from_period = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     to_period = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    land_occupied = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Enterprise
@@ -48,3 +49,4 @@ class EnterpriseForm(forms.ModelForm):
         self.fields['sector'].empty_label = '--please select--'
         farmersectors = FarmerProfile.objects.filter(user=self.request.user).values('sector')
         self.fields['sector'].queryset = Sector.objects.filter(id__in=farmersectors)
+        self.fields['farm'].queryset = Farm.objects.filter(farmer_id=self.request.user.id)
