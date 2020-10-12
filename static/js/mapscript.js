@@ -10,7 +10,7 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         data.push(p);
     })
 
-//console.log(data);
+   
     chart = Highcharts.mapChart('container', {
         title: {
             text: 'Farmers Locations'
