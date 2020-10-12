@@ -84,7 +84,16 @@ def can_register_agent(user, context):
         return True
     return user.has_perm('unffeagents.add_agentprofile')
 
+def can_add_product(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('openmarket. add_product')
 
+
+def can_view_products(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('openmarket. product_list')
 # menu starts from here
 menus = [
     menu.Node(id='dashboard',css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>', pattern_name='common:home', link_attrs={'id': 'dashboard'}),
@@ -163,6 +172,45 @@ menus = [
          
         ]
     ),
+
+
+    #Open market menu
+
+menu.PassTestNode(
+        id='Open-Market-section',
+        css_class="sidebar-header",
+        label='<i data-feather="users"></i><span>Open Market</span><i class="fa fa-angle-right pull-right"></i>',
+        url='#',
+        test=can_view_service_provider,
+        children=[
+            menu.PassTestNode(id='provider_registration',
+                              label='<i class="fa fa-circle"></i>Add Products',
+                             
+                              pattern_name='openmarket:create_product', test=can_add_product),
+            menu.PassTestNode(id='provider_list',
+                              label='<i class="fa fa-circle"></i>My products',
+                             
+                              pattern_name='openmarket:product_list', test=can_view_products),
+            menu.PassTestNode(id='register_service',
+                              label='<i class="fa fa-circle"></i>Register Market',
+                             
+                              pattern_name='openmarket:service_registration', test=can_register_services),
+            menu.PassTestNode(id='services',
+                              label='<i class="fa fa-circle"></i>Markets',
+                             
+                              pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+            menu.PassTestNode(id='services',
+                              label='<i class="fa fa-circle"></i>Hire',
+                             
+                              pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+ 
+         
+         
+        ]
+    ),
+
+
+
     menu.PassTestNode(
         id='Seller-section',
         css_class="sidebar-header",

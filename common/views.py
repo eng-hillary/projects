@@ -81,6 +81,8 @@ class HomePage(LoginRequiredMixin, TemplateView):
         dump = json.dumps(chart)
         context["dataset"]=dataset
         context["chart"] = json.dumps(chart)
+        #context["credit.html"] = credit.html
+        
             
         return context
         
