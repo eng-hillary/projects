@@ -533,3 +533,72 @@ class SoilScienceList(APIView):
     def get(self, request):
         queryset = SoilScience.objects.order_by('name')
         return Response({'soilsciences': queryset})
+    
+
+#update service provider view
+class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
+    model =ServiceProvider
+    template_name = 'register_service_provider.html'
+    success_url = reverse_lazy('openmarket:serviceprovider_list')
+    form_class = ServiceProviderProfileForm
+    success_message = "Your profile was Updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(UpdateServiceProviderProfile, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateServiceProviderProfile, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        # updating profile for only changed fields
+        profile.save()
+
+        # not sending email to a farmer after editing for now
+        # current_site = get_current_site(self.request)
+        # subject = 'Registrated Successful'
+        # message = render_to_string('profile_created_successful_email.html', {
+        #     'user': profile.user,
+        #     'domain': current_site.domain
+        #     })
+        # to_email = profile.user.email
+        # email = EmailMessage(
+        #         subject, message, to=[to_email]
+        #     )
+        # email.content_subtype = "html"
+        # email.send()
+        return redirect('farmer:farmerprofile_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+#Service Provider Detail View
+class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
+    model = ServiceProvider
+    context_object_name = "profilerecord"
+    template_name = "view_service_provider_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ServiceProviderProfileDetailView, self).get_context_data(**kwargs)
+        
+        context.update({
+
+        })
+        return context
+

@@ -297,7 +297,7 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
 
 class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
     model = FarmerProfile
-    context_object_name = "profilerecord"
+    context_object_name = ""
     template_name = "view_farmer_profile.html"
 
     def get_context_data(self, **kwargs):
@@ -324,7 +324,7 @@ def farmer_class_view(request):
 
 #Looping through the created dataset from above
     for entry in dataset:
-        categories.append('%s Farmers' % entry['region'])
+        categories.append(entry['region'] % entry['region'])
         credit_access_series_data.append(entry['credit_access_count'])
         no_credit_access_series_data.append(entry['no_credit_access_count'])
 
