@@ -13,13 +13,6 @@ class SectorSerializer(serializers.ModelSerializer):
         fields = ['id','name', 'size']
 
 
-class PestAndDiseaseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PestAndDisease
-        fields = ['query_category','farm', 'description', 'date_discovered'
-        'action_taken', 'picture', 'reporting_date', 'solution']
-
-
 class FarmSerializer(serializers.ModelSerializer):
     #sector = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
 
@@ -61,6 +54,14 @@ class EnterpriseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enterprise
         fields = '__all__'
+
+
+class PestAndDiseaseSerializer(serializers.ModelSerializer):
+    farm = FarmSerializer()
+    class Meta:
+        model = PestAndDisease
+        fields = ['query_category','farm', 'description', 'date_discovered',
+        'action_taken', 'image', 'reporting_date', 'solution']
 
 
 class FarmFacilitySerializer(serializers.ModelSerializer):
