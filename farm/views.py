@@ -218,7 +218,7 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.name + ' Details have been updated sucessfully',
+            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
             })
         to_email = farm.farmer.user.email
         email = EmailMessage(
@@ -356,3 +356,13 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+
+class FarmProfileDetailView(DetailView):
+    model = Farm
+    template_name = "view_farm_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(FarmProfileDetailView, self).get_context_data(**kwargs)
+        context['farmobject'] = self.object
+        
+        return context

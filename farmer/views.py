@@ -309,7 +309,6 @@ class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-
 #Quering the farmers table for the data. 
 def farmer_class_view(request):
     #Filtering the needed columns for the bargraph
