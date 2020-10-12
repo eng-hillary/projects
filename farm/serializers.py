@@ -60,7 +60,7 @@ class PestAndDiseaseSerializer(serializers.ModelSerializer):
     farm = FarmSerializer()
     class Meta:
         model = PestAndDisease
-        fields = ['query_category','farm', 'description', 'date_discovered',
+        fields = ['id','query_category','farm', 'description', 'date_discovered',
         'action_taken', 'image', 'reporting_date', 'solution']
 
 

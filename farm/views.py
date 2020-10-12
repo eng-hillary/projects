@@ -135,10 +135,10 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
 
 # update farm view
 class EditQueryView(LoginRequiredMixin,UpdateView):
-    model =Farm
+    model =PestAndDisease
     template_name = 'create_query.html'
     success_url = reverse_lazy('farm:query_list')
-    form_class = FarmForm
+    form_class = QueryForm
     success_message = "Query has been updated successfully"
 
 
