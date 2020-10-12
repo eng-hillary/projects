@@ -28,12 +28,9 @@ from .forms import(FarmerProfileForm,FarmerGroupForm)
 import datetime
 
 from django.contrib import messages
-<<<<<<< HEAD
 from django.contrib.auth.models import Group as UserGroup
-=======
 from django.db.models import Count, Q
 import json
->>>>>>> acfc195db324bd20fdf7fbf45b3e27ebe10b6985
 
 
 
