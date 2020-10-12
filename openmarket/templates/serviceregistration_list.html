@@ -16,7 +16,7 @@
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Services</li>
-                    <li class="breadcrumb-item active">services List</li>
+                    <li class="breadcrumb-item active">Services List</li>
                 </ol>
             </div>
         </div>
@@ -32,7 +32,7 @@
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i> 
   </button>
- 
+  
 </div>
 <table
   id="table"
@@ -53,7 +53,7 @@
   data-page-list="[10, 25, 50, 100, all]"
   data-url="/api-openmarket/serviceregistration/?format=json">
   <thead>
-   <tr>
+    <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="user.full_name" data-sortable="true">Service Provider</th>
       <th data-field="service_name" data-visible="false"  data-sortable="true">Service Name</th>
@@ -63,12 +63,10 @@
       <th data-field="availability_date" data-sortable="true">Availability Date</th>
       <th data-field="picture" data-visible="true"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
       <th data-formatter="operateFormatter" data-events="operateEvents" class="text-center">Action</th>     
-                
     </tr>
   </thead>
 </table>
  <!--bootstrap table ends here-->
-
  {% endblock %}
 <!-- latest jquery-->
 {% block javascript %}
@@ -91,21 +89,28 @@
     })
     return res
   }
-  //displays the image
-  function imageFormatter(value, row) {
-    var url =row.picture;
-  return '<img class="img-thumbnail" src="'+url+'">'
-}
+
 
   function operateFormatter(value, row, index) {
+    var url ="/openmarket/"+row.id+"/edit"
+    var view_url ="/openmarket/"+row.id+"/view"
     return [
    
       '<a class="Edit " href="javascript:void(0)" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
 
+      '<a class="Edit " href="'+view_url+'" title="Edit">',
+      '<i class="fa fa-eye"></i>',
+      '</a>  ',
+
     ].join('')
   }
+
+  function imageFormatter(value, row) {
+    var url =row.picture;
+  return '<img class="img-thumbnail" src="'+url+'">'
+}
 
   window.operateEvents = {
     'click .Detail': function (e, value, row, index) {

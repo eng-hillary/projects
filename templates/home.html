@@ -50,6 +50,7 @@
                         </div>
                     </div>
 
+
              <div class="row">
 
                 <div class="col-xl-3 col-md-6 xl-50">
@@ -64,8 +65,8 @@
                     <div class="card">
                         
                         <div class="card-body">
-                          
                             <div id="barcontainer">
+                                <!-- {% include 'credit.html'%} -->
                             </div>
                     </div>
                 </div>
@@ -154,10 +155,7 @@
             <!-- Container-fluid Ends-->
         </div>
 <div class="card">
-    {{ chart }}
+  
 </div>
-<script>
-  Highcharts.chart('barcontainer', {{ chart|safe }});
-</script>
-        
+
             {% endblock %}

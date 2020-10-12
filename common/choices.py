@@ -40,6 +40,13 @@ INVENTORY_STATUS = (
      ('not_available', 'Not Available')
 )
 
+QUERIES = (
+     (None, "--please select--"),
+     ('pest', 'Pest'),
+     ('disease', 'Disease'),
+     ('general_query', 'General Query')
+)
+
 LAND_TYPES = (
      (None, "---please select---"),
     ('rented', 'Rented'),

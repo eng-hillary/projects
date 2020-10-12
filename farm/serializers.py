@@ -13,6 +13,11 @@ class SectorSerializer(serializers.ModelSerializer):
         fields = ['id','name', 'size']
 
 
+class PestAndDiseaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PestAndDisease
+        fields = ['query_category','farm', 'description', 'date_discovered'
+        'action_taken', 'picture', 'reporting_date', 'solution']
 
 
 class FarmSerializer(serializers.ModelSerializer):
@@ -80,9 +85,10 @@ class FarmMapSerializer(serializers.ModelSerializer):
 
     farmer = serializers.SerializerMethodField(method_name='get_user_full_name',source='farmer__user')
     district = serializers.SerializerMethodField(method_name='get_district',source='farmer')
+    region = serializers.SerializerMethodField(method_name='get_region',source='farmer')
     class Meta:
         model = Farm
-        fields = ('district','farm_name','farmer',  'lat', 'lon','land_occupied')
+        fields = ('id','region','district','farm_name','farmer',  'lat', 'lon','land_occupied')
 
 
 
@@ -91,3 +97,7 @@ class FarmMapSerializer(serializers.ModelSerializer):
 
     def get_district(self, obj):
         return '{}'.format(obj.farmer.district.name)
+
+    
+    def get_region(self, obj):
+        return '{}'.format(obj.farmer.region.name)

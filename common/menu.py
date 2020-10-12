@@ -12,7 +12,7 @@ def can_view_farmers(user, context):
         return True
     return user.has_perm('farmer.view_farmerprofile')
 
-# function to check wether a user has permissions to view farmers groups
+# function to check whether a user has permissions to view farmers groups
 def can_view_farmer_groups(user, context):
     if user.is_superuser:
         return True
@@ -32,6 +32,12 @@ def can_view_enterprise(user, context):
     if user.is_superuser:
         return True
     return user.has_perm('farm.view_enterprise')
+
+
+def can_view_pest_and_diseases(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_pest_and_diseases')
 
 def can_view_service_provider(user, context):
     if user.is_superuser:
@@ -78,7 +84,16 @@ def can_register_agent(user, context):
         return True
     return user.has_perm('unffeagents.add_agentprofile')
 
+def can_add_product(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('openmarket. add_product')
 
+
+def can_view_products(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('openmarket. product_list')
 # menu starts from here
 menus = [
     menu.Node(id='dashboard',css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>', pattern_name='common:home', link_attrs={'id': 'dashboard'}),
@@ -120,6 +135,11 @@ menus = [
                               label='<i class="fa fa-circle"></i>Enterprises',
                              
                               pattern_name='farm:enterprise_list', test=can_view_enterprise),
+
+            menu.PassTestNode(id='pests_and_diseases',
+                              label='<i class="fa fa-circle"></i>Queries',
+                             
+                              pattern_name='farm:create_query', test=can_view_pest_and_diseases),
  
          
          
@@ -152,6 +172,45 @@ menus = [
          
         ]
     ),
+
+
+    #Open market menu
+
+menu.PassTestNode(
+        id='Open-Market-section',
+        css_class="sidebar-header",
+        label='<i data-feather="users"></i><span>Open Market</span><i class="fa fa-angle-right pull-right"></i>',
+        url='#',
+        test=can_view_service_provider,
+        children=[
+            menu.PassTestNode(id='provider_registration',
+                              label='<i class="fa fa-circle"></i>Add Products',
+                             
+                              pattern_name='openmarket:create_product', test=can_add_product),
+            menu.PassTestNode(id='provider_list',
+                              label='<i class="fa fa-circle"></i>My products',
+                             
+                              pattern_name='openmarket:product_list', test=can_view_products),
+            menu.PassTestNode(id='register_service',
+                              label='<i class="fa fa-circle"></i>Register Market',
+                             
+                              pattern_name='openmarket:service_registration', test=can_register_services),
+            menu.PassTestNode(id='services',
+                              label='<i class="fa fa-circle"></i>Markets',
+                             
+                              pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+            menu.PassTestNode(id='services',
+                              label='<i class="fa fa-circle"></i>Hire',
+                             
+                              pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+ 
+         
+         
+        ]
+    ),
+
+
+
     menu.PassTestNode(
         id='Seller-section',
         css_class="sidebar-header",

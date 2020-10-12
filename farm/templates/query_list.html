@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+   <!-- Container-fluid starts-->
+   <div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="page-header-left">
+                    <h3>Query List
+                      <small><a class="add-new" href="{% url 'farm:create_query' %}">Add new</a></small>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <ol class="breadcrumb pull-right">
+                    <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item">Queries</li>
+                    <li class="breadcrumb-item active">Query List</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container-fluid Ends-->
+
+
+
+<!-- bootstrap table begin here -->
+<div id="toolbar">
+  <button id="remove" class="btn btn-danger" disabled>
+    <i class="fa fa-trash"></i> Delete
+  </button>
+</div>
+<table
+  id="table"
+  data-toggle="table"
+  data-show-refresh="true"
+  data-show-toggle="true"
+  data-search="true"
+  data-show-fullscreen="true"
+  data-show-columns="true"
+  data-show-columns-toggle-all="true"
+  data-show-export="true"
+  data-click-to-select="true"
+  data-minimum-count-columns="2"
+  data-show-pagination-switch="true"
+  data-pagination="true"
+  data-id-field="id"
+  data-toolbar="#toolbar"
+  data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
+  data-page-list="[10, 25, 50, 100, all]"
+  data-page-list="[10, 25, 50, 100, all]"
+  data-url="/farm/api/query/"
+  data-response-handler="responseHandler">
+  <thead>
+    <tr>
+      <th data-field="state" data-checkbox="true"></th>
+      <th data-field="query_category" data-sortable="true">query_category</th>
+      <th data-field="farm" data-sortable="true">farm</th>
+      <th data-field="description" data-sortable="true">description</th>
+      <th data-field="date_discovered" data-sortable="true">date_discovered</th>
+      <th data-field="picture" data-visible="true"  data-formatter="imageFormatter" data-sortable="true">picture</th>
+      <th data-field="action_taken" data-sortable="true">action_taken</th>
+      <th data-field="reporting_date" data-sortable="true">reporting_date</th>
+      <th data-field="solution" data-sortable="true">solution</th>
+      <th data-formatter="operateFormatter"  class="text-center">Action</th>
+    </tr>
+  </thead>
+</table>
+ <!--bootstrap table ends here-->
+
+ {% endblock %}
+<!-- latest jquery-->
+{% block javascript %}
+<script>
+
+  var $table = $('#table');
+  var selections = []
+
+  function getIdSelections() {
+    return $.map($table.bootstrapTable('getSelections'), function (row) {
+      return row.id
+    })
+  }
+  function responseHandler(res) {
+    $.each(res.rows, function (i, row) {
+      row.state = $.inArray(row.id, selections) !== -1
+    })
+    return res
+  }
+  //displays an image
+  function imageFormatter(value, row) {
+    var url =row.image;
+  return '<img class="img-thumbnail" src="'+url+'">'
+}
+
+function operateFormatter(value, row, index) {
+  console.log(row.id);
+  var url ="/openmarket/product/" + row.id +"/edit";
+  return [
+ 
+    '<a class="Edit " href="'+url+'" title="Edit">',
+    '<i class="fa fa-pencil"></i>',
+    '</a>  ',
+
+  ].join('')
+}
+  
+</script>
+  {% endblock %}
