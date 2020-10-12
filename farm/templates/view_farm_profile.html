@@ -85,8 +85,9 @@
           
                       <div class="col-auto">
                         <div class="farm_avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
-                            <img alt="" class="profile-pic" src="{{farmobject.image.url}}"/>
-                           
+                          {% if farmobject.image %}  
+                          <img alt="" class="profile-pic" src="{{farmobject.image.url}}"/>
+                          {% endif %} 
                         </div>
                     </div>
                      

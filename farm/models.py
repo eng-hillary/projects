@@ -154,7 +154,7 @@ class PestAndDisease(TimeStampedModel, models.Model):
     description = models.TextField( blank=True, null=True)
     date_discovered = models.DateField()
     action_taken = models.TextField( blank=False, null=True)
-    picture = models.ImageField(null=True, blank=False)
+    image = models.ImageField(null=True, blank=False)
     reporting_date = models.DateField(auto_now=True)
     solution = models.TextField( blank=True, null=True)
 

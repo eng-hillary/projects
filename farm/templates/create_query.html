@@ -34,7 +34,7 @@
                             <div class="card-header">
                                 <h5> Add Profile</h5>
                             </div>
-                            <form id="form" class="card-body" action="" method="post">
+                            <form id="form" class="card-body" action="" novalidate enctype="multipart/form-data" method="post">
                              {% csrf_token %}
 
                                 <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
@@ -56,7 +56,7 @@
                                             </div>
                                             
                                             <div class="col-xl-6 col-md-6">
-                                                {{ form.picture|as_crispy_field }}
+                                                {{ form.image|as_crispy_field }}
                                             </div>
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.reporting_date|as_crispy_field }}
