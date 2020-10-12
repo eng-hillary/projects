@@ -4,6 +4,9 @@ from common .models import(TimeStampedModel)
 from django.contrib.auth.models import User
 from common .choices import (ACTION_TYPE, TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO,QUERIES)
 from geopy.geocoders import Nominatim
+import phonenumbers
+from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.translation import ugettext as _
 # Create your models here.
 
 
@@ -165,16 +168,16 @@ class PestAndDisease(TimeStampedModel, models.Model):
 
 class FarmRecord(TimeStampedModel, models.Model):
 
-    farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_records')
-    activity = models.CharField(max_length=200, null=False, blank=False)
+    enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=True, blank=False, related_name='farm_records')
     activity_type = models.CharField(max_length=30, choices=ACTION_TYPE)
+    activity = models.CharField(max_length=200, null=False, blank=False)
     from_date = models.DateField()
     to_date = models.DateField()
-    from_time = models.TimeField()
-    to_time = models.TimeField()
     description = models.TextField( blank=True, null=True)
+    # person responsible
     taken_by = models.CharField(blank=False, null=True, max_length=100)
-    reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    contact =  PhoneNumberField(_('Phone number 1'), blank=False, null=True)
+    #reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
     def __str__(self):

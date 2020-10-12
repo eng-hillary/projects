@@ -5,7 +5,7 @@ from . import views
 
 from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
 CreateFarmView, EditFarmView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
-FarmProfileDetailView)
+FarmProfileDetailView,QueryList)
 
 
 
