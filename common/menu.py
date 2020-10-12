@@ -12,7 +12,7 @@ def can_view_farmers(user, context):
         return True
     return user.has_perm('farmer.view_farmerprofile')
 
-# function to check wether a user has permissions to view farmers groups
+# function to check whether a user has permissions to view farmers groups
 def can_view_farmer_groups(user, context):
     if user.is_superuser:
         return True
@@ -32,6 +32,12 @@ def can_view_enterprise(user, context):
     if user.is_superuser:
         return True
     return user.has_perm('farm.view_enterprise')
+
+
+def can_view_pest_and_diseases(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_pest_and_diseases')
 
 def can_view_service_provider(user, context):
     if user.is_superuser:
@@ -120,6 +126,11 @@ menus = [
                               label='<i class="fa fa-circle"></i>Enterprises',
                              
                               pattern_name='farm:enterprise_list', test=can_view_enterprise),
+
+            menu.PassTestNode(id='pests_and_diseases',
+                              label='<i class="fa fa-circle"></i>Queries',
+                             
+                              pattern_name='farm:create_query', test=can_view_pest_and_diseases),
  
          
          

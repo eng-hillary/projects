@@ -13,6 +13,11 @@ class SectorSerializer(serializers.ModelSerializer):
         fields = ['id','name', 'size']
 
 
+class PestAndDiseaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PestAndDisease
+        fields = ['query_category','farm', 'description', 'date_discovered'
+        'action_taken', 'picture', 'reporting_date', 'solution']
 
 
 class FarmSerializer(serializers.ModelSerializer):
