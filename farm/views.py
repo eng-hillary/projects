@@ -138,9 +138,25 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows sectors to be viewed or edited.
     """
-    queryset = Enterprise.objects.all().order_by('-id')
+    queryset = Enterprise.objects.all().order_by('farm')
     serializer_class = EnterpriseSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the farms 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        farmer = FarmerProfile.objects.get(user=user)
+        farms = Farm.objects.filter(farmer =farmer)
+        enterprises = Enterprise.objects.all().order_by('farm')
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
+            queryset = enterprises
+        else:
+            queryset = enterprises.filter(farm__in=farms)
+        
+        return queryset
 
 
 class EnterpriseList(LoginRequiredMixin, APIView):
@@ -158,9 +174,23 @@ class FarmViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
-    queryset = Farm.objects.all().order_by('-id')
     serializer_class = FarmSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the farms 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        farmer = FarmerProfile.objects.get(user=user)
+        farms = Farm.objects.all().order_by('farmer')
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
+            queryset = farms
+        else:
+            queryset = farms.filter(farmer=farmer)
+        
+        return queryset
 
 
 # farm api for maps
@@ -358,12 +388,17 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
         initial['farm'] = Farm.objects.get(pk=self.kwargs['farm_pk'])
         return initial
 
-
+    def get_context_data(self, **kwargs):
+        context = super(CreateEnterpriseView, self).get_context_data(**kwargs)
+        farm = Farm.objects.get(pk=self.kwargs['farm_pk'])
+        context['landsize'] = farm.land_occupied
+        context['available_land'] = farm.available_land
+        return context
 
 
 # update Enterprise view
 class EditEnterpriseView(LoginRequiredMixin,UpdateView):
-    model =EnterpriseForm
+    model =Enterprise
     template_name = 'create_enterprise.html'
     success_url = reverse_lazy('farm:farm_list')
     form_class = EnterpriseForm
@@ -375,6 +410,7 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(EditEnterpriseView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
 
@@ -395,10 +431,10 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
          # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
         subject = 'Enterprise Updated Successfully'
-        message = render_to_string('enterprise_created_successful_email.html', {
+        message = render_to_string('enterprise_email.html', {
             'user': enterprise.farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+enterprise.farm.name + ' Details have been updated sucessfully',
+            'message': 'Your '+enterprise.name + ' Details have been updated sucessfully',
             })
         to_email = enterprise.farm.farmer.user.email
         email = EmailMessage(
@@ -406,7 +442,7 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
             )
         email.content_subtype = "html"
         email.send()
-        return redirect('farm:farm_list')
+        return redirect('farm:enterprise_list')
 
 
     def form_invalid(self, form):
