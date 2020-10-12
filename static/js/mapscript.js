@@ -10,8 +10,7 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         data.push(p);
     })
 
-
-//console.log(data);
+   
     chart = Highcharts.mapChart('container', {
         title: {
             text: 'Farmers Locations'
@@ -25,12 +24,12 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         },
        
         tooltip: {
-            pointFormat: 'district: {point.district}<br>' +
+            pointFormat: 'id: {point.id}<br>' +
+                'district: {point.district}<br>' +
                 'farmer: {point.farmer}<br>' +
                 'farm name: {point.farm_name}<br>' +
-                'latittude: {point.lat}<br>' +
-                'longitude: {point.lon}<br>'+ 
                 'land occupied: {point.land_occupied}'+ ' acres'
+      
         },
 
         xAxis: {
@@ -50,7 +49,19 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
                 color: 'gray'
             }
         },
-
+        plotOptions:{
+            series:{
+                point:{
+                    events:{
+                        click: function(event){
+                             var url = "/farm/"+ event.point.id +"/view/";
+                             window.location.href = url;
+                            //alert(event.point.id);
+                        }
+                    }
+                }
+            }
+        },
         series: [{
             name: 'Basemap',
             mapData: map,
@@ -108,6 +119,7 @@ document.getElementById('container').addEventListener('mousemove', function (e) 
     }
 });
 
+
 document.getElementById('container').addEventListener('mouseout', function () {
     if (chart && chart.lab) {
         chart.lab.destroy();
@@ -116,8 +128,6 @@ document.getElementById('container').addEventListener('mouseout', function () {
 });
 
 
-
-//Piechart Js
 // Create the chart
 Highcharts.chart('piecontainer', {
   chart: {
