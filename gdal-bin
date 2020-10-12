@@ -14,7 +14,6 @@ django-cascading-dropdown-widget==0.2.1
 django-compressor==2.4
 django-crispy-forms==1.9.2
 django-filter==2.3.0
-django-navutils==0.7
 django-phonenumber-field==5.0.0
 django-redis==4.12.1
 django-select2==7.4.2
@@ -51,7 +50,6 @@ notebook==6.1.4
 packaging==20.4
 pandocfilters==1.4.2
 parso==0.7.1
-persisting-theory==0.2.1
 pexpect==4.8.0
 phonenumbers==8.12.9
 pickleshare==0.7.5

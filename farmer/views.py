@@ -26,8 +26,14 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from .forms import(FarmerProfileForm,FarmerGroupForm)
 import datetime
+
 from django.contrib import messages
+<<<<<<< HEAD
 from django.contrib.auth.models import Group as UserGroup
+=======
+from django.db.models import Count, Q
+import json
+>>>>>>> acfc195db324bd20fdf7fbf45b3e27ebe10b6985
 
 
 
@@ -295,9 +301,10 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
+
 class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
     model = FarmerProfile
-    context_object_name = "profilerecord"
+    context_object_name = ""
     template_name = "view_farmer_profile.html"
 
     def get_context_data(self, **kwargs):
@@ -307,3 +314,47 @@ class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
 
         })
         return context
+
+
+#Quering the farmers table for the data. 
+def farmer_class_view(request):
+    #Filtering the needed columns for the bargraph
+    dataset = FarmerProfile.objects \
+        .values('region') \
+        .annotate(credit_access_count=Count('region', filter=Q(credit_access=True)),
+                  no_credit_access_count=Count('region', filter=Q(credit_access=False))) \
+        .order_by('region')
+#Creating lists 
+    categories = list()
+    credit_access_series_data = list()
+    no_credit_access_series_data = list()
+
+#Looping through the created dataset from above
+    for entry in dataset:
+        categories.append(entry['region'] % entry['region'])
+        credit_access_series_data.append(entry['credit_access_count'])
+        no_credit_access_series_data.append(entry['no_credit_access_count'])
+
+
+    credit_access_series = {
+        'name': 'Credit Access',
+        'data': credit_access_series_data,
+        'color': 'green'
+    }
+
+    no_credit_access_series = {
+        'name': 'No credit Access',
+        'data': no_credit_access_series_data,
+        'color': 'red'
+    }
+
+    chart = {
+        'chart': {'type': 'column'},
+        'title': {'text': 'Farmers Credit Access by Region'},
+        'xAxis': {'categories': categories},
+        'series': [credit_access_series, no_credit_access_series]
+    }
+
+    dump = json.dumps(chart)
+    return render(request, 'credit.html', {'chart': dump})
+    

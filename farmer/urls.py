@@ -33,6 +33,9 @@ urlpatterns = [
     path('create/profile', CreateFarmerProfile.as_view(), name="create_farmer"),
     path('<int:pk>/edit/', UpdateFarmerProfile.as_view(), name="edit_farmer_profile"),
     path('<int:pk>/approve/', approve_farmer, name='approve'),
+
     path('<int:pk>/view/', FarmerProfileDetailView.as_view(), name="view_farmer_profile"),
+
+    path('columnchart/', views.farmer_class_view, name ="column_chart")
 
 ]
