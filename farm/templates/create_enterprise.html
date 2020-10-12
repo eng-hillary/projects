@@ -32,7 +32,7 @@
                     <div class="col-sm-12">
                         <div class="card tab2-card">
                             <div class="card-header">
-                                <h5> Add Enterprise</h5>
+                                <h5> Add Enterprise{{landsize}}</h5>
                                 {% if messages %}
                                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                                     {% for message in messages %}
@@ -63,7 +63,12 @@
                                     </div>
                                      
                                     <div class="col-xl-6 col-md-6">
-                                        {{ form.land_occupied|as_crispy_field }}
+                                        <div class="form-group">
+                                            <label for="land_occupied" class="required">Land occupied{% if form.land_occupied.field.required %}<span class="error"
+                                                style="color:red">* ( Available farm land {{available_land}})</span>{% endif %}</label>
+                                        {{form.land_occupied}}
+                                        <span class="error" style="color:red" ><div id="land_occupied_error"></div>{{ form.land_occupied.errors }}</span>
+                                    </div>
                                     </div>
                                     <div class="col-xl-6 col-md-6">
                                         {{ form.start_date|as_crispy_field }}
@@ -91,7 +96,7 @@
                                     <div class="col-xl-12 col-md-12">
                                         {{ form.image|as_crispy_field }}
                                     </div>
-
+                                       <p> <div id="land_occupied_error"></div>
                                 </div>
                               
                                 <div class="pull-right">
@@ -112,11 +117,27 @@
 <!-- latest jquery-->
 {% block javascript %}
 <!--select 2-->
-<script src="{% static 'js/select2.min.js' %}"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
 
+
+        $('#id_farm option:not(:selected)').attr('disabled', true);
+        $("land_occupied_error").val("Enter a number less or equal to the available farm land");
+
+        var available_farm_land = {{available_land}};
+       
+ $('#id_land_occupied').on('mouseleave', function(){
+     var number_entered = $('#id_land_occupied').val();
+     if(number_entered>available_farm_land){
+         $("#land_occupied_error").text("Enter a number less or equal to the available farm land");
+     }
+     else if(number_entered <= available_farm_land){
+        $("#land_occupied_error").text("");
+     }
+
+
+ })
 
 
     });

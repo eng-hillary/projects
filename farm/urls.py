@@ -1,8 +1,12 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import (SectorList, QueryList, SectorDetail,CreateQueryView, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
-CreateFarmView, EditFarmView,EditQueryView,FarmMapViewSet,CreateEnterpriseView,FarmProfileDetailView)
+
+
+from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
+CreateFarmView, EditFarmView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
+FarmProfileDetailView,EditQueryView,QueryList)
+
 
 
 
@@ -32,5 +36,7 @@ urlpatterns = [
     path('queries', QueryList.as_view(), name='query_list'),
     path('enterprises', EnterpriseList.as_view(), name='enterprise_list'),
     path('create/enterprise/<int:farm_pk>', CreateEnterpriseView.as_view(), name="create_enterprise"),
+    path('<int:pk>/edit/enterprise', EditEnterpriseView.as_view(), name="edit_enterprise"),
     path('<int:pk>/view/', FarmProfileDetailView.as_view(), name="view_farm_profile"),    
+
 ]
