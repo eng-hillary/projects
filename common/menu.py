@@ -139,7 +139,7 @@ menus = [
             menu.PassTestNode(id='pests_and_diseases',
                               label='<i class="fa fa-circle"></i>Queries',
                              
-                              pattern_name='farm:create_query', test=can_view_pest_and_diseases),
+                              pattern_name='farm:query_list', test=can_view_pest_and_diseases),
  
          
          
