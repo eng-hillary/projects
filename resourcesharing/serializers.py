@@ -3,10 +3,15 @@ from .models import (Resource, ResourceSharing, ResourceBooking)
 
 
 class ResourceSerializer(serializers.ModelSerializer):
+    owner = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     class Meta:
         model = Resource
-        fields = ['resource_name', 'owner', 'contacts', 'resource_category', 'latitude', 'longitude',
-        'termsandconditions', 'resource_status', 'availability_date_and_time', 'price']
+        fields = ['id','resource_name', 'owner', 'Phone_number1', 'Phone_number2','resource_category', 'latitude', 'longitude',
+        'terms_and_conditions', 'resource_status', 'available_from','available_to', 'price','image']
+
+    def get_user_full_name(self, obj):
+        return '{} {}'.format(obj.owner.user.first_name, obj.owner.user.last_name)
+
 
 class ResourceSharingSerializer(serializers.ModelSerializer):
     class Meta:
