@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel)
 from django.contrib.auth.models import User
-from common .choices import (ACTION_TYPE, TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO,QUERIES)
+from common .choices import (TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO,QUERIES)
 from geopy.geocoders import Nominatim
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
@@ -122,7 +122,7 @@ class Produce(TimeStampedModel, models.Model):
 
 
 class FarmProduce(TimeStampedModel, models.Model):
-    farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_produces')
+    enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_produces')
     produce = models.ForeignKey(Produce, on_delete=models.DO_NOTHING)
     quantity = models.FloatField(blank=False, null=False)
     description = models.TextField( blank=True, null=True)
@@ -131,19 +131,18 @@ class FarmProduce(TimeStampedModel, models.Model):
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.farm)
+        return str(self.produce)
 
 
 class FinancialRecord(TimeStampedModel, models.Model):
-    farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_financial_record')
+    enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_financial_record')
     transaction_type = models.CharField(choices=TRANSACTION_TYPE, max_length=100, null=False)
-    spent_on = models.CharField(max_length=200)
-    transaction_from = models.CharField(max_length=100)
-    transaction_to = models.CharField(max_length=100)
-    amount = models.FloatField(blank=False, null=False)
+    spent_on = models.CharField(_('Payment for'),max_length=200)
+    transaction_to = models.CharField(_('Payment To/From'),max_length=100)
+    amount = models.FloatField(_('Amount paid'),blank=False, null=False)
     quantity = models.FloatField()
     means_of_payment = models.CharField(max_length=20, blank=False, null=False, choices=PAYMENT_MODE)
-    transaction_date = models.DateField()
+    transaction_date = models.DateField(auto_now=True)
     description = models.TextField( blank=True, null=True)
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -164,21 +163,27 @@ class PestAndDisease(TimeStampedModel, models.Model):
 
     def __str__(self):
         return self.description
+class RecordType(models.Model):
+    name = models.CharField(max_length=100,null=False,blank=False)
+
+    def __str__(self):
+        return self.name
 
 
 class FarmRecord(TimeStampedModel, models.Model):
 
     enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=True, blank=False, related_name='farm_records')
-    activity_type = models.CharField(max_length=30, choices=ACTION_TYPE)
-    activity = models.CharField(max_length=200, null=False, blank=False)
+    record_type = models.ForeignKey(RecordType,null=True, blank=True, on_delete=models.DO_NOTHING)
+    name = models.CharField(_('Activity'),max_length=200, null=False, blank=False)
     from_date = models.DateField()
     to_date = models.DateField()
     description = models.TextField( blank=True, null=True)
     # person responsible
-    taken_by = models.CharField(blank=False, null=True, max_length=100)
-    contact =  PhoneNumberField(_('Phone number 1'), blank=False, null=True)
+    taken_by = models.CharField(_('Taken by'), blank=False, null=True, max_length=100)
+    contact =  PhoneNumberField(_('Phone number'), blank=False, null=True)
+    next_activity_date = models.DateField(null=True, blank=True)
     #reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
     def __str__(self):
-        return self.activity
+        return self.name

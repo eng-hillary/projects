@@ -7,7 +7,8 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Enterprise List
+                    <h3>Farm Records
+                    
                     </h3>
                 </div>
             </div>
@@ -15,22 +16,23 @@
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Farms</li>
-                    <li class="breadcrumb-item active">Enterprise List</li>
+                    <li class="breadcrumb-item active">Farm Records</li>
                 </ol>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Container-fluid Ends-->
 
 
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
+  {% if request.user.is_superuser or perms.farm.delete_farm %}
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
+  {% endif %}
 </div>
 <table
 id="table"
@@ -55,26 +57,23 @@ data-data-field="results"
 data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
 data-page-list="[10, 25, 50, 100, all]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/farm/api/enterprise/"
+  data-url="/farm/api/farmrecords/"
   data-response-handler="responseHandler">
   <thead>
     <tr>
+      {% if request.user.is_superuser or perms.farm.delete_farmrecord %}
       <th data-field="state" data-checkbox="true"></th>
-      <th data-field="name" data-sortable="true">Name</th>
-      <th data-field="sector" data-sortable="true">Sector</th>
-      <th data-field="farm" data-sortable="true">Farm</th>
-      <th data-field="enterprise_type" data-sortable="true">Type</th>
-      <th data-field="land_occupied" data-sortable="true">Land Occupied(acres)</th>
-      
-      <th data-field="start_date" data-sortable="true">Start Date</th>
-      <th data-field="status" data-sortable="true">Status</th>
-      <th data-field="animal_seed_density" data-visible="false" data-sortable="true">Animal/Seed Density</th>
-      <th data-field="capital_invested" data-visible="false" data-sortable="true">Capital Invested</th>
-      <th data-field="return_on_investment" data-visible="false" data-sortable="true">Expected Return on Investment</th>
-      <th data-field="from_period" data-visible="false" data-sortable="true">Period</th>
-      <th data-field="description" data-visible="false" data-sortable="true">Description</th>
-      <th data-field="image" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
-      <th data-field="close_date" data-visible="false" data-sortable="true">Closing Date</th>
+      {% endif %}
+      <th data-field="enterprise" data-sortable="true">Enterprise</th>
+      <th data-field="name" data-sortable="true">Activity</th>
+      <th data-field="record_type" data-sortable="true">Type</th>
+     
+      <th data-field="from_date" data-sortable="true">From</th>
+      <th data-field="to_date"  data-sortable="true">To</th>
+      <th data-field="taken_by"  data-sortable="true">Taken by</th>
+      <th data-field="contact" data-visible="false" data-sortable="true">Contact</th>
+      <th data-field="next_activity_date" data-visible="false" data-sortable="true">Next Activity Date</th>
+      <th data-field="description" data-visible="false"   data-sortable="true">Description</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
     </tr>
@@ -82,8 +81,7 @@ data-page-list="[10, 25, 50, 100, all]"
 </table>
  <!--bootstrap table ends here-->
  {% endblock %}
-<!-- latest jquery-->
-{% block javascript %}
+ {% block javascript %}
 <script>
   var $table = $('#table');
   var $remove = $('#remove')
@@ -101,32 +99,20 @@ data-page-list="[10, 25, 50, 100, all]"
     return res
   }
   //displays an image
- function imageFormatter(value, row) {
+    function imageFormatter(value, row) {
       var url =row.image;
     return '<img class="img-thumbnail" src="'+url+'">'
   }
   function operateFormatter(value, row, index) {
     console.log(row.id);
-    var url ="/farm/"+row.id+"/edit/enterprise";
-    var create_farmrecord_url ="/farm/create/record/"+row.id;
-    var create_financialrecord_url ="/farm/create/financilrecord/"+row.id;
+    var url ="/farm/"+row.id+"/edit/farmrecord";
     return [
-   
+    {% if request.user.is_superuser or perms.farm.change_farmrecord %}
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
-      {% if request.user.is_superuser or perms.farm.add_farmrecord %}
-      '<a class="Edit " href="'+create_farmrecord_url+'" title="Add Farm Record">',
-      '<i class="fa fa-plus"></i>',
-      '</a>  ',
         {% endif %}
-
-        {% if request.user.is_superuser or perms.farm.add_financialrecord %}
-      '<a class="Edit " href="'+create_financialrecord_url+'" title="Add Financial Record">',
-      '<i class="fa fa-plus"></i>',
-      '</a>  ',
-        {% endif %}
-
+     
     ].join('')
   }
 
@@ -179,7 +165,7 @@ for(id=0; id<ids.length; id++){
     console.log(ids[id]);
 
 $.ajax({
-    url: "/farm/api/enterprise/"+ids[id],
+    url: "/farm/api/farmrecords/"+ids[id],
     data: {},
     headers:{"X-CSRFToken": getCookie("csrftoken")},
     type: 'DELETE',
@@ -219,4 +205,4 @@ $('#locale').change(initTable)
 </script>
  
 
-{% endblock %}
+ {% endblock %}
