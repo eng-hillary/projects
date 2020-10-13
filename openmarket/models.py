@@ -147,9 +147,6 @@ class Service(models.Model):
     lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your industry location")
 
 
-
-
-
     class meta:
         ordering =("service_type")
 
@@ -159,7 +156,11 @@ contact details
 availability date and time
 terms and conditions
 
+select an enterprise for value addition and sorting and graining 
+
+
 """
+
 class ContactDetails(models.Model):
     name = models.CharField(max_length=25, null=True)
     #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
