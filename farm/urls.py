@@ -12,6 +12,7 @@ CreateFarmFinancialRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsL
 
 
 
+
 router = routers.DefaultRouter()
 
 router.register(r'farms', views.FarmViewSet,'farm-api')
@@ -35,6 +36,7 @@ urlpatterns = [
     path('<int:pk>/edit/sector', SectorDetail.as_view(), name="edit_sector"),
     path('create/sector', CreateSector.as_view(), name="create_sector"),
     path('create/query', CreateQueryView.as_view(), name="create_query"),
+    path('<int:pk>/edit/query', EditQueryView.as_view(), name="edit_query"),
     path('queries', QueryList.as_view(), name='query_list'),
     path('enterprises', EnterpriseList.as_view(), name='enterprise_list'),
     path('create/enterprise/<int:farm_pk>', CreateEnterpriseView.as_view(), name="create_enterprise"),

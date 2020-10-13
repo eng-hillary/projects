@@ -7,16 +7,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Services List
-                      <small><a class="add-new" href="{% url 'openmarket:service_registration' %}">Add new</a></small>
+                    <h3>ServiceProvider List
+                      <small><a class="add-new" href="{% url 'openmarket:serviceprovider_registration' %}">Add new</a></small>
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Services</li>
-                    <li class="breadcrumb-item active">Services List</li>
+                    <li class="breadcrumb-item">ServiceProvider</li>
+                    <li class="breadcrumb-item active">serviceprovider List</li>
                 </ol>
             </div>
         </div>
@@ -32,7 +32,12 @@
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i> 
   </button>
-  
+  <button id="decline" class="btn btn-decline" title="Decline" disabled>
+    <i class="fa fa-times"></i>
+  </button>
+  <button id="approve" class="btn btn-primary" title="Approve" disabled>
+    <i class="fa fa-check"></i>
+  </button>
 </div>
 <table
   id="table"
@@ -55,14 +60,22 @@
   <thead>
     <tr>
       <th data-field="state" data-checkbox="true"></th>
-      <th data-field="user.full_name" data-sortable="true">Service Provider</th>
+      <th data-field="full_name" data-sortable="true">Service Provider</th>
       <th data-field="service_name" data-visible="false"  data-sortable="true">Service Name</th>
+      <th data-field="lon" data-visible="false"  data-sortable="true">Longitude</th>
+      <th data-field="lat" data-visible="false"  data-sortable="true">Latitude</th>
       <th data-field="category" data-visible="false"  data-sortable="true">Category</th>
+
+      <th data-field="name_of_storage_center" data-visible="false"  data-sortable="true">Name of Storage Centre</th>
+      <th data-field="location_of_storage_center" data-visible="false"  data-sortable="true">Location of storage centre</th>
+      <th data-field="vehicle_type" data-visible="false"  data-sortable="true">Vehicle Type</th>
+      <th data-field="vehicle_capacity" data-visible="false"  data-sortable="true">Vehicle Capacity</th>
+    
       <th data-field="service_type" data-sortable="true">Service Type</th>
       <th data-field="size" data-sortable="true">Size</th>
       <th data-field="availability_date" data-sortable="true">Availability Date</th>
       <th data-field="picture" data-visible="true"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
-      <th data-formatter="operateFormatter" data-events="operateEvents" class="text-center">Action</th>     
+      <th data-formatter="operateFormatter" data-events="operateEvents" class="text-center">Action</th>      
     </tr>
   </thead>
 </table>
@@ -90,7 +103,10 @@
     return res
   }
 
-
+  function imageFormatter(value, row) {
+    var url =row.picture;
+  return '<img class="img-thumbnail" src="'+url+'">'
+}
   function operateFormatter(value, row, index) {
     var url ="/openmarket/"+row.id+"/edit"
     var view_url ="/openmarket/"+row.id+"/view"
@@ -106,11 +122,6 @@
 
     ].join('')
   }
-
-  function imageFormatter(value, row) {
-    var url =row.picture;
-  return '<img class="img-thumbnail" src="'+url+'">'
-}
 
   window.operateEvents = {
     'click .Detail': function (e, value, row, index) {
@@ -188,7 +199,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/api-openmarket/serviceregistration/"+ids[id],
+        url: "/api-openmarket/serviceproviders/"+ids[id],
 
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},

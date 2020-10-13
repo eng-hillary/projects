@@ -124,16 +124,31 @@ class ServiceProvider(models.Model):
         ordering =("service_type")
 
 class Service(models.Model):
+    enterprise = models.CharField(max_length=50, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
     category = models.CharField(choices=SERVICE_CATEGORY,null=True, max_length=50)
     service_name = models.CharField(max_length=200, null=True)
     service_type = models.CharField(max_length=50, null=True)
-    size =  models.FloatField(max_length=50, null=True)
+    size =  models.FloatField(max_length=50, null=True,blank=True)
     terms_and_conditions = models.BooleanField(default=True)
     availability_date = models.DateField(blank=True, null=True)
     availability_time = models.DateTimeField(auto_now_add=True, null=True) 
     picture = models.ImageField(null=True, blank=True)
-
+    description = models.TextField(blank=True)
+    available_services = models.CharField(max_length=50, blank=True)
+    #status = models.CharField(choices=STATUS, default='True', max_length=20, null=False, blank=True)
+    #inventory_status = models.CharField(choices=INVENTORY_STATUS, default=True, max_length=20,null=False, blank=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    rent = models.CharField(max_length=25, null=True, blank=True)
+    name_of_storage_center = models.CharField(max_length=50, null=True,blank=True)
+    location_of_storage_center = models.CharField(null=True, max_length=50, blank=True)  
+    certification_status = models.BooleanField(_('Is the Service Certified'),choices = YES_OR_NO, null=True, blank=True)
+    vehicle_type = models.CharField(max_length=100, null = True, blank=True)
+    vehicle_capacity = models.FloatField(max_length=50, null=True, help_text="capacity of your vehicle in tonnes", blank=True)
+    lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your industry location")
+    lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your industry location")
+    others = models.CharField(_('Please state the category if its not among the above'), blank=True, null=True, max_length=100)
+    
     class meta:
         ordering =("service_type")
 
@@ -143,7 +158,14 @@ contact details
 availability date and time
 terms and conditions
 
+select an enterprise for value addition and sorting and graining 
+capacity for transport
+size in square feet
+
+
+
 """
+
 class ContactDetails(models.Model):
     name = models.CharField(max_length=25, null=True)
     #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
@@ -162,37 +184,26 @@ class Logistics(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, max_length=50)
     contact_details = models.ForeignKey(ContactDetails, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-    description = models.TextField(blank=True)
-    status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
-    inventory_status = models.CharField(choices=INVENTORY_STATUS, default=True, max_length=20,null=False)
-
+  
 
     class Meta:
         ordering =("name",)
 
 class Storage(models.Model):
-    name = models.CharField(max_length=50, null=True)
-    location = models.CharField(null=True, max_length=50)   
+    storage = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
+     
     size = models.FloatField(null=True)
     type = models.CharField(max_length=50, null=False)
-    description = models.TextField(blank=True)
-    available_services = models.CharField(max_length=50, blank=True)
-    status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
-    inventory_status = models.CharField(choices=INVENTORY_STATUS, default=True, max_length=20,null=False)
+    
 
-
-
-    class Meta:
-        ordering =("name",)
         
-class Packaging(models.Model):
+class Packaging(models.Model): #value addition. 
     name = models.CharField(max_length=50, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.CharField(null=True, max_length=50) 
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
-    rent = models.CharField(max_length=25, null=True)
+    #rent = models.CharField(max_length=25, null=True)
 
     class Meta:
         ordering =("name",)
