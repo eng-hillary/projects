@@ -11,6 +11,7 @@ FarmProfileDetailView,EditQueryView,QueryList)
 
 
 
+
 router = routers.DefaultRouter()
 
 router.register(r'farms', views.FarmViewSet,'farm-api')

@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             name='inventory_status',
             field=models.CharField(choices=[(None, '--please select--'), ('availabe', 'Available'), ('not_available', 'Not Available')], default=True, max_length=20),
         ),
-                migrations.RemoveField(
+        migrations.RemoveField(
             model_name='packaging',
             name='rent',
         ),
@@ -60,4 +60,5 @@ class Migration(migrations.Migration):
             name='status',
             field=models.CharField(choices=[(None, '--please select--'), ('Active', 'Active'), ('Pending', 'Pending'), ('Rejected', 'Rejected')], default='True', max_length=20),
         ),
+
     ]
