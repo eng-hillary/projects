@@ -65,14 +65,9 @@ YES_OR_NO=(
     (False, 'No')
 )
 
-ACTION_TYPE = (
-    ('planting','Planting'),
-    ('treatment', 'Treatment'),
-    ('weeding', 'Weeding'),
-    ('harvesting', 'Harvesting')
-)
 
 TRANSACTION_TYPE = (
+    (None, '--please select--'),
     ('income', 'Income'),
     ('expense', 'expense')
 )
@@ -82,7 +77,7 @@ PAYMENT_MODE = (
     ('cash', 'Cash'),
     ('bank', 'Bank Transfer'),
     ('cheque', 'Cheque'),
-    ('mobilemoney', 'mobilemoney'),
+    ('mobilemoney', 'Mobile Money'),
     ('credit_card', 'credit card'),
     ('others', 'Others')
 

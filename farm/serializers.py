@@ -17,7 +17,7 @@ class FarmSerializer(serializers.ModelSerializer):
     #sector = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
 
     location = serializers.CharField(source='compute_location')
-    farmer = FarmerProfileSerializer()
+    farmer = serializers.SerializerMethodField(method_name='get_farmer_name',source='farmer')
     status = serializers.CharField(source='get_status_display')
     availability_of_services = serializers.SerializerMethodField(method_name='conversion_bool',source='availability_of_services')
     availability_of_water = serializers.SerializerMethodField(method_name='water_conv_bool',source='availability_of_water')
@@ -27,7 +27,10 @@ class FarmSerializer(serializers.ModelSerializer):
         fields = ('id', 'farm_name', 'farmer', 'lat', 'lon','location',
          'start_date','close_date',  'image','availability_of_services','availability_of_water','land_occupied','available_land', 'status', 'general_remarks')
 
-    
+    def get_farmer_name(self, obj):
+        return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
+
+
     def conversion_bool(self, instance):
         if instance.availability_of_services == True:
             return "Yes"
@@ -42,9 +45,20 @@ class FarmSerializer(serializers.ModelSerializer):
 
 
 class FarmRecordSerializer(serializers.ModelSerializer):
-    
+    record_type = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     class Meta:
         model = FarmRecord
+        fields = '__all__'
+
+
+class FarmFinancilRecordSerializer(serializers.ModelSerializer):
+    enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    transaction_type = serializers.CharField(source='get_transaction_type_display')
+    means_of_payment = serializers.CharField(source='get_means_of_payment_display')
+
+    class Meta:
+        model = FinancialRecord
         fields = '__all__'
 
 
@@ -57,8 +71,8 @@ class EnterpriseTypeSerializer(serializers.ModelSerializer):
 
 
 class EnterpriseSerializer(serializers.ModelSerializer):
-    farm = FarmSerializer()
-    sector = SectorSerializer()
+    farm = serializers.SlugRelatedField(many=False,read_only=True, slug_field='farm_name')
+    sector = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     class Meta:
         model = Enterprise
         fields = '__all__'
