@@ -5,7 +5,8 @@ from . import views
 
 from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
 CreateFarmView, EditFarmView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
-FarmProfileDetailView,QueryList)
+FarmProfileDetailView,EditQueryView,QueryList)
+
 
 
 
@@ -32,6 +33,7 @@ urlpatterns = [
     path('<int:pk>/edit/sector', SectorDetail.as_view(), name="edit_sector"),
     path('create/sector', CreateSector.as_view(), name="create_sector"),
     path('create/query', CreateQueryView.as_view(), name="create_query"),
+    path('<int:pk>/edit/query', EditQueryView.as_view(), name="edit_query"),
     path('queries', QueryList.as_view(), name='query_list'),
     path('enterprises', EnterpriseList.as_view(), name='enterprise_list'),
     path('create/enterprise/<int:farm_pk>', CreateEnterpriseView.as_view(), name="create_enterprise"),

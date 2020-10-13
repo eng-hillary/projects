@@ -30,10 +30,7 @@ class Migration(migrations.Migration):
             model_name='logistics',
             name='name_of_storage_center',
         ),
-        migrations.RemoveField(
-            model_name='logistics',
-            name='rent',
-        ),
+      
         migrations.RemoveField(
             model_name='logistics',
             name='status',

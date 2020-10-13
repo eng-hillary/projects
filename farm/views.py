@@ -132,6 +132,39 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
+# update farm view
+class EditQueryView(LoginRequiredMixin,UpdateView):
+    model =PestAndDisease
+    template_name = 'create_query.html'
+    success_url = reverse_lazy('farm:query_list')
+    form_class = QueryForm
+    success_message = "Query has been updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditQueryView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditQueryView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+        farm.save()
+        return redirect('farm:query_list')
+
+
 
 # views for enterprise
 class EnterpriseViewSet(viewsets.ModelViewSet):
@@ -305,7 +338,7 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
+            'message': 'Your '+farm.name + ' Details have been updated sucessfully',
             })
         to_email = farm.farmer.user.email
         email = EmailMessage(
