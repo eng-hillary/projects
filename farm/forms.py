@@ -1,6 +1,8 @@
-from .models  import Farm, Enterprise, Sector, PestAndDisease
+from .models  import (Farm, Enterprise, Sector, PestAndDisease,FarmRecord,FinancialRecord)
 from django import forms
 from farmer.models import FarmerProfile
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
 
@@ -50,3 +52,38 @@ class EnterpriseForm(forms.ModelForm):
         farmersectors = FarmerProfile.objects.filter(user=self.request.user).values('sector')
         self.fields['sector'].queryset = Sector.objects.filter(id__in=farmersectors)
         self.fields['farm'].queryset = Farm.objects.filter(farmer_id=self.request.user.id)
+
+
+class FarmRecordForm(forms.ModelForm):
+    from_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    to_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    next_activity_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    contact = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
+  
+    class Meta:
+        model = FarmRecord
+        exclude = ['status']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(FarmRecordForm, self).__init__(*args, **kwargs)
+        self.fields['description'].widget.attrs.update({'rows': '2'})
+        self.fields['record_type'].empty_label = '--please select--'
+        self.fields['enterprise'].empty_label = None
+        farms = Farm.objects.filter(farmer_id=self.request.user.id)
+        self.fields['enterprise'].queryset = Enterprise.objects.filter(farm__in=farms)
+
+
+class FarmFnancialRecordForm(forms.ModelForm):
+   
+    class Meta:
+        model = FinancialRecord
+        exclude = ['reported_by','transaction_date']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(FarmFnancialRecordForm, self).__init__(*args, **kwargs)
+        self.fields['description'].widget.attrs.update({'rows': '2'})
+        self.fields['enterprise'].empty_label = None
+        farms = Farm.objects.filter(farmer_id=self.request.user.id)
+        self.fields['enterprise'].queryset = Enterprise.objects.filter(farm__in=farms)

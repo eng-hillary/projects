@@ -16,9 +16,8 @@ class GroupSerializer(serializers.ModelSerializer):
 class FarmerProfileSerializer(serializers.ModelSerializer):
 
     user_id = serializers.SerializerMethodField(method_name='get_id')
-    #user = serializers.SerializerMethodField(method_name='get_user_full_name')
+    user = serializers.SerializerMethodField(method_name='get_user_full_name')
     sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
-    user = UserSerializer()
     region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
