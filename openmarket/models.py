@@ -148,7 +148,7 @@ class Service(models.Model):
     lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your industry location")
     lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your industry location")
     others = models.CharField(_('Please state the category if its not among the above'), blank=True, null=True, max_length=100)
-
+    
     class meta:
         ordering =("service_type")
 
