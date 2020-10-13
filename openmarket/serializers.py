@@ -108,11 +108,19 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
 
 
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.SerializerMethodField(method_name='get_user_full_name')
+    #user = UserSerializer()
+    full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='username')
+    serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
+
     class Meta:
         model = Service
-        fields = ('user','category', 'service_name', 'service_type', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture')
-    
+        fields = ('user','category', 'service_name', 'service_type', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
+        'available_services','rent','name_of_storage_center','location_of_storage_center','certification_status',
+        'vehicle_type','vehicle_capacity','lat','lon','others','full_name')
+   
+    def get_user_full_name(self, obj):
+        return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
 class ContactDetailsSerializer(serializers.ModelSerializer):
     class Meta:

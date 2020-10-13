@@ -23,6 +23,7 @@ from .views import (ProductList,
                     ServiceProviderViewSet,
                     UpdateServiceProviderProfile,
                     ServiceProviderProfileDetailView,
+                    ServiceDetailView
                      )
 
 router = routers.DefaultRouter()
@@ -78,7 +79,7 @@ urlpatterns = [
     path('<int:pk>/edit/', UpdateServiceProviderProfile.as_view(), name="edit_service_provider_profile"),
     path('<int:pk>/view/', ServiceProviderProfileDetailView.as_view(), name="view_serviceprovider_profile"),
     path('<int:pk>/edit/', UpdateServiceProviderProfile.as_view(), name="edit_service_provider_profile"),
-    path('<int:pk>/view/', ServiceProviderProfileDetailView.as_view(), name="view_serviceprovider_profile"),
+    path('<int:pk>/viewservice/', ServiceDetailView.as_view(), name="view_service"),
 ]
 
 
