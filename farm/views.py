@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm)
+from .models import (Sector, Enterprise, Farm, PestAndDisease, FarmRecord)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer)
+,FarmMapSerializer,  PestAndDiseaseSerializer, FarmRecordSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -16,7 +16,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from .forms import (FarmForm,EnterpriseForm)
+from .forms import (FarmForm,EnterpriseForm,QueryForm)
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -76,14 +76,87 @@ class CreateSector(LoginRequiredMixin, APIView):
         serializer.save()
         return redirect('farm:sector_list')
 
+
+class QueryList(LoginRequiredMixin, APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'query_list.html'
+
+    def get(self, request):
+       # queryset = Sector.objects.order_by('-id')
+        return Response()
+
+# farm api for queries
+class QueryViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = PestAndDisease.objects.all()
+    serializer_class = PestAndDiseaseSerializer
+    
+
+
+# create farm 
+class CreateQueryView(LoginRequiredMixin,CreateView):
+    template_name = 'create_query.html'
+    success_url = reverse_lazy('farm:query_list')
+    form_class = QueryForm
+    success_message = "Query has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateQueryView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateQueryView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+        farm.save()
+        return redirect('farm:query_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+
 # views for enterprise
 class EnterpriseViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows sectors to be viewed or edited.
     """
-    queryset = Enterprise.objects.all().order_by('-id')
+    queryset = Enterprise.objects.all().order_by('farm')
     serializer_class = EnterpriseSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the farms 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        farmer = FarmerProfile.objects.get(user=user)
+        farms = Farm.objects.filter(farmer =farmer)
+        enterprises = Enterprise.objects.all().order_by('farm')
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
+            queryset = enterprises
+        else:
+            queryset = enterprises.filter(farm__in=farms)
+        
+        return queryset
 
 
 class EnterpriseList(LoginRequiredMixin, APIView):
@@ -101,9 +174,23 @@ class FarmViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
-    queryset = Farm.objects.all().order_by('-id')
     serializer_class = FarmSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the farms 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        farmer = FarmerProfile.objects.get(user=user)
+        farms = Farm.objects.all().order_by('farmer')
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
+            queryset = farms
+        else:
+            queryset = farms.filter(farmer=farmer)
+        
+        return queryset
 
 
 # farm api for maps
@@ -165,7 +252,7 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.name + ' has been registered sucessfully',
+            'message': 'Your '+farm.farm_name + ' has been registered sucessfully',
             })
         to_email = farm.farmer.user.email
         email = EmailMessage(
@@ -301,12 +388,17 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
         initial['farm'] = Farm.objects.get(pk=self.kwargs['farm_pk'])
         return initial
 
-
+    def get_context_data(self, **kwargs):
+        context = super(CreateEnterpriseView, self).get_context_data(**kwargs)
+        farm = Farm.objects.get(pk=self.kwargs['farm_pk'])
+        context['landsize'] = farm.land_occupied
+        context['available_land'] = farm.available_land
+        return context
 
 
 # update Enterprise view
 class EditEnterpriseView(LoginRequiredMixin,UpdateView):
-    model =EnterpriseForm
+    model =Enterprise
     template_name = 'create_enterprise.html'
     success_url = reverse_lazy('farm:farm_list')
     form_class = EnterpriseForm
@@ -318,6 +410,7 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(EditEnterpriseView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
 
@@ -338,10 +431,10 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
          # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
         subject = 'Enterprise Updated Successfully'
-        message = render_to_string('enterprise_created_successful_email.html', {
+        message = render_to_string('enterprise_email.html', {
             'user': enterprise.farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+enterprise.farm.name + ' Details have been updated sucessfully',
+            'message': 'Your '+enterprise.name + ' Details have been updated sucessfully',
             })
         to_email = enterprise.farm.farmer.user.email
         email = EmailMessage(
@@ -349,7 +442,7 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
             )
         email.content_subtype = "html"
         email.send()
-        return redirect('farm:farm_list')
+        return redirect('farm:enterprise_list')
 
 
     def form_invalid(self, form):
@@ -366,3 +459,28 @@ class FarmProfileDetailView(DetailView):
         context['farmobject'] = self.object
         
         return context
+
+# farm record viewset
+class FarmRecordViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows sectors to be viewed or edited.
+    """
+    serializer_class = FarmRecordSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the farms 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        farmer = FarmerProfile.objects.get(user=user)
+        farms = Farm.objects.filter(farmer =farmer)
+        enterprises = Enterprise.objects.filter(farm__in=farms)
+        farmrecords = FarmRecord.objects.all().order_by('enterprise')
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
+            queryset = enterprises
+        else:
+            queryset = farmrecords.filter(enterprise__in=enterprises)
+        
+        return queryset
