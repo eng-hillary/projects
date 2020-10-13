@@ -61,7 +61,9 @@
       <th data-field="farm" data-sortable="true">Farm</th>
       <th data-field="description" data-sortable="true">Description</th>
       <th data-field="date_discovered" data-sortable="true">Date Discovered</th>
+
       <th data-field="image" data-visible="true"  data-formatter="imageFormatter" data-sortable="true">Image</th>
+
       <th data-field="action_taken" data-sortable="true">Action Taken</th>
       <th data-field="reporting_date" data-sortable="true">Reporting Date</th>
       <th data-field="solution" data-visible="false" data-sortable="true">Solution</th>
@@ -75,8 +77,12 @@
 <!-- latest jquery-->
 {% block javascript %}
 <script>
+
   var $table = $('#table');
   var $remove = $('#remove')
+
+  var $table = $('#table');
+
   var selections = []
 
   function getIdSelections() {
@@ -90,7 +96,7 @@
     })
     return res
   }
-  //displays an image
+
     function imageFormatter(value, row) {
       var url =row.image;
     return '<img class="img-thumbnail" src="'+url+'">'
@@ -198,8 +204,4 @@ $('#locale').change(initTable)
 
 
 
-
-</script>
- 
-
- {% endblock %}
+  {% endblock %}

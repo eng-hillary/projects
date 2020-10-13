@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm, PestAndDisease)
+from .models import (Sector, Enterprise, Farm, PestAndDisease, FarmRecord)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer,  PestAndDiseaseSerializer)
+,FarmMapSerializer,  PestAndDiseaseSerializer, FarmRecordSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -132,7 +132,6 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-
 # update farm view
 class EditQueryView(LoginRequiredMixin,UpdateView):
     model =PestAndDisease
@@ -164,6 +163,7 @@ class EditQueryView(LoginRequiredMixin,UpdateView):
         farm = form.save(commit=False)
         farm.save()
         return redirect('farm:query_list')
+
 
 
 # views for enterprise
@@ -285,7 +285,7 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.name + ' has been registered sucessfully',
+            'message': 'Your '+farm.farm_name + ' has been registered sucessfully',
             })
         to_email = farm.farmer.user.email
         email = EmailMessage(
@@ -492,3 +492,28 @@ class FarmProfileDetailView(DetailView):
         context['farmobject'] = self.object
         
         return context
+
+# farm record viewset
+class FarmRecordViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows sectors to be viewed or edited.
+    """
+    serializer_class = FarmRecordSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the farms 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        farmer = FarmerProfile.objects.get(user=user)
+        farms = Farm.objects.filter(farmer =farmer)
+        enterprises = Enterprise.objects.filter(farm__in=farms)
+        farmrecords = FarmRecord.objects.all().order_by('enterprise')
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
+            queryset = enterprises
+        else:
+            queryset = farmrecords.filter(enterprise__in=enterprises)
+        
+        return queryset

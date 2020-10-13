@@ -40,6 +40,7 @@ def can_view_pest_and_diseases(user, context):
     return user.has_perm('farm.view_pest_and_diseases')
 
 
+
 def can_view_resources(user, context):
     if user.is_superuser:
         return True
@@ -147,12 +148,13 @@ menus = [
                              
                               pattern_name='farm:query_list', test=can_view_pest_and_diseases),
 
+
             menu.PassTestNode(id='resources',
                               label='<i class="fa fa-circle"></i>Resources',
                              
                               pattern_name='resourcesharing:resource_list', test=can_view_resources),
  
- 
+
          
          
         ]
