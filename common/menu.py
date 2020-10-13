@@ -39,10 +39,17 @@ def can_view_pest_and_diseases(user, context):
         return True
     return user.has_perm('farm.view_pest_and_diseases')
 
+
+
+def can_view_resources(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('resourcesharing.can_view_resources')
+
 def can_view_service_provider(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('openmarket.view_serviceprovider')
+    return user.has_perm('farm.view_resources')
 
 def can_add_service_provider(user, context):
     if user.is_superuser:
@@ -140,7 +147,14 @@ menus = [
                               label='<i class="fa fa-circle"></i>Queries',
                              
                               pattern_name='farm:query_list', test=can_view_pest_and_diseases),
+
+
+            menu.PassTestNode(id='resources',
+                              label='<i class="fa fa-circle"></i>Resources',
+                             
+                              pattern_name='resourcesharing:resource_list', test=can_view_resources),
  
+
          
          
         ]

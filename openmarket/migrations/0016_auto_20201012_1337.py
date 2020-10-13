@@ -20,4 +20,45 @@ class Migration(migrations.Migration):
             name='inventory_status',
             field=models.CharField(choices=[(None, '--please select--'), ('availabe', 'Available'), ('not_available', 'Not Available')], default=True, max_length=20),
         ),
+        migrations.RemoveField(
+            model_name='packaging',
+            name='rent',
+        ),
+        migrations.RemoveField(
+            model_name='storage',
+            name='available_services',
+        ),
+        migrations.RemoveField(
+            model_name='storage',
+            name='description',
+        ),
+        migrations.RemoveField(
+            model_name='storage',
+            name='inventory_status',
+        ),
+        migrations.RemoveField(
+            model_name='storage',
+            name='status',
+        ),
+        migrations.AddField(
+            model_name='service',
+            name='available_services',
+            field=models.CharField(blank=True, max_length=50),
+        ),
+        migrations.AddField(
+            model_name='service',
+            name='description',
+            field=models.TextField(blank=True),
+        ),
+        migrations.AddField(
+            model_name='service',
+            name='inventory_status',
+            field=models.CharField(choices=[(None, '--please select--'), ('availabe', 'Available'), ('not_available', 'Not Available')], default=True, max_length=20),
+        ),
+        migrations.AddField(
+            model_name='service',
+            name='status',
+            field=models.CharField(choices=[(None, '--please select--'), ('Active', 'Active'), ('Pending', 'Pending'), ('Rejected', 'Rejected')], default='True', max_length=20),
+        ),
+
     ]

@@ -15,13 +15,16 @@ class Resource(models.Model):
     )
     resource_name = models.CharField(max_length=200, blank = False)
     owner = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
-    contacts = PhoneNumberField(blank = False)
+    Phone_number1 = PhoneNumberField(_('Phone number 1'), blank=False, null=True)
+    Phone_number2 = PhoneNumberField(_('Phone number 2'), blank=False, null=True)
     resource_category = models.CharField(choices=RESOURCE_CATEGORY, max_length=25, null=False, blank=False)
     latitude = models.FloatField(_('Latitude'), blank=True, null=True)
     longitude = models.FloatField(_('Longitude'), blank=True, null=True)
-    termsandconditions = models.TextField(max_length=400, blank = False)
+    terms_and_conditions = models.TextField(max_length=400, blank = False)
     resource_status = models.CharField(max_length=20, choices=RESOURCE_STATUS)
-    availability_date_and_time = models.DateTimeField(blank =False,null=True) #this should be a dynamic field
+    available_from = models.DateField(auto_now=True)
+    available_to = models.DateField(auto_now=True)
+    image = models.ImageField(null=True, blank=False)
     price = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
 
     def __str__(self):
