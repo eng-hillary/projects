@@ -1,8 +1,8 @@
+//map showing farms
 var H = Highcharts,
     map = H.maps['countries/ug/ug-all'],
     chart;
 
-// Add series with state capital bubbles
 Highcharts.getJSON('/farm/api/maps/', function (json) {
     var data = [];
     json.forEach(function (p) {
@@ -11,7 +11,7 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
     })
 
    
-    chart = Highcharts.mapChart('container', {
+    chart = Highcharts.mapChart('farm_container', {
         title: {
             text: 'Farmers Locations'
         },
@@ -91,7 +91,7 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
 
 
 // Display custom label with lat/lon next to crosshairs
-document.getElementById('container').addEventListener('mousemove', function (e) {
+document.getElementById('farm_container').addEventListener('mousemove', function (e) {
     var position;
     if (chart) {
         if (!chart.lab) {
@@ -120,11 +120,140 @@ document.getElementById('container').addEventListener('mousemove', function (e) 
 });
 
 
-document.getElementById('container').addEventListener('mouseout', function () {
+document.getElementById('farm_container').addEventListener('mouseout', function () {
     if (chart && chart.lab) {
         chart.lab.destroy();
         chart.lab = null;
     }
+});
+
+
+//map showing resources
+var R = Highcharts,
+    resource_map = R.maps['countries/ug/ug-all'],
+    chart;
+
+Highcharts.getJSON('/resourcesharing/api/resource/', function (json) {
+  var resource_data = [];
+  json.forEach(function (r) {
+      r.z = r.price;
+      resource_data.push(r);
+  })
+//console.log(resource_data);
+ 
+  chart = Highcharts.mapChart('resource_container', {
+      title: {
+          text: 'resource Locations'
+      },
+      
+      mapNavigation: {
+          enabled: true,
+          buttonOptions: {
+              verticalAlign: 'bottom'
+          }
+      },
+     
+      tooltip: {
+          pointFormat: 'id: {point.id}<br>' +
+              'resource_name: {point.resource_name}<br>' +
+              'owner: {point.owner}<br>' +
+              'price: {point.price}<br>' + 'shs'
+    
+      },
+
+      xAxis: {
+          crosshair: {
+              zIndex: 5,
+              dashStyle: 'dot',
+              snap: false,
+              color: 'gray'
+          }
+      },
+
+      yAxis: {
+          crosshair: {
+              zIndex: 5,
+              dashStyle: 'dot',
+              snap: false,
+              color: 'gray'
+          }
+      },
+      plotOptions:{
+          series:{
+              point:{
+                  events:{
+                      click: function(event){
+                           var url = "/resourcesharing/"+ event.point.id +"/view/";
+                           window.location.href = url;
+                          //alert(event.point.id);
+                      }
+                  }
+              }
+          }
+      },
+      series: [{
+          name: 'Basemap',
+          mapData: resource_map,
+          borderColor: '#B0B0B0',
+          nullColor: 'rgba(200, 200, 200, 0.2)',
+          showInLegend: false
+      }, {
+          name: 'Separators',
+          type: 'mapline',
+          data: R.geojson(resource_map, 'mapline'),
+          color: '#101010',
+          enableMouseTracking: false,
+          showInLegend: false
+      }, {
+          type: 'mapbubble',
+          dataLabels: {
+              enabled: true,
+              format: '{point.resource_name}'
+          },
+          name: 'Resources',
+          data: resource_data,
+          maxSize: '5%',
+          color: R.getOptions().colors[0]
+      }]
+  });
+});
+
+
+// Display custom label with lat/lon next to crosshairs
+document.getElementById('resource_container').addEventListener('mousemove', function (e) {
+  var position;
+  if (chart) {
+      if (!chart.lab) {
+          chart.lab = chart.renderer.text('', 0, 0)
+              .attr({
+                  zIndex: 5
+              })
+              .css({
+                  color: '#505050'
+              })
+              .add();
+      }
+
+      e = chart.pointer.normalize(e);
+      position = chart.fromPointToLatLon({
+          x: chart.xAxis[0].toValue(e.chartX),
+          y: chart.yAxis[0].toValue(e.chartY)
+      });
+    
+      chart.lab.attr({
+          x: e.chartX + 5,
+          y: e.chartY - 22,
+          text: 'Lat: ' + position.lat.toFixed(2) + '<br>Lon: ' + position.lon.toFixed(2)
+      });
+  }
+});
+
+
+document.getElementById('resource_container').addEventListener('mouseout', function () {
+  if (chart && chart.lab) {
+      chart.lab.destroy();
+      chart.lab = null;
+  }
 });
 
 
@@ -519,7 +648,7 @@ Highcharts.getJSON('/api-farmer/farmerprofiles/', function (json) {
       data.push(p);
   })
 
-console.log(data);
+//console.log(data);
 
 
 
