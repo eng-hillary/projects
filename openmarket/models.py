@@ -133,6 +133,22 @@ class Service(models.Model):
     availability_date = models.DateField(blank=True, null=True)
     availability_time = models.DateTimeField(auto_now_add=True, null=True) 
     picture = models.ImageField(null=True, blank=True)
+    description = models.TextField(blank=True)
+    available_services = models.CharField(max_length=50, blank=True)
+    status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
+    inventory_status = models.CharField(choices=INVENTORY_STATUS, default=True, max_length=20,null=False)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    rent = models.CharField(max_length=25, null=True)
+    name_of_storage_center = models.CharField(max_length=50, null=True)
+    location_of_storage_center = models.CharField(null=True, max_length=50)  
+    certification_status = models.BooleanField(choices = YES_OR_NO, null=True)
+    vehicle_type = models.CharField(max_length=100, null = True)
+    lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your industry location")
+    lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your industry location")
+
+
+
+
 
     class meta:
         ordering =("service_type")
@@ -162,37 +178,26 @@ class Logistics(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, max_length=50)
     contact_details = models.ForeignKey(ContactDetails, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-    description = models.TextField(blank=True)
-    status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
-    inventory_status = models.CharField(choices=INVENTORY_STATUS, default=True, max_length=20,null=False)
-
+  
 
     class Meta:
         ordering =("name",)
 
 class Storage(models.Model):
-    name = models.CharField(max_length=50, null=True)
-    location = models.CharField(null=True, max_length=50)   
+    storage = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
+     
     size = models.FloatField(null=True)
     type = models.CharField(max_length=50, null=False)
-    description = models.TextField(blank=True)
-    available_services = models.CharField(max_length=50, blank=True)
-    status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
-    inventory_status = models.CharField(choices=INVENTORY_STATUS, default=True, max_length=20,null=False)
+    
 
-
-
-    class Meta:
-        ordering =("name",)
         
-class Packaging(models.Model):
+class Packaging(models.Model): #value addition. 
     name = models.CharField(max_length=50, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     location = models.CharField(null=True, max_length=50) 
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
-    rent = models.CharField(max_length=25, null=True)
+    #rent = models.CharField(max_length=25, null=True)
 
     class Meta:
         ordering =("name",)
