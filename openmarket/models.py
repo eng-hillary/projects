@@ -124,6 +124,7 @@ class ServiceProvider(models.Model):
         ordering =("service_type")
 
 class Service(models.Model):
+    enterprise = models.CharField(max_length=50, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
     category = models.CharField(choices=SERVICE_CATEGORY,null=True, max_length=50)
     service_name = models.CharField(max_length=200, null=True)
@@ -141,11 +142,12 @@ class Service(models.Model):
     rent = models.CharField(max_length=25, null=True)
     name_of_storage_center = models.CharField(max_length=50, null=True)
     location_of_storage_center = models.CharField(null=True, max_length=50)  
-    certification_status = models.BooleanField(choices = YES_OR_NO, null=True)
+    certification_status = models.BooleanField(_('Is the Service Certified'),choices = YES_OR_NO, null=True)
     vehicle_type = models.CharField(max_length=100, null = True)
+    vehicle_capacity = models.FloatField(max_length=50, null=True, help_text="capacity of your vehicle in tonnes")
     lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your industry location")
     lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your industry location")
-
+    others = models.CharField(_('Please state the category if its not among the above'), blank=True, null=True, max_length=100)
 
     class meta:
         ordering =("service_type")
@@ -157,6 +159,9 @@ availability date and time
 terms and conditions
 
 select an enterprise for value addition and sorting and graining 
+capacity for transport
+size in square feet
+
 
 
 """
