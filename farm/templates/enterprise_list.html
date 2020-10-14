@@ -48,6 +48,10 @@ data-show-pagination-switch="true"
 data-pagination="true"
 data-id-field="id"
 data-toolbar="#toolbar"
+data-side-pagination="server"
+data-server-sort="false"
+data-total-field="count"
+data-data-field="results"
 data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
 data-page-list="[10, 25, 50, 100, all]"
   data-page-list="[10, 25, 50, 100, all]"
@@ -57,8 +61,8 @@ data-page-list="[10, 25, 50, 100, all]"
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="name" data-sortable="true">Name</th>
-      <th data-field="sector.name" data-sortable="true">Sector</th>
-      <th data-field="farm.farm_name" data-sortable="true">Farm</th>
+      <th data-field="sector" data-sortable="true">Sector</th>
+      <th data-field="farm" data-sortable="true">Farm</th>
       <th data-field="enterprise_type" data-sortable="true">Type</th>
       <th data-field="land_occupied" data-sortable="true">Land Occupied(acres)</th>
       
@@ -104,11 +108,24 @@ data-page-list="[10, 25, 50, 100, all]"
   function operateFormatter(value, row, index) {
     console.log(row.id);
     var url ="/farm/"+row.id+"/edit/enterprise";
+    var create_farmrecord_url ="/farm/create/record/"+row.id;
+    var create_financialrecord_url ="/farm/create/financilrecord/"+row.id;
     return [
    
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
+      {% if request.user.is_superuser or perms.farm.add_farmrecord %}
+      '<a class="Edit " href="'+create_farmrecord_url+'" title="Add Farm Record">',
+      '<i class="fa fa-plus"></i>',
+      '</a>  ',
+        {% endif %}
+
+        {% if request.user.is_superuser or perms.farm.add_financialrecord %}
+      '<a class="Edit " href="'+create_financialrecord_url+'" title="Add Financial Record">',
+      '<i class="fa fa-plus"></i>',
+      '</a>  ',
+        {% endif %}
 
     ].join('')
   }

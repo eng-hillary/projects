@@ -7,78 +7,81 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Resource List
-                      <small><a class="add-new" href="{% url 'resourcesharing:create_resource' %}">Add new</a></small>
+                    <h3>Farm Records
+                    
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Resources</li>
-                    <li class="breadcrumb-item active">Resource List</li>
+                    <li class="breadcrumb-item">Farms</li>
+                    <li class="breadcrumb-item active">Farm Records</li>
                 </ol>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Container-fluid Ends-->
 
 
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
+  {% if request.user.is_superuser or perms.farm.delete_farm %}
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
+  {% endif %}
 </div>
 <table
-  id="table"
-  data-toggle="table"
-  data-show-refresh="true"
-  data-show-toggle="true"
-  data-search="true"
-  data-show-fullscreen="true"
-  data-show-columns="true"
-  data-show-columns-toggle-all="true"
-  data-show-export="true"
-  data-click-to-select="true"
-  data-minimum-count-columns="2"
-  data-show-pagination-switch="true"
-  data-pagination="true"
-  data-id-field="id"
-  data-toolbar="#toolbar"
-  data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
+id="table"
+data-toggle="table"
+data-show-toggle="true"
+data-search="true"
+data-show-refresh="true"
+data-show-fullscreen="true"
+data-show-columns="true"
+data-show-columns-toggle-all="true"
+data-show-export="true"
+data-click-to-select="true"
+data-minimum-count-columns="2"
+data-show-pagination-switch="true"
+data-pagination="true"
+data-id-field="id"
+data-toolbar="#toolbar"
+data-side-pagination="server"
+data-server-sort="false"
+data-total-field="count"
+data-data-field="results"
+data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
+data-page-list="[10, 25, 50, 100, all]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-page-list="[10, 25, 50, 100, all]"
-  data-url="/resourcesharing/api/resource/"
+  data-url="/farm/api/farmrecords/"
   data-response-handler="responseHandler">
   <thead>
     <tr>
+      {% if request.user.is_superuser or perms.farm.delete_farmrecord %}
       <th data-field="state" data-checkbox="true"></th>
-      <th data-field="resource_name" data-sortable="true">Resource Name</th>
-      <th data-field="resource_category" data-visible="false" data-sortable="true">Resource Category</th>
-      <th data-field="owner" data-sortable="true">Owner</th>
-      <th data-field="Phone_number1" data-sortable="true">Phone Number1</th>
-      <th data-field="Phone_number2" data-visible="false" data-sortable="true">Phone Number2</th>
-      <th data-field="lat" data-visible="false"data-sortable="true">Latitude</th>
-      <th data-field="long" data-visible="false" data-sortable="true">Longitude</th>
-      <th data-field="terms_and_conditions" data-visible="false" data-sortable="true">Terms And Conditions</th>
-      <th data-field="resource_status" data-visible="false" data-sortable="true">Resource Status</th>
-      <th data-field="available_from" data-visible="false" data-sortable="true">Available From</th>
-      <th data-field="available_to" data-visible="false" data-sortable="true">Available To</th>
-      <th data-field="price" data-sortable="true">Price</th>
-      <th data-field="image" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Image</th>
+      {% endif %}
+      <th data-field="enterprise" data-sortable="true">Enterprise</th>
+      <th data-field="name" data-sortable="true">Activity</th>
+      <th data-field="record_type" data-sortable="true">Type</th>
+     
+      <th data-field="from_date" data-sortable="true">From</th>
+      <th data-field="to_date"  data-sortable="true">To</th>
+      <th data-field="taken_by"  data-sortable="true">Taken by</th>
+      <th data-field="contact" data-visible="false" data-sortable="true">Contact</th>
+      <th data-field="next_activity_date" data-visible="false" data-sortable="true">Next Activity Date</th>
+      <th data-field="description" data-visible="false"   data-sortable="true">Description</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
+                
     </tr>
   </thead>
 </table>
  <!--bootstrap table ends here-->
-
  {% endblock %}
-<!-- latest jquery-->
-{% block javascript %}
+ {% block javascript %}
 <script>
   var $table = $('#table');
   var $remove = $('#remove')
@@ -95,26 +98,21 @@
     })
     return res
   }
-   //displays an image
-     function imageFormatter(value, row) {
-       var url =row.image;
-     return '<img class="img-thumbnail" src="'+url+'">'
+  //displays an image
+    function imageFormatter(value, row) {
+      var url =row.image;
+    return '<img class="img-thumbnail" src="'+url+'">'
   }
   function operateFormatter(value, row, index) {
     console.log(row.id);
-    var url ="/resourcesharing/"+row.id+"/edit/resource";
-    var create_resource_url ="/resourcesharing/create/resource/"+row.id;
+    var url ="/farm/"+row.id+"/edit/farmrecord";
     return [
-    {% if request.user.is_superuser or perms.resourcesharing.change_resource %}
+    {% if request.user.is_superuser or perms.farm.change_farmrecord %}
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
         {% endif %}
-        {% if request.user.is_superuser or perms.resourcesharing.add_resource %}
-      '<a class="Edit " href="'+create_resource_url+'" title="Add Resource">',
-      '<i class="fa fa-plus"></i>',
-      '</a>  ',
-        {% endif %}
+     
     ].join('')
   }
 
@@ -167,13 +165,13 @@ for(id=0; id<ids.length; id++){
     console.log(ids[id]);
 
 $.ajax({
-    url: "/resourcesharing/api/resource/"+ids[id],
+    url: "/farm/api/farmrecords/"+ids[id],
     data: {},
     headers:{"X-CSRFToken": getCookie("csrftoken")},
     type: 'DELETE',
     contentType: 'application/json',
     success: function(result) {
-      console.log('deleted successful');
+      console.log('deleted successfule');
     },
    });
 swal("Your record/s have been deleted successfully!", {
