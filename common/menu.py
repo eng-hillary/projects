@@ -139,10 +139,13 @@ menus = [
                              
                               pattern_name='farm:farm_list', test=can_view_farms),
             menu.PassTestNode(id='enterprises',
-                              label='<i class="fa fa-circle"></i>Enterprises',
+                              label='<i class="fa fa-circle"></i>Enterprise Selection',
                              
                               pattern_name='farm:enterprise_list', test=can_view_enterprise),
-
+            menu.PassTestNode(id='enterprises',
+                              label='<i class="fa fa-circle"></i>Enterprises',
+                                        
+                             pattern_name='farm:enterprise_list', test=can_view_enterprise),
             menu.PassTestNode(id='pests_and_diseases',
                               label='<i class="fa fa-circle"></i>Queries',
                              
