@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, Storage, Packaging, Medical, SoilScience
+from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics,SoilScience
 from common.models import Region, District
 from .serializers import (ProductSerializer,
                         SellerSerializer, 
@@ -10,9 +10,6 @@ from .serializers import (ProductSerializer,
                         ServiceRegistrationSerializer,
                         ContactDetailsSerializer,
                         LogisticsSerializer,
-                        StorageSerializer,
-                        MedicalSerializer,
-                        PackagingSerializer,
                         SoilScienceSerializer,
                         ServiceProviderApprovalSerializer,
                         SellerApprovalSerializer
@@ -460,60 +457,60 @@ class LogiticsList(APIView):
 
 
 #views for StoragePackagingSerializerViewSet
-class StorageViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows products to be viewed or edited.
-    """
-    queryset = Storage.objects.all().order_by('name')
-    serializer_class = StorageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class StorageViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows products to be viewed or edited.
+#     """
+#     queryset = Storage.objects.all().order_by('name')
+#     serializer_class = StorageSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
 
-class StorageList(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'storage_list.html'
+# class StorageList(APIView):
+#     renderer_classes = [TemplateHTMLRenderer]
+#     template_name = 'storage_list.html'
 
-    def get(self, request):
-        queryset = Storage.objects.order_by('name')
-        return Response({'storages': queryset})
-
-
-#views for packaging
-class PackagingViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows products to be viewed or edited.
-    """
-    queryset = Packaging.objects.all().order_by('name')
-    serializer_class = PackagingSerializer
-    permission_classes = [permissions.IsAuthenticated]
+#     def get(self, request):
+#         queryset = Storage.objects.order_by('name')
+#         return Response({'storages': queryset})
 
 
-class PackagingList(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'packaging_list.html'
-
-    def get(self, request):
-        queryset = Packaging.objects.order_by('name')
-        return Response({'packagings': queryset})
-
-
-#views for packaging
-class MedicalViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows products to be viewed or edited.
-    """
-    queryset = Packaging.objects.all().order_by('name')
-    serializer_class = MedicalSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# #views for packaging
+# class PackagingViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows products to be viewed or edited.
+#     """
+#     queryset = Packaging.objects.all().order_by('name')
+#     serializer_class = PackagingSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
 
-class MedicalList(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'medical_list.html'
+# class PackagingList(APIView):
+#     renderer_classes = [TemplateHTMLRenderer]
+#     template_name = 'packaging_list.html'
 
-    def get(self, request):
-        queryset = Medical.objects.order_by('name')
-        return Response({'medicals': queryset})
+#     def get(self, request):
+#         queryset = Packaging.objects.order_by('name')
+#         return Response({'packagings': queryset})
+
+
+# #views for packaging
+# class MedicalViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows products to be viewed or edited.
+#     """
+#     queryset = Packaging.objects.all().order_by('name')
+#     serializer_class = MedicalSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+
+
+# class MedicalList(APIView):
+#     renderer_classes = [TemplateHTMLRenderer]
+#     template_name = 'medical_list.html'
+
+#     def get(self, request):
+#         queryset = Medical.objects.order_by('name')
+#         return Response({'medicals': queryset})
 
 
 #views for packaging
@@ -521,7 +518,7 @@ class SoilScienceViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = Packaging.objects.all().order_by('name')
+    queryset = SoilScience.objects.all().order_by('name')
     serializer_class = SoilScienceSerializer
     permission_classes = [permissions.IsAuthenticated]
 

@@ -125,3 +125,14 @@ class FarmMapSerializer(serializers.ModelSerializer):
     
     def get_region(self, obj):
         return '{}'.format(obj.farmer.region.name)
+
+class EnterpriseSelectionSerializer(serializers.ModelSerializer):
+     own_piece_of_land = serializers.SlugRelatedField(many=False,read_only=True, slug_field='land')
+     what_is_your_inspiration_for_considering_in_farming = serializers.SlugRelatedField(many=False,read_only=True, slug_field='inspiration')
+     involved_in_anyother_farming_activity = serializers.SlugRelatedField(many=False,read_only=True, slug_field='land')
+     scale = serializers.SlugRelatedField(many=False,read_only=True, slug_field='scale')
+     sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='sector')
+     full_time_devotion=serializers.SlugRelatedField(many=False,read_only=True, slug_field='devotion')
+     time_allocated_to_farming=serializers.SlugRelatedField(many=False,read_only=True, slug_field='time')
+    
+     

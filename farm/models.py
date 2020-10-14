@@ -188,3 +188,18 @@ class FarmRecord(TimeStampedModel, models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+
+
+#Enterprise Selection
+class EnterpriseSelection(models.Model):
+    own_piece_of_land = models.BooleanField(_('Do you own a piece of land or you intend to use rented land'), choices=YES_OR_NO, null=False, blank=False, default=True)
+    what_is_your_inspiration_for_considering_in_farming = models.TextField(null=True, blank=True)
+    involved_in_anyother_farming_activity = models.BooleanField(_('Have  you been involved in other farming sectors'), choices=YES_OR_NO, null=False, blank=False, default=True)
+    scale = models.CharField(max_length=100, null=True)
+    sector = models.CharField(max_length=100, null=True)
+    full_time_devotion = models.BooleanField(_('Do you want to devote full-time effort to the farm or would you prefer farming to be a part-time activity?'), choices=YES_OR_NO, null=False, blank=False, default=True)
+    time_allocated_to_farming = models.FloatField(null= True)
+
