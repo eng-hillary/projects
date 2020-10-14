@@ -24070,6 +24070,13 @@ a.Detail{
   max-width: 1000px;
   margin: 0 auto;
 }
+
+#resource_container {
+  height: 800px;
+  min-width: 310px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
 .loading {
   margin-top: 10em;
   text-align: center;

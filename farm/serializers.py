@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (Sector, Enterprise, Farm, FarmFacility, Produce, FarmProduce, 
-                    FinancialRecord, PestAndDisease, FarmRecord, EnterpriseType,FarmRecord)
+                    FinancialRecord, Query, FarmRecord, EnterpriseType,FarmRecord)
 from farmer .serializers import FarmerProfileSerializer
 
 from geopy.geocoders import Nominatim
@@ -78,10 +78,10 @@ class EnterpriseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PestAndDiseaseSerializer(serializers.ModelSerializer):
+class QuerySerializer(serializers.ModelSerializer):
     farm = FarmSerializer()
     class Meta:
-        model = PestAndDisease
+        model = Query
 
         fields = ['id','query_category','farm', 'description', 'date_discovered',
         'action_taken', 'image', 'reporting_date', 'solution']

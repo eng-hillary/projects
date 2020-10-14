@@ -129,21 +129,17 @@ document.getElementById('farm_container').addEventListener('mouseout', function 
 
 
 //map showing resources
-var R = Highcharts,
-    resource_map = R.maps['countries/ug/ug-all'],
-    chart;
-
 Highcharts.getJSON('/resourcesharing/api/resource/', function (json) {
-  var resource_data = [];
-  json.forEach(function (r) {
-      r.z = r.price;
-      resource_data.push(r);
+  var data = [];
+  json.forEach(function (p) {
+      p.z = p.price;
+      data.push(p);
   })
-//console.log(resource_data);
+//console.log(data);
  
   chart = Highcharts.mapChart('resource_container', {
       title: {
-          text: 'resource Locations'
+          text: 'Resource Locations'
       },
       
       mapNavigation: {
@@ -155,9 +151,10 @@ Highcharts.getJSON('/resourcesharing/api/resource/', function (json) {
      
       tooltip: {
           pointFormat: 'id: {point.id}<br>' +
-              'resource_name: {point.resource_name}<br>' +
               'owner: {point.owner}<br>' +
-              'price: {point.price}<br>' + 'shs'
+              'resource name: {point.resource_name}<br>' +
+              'resource status: {point.resource_status}<br>' +
+              'price: {point.price}'+ ' acres'
     
       },
 
@@ -193,14 +190,14 @@ Highcharts.getJSON('/resourcesharing/api/resource/', function (json) {
       },
       series: [{
           name: 'Basemap',
-          mapData: resource_map,
+          mapData: map,
           borderColor: '#B0B0B0',
           nullColor: 'rgba(200, 200, 200, 0.2)',
           showInLegend: false
       }, {
           name: 'Separators',
           type: 'mapline',
-          data: R.geojson(resource_map, 'mapline'),
+          data: H.geojson(map, 'mapline'),
           color: '#101010',
           enableMouseTracking: false,
           showInLegend: false
@@ -208,12 +205,12 @@ Highcharts.getJSON('/resourcesharing/api/resource/', function (json) {
           type: 'mapbubble',
           dataLabels: {
               enabled: true,
-              format: '{point.resource_name}'
+              format: '{point.owner}'
           },
           name: 'Resources',
-          data: resource_data,
+          data: data,
           maxSize: '5%',
-          color: R.getOptions().colors[0]
+          color: H.getOptions().colors[0]
       }]
   });
 });
@@ -256,6 +253,131 @@ document.getElementById('resource_container').addEventListener('mouseout', funct
   }
 });
 
+//map showing services
+
+Highcharts.getJSON('/farm/api/maps/', function (json) {
+  var data = [];
+  json.forEach(function (p) {
+      p.z = p.land_occupied;
+      data.push(p);
+  })
+
+ 
+  chart = Highcharts.mapChart('service_container', {
+      title: {
+          text: 'Service Locations'
+      },
+      
+      mapNavigation: {
+          enabled: true,
+          buttonOptions: {
+              verticalAlign: 'bottom'
+          }
+      },
+     
+      tooltip: {
+          pointFormat: 'id: {point.id}<br>' +
+              'district: {point.district}<br>' +
+              'farmer: {point.farmer}<br>' +
+              'farm name: {point.farm_name}<br>' +
+              'land occupied: {point.land_occupied}'+ ' acres'
+    
+      },
+
+      xAxis: {
+          crosshair: {
+              zIndex: 5,
+              dashStyle: 'dot',
+              snap: false,
+              color: 'gray'
+          }
+      },
+
+      yAxis: {
+          crosshair: {
+              zIndex: 5,
+              dashStyle: 'dot',
+              snap: false,
+              color: 'gray'
+          }
+      },
+      plotOptions:{
+          series:{
+              point:{
+                  events:{
+                      click: function(event){
+                           var url = "/farm/"+ event.point.id +"/view/";
+                           window.location.href = url;
+                          //alert(event.point.id);
+                      }
+                  }
+              }
+          }
+      },
+      series: [{
+          name: 'Basemap',
+          mapData: map,
+          borderColor: '#B0B0B0',
+          nullColor: 'rgba(200, 200, 200, 0.2)',
+          showInLegend: false
+      }, {
+          name: 'Separators',
+          type: 'mapline',
+          data: H.geojson(map, 'mapline'),
+          color: '#101010',
+          enableMouseTracking: false,
+          showInLegend: false
+      }, {
+          type: 'mapbubble',
+          dataLabels: {
+              enabled: true,
+              format: '{point.farm_name}'
+          },
+          name: 'Farms',
+          data: data,
+          maxSize: '5%',
+          color: H.getOptions().colors[0]
+      }]
+  });
+});
+
+
+// Display custom label with lat/lon next to crosshairs
+document.getElementById('service_container').addEventListener('mousemove', function (e) {
+  var position;
+  if (chart) {
+      if (!chart.lab) {
+          chart.lab = chart.renderer.text('', 0, 0)
+              .attr({
+                  zIndex: 5
+              })
+              .css({
+                  color: '#505050'
+              })
+              .add();
+      }
+
+      e = chart.pointer.normalize(e);
+      position = chart.fromPointToLatLon({
+          x: chart.xAxis[0].toValue(e.chartX),
+          y: chart.yAxis[0].toValue(e.chartY)
+      });
+    
+      chart.lab.attr({
+          x: e.chartX + 5,
+          y: e.chartY - 22,
+          text: 'Lat: ' + position.lat.toFixed(2) + '<br>Lon: ' + position.lon.toFixed(2)
+      });
+  }
+});
+
+
+document.getElementById('farm_container').addEventListener('mouseout', function () {
+  if (chart && chart.lab) {
+      chart.lab.destroy();
+      chart.lab = null;
+  }
+});
 
 // Create the chart
 Highcharts.chart('piecontainer', {

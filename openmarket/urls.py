@@ -56,7 +56,7 @@ approve_serviceprovider= ServiceProviderViewSet.as_view({
 app_name = 'openmarket'
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('products', ProductList.as_view(), name='product_list'),
     path('create/products', CreateProductProfile.as_view(), name="create_product"),
     path('sellers', SellerList.as_view(), name='seller_list'),
