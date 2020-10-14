@@ -12,9 +12,9 @@ from .views import (ProductList,
                     BuyerPostList,
                     ContactDetailsList,
                     LogiticsList,
-                    StorageList,
-                    PackagingList,
-                    MedicalList,
+                    # StorageList,
+                    # PackagingList,
+                    # MedicalList,
                     SoilScienceList,
                     ServiceProviderProfileList,
                     CreateServiceProviderProfile,
@@ -36,9 +36,9 @@ router.register(r'serviceproviders', views.ServiceProviderViewSet)
 router.register(r'serviceregistration', views.ServiceRegistrationViewSet)
 router.register(r'contactdetails', views.ContactDetailsViewSet)
 router.register(r'logistics', views.LogisticsViewSet)
-router.register(r'storages', views.StorageViewSet)
-router.register(r'packagings', views.PackagingViewSet)
-router.register(r'medicals', views.MedicalViewSet)
+# router.register(r'storages', views.StorageViewSet)
+# router.register(r'packagings', views.PackagingViewSet)
+# router.register(r'medicals', views.MedicalViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
 
 # Wire up our API using automatic URL routing.
@@ -70,9 +70,9 @@ urlpatterns = [
     path('create/service', CreateServiceView.as_view(), name='service_registration'),
     path('contactdetails', ContactDetailsList.as_view(), name='contactdetails_list'),
     path('logistics', LogiticsList.as_view(), name='logistics_list'),
-    path('storages', StorageList.as_view(), name='storage_list'),
-    path('packagings', PackagingList.as_view(), name='packaging_list'),
-    path('medicals', MedicalList.as_view(), name='medical_list'),
+    # path('storages', StorageList.as_view(), name='storage_list'),
+    # path('packagings', PackagingList.as_view(), name='packaging_list'),
+    # path('medicals', MedicalList.as_view(), name='medical_list'),
     path('soilsciences', SoilScienceList.as_view(), name='soilscience_list'),
     path('<int:pk>/approve/', approve_serviceprovider, name='aprrove'),    
     path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
