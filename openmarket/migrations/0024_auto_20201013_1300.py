@@ -10,14 +10,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='service',
-            name='inventory_status',
-        ),
-        migrations.RemoveField(
-            model_name='service',
-            name='status',
-        ),
+        # migrations.RemoveField(
+        #     model_name='service',
+        #     name='inventory_status',
+        # ),
+        # migrations.RemoveField(
+        #     model_name='service',
+        #     name='status',
+        # ),
         migrations.AlterField(
             model_name='service',
             name='certification_status',
