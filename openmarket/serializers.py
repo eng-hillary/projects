@@ -8,14 +8,12 @@ from .models import (Product,
                      Service,
                      ContactDetails, 
                      Logistics, 
-                     Storage, 
-                     Packaging, 
-                     Medical, 
                      SoilScience)
 from django.contrib.auth.models import User
 from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
 from common.serializers import UserSerializer
+
 
 class ProductSerializer(serializers.ModelSerializer):
     enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
@@ -74,7 +72,9 @@ class BuyerPostSerializer(serializers.ModelSerializer):
 class ServiceProviderSerializer(serializers.ModelSerializer):
     #sector = serializers.PrimaryKeyRelatedField(many=True, queryset=Sector.objects.all())
     #sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
-    user = UserSerializer()
+   # user = UserSerializer()
+    user = serializers.SerializerMethodField(method_name='get_user_full_name')
+    full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
@@ -87,7 +87,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceProvider
-        fields = ('id','user', 'nin', 'region', 'district', 'county', 
+        fields = ('id','user', 'nin', 'region', 'district', 'county', 'full_name',
         'sub_county', 'region', 'parish', 'village','service_provider_location', 'list_of_services_if_more_than_one',
        'phone_1', 'phone_2', 'service_type', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
        )
@@ -101,6 +101,10 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
             return "No"
 
 
+    def get_user_full_name(self, obj):
+        return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+
+
 class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProvider
@@ -108,10 +112,12 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
 
 
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
+   # user = serializers.SerializerMethodField(method_name='get_user_full_name')
     user = serializers.SerializerMethodField(method_name='get_user_full_name')
+    full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     #user = UserSerializer()
-    full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='username')
-    serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
+    #full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='username')
+    #serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
 
     class Meta:
         model = Service
@@ -121,6 +127,7 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
    
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+
 
 class ContactDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -133,29 +140,6 @@ class LogisticsSerializer(serializers.ModelSerializer):
         model = Logistics
         fields = ('name', 'source', 'destination', 'quantity', 'time', 'product', 'payment_mode', 
         'contact_details', 'image', 'description', 'status', 'inventory_status')
-
-
-class StorageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Storage
-        fields = ('name', 'location', 'size', 'type', 'description', 'available_services', 'status',
-         'inventory_status')
-
-
-class PackagingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Packaging
-        fields = ('name', 'product', 'location', 'image', 'status', 'rent')
-
-
-
-class MedicalSerializer(serializers.ModelSerializer):
-    enterprise = EnterpriseSerializer(many=True, read_only=True)
-    class Meta:
-        model = Medical
-        fields = ('name', 'enterprise', 'location', 'status', 'time')
-
-
 
 class SoilScienceSerializer(serializers.ModelSerializer):
     class Meta:

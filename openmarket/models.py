@@ -189,34 +189,34 @@ class Logistics(models.Model):
     class Meta:
         ordering =("name",)
 
-class Storage(models.Model):
-    storage = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
+# class Storage(models.Model):
+#     storage = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
      
-    size = models.FloatField(null=True)
-    type = models.CharField(max_length=50, null=False)
+#     size = models.FloatField(null=True)
+#     type = models.CharField(max_length=50, null=False)
     
 
         
-class Packaging(models.Model): #value addition. 
-    name = models.CharField(max_length=50, null=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    location = models.CharField(null=True, max_length=50) 
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-    status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
-    #rent = models.CharField(max_length=25, null=True)
+# class Packaging(models.Model): #value addition. 
+#     name = models.CharField(max_length=50, null=True)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     location = models.CharField(null=True, max_length=50) 
+#     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+#     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
+#     #rent = models.CharField(max_length=25, null=True)
 
-    class Meta:
-        ordering =("name",)
+#     class Meta:
+#         ordering =("name",)
 
-class Medical(models.Model):
-    name = models.CharField(max_length=50, null=True)
-    enterprise = models.ForeignKey(to='farm.Enterprise',related_name='medical',on_delete=models.CASCADE)
-    location = models.CharField(null=True, max_length=50) 
-    status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
-    time = models.DateTimeField(auto_now_add=True)
+# class Medical(models.Model):
+#     name = models.CharField(max_length=50, null=True)
+#     enterprise = models.ForeignKey(to='farm.Enterprise',related_name='medical',on_delete=models.CASCADE)
+#     location = models.CharField(null=True, max_length=50) 
+#     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
+#     time = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering =("name",)
+#     class Meta:
+#         ordering =("name",)
 
 
 class SoilScience(models.Model):
