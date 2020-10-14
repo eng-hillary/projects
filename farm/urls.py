@@ -6,7 +6,7 @@ from . import views
 from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
 CreateFarmView, EditFarmView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
 FarmProfileDetailView,QueryList,CreateFarmRecordView, FarmRecordsList, EditFarmRecordView,
-CreateFarmFinancialRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsList,EditQueryView)
+CreateFarmFinancialRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsList,EditQueryView, EnterpriseSelection)
 
 
 
@@ -48,5 +48,6 @@ urlpatterns = [
     path('create/financilrecord/<int:enterprise_pk>', CreateFarmFinancialRecordView.as_view(), name="create_financial_record"), 
     path('financialrecords', FarmFinancilRecordsList.as_view(), name='financialrecords') ,
     path('<int:pk>/edit/financialrecord', EditFarmFinancialRecordView.as_view(), name="edit_financail_record"),
+    path('create/enterpriseselection', EnterpriseSelection.as_view(), name='enterprise_selection'),
 
 ]

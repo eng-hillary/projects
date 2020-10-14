@@ -417,7 +417,6 @@ class ServiceRegistrationList(APIView, LoginRequiredMixin):
         return Response()
 
 
-
 #views for ContactDetails
 class ContactDetailsViewSet(viewsets.ModelViewSet):
     """
@@ -455,62 +454,6 @@ class LogiticsList(APIView):
         queryset = Logistics.objects.order_by('name')
         return Response({'logistics': queryset})
 
-
-#views for StoragePackagingSerializerViewSet
-# class StorageViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows products to be viewed or edited.
-#     """
-#     queryset = Storage.objects.all().order_by('name')
-#     serializer_class = StorageSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-
-# class StorageList(APIView):
-#     renderer_classes = [TemplateHTMLRenderer]
-#     template_name = 'storage_list.html'
-
-#     def get(self, request):
-#         queryset = Storage.objects.order_by('name')
-#         return Response({'storages': queryset})
-
-
-# #views for packaging
-# class PackagingViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows products to be viewed or edited.
-#     """
-#     queryset = Packaging.objects.all().order_by('name')
-#     serializer_class = PackagingSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-
-# class PackagingList(APIView):
-#     renderer_classes = [TemplateHTMLRenderer]
-#     template_name = 'packaging_list.html'
-
-#     def get(self, request):
-#         queryset = Packaging.objects.order_by('name')
-#         return Response({'packagings': queryset})
-
-
-# #views for packaging
-# class MedicalViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows products to be viewed or edited.
-#     """
-#     queryset = Packaging.objects.all().order_by('name')
-#     serializer_class = MedicalSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-
-# class MedicalList(APIView):
-#     renderer_classes = [TemplateHTMLRenderer]
-#     template_name = 'medical_list.html'
-
-#     def get(self, request):
-#         queryset = Medical.objects.order_by('name')
-#         return Response({'medicals': queryset})
 
 
 #views for packaging
@@ -564,19 +507,6 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
         # updating profile for only changed fields
         profile.save()
 
-        # not sending email to a farmer after editing for now
-        # current_site = get_current_site(self.request)
-        # subject = 'Registrated Successful'
-        # message = render_to_string('profile_created_successful_email.html', {
-        #     'user': profile.user,
-        #     'domain': current_site.domain
-        #     })
-        # to_email = profile.user.email
-        # email = EmailMessage(
-        #         subject, message, to=[to_email]
-        #     )
-        # email.content_subtype = "html"
-        # email.send()
         return redirect('farmer:farmerprofile_list')
 
     def form_invalid(self, form):
@@ -610,3 +540,4 @@ class ServiceDetailView(LoginRequiredMixin, DetailView):
 
         })
         return context
+
