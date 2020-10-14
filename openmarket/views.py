@@ -601,4 +601,15 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
 
         })
         return context
+class ServiceDetailView(LoginRequiredMixin, DetailView):
+    model = Service
+    context_object_name = "profilerecord"
+    template_name = "view_services_details.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(ServiceProviderProfileDetailView, self).get_context_data(**kwargs)
+        
+        context.update({
+
+        })
+        return context

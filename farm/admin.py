@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Sector, Enterprise,Farm,EnterpriseType, PestAndDisease
+from .models import (Sector, Enterprise,Farm,EnterpriseType, PestAndDisease,RecordType,
+ FarmRecord)
 # Register your models here.
 
 class SectorAdmin(admin.ModelAdmin):
@@ -76,3 +77,17 @@ class FarmAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Farm, FarmAdmin)
+admin.site.register(RecordType)
+class FarmRecordAdmin(admin.ModelAdmin):
+    list_display = [
+        'enterprise',
+        'record_type',
+        'name',
+        'from_date',
+        'to_date',
+        'taken_by',
+        
+
+    ]
+    search_fields = ['enterprise__name','record_type__name','name','taken_by']
+admin.site.register(FarmRecord, FarmRecordAdmin)
