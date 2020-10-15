@@ -10,6 +10,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='EnterpriseSelection',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('own_piece_of_land', models.BooleanField(choices=[(None, '--please select--'), (True, 'Yes'), (False, 'No')], default=True, verbose_name='Do you own a piece of land or you intend to use rented land')),
+                ('what_is_your_inspiration_for_considering_in_farming', models.TextField(blank=True, null=True)),
+                ('involved_in_anyother_farming_activity', models.BooleanField(choices=[(None, '--please select--'), (True, 'Yes'), (False, 'No')], default=True, verbose_name='Have  you been involved in other farming sectors')),
+                ('scale', models.CharField(max_length=100, null=True)),
+                ('sector', models.CharField(max_length=100, null=True)),
+                ('full_time_devotion', models.BooleanField(choices=[(None, '--please select--'), (True, 'Yes'), (False, 'No')], default=True, verbose_name='Do you want to devote full-time effort to the farm or would you prefer farming to be a part-time activity?')),
+                ('time_allocated_to_farming', models.FloatField(null=True)),
+            ],
+        ),
         migrations.RenameModel(
             old_name='PestAndDisease',
             new_name='Query',

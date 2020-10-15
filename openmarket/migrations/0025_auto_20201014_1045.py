@@ -18,14 +18,14 @@ class Migration(migrations.Migration):
             model_name='storage',
             name='storage',
         ),
-        # migrations.RemoveField(
-        #     model_name='service',
-        #     name='inventory_status',
-        # ),
-        # migrations.RemoveField(
-        #     model_name='service',
-        #     name='status',
-        # ),
+        migrations.RemoveField(
+            model_name='service',
+            name='inventory_status',
+        ),
+        migrations.RemoveField(
+            model_name='service',
+            name='status',
+        ),
         migrations.AlterField(
             model_name='buyerpost',
             name='payment_mode',
