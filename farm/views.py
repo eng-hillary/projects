@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, PestAndDisease, FarmRecord, FinancialRecord, EnterpriseSelection)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer,  PestAndDiseaseSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer)
+,FarmMapSerializer,  PestAndDiseaseSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -791,7 +791,7 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class EnterpriseSelection(LoginRequiredMixin,CreateView):
+class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
     template_name = 'enterprise_selection.html'
     success_url = reverse_lazy('farm:select_enterpise')
     form_class = EnterpriseSelectionForm
@@ -799,10 +799,10 @@ class EnterpriseSelection(LoginRequiredMixin,CreateView):
     
 
     def dispatch(self, request, *args, **kwargs):
-        return super(EnterpriseSelection, self).dispatch(request, *args, **kwargs)
+        return super(EnterpriseSelectionView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(EnterpriseSelection, self).get_form_kwargs()
+        kwargs = super(EnterpriseSelectionView, self).get_form_kwargs()
         return kwargs
 
 
@@ -856,3 +856,13 @@ class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
     def get(self, request):
        # queryset = Sector.objects.order_by('-id')
         return Response()
+
+class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = EnterpriseSelection.objects.all()
+    serializer_class = EnterpriseSelectionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+  

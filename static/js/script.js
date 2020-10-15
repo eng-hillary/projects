@@ -1,13 +1,17 @@
-(function($) {
+
+$(document).ready(function () {
+    //alert('It works');
+});
+(function ($) {
     "use strict";
-    $(".mobile-toggle").click(function(){
+    $(".mobile-toggle").click(function () {
         $(".nav-menus").toggleClass("open");
     });
-    $(".mobile-search").click(function(){
+    $(".mobile-search").click(function () {
         $(".form-control-plaintext").toggleClass("open");
     });
-    $(".form-control-plaintext").keyup(function(e){
-        if(e.target.value) {
+    $(".form-control-plaintext").keyup(function (e) {
+        if (e.target.value) {
             $("body").addClass("offcanvas");
         } else {
             $("body").removeClass("offcanvas");
@@ -15,18 +19,18 @@
     });
 })(jQuery);
 
-$('.loader-wrapper').fadeOut('slow', function() {
+$('.loader-wrapper').fadeOut('slow', function () {
     $(this).remove();
 });
 
-$(window).on('scroll', function() {
+$(window).on('scroll', function () {
     if ($(this).scrollTop() > 600) {
         $('.tap-top').fadeIn();
     } else {
         $('.tap-top').fadeOut();
     }
 });
-$('.tap-top').click( function() {
+$('.tap-top').click(function () {
     $("html, body").animate({
         scrollTop: 0
     }, 600);
@@ -53,10 +57,10 @@ function toggleFullScreen() {
         }
     }
 }
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
     "use strict";
     var $ripple = $(".js-ripple");
-    $ripple.on("click.ui.ripple", function(e) {
+    $ripple.on("click.ui.ripple", function (e) {
         var $this = $(this);
         var $offset = $this.parent().offset();
         var $circle = $this.find(".c-ripple__circle");
@@ -70,12 +74,12 @@ function toggleFullScreen() {
     });
     $ripple.on(
         "animationend webkitAnimationEnd oanimationend MSAnimationEnd",
-        function(e) {
+        function (e) {
             $(this).removeClass("is-active");
         });
 })(jQuery, window, document);
 
-$(".chat-menu-icons .toogle-bar").click(function(){
+$(".chat-menu-icons .toogle-bar").click(function () {
     $(".chat-menu").toggleClass("show");
 });
 
@@ -83,9 +87,9 @@ $(".chat-menu-icons .toogle-bar").click(function(){
 /*=====================
  05. Image to background js
  ==========================*/
-$(".bg-img" ).parent().addClass('bg-size');
+$(".bg-img").parent().addClass('bg-size');
 
-jQuery('.bg-img').each(function() {
+jQuery('.bg-img').each(function () {
 
     var el = $(this),
         src = el.attr('src'),
@@ -95,7 +99,7 @@ jQuery('.bg-img').each(function() {
         'background-image': 'url(' + src + ')',
         'background-size': 'cover',
         'background-position': 'center',
-        'display' : 'block'
+        'display': 'block'
     });
 
     el.hide();

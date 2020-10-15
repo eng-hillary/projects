@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import (Sector, Enterprise, Farm, FarmFacility, Produce, FarmProduce, 
-                    FinancialRecord, PestAndDisease, FarmRecord, EnterpriseType,FarmRecord)
+                    FinancialRecord, PestAndDisease, FarmRecord, EnterpriseType,FarmRecord,EnterpriseSelection)
 from farmer .serializers import FarmerProfileSerializer
+from django.contrib.auth.models import User
 
 from geopy.geocoders import Nominatim
 
@@ -127,12 +128,21 @@ class FarmMapSerializer(serializers.ModelSerializer):
         return '{}'.format(obj.farmer.region.name)
 
 class EnterpriseSelectionSerializer(serializers.ModelSerializer):
-     own_piece_of_land = serializers.SlugRelatedField(many=False,read_only=True, slug_field='land')
-     what_is_your_inspiration_for_considering_in_farming = serializers.SlugRelatedField(many=False,read_only=True, slug_field='inspiration')
-     involved_in_anyother_farming_activity = serializers.SlugRelatedField(many=False,read_only=True, slug_field='land')
-     scale = serializers.SlugRelatedField(many=False,read_only=True, slug_field='scale')
-     sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='sector')
-     full_time_devotion=serializers.SlugRelatedField(many=False,read_only=True, slug_field='devotion')
-     time_allocated_to_farming=serializers.SlugRelatedField(many=False,read_only=True, slug_field='time')
+     user = serializers.SerializerMethodField(method_name='get_user_full_name')
+     #full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
+     #user = serializers.SerializerMethodField(method_name='get_id')
+     
+
+     
+     class Meta:
+         model = EnterpriseSelection
+         fields = ('own_piece_of_land','what_is_your_inspiration_for_considering_in_farming',
+        'involved_in_anyother_farming_activity','scale','sector','full_time_devotion',
+        'time_allocated_to_farming','interested_sector','capital','user')
+    
+     def get_user_full_name(self, obj):
+         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
     
      
+    #  def get_id(self, obj):
+    #      return '{}'.format(obj.user.id)
