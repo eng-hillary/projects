@@ -150,7 +150,7 @@ menus = [
             menu.PassTestNode(id='enterprises',
                               label='<i class="fa fa-circle"></i>Enterprise Selection',
                              
-                              pattern_name='farm:enterprise_list', test=can_view_enterprise),
+                              pattern_name='farm:enterprise_selection', test=can_view_enterprise),
             menu.PassTestNode(id='enterprises',
                               label='<i class="fa fa-circle"></i>Enterprises',
                                         
