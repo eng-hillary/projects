@@ -39,7 +39,12 @@ SCALE = (
     ('Large', 'large'),
     ('small', 'small'),
 )
-
+SECTOR = (
+    (None, "--please select--"),
+    ('Animal Farming','Animal Farming'),
+    ('Fisheries','Fisheries'),
+    ('Crop Farming','Crop Farming')
+)
 
 INVENTORY_STATUS = (
      (None, "--please select--"),

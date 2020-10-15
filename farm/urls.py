@@ -6,7 +6,7 @@ from . import views
 from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
 CreateFarmView, EditFarmView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
 FarmProfileDetailView,QueryList,CreateFarmRecordView, FarmRecordsList, EditFarmRecordView,
-CreateFarmFinancialRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsList,EditQueryView, EnterpriseSelection,
+CreateFarmFinancialRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsList,EditQueryView, EnterpriseSelectionView,
 EnterpriseSelectionRedirect)
 
 
@@ -19,6 +19,7 @@ router = routers.DefaultRouter()
 router.register(r'farms', views.FarmViewSet,'farm-api')
 router.register(r'maps', views.FarmMapViewSet,'maps-api')
 router.register(r'sector', views.SectorViewSet,'apisector')
+router.register(r'enterpriseselection', views.EnterpriseSelectionViewSet,'api-enterpriseselection' )
 router.register(r'enterprise', views.EnterpriseViewSet, basename='Enterprise')
 router.register(r'farmrecords', views.FarmRecordViewSet, basename='FarmRecord')
 router.register(r'financialrecords',views.FarmFinancialRecordViewSet,'FinancialRecord')
@@ -49,6 +50,6 @@ urlpatterns = [
     path('create/financilrecord/<int:enterprise_pk>', CreateFarmFinancialRecordView.as_view(), name="create_financial_record"), 
     path('financialrecords', FarmFinancilRecordsList.as_view(), name='financialrecords') ,
     path('<int:pk>/edit/financialrecord', EditFarmFinancialRecordView.as_view(), name="edit_financail_record"),
-    path('create/enterpriseselection', EnterpriseSelection.as_view(), name='enterprise_selection'),
+    path('create/enterpriseselection', EnterpriseSelectionView.as_view(), name='enterprise_selection'),
     path('selectenterprises', EnterpriseSelectionRedirect.as_view(), name='select_enterpise'),
 ]

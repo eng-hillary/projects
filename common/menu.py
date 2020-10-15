@@ -143,14 +143,19 @@ menus = [
         url='#',
         test=can_view_farms,
         children=[
-            menu.PassTestNode(id='farms',
-                              label='<i class="fa fa-circle"></i>Farms',
-                             
-                              pattern_name='farm:farm_list', test=can_view_farms),
             menu.PassTestNode(id='enterprises',
                               label='<i class="fa fa-circle"></i>Enterprise Selection',
                              
                               pattern_name='farm:enterprise_selection', test=can_view_enterprise),
+        menu.PassTestNode(id='enterprises',
+                              label='<i class="fa fa-circle"></i>Selections',
+                             
+                              pattern_name='farm:select_enterpise', test=can_view_enterprise),
+            menu.PassTestNode(id='farms',
+                              label='<i class="fa fa-circle"></i>Farms',
+                             
+                              pattern_name='farm:farm_list', test=can_view_farms),
+           
             menu.PassTestNode(id='enterprises',
                               label='<i class="fa fa-circle"></i>Enterprises',
                                         
