@@ -41,5 +41,15 @@ class ServiceProviderAdmin(admin.ModelAdmin):
 
 admin.site.register(ServiceProvider, ServiceProviderAdmin)
 
-admin.site.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = [
+       'service_name', 
+       'category', 
+       'lon', 
+       'lat', 
+       'availability_date', 
+       'picture', 
+        
+]
+admin.site.register(Service,  ServiceAdmin)
 
