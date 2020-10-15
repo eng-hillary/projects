@@ -71,3 +71,23 @@ class Notice(TimeStampedModel, models.Model):
 
     def __str__(self):
         return self.notice_title
+
+# adding models for call response
+
+class Caller(TimeStampedModel, models.Model):
+    phone = PhoneNumberField(blank=False, null=True)
+    session_id = models.CharField(max_length=200, null=False, blank=False)
+    call_date = models.DateTimeField(null=False, blank=False)
+
+    def __str__(self):
+        return str(self.phone)
+
+# converstion record
+class CallRsponse(TimeStampedModel, models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    session_id = models.CharField(max_length=200, null=False, blank=False)
+    duration = models.DurationField(null=False, blank=False)
+    recording = models.FileField(null=False, blank=False)
+
+    def __str__(self):
+        return str(self.session_id)
