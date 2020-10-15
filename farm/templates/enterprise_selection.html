@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col">
                 <div class="page-header-left">
-                    <h3>{% if farm %}Edit {% else %} Create {% endif %} Farm
+                    <h3>{% if farm %}Edit {% else %} Enterprise {% endif %} Selection
                     </h3>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                     <li class="breadcrumb-item"><a href="{% url 'farm:farm_list' %}"><i data-feather="home"></i></a>
                     </li>
                     <li class="breadcrumb-item add-new">Farms</li>
-                    <li class="breadcrumb-item active">Add Farm </li>
+                    <li class="breadcrumb-item active">Please fill in the form below to  </li>
                 </ol>
             </div>
         </div>
@@ -32,7 +32,7 @@
         <div class="col-sm-12">
             <div class="card tab2-card">
                 <div class="card-header">
-                    <h5>{% if farm %}Update {% else %} Add {% endif %} Farm</h5>
+                    <h5>{% if farm %}Update {% else %} Please fill in the form below in order to be guided{% endif %} about enterprise selection</h5>
                     {% if messages %}
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
                         {% for message in messages %}
@@ -52,13 +52,8 @@
                             {{ form.own_piece_of_land|as_crispy_field }}
                         </div>
                         <div class="col-xl-6 col-md-6">
-                            {{ form.what_is_your_inspiration_for_considering_in_farming|as_crispy_field }}
-                        </div>
-
-                        <div class="col-xl-6 col-md-6">
                             {{ form.involved_in_anyother_farming_activity|as_crispy_field }}
                         </div>
-
 
                         <div class="col-xl-6 col-md-6">
                             {{ form.scale|as_crispy_field }}
@@ -67,12 +62,21 @@
                             {{ form.sector|as_crispy_field }}
                         </div>
 
+                       
+                      
                         <div class="col-xl-6 col-md-6">
                             {{ form.full_time_devotion|as_crispy_field }}
                         </div>
                         <div class="col-xl-6 col-md-6">
                             {{ form.time_allocated_to_farming|as_crispy_field }}
                         </div>
+                        <div class="col-xl-12 col-md-6">
+                            {{ form.what_is_your_inspiration_for_considering_in_farming|as_crispy_field }}
+                        </div>
+
+                        
+
+
                        
 
                         <input name="farmer" value="{{user.id}}" type="hidden">

@@ -793,7 +793,7 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
 
 class EnterpriseSelection(LoginRequiredMixin,CreateView):
     template_name = 'enterprise_selection.html'
-    success_url = reverse_lazy('openmarket:serviceregistration_list')
+    success_url = reverse_lazy('farm:select_enterpise')
     form_class = EnterpriseSelectionForm
     success_message = "Your answers were submitted successfully"
     
@@ -836,7 +836,7 @@ class EnterpriseSelection(LoginRequiredMixin,CreateView):
             )
         email.content_subtype = "html"
         email.send()
-        return redirect('openmarket:serviceregistration_list')
+        return redirect('farm:select_enterpise')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
@@ -844,3 +844,15 @@ class EnterpriseSelection(LoginRequiredMixin,CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
+"""
+Enterprise selection redirect view
+"""
+
+
+class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'enterprise_selection_redirect.html'
+
+    def get(self, request):
+       # queryset = Sector.objects.order_by('-id')
+        return Response()

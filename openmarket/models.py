@@ -137,7 +137,7 @@ class Service(models.Model):
     description = models.TextField(blank=True)
     available_services = models.CharField(max_length=50, blank=True)
     #status = models.CharField(choices=STATUS, default='True', max_length=20, null=False, blank=True)
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    #image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     rent = models.CharField(max_length=25, null=True, blank=True)
     name_of_storage_center = models.CharField(max_length=50, null=True,blank=True)
     location_of_storage_center = models.CharField(null=True, max_length=50, blank=True)  
