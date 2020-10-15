@@ -23,7 +23,8 @@ from .views import (ProductList,
                     ServiceProviderViewSet,
                     UpdateServiceProviderProfile,
                     ServiceProviderProfileDetailView,
-                    ServiceDetailView
+                    ServiceDetailView,
+                    MapServiceDetailView
                      )
 
 router = routers.DefaultRouter()
@@ -56,7 +57,7 @@ approve_serviceprovider= ServiceProviderViewSet.as_view({
 app_name = 'openmarket'
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('products', ProductList.as_view(), name='product_list'),
     path('create/products', CreateProductProfile.as_view(), name="create_product"),
     path('sellers', SellerList.as_view(), name='seller_list'),
@@ -66,6 +67,7 @@ urlpatterns = [
     path('buyerposts', BuyerPostList.as_view(), name='buyerpost_list'),
     path('serviceproviders', ServiceProviderList.as_view(), name='serviceprovider_list'),
     path('serviceregistration', ServiceRegistrationList.as_view(), name='serviceregistration_list'),
+    path('<int:pk>/view/', MapServiceDetailView.as_view(), name="map_service_detail"),  
     path('serviceproviderregistration', CreateServiceProviderProfile.as_view(), name='serviceprovider_registration'),
     path('create/service', CreateServiceView.as_view(), name='service_registration'),
     path('contactdetails', ContactDetailsList.as_view(), name='contactdetails_list'),

@@ -4,7 +4,7 @@ from common.choices import(RESOURCE_CATEGORY, PAYMENT_MODE,PAYMENT_OPTIONS)
 from farmer.models import FarmerProfile
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
-
+from geopy.geocoders import Nominatim
 
 # Create your models here.
 class Resource(models.Model):
@@ -18,18 +18,31 @@ class Resource(models.Model):
     Phone_number1 = PhoneNumberField(_('Phone number 1'), blank=False, null=True)
     Phone_number2 = PhoneNumberField(_('Phone number 2'), blank=False, null=True)
     resource_category = models.CharField(choices=RESOURCE_CATEGORY, max_length=25, null=False, blank=False)
-    lat = models.FloatField(_('Latitude'), blank=True, null=True)
-    lon = models.FloatField(_('Longitude'), blank=True, null=True)
+    lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your location")
+    lon = models.FloatField(_('Longitude'), blank=True, null=True, help_text="Longitude of your location")
     terms_and_conditions = models.TextField(max_length=400, blank = False)
     resource_status = models.CharField(max_length=20, choices=RESOURCE_STATUS)
     available_from = models.DateField(auto_now=True)
     available_to = models.DateField(auto_now=True)
     image = models.ImageField(null=True, blank=False)
-    price = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    price = models.DecimalField(_('Price(shs)'),decimal_places=2, max_digits=20, blank=False)
 
     def __str__(self):
         return self.resource_name
 
+    @property
+    def compute_location(self):
+        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
+        lat = str(self.lat)
+        lon = str(self.lon)
+       
+        try:
+
+            location = geolocator.reverse(lat + "," + lon)
+            return '{}'.format(location)
+        except:
+            location = str(self.lat) + "," + str(self.lon)
+            return 'slow network, loading location ...'
 
 class ResourceSharing(models.Model):
     resource = models.ForeignKey(Resource, on_delete = models.CASCADE)
