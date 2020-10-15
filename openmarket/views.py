@@ -339,6 +339,15 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+class MapServiceDetailView(DetailView):
+    model = Service
+    template_name = "map_service_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(MapServiceDetailView, self).get_context_data(**kwargs)
+        context['Serviceobject'] = self.object
+        
+        return context
 #service provider list
 class ServiceProviderProfileList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
