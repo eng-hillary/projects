@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm, PestAndDisease, FarmRecord, FinancialRecord, EnterpriseSelection)
+from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer,  PestAndDiseaseSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer)
+,FarmMapSerializer,  QuerySerializer, FarmRecordSerializer,FarmFinancilRecordSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -91,9 +91,23 @@ class QueryViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
-    queryset = PestAndDisease.objects.all()
-    serializer_class = PestAndDiseaseSerializer
+    queryset = Query.objects.all()
+    serializer_class = QuerySerializer
     
+    def get_queryset(self):
+        """
+        This view should return a list of all the farmers profiles
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        queries = Query.objects.all().order_by('query_category')
+        if  self.request.user.has_perm('farm.delete_Query'):
+            queryset = queries
+        else:
+            queryset = queries.filter(user=user)
+        
+        return queryset
+
 
 
 # create farm 
@@ -135,7 +149,7 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
 
 # update farm view
 class EditQueryView(LoginRequiredMixin,UpdateView):
-    model =PestAndDisease
+    model =Query
     template_name = 'create_query.html'
     success_url = reverse_lazy('farm:query_list')
     form_class = QueryForm

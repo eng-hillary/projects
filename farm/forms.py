@@ -1,4 +1,4 @@
-from .models  import (Farm, Enterprise, Sector, PestAndDisease,FarmRecord,FinancialRecord,EnterpriseSelection)
+from .models  import (Farm, Enterprise, Sector, Query,FarmRecord,FinancialRecord,EnterpriseSelection)
 from django import forms
 from farmer.models import FarmerProfile
 from phonenumber_field.formfields import PhoneNumberField
@@ -23,7 +23,7 @@ class QueryForm(forms.ModelForm):
     reporting_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 
     class Meta:
-        model = PestAndDisease
+        model = Query
         exclude = ['solution']
 
     def __init__(self, *args, **kwargs):

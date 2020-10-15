@@ -107,6 +107,16 @@ class EditResourceView(LoginRequiredMixin,UpdateView):
 
 
 
+class ResourceDetailView(DetailView):
+    model = Resource
+    template_name = "view_resource_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ResourceDetailView, self).get_context_data(**kwargs)
+        context['Resourceobject'] = self.object
+        
+        return context
+
 # views for resource sharing
 class ResourceSharingViewSet(viewsets.ModelViewSet):
     """

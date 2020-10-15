@@ -150,7 +150,7 @@ class FinancialRecord(TimeStampedModel, models.Model):
         return self.spent_on
 
 
-class PestAndDisease(TimeStampedModel, models.Model):
+class Query(TimeStampedModel, models.Model):
     query_category = models.CharField(choices=QUERIES, max_length=25, null=True, blank=False)
     farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_pests_and_diseases')
     description = models.TextField( blank=True, null=True)
@@ -162,7 +162,8 @@ class PestAndDisease(TimeStampedModel, models.Model):
 
 
     def __str__(self):
-        return self.description
+        return self.query_category
+
 class RecordType(models.Model):
     name = models.CharField(max_length=100,null=False,blank=False)
 
