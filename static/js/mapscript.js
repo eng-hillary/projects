@@ -84,7 +84,7 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
             name: 'Farms',
             data: data,
             maxSize: '5%',
-            color: H.getOptions().colors[0]
+            color: 'green'
         }]
     });
 });
@@ -150,10 +150,12 @@ document.getElementById('farm_container').addEventListener('mouseout', function 
       },
      
       tooltip: {
-          pointFormat: 'id: {point.id}<br>' +
-          'lat: {point.lat}<br>' +
-          'lon: {point.lon}<br>' 
-       
+          pointFormat: 'ID: {point.id}<br>' +
+          'District: {point.district}<br>' +
+          'Owner: {point.owner}<br>' +
+          'Resource Status: {point.resource_status}<br>' +
+          'Price: {point.price}<br>' + 'shs'
+          
       },
 
       xAxis: {
@@ -208,7 +210,7 @@ document.getElementById('farm_container').addEventListener('mouseout', function 
           name: 'Resources',
           data: data,
           maxSize: '5%',
-          color: H.getOptions().colors[0]
+          color: 'blue'
       }]
   });
 });
@@ -332,7 +334,7 @@ Highcharts.getJSON('/openmarket/api/serviceregistration/', function (json) {
           name: 'services',
           data: data,
           maxSize: '5%',
-          color: H.getOptions().colors[0]
+          color: 'red'
       }]
   });
 });
