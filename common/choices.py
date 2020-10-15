@@ -34,6 +34,13 @@ TYPE = (
     ('retail', 'retail'),
 )
 
+SCALE = (
+    (None, "--please select--"),
+    ('Large', 'large'),
+    ('small', 'small'),
+)
+
+
 INVENTORY_STATUS = (
      (None, "--please select--"),
      ('availabe', 'Available'),

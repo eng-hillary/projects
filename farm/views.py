@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord)
+from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
 ,FarmMapSerializer,  QuerySerializer, FarmRecordSerializer,FarmFinancilRecordSerializer)
 from rest_framework import viewsets
@@ -16,7 +16,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from .forms import (FarmForm,EnterpriseForm,QueryForm, FarmRecordForm,FarmFnancialRecordForm)
+from .forms import (FarmForm,EnterpriseForm,QueryForm, FarmRecordForm,FarmFnancialRecordForm, EnterpriseSelectionForm)
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -803,3 +803,70 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
             queryset = farmrecords.filter(enterprise__in=enterprises)
         
         return queryset
+
+
+class EnterpriseSelection(LoginRequiredMixin,CreateView):
+    template_name = 'enterprise_selection.html'
+    success_url = reverse_lazy('farm:select_enterpise')
+    form_class = EnterpriseSelectionForm
+    success_message = "Your answers were submitted successfully"
+    
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EnterpriseSelection, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EnterpriseSelection, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        # setting farmer profile to in-active
+        #profile.status = 'Pending'
+        profile.user = self.request.user
+        profile.save()
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Registrated Service Successful'
+        message = render_to_string('profile_created_successful.html', {
+            'user': profile.user,
+            'domain': current_site.domain
+            })
+        to_email = profile.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('farm:select_enterpise')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+"""
+Enterprise selection redirect view
+"""
+
+
+class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'enterprise_selection_redirect.html'
+
+    def get(self, request):
+       # queryset = Sector.objects.order_by('-id')
+        return Response()

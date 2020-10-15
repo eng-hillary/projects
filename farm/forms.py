@@ -1,4 +1,4 @@
-from .models  import (Farm, Enterprise, Sector, Query,FarmRecord,FinancialRecord)
+from .models  import (Farm, Enterprise, Sector, Query,FarmRecord,FinancialRecord,EnterpriseSelection)
 from django import forms
 from farmer.models import FarmerProfile
 from phonenumber_field.formfields import PhoneNumberField
@@ -87,3 +87,9 @@ class FarmFnancialRecordForm(forms.ModelForm):
         self.fields['enterprise'].empty_label = None
         farms = Farm.objects.filter(farmer_id=self.request.user.id)
         self.fields['enterprise'].queryset = Enterprise.objects.filter(farm__in=farms)
+
+class EnterpriseSelectionForm(forms.ModelForm):
+
+    class Meta:
+        model=EnterpriseSelection
+        exclude = []
