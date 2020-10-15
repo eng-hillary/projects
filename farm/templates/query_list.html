@@ -7,16 +7,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Query List
-                      <small><a class="add-new" href="{% url 'farm:create_query' %}">Add new</a></small>
+                    <h3>Resource List
+                      <small><a class="add-new" href="{% url 'resourcesharing:create_resource' %}">Add new</a></small>
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Queries</li>
-                    <li class="breadcrumb-item active">Query List</li>
+                    <li class="breadcrumb-item">Resources</li>
+                    <li class="breadcrumb-item active">Resource List</li>
                 </ol>
             </div>
         </div>
@@ -61,9 +61,7 @@
       <th data-field="farm" data-sortable="true">Farm</th>
       <th data-field="description" data-sortable="true">Description</th>
       <th data-field="date_discovered" data-sortable="true">Date Discovered</th>
-
       <th data-field="image" data-visible="true"  data-formatter="imageFormatter" data-sortable="true">Image</th>
-
       <th data-field="action_taken" data-sortable="true">Action Taken</th>
       <th data-field="reporting_date" data-sortable="true">Reporting Date</th>
       <th data-field="solution" data-visible="false" data-sortable="true">Solution</th>
@@ -77,12 +75,8 @@
 <!-- latest jquery-->
 {% block javascript %}
 <script>
-
   var $table = $('#table');
   var $remove = $('#remove')
-
-  var $table = $('#table');
-
   var selections = []
 
   function getIdSelections() {
@@ -96,22 +90,22 @@
     })
     return res
   }
-
-    function imageFormatter(value, row) {
-      var url =row.image;
-    return '<img class="img-thumbnail" src="'+url+'">'
+   //displays an image
+     function imageFormatter(value, row) {
+       var url =row.image;
+     return '<img class="img-thumbnail" src="'+url+'">'
   }
   function operateFormatter(value, row, index) {
     console.log(row.id);
     var url ="/farm/"+row.id+"/edit/query";
     var create_query_url ="/farm/create/query/"+row.id;
     return [
-    {% if request.user.is_superuser or perms.farm.change_farm %}
+    {% if request.user.is_superuser or perms.farm.change_query %}
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
         {% endif %}
-        {% if request.user.is_superuser or perms.farm.add_enterprise %}
+        {% if request.user.is_superuser or perms.farm.add_query %}
       '<a class="Edit " href="'+create_query_url+'" title="Add Query">',
       '<i class="fa fa-plus"></i>',
       '</a>  ',
@@ -204,4 +198,8 @@ $('#locale').change(initTable)
 
 
 
-  {% endblock %}
+
+</script>
+ 
+
+ {% endblock %}

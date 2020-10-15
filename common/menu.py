@@ -26,7 +26,7 @@ def can_add_farmer_profile(user, context):
 def can_view_farms(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('farm.view_farm') or user.farmer
+    return user.has_perm('farm.view_farm')
 
 def can_view_enterprise(user, context):
     if user.is_superuser:
