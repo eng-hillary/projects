@@ -195,12 +195,13 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmer = FarmerProfile.objects.get(user=user)
-        farms = Farm.objects.filter(farmer =farmer)
+       
         enterprises = Enterprise.objects.all().order_by('farm')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = enterprises
         else:
+            farmer = FarmerProfile.objects.get(user=user)
+            farms = Farm.objects.filter(farmer =farmer)
             queryset = enterprises.filter(farm__in=farms)
         
         return queryset
@@ -230,11 +231,12 @@ class FarmViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmer = FarmerProfile.objects.get(user=user)
+        
         farms = Farm.objects.all().order_by('farmer')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farms
         else:
+            farmer = FarmerProfile.objects.get(user=user)
             queryset = farms.filter(farmer=farmer)
         
         return queryset
@@ -352,7 +354,7 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
             'domain': current_site.domain,
-            'message': 'Your '+farm.name + ' Details have been updated sucessfully',
+            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
             })
         to_email = farm.farmer.user.email
         email = EmailMessage(
@@ -521,13 +523,14 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmer = FarmerProfile.objects.get(user=user)
-        farms = Farm.objects.filter(farmer =farmer)
-        enterprises = Enterprise.objects.filter(farm__in=farms)
+        
         farmrecords = FarmRecord.objects.all().order_by('enterprise')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
         else:
+            farmer = FarmerProfile.objects.get(user=user)
+            farms = Farm.objects.filter(farmer =farmer)
+            enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
         
         return queryset
@@ -637,7 +640,7 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
         message = render_to_string('enterprise_email.html', {
             'user': self.request.user,
             'domain': current_site.domain,
-            'message': 'Your '+farmrecord.name + ' Details have been updated sucessfully',
+            'message': 'Your '+farmrecord.farm_name + ' Details have been updated sucessfully',
             })
         to_email = self.request.user.email
         email = EmailMessage(
@@ -793,13 +796,13 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmer = FarmerProfile.objects.get(user=user)
-        farms = Farm.objects.filter(farmer =farmer)
-        enterprises = Enterprise.objects.filter(farm__in=farms)
         farmrecords = FinancialRecord.objects.all().order_by('enterprise')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
         else:
+            farmer = FarmerProfile.objects.get(user=user)
+            farms = Farm.objects.filter(farmer =farmer)
+            enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
         
         return queryset

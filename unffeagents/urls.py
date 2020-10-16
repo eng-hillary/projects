@@ -10,6 +10,8 @@ router.register(r'agentprofile', views.AgentProfileViewSet)
 router.register(r'market', views.MarketViewSet)
 router.register(r'marketprice', views.MarketPriceViewSet)
 router.register(r'notice', views.NoticeViewSet)
+router.register(r'call', views.CallerViewSet)
+router.register(r'response', views.ResponseViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -17,7 +19,7 @@ router.register(r'notice', views.NoticeViewSet)
 app_name = 'unffeagents'
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('agentprofile', AgentProfileList.as_view(), name='agentprofile_list'),
     path('create/agentprofile', CreateAgentProfile.as_view(), name="create_agentprofile"),
 
