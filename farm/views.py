@@ -1,11 +1,7 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-<<<<<<< HEAD
-,FarmMapSerializer,  PestAndDiseaseSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer)
-=======
-,FarmMapSerializer,  QuerySerializer, FarmRecordSerializer,FarmFinancilRecordSerializer)
->>>>>>> 182a96d310831372408fff8af4841a7a621e36b9
+,FarmMapSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer

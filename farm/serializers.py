@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import (Sector, Enterprise, Farm, FarmFacility, Produce, FarmProduce, 
-                    FinancialRecord, PestAndDisease, FarmRecord, EnterpriseType,FarmRecord,EnterpriseSelection,)
-                    Query)
+                    FinancialRecord, FarmRecord, EnterpriseType,FarmRecord,EnterpriseSelection,Query)
 from farmer .serializers import FarmerProfileSerializer
 from django.contrib.auth.models import User
 
