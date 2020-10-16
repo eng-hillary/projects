@@ -20,4 +20,8 @@ class Migration(migrations.Migration):
             name='interested_sector',
             field=models.CharField(max_length=100, null=True, verbose_name='What Sector of farming are you interested in'),
         ),
+         migrations.RenameModel(
+            old_name='PestAndDisease',
+            new_name='Query',
+        ),
     ]
