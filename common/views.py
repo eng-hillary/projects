@@ -30,10 +30,17 @@ from rest_framework.schemas import ManualSchema
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework import viewsets
+from rest_framework import permissions
 from .forms import ProfileForm
 from farmer.views import FarmerProfile
 from django.db.models import Count, Q
 import json
+from .serializers import GroupSerializer, UserSerializer
+from rest_framework import filters
+from django.core import serializers as django_serializers
+
+
 
 class HomePage(LoginRequiredMixin, TemplateView):
 
@@ -316,12 +323,19 @@ class ObtainAuthToken(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
+        
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        user_object = User.objects.filter(id=user.pk)
-        return Response({'token': token.key,'created': created,'user_id':user.pk, 'email':user.email,
-            'first_name':user.first_name,'user_object':user_object})
+        picture = None
+        if user.profile.profile_pic:
+            picture = user.profile.profile_pic.url
+        else:
+            picture = None
+
+        return Response({'token': token.key,'created': created,'id':user.pk,'username':user.username, 'email':user.email,
+            'first_name':user.first_name,'last_name':user.last_name,'profile_pic':picture
+            })
 
 
 obtain_auth_token = ObtainAuthToken.as_view()
@@ -357,3 +371,26 @@ def load_villages(request):
     parish_id = request.GET.get('parish')
     villages = Village.objects.filter(parish_id=parish_id).order_by('name')
     return render(request, 'village_dropdown_list_options.html', {'villages': villages})
+
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = '__all__'
+    ordering_fields = '__all__'
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['username','first_name','last_name','email','profile__gender','profile__phone_number']
+    ordering_fields = '__all__'

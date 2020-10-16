@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import AgentProfile, Market, MarketPrice, Notice
-from .serializers import AgentProfileSerializer, MarketSerializer, MarketPriceSerializer, NoticeSerializer
+from .models import (AgentProfile, Market, MarketPrice, Notice,CallRsponse,Caller)
+from .serializers import (AgentProfileSerializer, MarketSerializer, MarketPriceSerializer, 
+NoticeSerializer,CallSerializer,ResponseSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -21,6 +22,9 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
+from rest_framework import filters
+
+
 # views for agentprofiles
 class AgentProfileViewSet(viewsets.ModelViewSet):
     """
@@ -144,3 +148,25 @@ class NoticeList(APIView):
     def get(self, request):
         queryset = Notice.objects.order_by('notice_title')
         return Response({'notices': queryset})
+
+
+class CallerViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = Caller.objects.all()
+    serializer_class = CallSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = '__all__'
+    ordering_fields = '__all__'
+
+
+class ResponseViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = CallRsponse.objects.all()
+    serializer_class = ResponseSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['session_id','duration','recording','agent__user__first_name','agent__user__last_name']
+    ordering_fields = '__all__'
