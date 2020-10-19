@@ -15,6 +15,8 @@ router = routers.DefaultRouter()
 
 router.register(r'users', views.UserViewSet,'users')
 router.register(r'groups', views.GroupViewSet,'groups')
+router.register(r'districts', views.DistrictViewSet,'districts')
+
 
 app_name ='common'
 

@@ -25,7 +25,7 @@ approve_farmer= FarmerProfileViewSet.as_view({
 
 app_name = 'farmer'
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('groups', GroupList.as_view(), name='group_list'),
     path('create/group', CreateFarmerGroup.as_view(), name="create_farmer_group"),
     path('group/<int:pk>/edit', EditFarmerGroup.as_view(), name="edit_farmer_group"),

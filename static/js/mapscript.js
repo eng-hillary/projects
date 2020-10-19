@@ -307,7 +307,7 @@ Highcharts.getJSON('/openmarket/api/serviceregistration/', function (json) {
                            var url = "/openmarket/"+ event.point.id +"/view/";
                            window.location.href = url;
                           //alert(event.point.id);
-                      }
+                      },
                   }
               }
           }
@@ -623,7 +623,7 @@ Highcharts.chart('piecontainer', {
 
 // Create the chart
 
-Highcharts.getJSON('/api-farmer/farmerprofiles/', function (json) {
+Highcharts.getJSON('/farmer/api/farmerprofiles/', function (json) {
   var data = [];
   json.forEach(function (p) {
       p.z = p.region;

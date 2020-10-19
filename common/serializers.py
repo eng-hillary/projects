@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User,Group
+from .models import Region, District, County, SubCounty, Parish, Village
 
 
 class GroupSerializer(serializers.Serializer):
@@ -23,6 +24,12 @@ class UserSerializer(serializers.Serializer):
     gender = serializers.CharField(source='profile.get_gender_display')
     home_address = serializers.CharField(source='profile.home_address')
     profile_pic = serializers.FileField(source='profile.profile_pic')
+    region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
 
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.first_name, obj.last_name)
@@ -32,5 +39,33 @@ class UserSerializer(serializers.Serializer):
         exclude =['password1']
 
 
+class DistrictSerializer(serializers.ModelSerializer):
+  
+    class Meta:
+        model = District
+        fields ='__all__'
 
-     
+
+class CountySerializer(serializers.ModelSerializer):
+  
+    class Meta:
+        model = County
+        fields ='__all__'
+
+class SubCountySerializer(serializers.ModelSerializer):
+  
+    class Meta:
+        model = SubCounty
+        fields ='__all__'
+
+class ParishSerializer(serializers.ModelSerializer):
+  
+    class Meta:
+        model = Parish
+        fields ='__all__'
+
+class VillageSerializer(serializers.ModelSerializer):
+  
+    class Meta:
+        model = Village
+        fields ='__all__'

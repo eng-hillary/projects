@@ -54,12 +54,12 @@
                     <b>Number of dependants</b>: {{profilerecord.number_of_dependants}} <br>
                     <b>Have access to credit ?</b>: {% if profilerecord.credit_access is True%} Yes {% else %} No {% endif %} <br>
                     <h6 class="product-title">Address</h6>
-                    <b>Region</b>: {{profilerecord.region}} <br>
-                    <b>District</b>: {{profilerecord.district}} <br>
-                    <b>County</b>: {{profilerecord.county}} <br>
-                    <b>Sub county</b>: {{profilerecord.sub_county}} <br>
-                    <b>Parish</b>: {{profilerecord.parish}} <br>
-                    <b>Village</b>: {{profilerecord.village}} <br>
+                    <b>Region</b>: {{profilerecord.user.profile.region}} <br>
+                    <b>District</b>: {{profilerecord.user.profile.district}} <br>
+                    <b>County</b>: {{profilerecord.user.profile.county}} <br>
+                    <b>Sub county</b>: {{profilerecord.user.profile.sub_county}} <br>
+                    <b>Parish</b>: {{profilerecord.user.profile.parish}} <br>
+                    <b>Village</b>: {{profilerecord.user.profile.village}} <br>
                     <h6 class="product-title">Farming Information</h6>
                     <b>Sectors</b>:
                          {% for sector in profilerecord.sector.all %}
@@ -124,11 +124,12 @@
                  
                
                     <hr>
-                
+                    {% if request.user.is_superuser or perms.farmer.can_approve_farmers %}
                     <div class="m-t-15">
                         <button class="btn btn-primary m-r-10" id="approve_btn" type="button">Approve</button>
                         <button class="btn btn-decline" id="decline_btn" type="button">Decline</button>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
