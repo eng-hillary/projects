@@ -25,4 +25,4 @@ class ResourceSharingSerializer(serializers.ModelSerializer):
 class ResourceBookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResourceBooking
-        fields = ('resource', 'farmer', 'date_needed', 'payment_mode', 'payment_method')
+        fields = ('id','resource', 'farmer', 'date_needed', 'payment_mode', 'payment_method')
