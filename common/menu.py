@@ -92,6 +92,8 @@ def can_view_products(user, context):
      return user.has_perm('openmarket.view_product')
 
 def can_view_unffeagents(user, context):
+   
+   
     if user.is_superuser:
         return True
     return user.has_perm('unffeagents.view_agentprofile')
@@ -120,10 +122,26 @@ def can_add_product(user, context):
 # menu starts from here
 menus = [
     menu.Node(id='dashboard',css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>', pattern_name='common:home', link_attrs={'id': 'dashboard'}),
-    menu.Node(id='enterprises_selection', css_class="sidebar-header",
-                              label='<i data-feather="users"></i>Enterprise Selection',
+    
+    menu.PassTestNode(
+        id='Enterprise-selection-section',
+        css_class="sidebar-header",
+        label='<i data-feather="users"></i><span>Select Enterprise</span><i class="fa fa-angle-right pull-right"></i>',
+        url='#',
+        test=can_view_service_provider,
+        children=[
+            menu.PassTestNode(id='Enterprise selection',
+                              label='<i class="fa fa-circle"></i>Enterprise Selection',
                              
-                              pattern_name='farm:enterprise_selection',link_attrs={'id': 'enterprise_selection'}),
+                              pattern_name='farm:enterprise_selection', test=can_add_service_provider),
+            menu.PassTestNode(id='provider_list',
+                              label='<i class="fa fa-circle"></i>Selection Queries',
+                             
+                              pattern_name='farm:select_enterpise', test=can_view_service_provider),
+           
+        ]
+    ),
+   
     menu.PassTestNode(
         id='farmer-section',
         css_class="sidebar-header",
@@ -155,15 +173,7 @@ menus = [
         test=can_view_farms,
         children=[
 
-            menu.PassTestNode(id='enterprises',
-                              label='<i class="fa fa-circle"></i>Enterprise Selection',
-                             
-                              pattern_name='farm:enterprise_selection', test=can_view_enterprise),
-          menu.PassTestNode(id='enterprises',
-                              label='<i class="fa fa-circle"></i>Selections',
-                             
-                              pattern_name='farm:select_enterpise', test=can_view_enterprise),
-
+        
             menu.PassTestNode(id='farms',
                               label='<i class="fa fa-circle"></i>Farms',
                              
@@ -214,6 +224,18 @@ menus = [
                               label='<i class="fa fa-circle"></i>Applications',
                              
                               pattern_name='openmarket:serviceprovider_list', test=can_view_service_provider),
+           
+        ]
+    ),
+
+menu.PassTestNode(
+        id='Service-section',
+        css_class="sidebar-header",
+        label='<i data-feather="users"></i><span>Services</span><i class="fa fa-angle-right pull-right"></i>',
+        url='#',
+        test=can_view_service_provider,
+        children=[
+            
             menu.PassTestNode(id='register_service',
                               label='<i class="fa fa-circle"></i>Register Service',
                              
