@@ -53,14 +53,14 @@ class MarketPrice(TimeStampedModel, models.Model):
 
 class Notice(TimeStampedModel, models.Model):
     # sector
-    sector = models.ManyToManyField(Sector, related_name='notice_sectors')
+    sector = models.ManyToManyField(Sector, related_name='notice_sectors', blank=True)
         # location
     region = models.ManyToManyField(Region, related_name='target_regions')
     district = models.ManyToManyField(District, related_name='notice_districts', blank=True)
     county = models.ManyToManyField(County, related_name='notice_counties', blank=True)
     sub_county = models.ManyToManyField(SubCounty, related_name='notice_sub_counties', blank=True)
-    parish = models.ManyToManyField(Parish, related_name='notice_parishes')
-    village = models.ManyToManyField(Village, related_name='notice_villages')
+    parish = models.ManyToManyField(Parish, related_name='notice_parishes', blank=True)
+    village = models.ManyToManyField(Village, related_name='notice_villages', blank=True)
      
     # notice details
     notice_title = models.CharField(max_length=200, blank = False, null=False)

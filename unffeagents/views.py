@@ -23,6 +23,8 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
 from rest_framework import filters
+from django.contrib.auth.models import User, Group
+import requests
 
 
 # views for agentprofiles
@@ -172,8 +174,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
 
 # create notification
-
-# create farm 
+ 
 class CreateNoticeView(LoginRequiredMixin,CreateView):
     template_name = 'create_notification.html'
     success_url = reverse_lazy('unffeagents:notice_list')
@@ -204,21 +205,69 @@ class CreateNoticeView(LoginRequiredMixin,CreateView):
         notice.posted_by = self.request.user
         notice.save()
         form.save_m2m()
-        
-        # send email to target audience
-        # current_site = get_current_site(self.request)
-        # subject = notice.notice_title
-        # message = render_to_string('notice_email.html', {
-        #     'user': self.request.user,
-        #     'domain': current_site.domain,
-        #     'message': notice.description,
-        #     })
-        # to_email = self.request.user.email
-        # email = EmailMessage(
-        #         subject, message, to=[to_email]
-        #     )
-        # email.content_subtype = "html"
-        # email.send()
+        users = []
+        print(notice.sector.all())
+        if notice.sector.all().count()>0:
+            users =  User.objects.filter(is_active=True, farmer__isnull=False).exclude(email='')
+            for user in users:
+                if user.farmer.sector.filter(id__in=notice.sector.all()).exists() and notice.region.filter(id=user.profile.region.id) or user.farmer.sector.filter(id__in=notice.sector.all()).exists() and notice.district.filter(id=user.profile.district.id) or user.farmer.sector.filter(id__in=notice.sector.all()).exists() and notice.county.filter(id=user.profile.county.id) or user.farmer.sector.filter(id__in=notice.sector.all()).exists() and notice.sub_county.filter(id=user.profile.sub_county.id) or user.farmer.sector.filter(id__in=notice.sector.all()).exists() and notice.parish.filter(id=user.profile.parish.id) or user.farmer.sector.filter(id__in=notice.sector.all()).exists() and notice.village.filter(id=user.profile.village.id):
+                    # sending email with notifications
+                    current_site = get_current_site(self.request)
+                    subject = notice.notice_title
+                    message = render_to_string('notice_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'message': notice.description,
+                        })
+                    to_email = user.email
+                    email = EmailMessage(
+                        subject, message, to=[to_email]
+                        )
+                    email.content_subtype = "html"
+                    email.send()
+
+                    #send sms
+                    if user.profile.phone_number:
+                        try:
+                            request_type = "POST"
+                            url = 'http://techguy.thinvoidcloud.com/api.php'
+                            data = {'contacts': str(user.profile.phone_number),'message': notice.description,'username': 'ivr@unffeict4farmers.org','password': 'ccsrzwub'}
+                            response = requests.request(request_type, url, data=data)
+                            print(response)
+                            print(user.profile.phone_number)
+                        except:
+                            print('unable to  send messages')
+        else:
+            users = User.objects.filter(is_active=True).exclude(email='')
+            for user in users:
+                
+                if user.groups.filter(id__in=notice.target_audience.all()).exists() and notice.region.filter(id=user.profile.region.id): #or user.groups.filter(id__in=notice.target_audience.all()).exists() and notice.district.filter(id=user.profile.district.id) or user.groups.filter(id__in=notice.target_audience.all()).exists() and notice.county.filter(id=user.profile.county.id) or user.groups.filter(id__in=notice.target_audience.all()).exists() and notice.sub_county.filter(id=user.profile.sub_county.id) or user.groups.filter(id__in=notice.target_audience.all()).exists() and notice.parish.filter(id=user.profile.parish.id) or user.groups.filter(id__in=notice.target_audience.all()).exists() and notice.village.filter(id=user.profile.village.id):
+                    
+                    current_site = get_current_site(self.request)
+                    subject = notice.notice_title
+                    message = render_to_string('notice_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'message': notice.description,
+                        })
+                    to_email = user.email
+                    email = EmailMessage(
+                        subject, message, to=[to_email]
+                        )
+                    email.content_subtype = "html"
+                    email.send()
+
+                     #send sms
+                    if user.profile.phone_number:
+                        try:
+                            request_type = "POST"
+                            url = 'http://techguy.thinvoidcloud.com/api.php'
+                            data = {'contacts': str(user.profile.phone_number),'message': notice.description,'username': 'ivr@unffeict4farmers.org','password': 'ccsrzwub'}
+                            response = requests.request(request_type, url, data=data)
+                            print(user.profile.phone_number)
+                            print(response)
+                        except:
+                            print('unable to  send messages')
         return redirect('unffeagents:notice_list')
 
     def form_invalid(self, form):
