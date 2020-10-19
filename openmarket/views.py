@@ -407,7 +407,7 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
             )
         email.content_subtype = "html"
         email.send()
-        return redirect('openmarket:serviceprovider_list')
+        return redirect('openmarket:service_registration')
 
 #view for loading 
 def load_districts(request):
@@ -537,6 +537,8 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
 
         })
         return context
+
+
 class ServiceDetailView(LoginRequiredMixin, DetailView):
     model = Service
     context_object_name = "profilerecord"

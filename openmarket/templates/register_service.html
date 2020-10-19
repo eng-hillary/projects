@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col">
                 <div class="page-header-left">
-                    <h3>Create Service
+                    <h3>Please Register your Services to continue
                         <small>{{ user.groups.all.0 }} </small>
                     </h3>
                 </div>
@@ -72,11 +72,19 @@
                                 </div>
                                 <div class="row col-xl-12" id="transport">
                                     <div class="col-xl-12">
+                                        {{ form.driver_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-xl-12">
+                                        {{ form.driver_contact|as_crispy_field }}
+                                    </div>
+                                    
+                                    <div class="col-xl-12">
                                         {{ form.vehicle_type|as_crispy_field }}
                                     </div>
                                     <div class="col-xl-12">
                                         {{ form.vehicle_capacity|as_crispy_field }}
                                     </div>
+
                                 </div>
                                 <div id="enterprise" class="col-md-12">
                                     <div class="col-xl-12 ">

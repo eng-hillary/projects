@@ -301,7 +301,7 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
 
 class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
     model = FarmerProfile
-    context_object_name = ""
+    context_object_name = "profilerecord"
     template_name = "view_farmer_profile.html"
 
     def get_context_data(self, **kwargs):
