@@ -48,26 +48,34 @@
                     {% csrf_token %}
                     <div class="row">
 
-                        <div class="col-xl-6 col-md-6">
+                        <div class="col-xl-12 col-md-6">
                             {{ form.own_piece_of_land|as_crispy_field }}
                         </div>
-                        <div class="col-xl-6 col-md-6">
+                        <div id="land" class="row col-xl-12">
+                            <div class="col-xl-12 col-md-12">
+                                {{ form.rented_land|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-6">
                             {{ form.involved_in_anyother_farming_activity|as_crispy_field }}
+                        </div>
+                        <div id="sector" class="row col-xl-12">
+                            <div class="col-xl- 12">
+                                {{ form.sector|as_crispy_field }}
+                            </div>
+                            <div class="col-xl-12">
+                                {{ form.scale|as_crispy_field }}
+                            </div>
                         </div>
                         <div class="col-xl-6 col-md-6">
                             {{ form.capital|as_crispy_field }}
                         </div>
-                        <div class="col-xl-6 col-md-6">
-                            {{ form.scale|as_crispy_field }}
-                        </div>
-                        <div class="col-xl-6 col-md-6">
-                            {{ form.sector|as_crispy_field }}
-                        </div>
+                       
+                       
                         <div class="col-xl-6 col-md-6">
                             {{ form.interested_sector|as_crispy_field }}
                         </div>
-                       
-                      
+                          
                         <div class="col-xl-12 col-md-6">
                             {{ form.full_time_devotion|as_crispy_field }}
                         </div>
@@ -75,11 +83,6 @@
                         <div class="col-xl-12 col-md-6">
                             {{ form.what_is_your_inspiration_for_considering_in_farming|as_crispy_field }}
                         </div>
-
-                        
-
-
-                       
 
                         <input name="farmer" value="{{user.id}}" type="hidden">
 
@@ -107,10 +110,38 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+            $('#land').hide();
+            $('#sector').hide();
+          
+        });
+        
+        $('#id_own_piece_of_land').change(function () {
+            
+            if ($('#id_own_piece_of_land').val() == 'True') {
+                // alert('It works');
+                
+                $('#land').show();
+                
+            }
+            else {
+                
+                $('#land').hide();
+            }
+        });
+
+        $('#id_involved_in_anyother_farming_activity').change(function () {
+          
+            if ($('#id_involved_in_anyother_farming_activity').val() == 'True') {
+             //alert('It works');
+                $('#sector').show();
+            }
+            else {
+                $('#sector').hide();
+            }
+        });
 
 
 
-    });
 
 
 </script>

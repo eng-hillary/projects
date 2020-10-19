@@ -74,7 +74,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     #sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
    # user = UserSerializer()
     user = serializers.SerializerMethodField(method_name='get_user_full_name')
-    full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
+    #full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
@@ -87,7 +87,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceProvider
-        fields = ('id','user', 'nin', 'region', 'district', 'county', 'full_name',
+        fields = ('id','user', 'nin', 'region', 'district', 'county',
         'sub_county', 'region', 'parish', 'village','service_provider_location', 'list_of_services_if_more_than_one',
        'phone_1', 'phone_2', 'service_type', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
        )
