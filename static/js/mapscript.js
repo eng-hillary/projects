@@ -307,7 +307,7 @@ Highcharts.getJSON('/openmarket/api/serviceregistration/', function (json) {
                            var url = "/openmarket/"+ event.point.id +"/view/";
                            window.location.href = url;
                           //alert(event.point.id);
-                      }
+                      },
                   }
               }
           }

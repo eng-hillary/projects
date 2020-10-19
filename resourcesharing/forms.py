@@ -1,4 +1,4 @@
-from .models  import Resource
+from .models  import Resource, ResourceBooking
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
@@ -20,3 +20,15 @@ class ResourceForm(forms.ModelForm):
         super(ResourceForm, self).__init__(*args, **kwargs)
         self.fields['terms_and_conditions'].widget.attrs.update({'rows': '3'})
       
+class ResourceBookingForm(forms.ModelForm):
+    date_needed = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+   
+    class Meta:
+        model = ResourceBooking
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ResourceBookingForm, self).__init__(*args, **kwargs)
+       
+    
