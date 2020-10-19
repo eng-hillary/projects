@@ -123,11 +123,11 @@ class FarmMapSerializer(serializers.ModelSerializer):
         return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
 
     def get_district(self, obj):
-        return '{}'.format(obj.farmer.district.name)
+        return '{}'.format(obj.farmer.user.profile.district)
 
     
     def get_region(self, obj):
-        return '{}'.format(obj.farmer.region.name)
+        return '{}'.format(obj.farmer.user.profile.region)
 
 class EnterpriseSelectionSerializer(serializers.ModelSerializer):
      user = serializers.SerializerMethodField(method_name='get_user_full_name')

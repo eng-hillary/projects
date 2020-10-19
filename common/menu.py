@@ -101,6 +101,12 @@ def can_register_agent(user, context):
         return True
     return user.has_perm('unffeagents.add_agentprofile')
 
+
+def can_view_notifications(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('unffeagents.view_notice')
+
 def can_add_product(user, context):
     if user.is_superuser:
         return True
@@ -296,6 +302,10 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Agents',
                              
                               pattern_name='unffeagents:agentprofile_list', test=can_view_unffeagents),
+            menu.PassTestNode(id='notifications',
+                              label='<i class="fa fa-circle"></i>Alerts & Notifications',
+                             
+                              pattern_name='unffeagents:notice_list', test=can_view_notifications),
            
          
         ]

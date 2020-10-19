@@ -24,12 +24,19 @@ class MarketPriceSerializer(serializers.ModelSerializer):
         fields = ['market', 'user', 'product', 'unit_of_measure', 'start_price', 'end_price']
 
 class NoticeSerializer(serializers.ModelSerializer):
-    target_audience = serializers.PrimaryKeyRelatedField(many=False, queryset=Notice.objects.all())
-    region = serializers.PrimaryKeyRelatedField(many=False, queryset=Notice.objects.all())
+    sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    district = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    region = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    county = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    sub_county = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    parish = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    target_audience = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    village = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    display_up_to = serializers.DateTimeField()
+  
     class Meta:
         model = Notice
-        fields = ['notice_title', 'category', 'display_up_to', 'posted_by', 'target_audience', 'region',
-        'description', 'upload']
+        fields ='__all__'
 
 
 class CallSerializer(serializers.ModelSerializer):

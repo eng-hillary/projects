@@ -1,11 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from openmarket.models import Product
-from common.models import Region
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
-from common .models import (District,County,Region)
+from common .models import (District,County,Region,SubCounty, Parish,Village)
 from common .models import TimeStampedModel
+from farm .models import Sector
 
 
 # Create your models here.
@@ -50,24 +50,25 @@ class MarketPrice(TimeStampedModel, models.Model):
         return self.market
 
 
-class Notice(TimeStampedModel, models.Model):
-    CATEGORY = (
-        (None, "--please select--"),
-        ('weather', 'Weather'),
-        ('inputs', 'Inputs'),
-        ('market', 'Market'),
-        ('pests and diseases', 'Pests and Diseases'),
-        ('policies', 'Policies'),
-    )
 
-    notice_title = models.CharField(max_length=100, blank = False, null=False)
-    category = models.CharField(choices=CATEGORY, blank=False, max_length=50)
+class Notice(TimeStampedModel, models.Model):
+    # sector
+    sector = models.ManyToManyField(Sector, related_name='notice_sectors')
+        # location
+    region = models.ManyToManyField(Region, related_name='target_regions')
+    district = models.ManyToManyField(District, related_name='notice_districts', blank=True)
+    county = models.ManyToManyField(County, related_name='notice_counties', blank=True)
+    sub_county = models.ManyToManyField(SubCounty, related_name='notice_sub_counties', blank=True)
+    parish = models.ManyToManyField(Parish, related_name='notice_parishes')
+    village = models.ManyToManyField(Village, related_name='notice_villages')
+     
+    # notice details
+    notice_title = models.CharField(max_length=200, blank = False, null=False)
     display_up_to = models.DateTimeField(blank = False)
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE)
     target_audience = models.ManyToManyField(Group, related_name='target_groups')
-    region = models.ManyToManyField(Region, related_name='target_regions')
     description = models.TextField(max_length=300, blank=False)
-    upload = models.FileField(null=True)
+  
 
     def __str__(self):
         return self.notice_title
