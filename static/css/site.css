@@ -24044,8 +24044,37 @@ a.detail-icon {
 }
 
 
+/* .select2-container{
+  width: 100% !important;
+  border-radius: 0;
+  border: 1px solid #ced4da;
+}
+.select2-container--default .select2-selection--multiple{
+  border-radius: 0 important;
+  border: none !important;
+} */
+/* dal bootstrap css fix */
+.select2-container {
+  width: 100% !important;
+  min-width: 10em !important;
+}
+/* django-addanother bootstrap css fix */
+.related-widget-wrapper{
+  padding-right: 16px;
+  position: relative;
+}
+.related-widget-wrapper-link{
+  position: absolute;
+  top: 3px;
+  right: 0px;
+}
+span.select2-selection.select2-selection--single {
+  height: 33px;
+}
 
-
+span.select2-selection__placeholder {
+  font-size: 16px;
+}
 
 a.Edit{
   color:#0062cc;
@@ -24153,20 +24182,7 @@ min-width: 50px;
   z-index: 2;
 }
 
-/* select2 css */
-.select2-container{
-  width: 100% !important;
-  border-radius: 0;
-  border: 1px solid #ced4da;
-}
-.select2-container--default .select2-selection--multiple{
-  border-radius: 0 important;
-  border: none !important;
-}
-.select2-container--open{
-  width: inherit !important;
-  display: block !important;
-}
+
 
 .farm_avatar-wrapper {
   position: relative;

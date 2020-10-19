@@ -30,10 +30,18 @@ from rest_framework.schemas import ManualSchema
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework import viewsets
+from rest_framework import permissions
 from .forms import ProfileForm
 from farmer.views import FarmerProfile
 from django.db.models import Count, Q
 import json
+from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer
+,SubCountySerializer,ParishSerializer,VillageSerializer)
+from rest_framework import filters
+from django.core import serializers as django_serializers
+
+
 
 class HomePage(LoginRequiredMixin, TemplateView):
 
@@ -43,10 +51,10 @@ class HomePage(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomePage, self).get_context_data(**kwargs)
         dataset = FarmerProfile.objects \
-        .values('region') \
-        .annotate(credit_access_count=Count('region', filter=Q(credit_access=True)),
-                  no_credit_access_count=Count('region', filter=Q(credit_access=False))) \
-        .order_by('region')
+        .values('sector') \
+        .annotate(credit_access_count=Count('sector', filter=Q(credit_access=True)),
+                  no_credit_access_count=Count('sector', filter=Q(credit_access=False))) \
+        .order_by('sector')
     
         categories = list()
         credit_access_series_data = list()
@@ -54,7 +62,7 @@ class HomePage(LoginRequiredMixin, TemplateView):
 
 #Looping through the created dataset from above
         for entry in dataset:
-            categories.append('%s Farmers' % entry['region'])
+            categories.append('%s Farmers' % entry['sector'])
             credit_access_series_data.append(entry['credit_access_count'])
             no_credit_access_series_data.append(entry['no_credit_access_count'])
 
@@ -176,6 +184,13 @@ class SignUpView(CreateView):
         user.refresh_from_db()  # load the profile instance created by the signal
         Token.objects.get_or_create(user=user)
         profile.phone_number = form.cleaned_data.get('phone_number')
+        profile.phone_2 = form.cleaned_data.get('phone_2')
+        profile.region = form.cleaned_data.get('region')
+        profile.district = form.cleaned_data.get('district')
+        profile.county = form.cleaned_data.get('county')
+        profile.sub_county = form.cleaned_data.get('sub_county')
+        profile.parish = form.cleaned_data.get('parish')
+        profile.village = form.cleaned_data.get('village')
         profile.home_address = form.cleaned_data.get('home_address')
         profile.gender = form.cleaned_data.get('gender')
         profile.profile_pic = form.cleaned_data.get('profile_pic')
@@ -316,12 +331,19 @@ class ObtainAuthToken(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
+        
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        user_object = User.objects.filter(id=user.pk)
-        return Response({'token': token.key,'created': created,'user_id':user.pk, 'email':user.email,
-            'first_name':user.first_name,'user_object':user_object})
+        picture = None
+        if user.profile.profile_pic:
+            picture = user.profile.profile_pic.url
+        else:
+            picture = None
+
+        return Response({'token': token.key,'created': created,'id':user.pk,'username':user.username, 'email':user.email,
+            'first_name':user.first_name,'last_name':user.last_name,'profile_pic':picture
+            })
 
 
 obtain_auth_token = ObtainAuthToken.as_view()
@@ -357,3 +379,37 @@ def load_villages(request):
     parish_id = request.GET.get('parish')
     villages = Village.objects.filter(parish_id=parish_id).order_by('name')
     return render(request, 'village_dropdown_list_options.html', {'villages': villages})
+
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = '__all__'
+    ordering_fields = '__all__'
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['username','first_name','last_name','email','profile__gender','profile__phone_number']
+    ordering_fields = '__all__'
+
+
+class DistrictViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = District.objects.all()
+    serializer_class = DistrictSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['name','region__name']
+    ordering_fields = '__all__'

@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
-from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer,  QuerySerializer, FarmRecordSerializer,FarmFinancilRecordSerializer)
+from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer,QuerySerializer
+,FarmMapSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer)
+
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -195,12 +196,13 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmer = FarmerProfile.objects.get(user=user)
-        farms = Farm.objects.filter(farmer =farmer)
+       
         enterprises = Enterprise.objects.all().order_by('farm')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = enterprises
         else:
+            farmer = FarmerProfile.objects.get(user=user)
+            farms = Farm.objects.filter(farmer =farmer)
             queryset = enterprises.filter(farm__in=farms)
         
         return queryset
@@ -230,11 +232,12 @@ class FarmViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmer = FarmerProfile.objects.get(user=user)
+        
         farms = Farm.objects.all().order_by('farmer')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farms
         else:
+            farmer = FarmerProfile.objects.get(user=user)
             queryset = farms.filter(farmer=farmer)
         
         return queryset
@@ -521,13 +524,14 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmer = FarmerProfile.objects.get(user=user)
-        farms = Farm.objects.filter(farmer =farmer)
-        enterprises = Enterprise.objects.filter(farm__in=farms)
+        
         farmrecords = FarmRecord.objects.all().order_by('enterprise')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
         else:
+            farmer = FarmerProfile.objects.get(user=user)
+            farms = Farm.objects.filter(farmer =farmer)
+            enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
         
         return queryset
@@ -793,19 +797,19 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmer = FarmerProfile.objects.get(user=user)
-        farms = Farm.objects.filter(farmer =farmer)
-        enterprises = Enterprise.objects.filter(farm__in=farms)
         farmrecords = FinancialRecord.objects.all().order_by('enterprise')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
         else:
+            farmer = FarmerProfile.objects.get(user=user)
+            farms = Farm.objects.filter(farmer =farmer)
+            enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
         
         return queryset
 
 
-class EnterpriseSelection(LoginRequiredMixin,CreateView):
+class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
     template_name = 'enterprise_selection.html'
     success_url = reverse_lazy('farm:select_enterpise')
     form_class = EnterpriseSelectionForm
@@ -813,10 +817,10 @@ class EnterpriseSelection(LoginRequiredMixin,CreateView):
     
 
     def dispatch(self, request, *args, **kwargs):
-        return super(EnterpriseSelection, self).dispatch(request, *args, **kwargs)
+        return super(EnterpriseSelectionView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(EnterpriseSelection, self).get_form_kwargs()
+        kwargs = super(EnterpriseSelectionView, self).get_form_kwargs()
         return kwargs
 
 
@@ -870,3 +874,13 @@ class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
     def get(self, request):
        # queryset = Sector.objects.order_by('-id')
         return Response()
+
+class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = EnterpriseSelection.objects.all()
+    serializer_class = EnterpriseSelectionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+  

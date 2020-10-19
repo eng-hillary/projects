@@ -164,7 +164,7 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        farmers = FarmerProfile.objects.all().order_by('region')
+        farmers = FarmerProfile.objects.all().order_by('-user_id')
         if  self.request.user.has_perm('farmer.delete_farmerprofile'):
             queryset = farmers
         else:
@@ -216,6 +216,7 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
         profile.status = 'Pending'
         profile.user = self.request.user
         profile.save()
+        form.save_m2m()
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
@@ -276,20 +277,22 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
         profile = form.save(commit=False)
         # updating profile for only changed fields
         profile.save()
-
-        # not sending email to a farmer after editing for now
-        # current_site = get_current_site(self.request)
-        # subject = 'Registrated Successful'
-        # message = render_to_string('profile_created_successful_email.html', {
-        #     'user': profile.user,
-        #     'domain': current_site.domain
-        #     })
-        # to_email = profile.user.email
-        # email = EmailMessage(
-        #         subject, message, to=[to_email]
-        #     )
-        # email.content_subtype = "html"
-        # email.send()
+        form.save_m2m()
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Registered Successfully'
+        message = render_to_string('profile_created_successful_email.html', {
+            'user': profile.user,
+            'domain': current_site.domain,
+            'message':'Your Profile as a farmer in the ICT4Farmers System has been updated successfully',
+          
+            })
+        to_email = profile.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
         return redirect('farmer:farmerprofile_list')
 
     def form_invalid(self, form):
@@ -301,7 +304,7 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
 
 class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
     model = FarmerProfile
-    context_object_name = ""
+    context_object_name = "profilerecord"
     template_name = "view_farmer_profile.html"
 
     def get_context_data(self, **kwargs):

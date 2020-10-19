@@ -18,20 +18,22 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField(method_name='get_id')
     user = serializers.SerializerMethodField(method_name='get_user_full_name')
     sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
-    region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     group = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     credit_access = serializers.SerializerMethodField(method_name='conversion_bool',source='Credit access')
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
+    region = serializers.SerializerMethodField(method_name='get_region',source='user.profile.region')
+    district = serializers.SerializerMethodField(method_name='get_district',source='user.profile.district')
+    county = serializers.SerializerMethodField(method_name='get_county',source='user.profile.county')
+    sub_county = serializers.SerializerMethodField(method_name='get_sub_county',source='user.profile.sub_county')
+    parish = serializers.SerializerMethodField(method_name='get_parish',source='user.profile.parish')
+    village = serializers.SerializerMethodField(method_name='get_village',source='user.profile.village')
+    phone_1 = serializers.SerializerMethodField(method_name='get_phone1',source='user.profile.phone_number')
+    phone_2 = serializers.SerializerMethodField(method_name='get_phone2',source='user.profile.phone_2')
+
     class Meta:
         model = FarmerProfile
-        fields = ('user_id','user','full_name', 'date_of_birth', 'nin', 'sector', 'region', 'district', 'county',
-        'sub_county', 'region', 'parish', 'village', 'level_of_education', 'marital_status',
-        'size_of_land', 'phone_1', 'phone_2', 'group', 'type_of_land', 'production_scale', 'number_of_dependants',
+        fields = ('user_id','user','full_name', 'date_of_birth', 'nin', 'sector', 'occupation', 'level_of_education', 'marital_status','region',
+        'district','county','sub_county','parish','village','phone_1','phone_2','size_of_land', 'group', 'type_of_land', 'production_scale', 'number_of_dependants',
         'credit_access', 'experience', 'status', 'general_remarks', 'approver', 'approved_date')
     '''
     returns yes or no for boolean fields
@@ -48,6 +50,32 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
 
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+
+    def get_region(self, obj):
+        return '{}'.format(obj.user.profile.region)
+    
+    def get_district(self, obj):
+        return '{}'.format(obj.user.profile.district)
+    
+    def get_county(self, obj):
+        return '{}'.format(obj.user.profile.county)
+
+    def get_sub_county(self, obj):
+        return '{}'.format(obj.user.profile.sub_county)
+    
+    def get_parish(self, obj):
+        return '{}'.format(obj.user.profile.parish)
+    
+    def get_village(self, obj):
+        return '{}'.format(obj.user.profile.village)
+
+    def get_phone1(self, obj):
+        return '{}'.format(obj.user.profile.phone_number)
+    
+    def get_phone2(self, obj):
+        return '{}'.format(obj.user.profile.phone_2)
+    
+    
 
 
 

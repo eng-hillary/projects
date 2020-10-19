@@ -40,11 +40,11 @@ urlpatterns = [
     path('openmarket/', include('openmarket.urls', namespace="openmarket")),
 
     # farm urls
-    path('api-farm/', include('farm.urls', namespace="api-farm")),
+  
     path('farm/', include('farm.urls', namespace="farm")),
 
     # farmer urls
-    path('api-farmer/', include('farmer.urls', namespace="api-farmer")),
+   
     path('farmer/', include('farmer.urls', namespace="farmer")),
 
     # unffeagents urls

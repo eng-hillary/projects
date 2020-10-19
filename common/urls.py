@@ -5,12 +5,23 @@ from common.views import (
     load_parishes,load_villages, activate
 )
 
-from django.urls import path
+from django.urls import path,include
+from rest_framework import routers
+from . import views
+
+
+
+router = routers.DefaultRouter()
+
+router.register(r'users', views.UserViewSet,'users')
+router.register(r'groups', views.GroupViewSet,'groups')
+router.register(r'districts', views.DistrictViewSet,'districts')
 
 
 app_name ='common'
 
 urlpatterns = [
+    path('api/', include(router.urls)),
     path('', HomePage.as_view(), name='home'),
     path('account_activation_sent/', account_activation_sent, name='account_activation_sent'),
     path('signup/', SignUpView.as_view(), name='signup'),

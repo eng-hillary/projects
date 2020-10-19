@@ -32,7 +32,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="card tab2-card">
+                        <div class="card tab2-card ">
                             <div class="card-header">
                                 <h5> {% if farmerprofile %} Update {% else %} Add {% endif %}Farmer Profile</h5>
                             </div>
@@ -61,52 +61,21 @@
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.marital_status|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.phone_1|as_crispy_field }}
+                                            <div class="col-md-6">
+                                                {{ form.occupation|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.phone_2|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-4 col-md-4">
+                                            <div class="col-md-6">
                                                 {{ form.number_of_dependants|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-4 col-md-4">
+                                            <div class="col-md-6">
                                                 {{ form.credit_access|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-4 col-md-4">
+                                            <div class="col-md-6">
                                                 {{ form.experience|as_crispy_field }}
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab" id="address" role="tabpanel" aria-labelledby="address-tabs">
-                                      
-                                          
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h4>Address</h4>
-                                              </div>
-                                                <div class="col-xl-6 col-md-6">
-                                                    {{ form.region|as_crispy_field }}
-                                                </div>
-                                                <div class="col-xl-6 col-md-6">
-                                                    {{ form.district|as_crispy_field }}
-                                                </div>
-                                                <div class="col-xl-6 col-md-6">
-                                                    {{ form.county|as_crispy_field }}
-                                                </div>
-                                                <div class="col-xl-6 col-md-6">
-                                                    {{ form.sub_county|as_crispy_field }}
-                                                </div>
-                                                <div class="col-xl-6 col-md-6">
-                                                    {{ form.parish|as_crispy_field }}
-                                                </div>
-                                                <div class="col-xl-6 col-md-6">
-                                                    {{ form.village|as_crispy_field }}
-                                                </div>
-                                            
-                                            </div>
-                                      
-                                    </div>
+                
                                     <div class="tab" id="farming" role="tabpanel" aria-labelledby="farming-tabs">
                                        
                                           
@@ -142,15 +111,15 @@
                                     <div style="float:right;">
                                       <button type="button" class="btn previous">Previous</button>
                                         <button type="button" class="next btn btn-primary">Next</button>
-                                        <button type="button" class="btn btn-primary preview">Preview</button>
-                                        <button type="button" class="btn btn-success submit">Submit</button>
+                                       
+                                        <button type="button" class="btn btn-primary submit">Submit</button>
                                     </div>
                                 </div>
                                 <!-- Circles which indicates the steps of the form: -->
                                 <div style="text-align:center;margin-top:40px;">
                                     <span class="step">1</span>
                                     <span class="step">2</span>
-                                    <span class="step">3</span>
+                                    
                                 </div>
                             </form>
                         </div>
@@ -172,88 +141,8 @@
       // add select 2 to dropdown fields
       $('#id_sector').select2( );
       $('#id_group').select2();
-    //load districts
-    $("#id_region").change(function () {
-      var url = $("#form").attr("data-districts-url");  // get the url of the `load_cities` view
-      var regionId = $(this).val();  // get the selected country ID from the HTML input
+     
 
-      $.ajax({                       // initialize an AJAX request
-        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-        data: {
-          'region': regionId       // add the country id to the GET parameters
-        },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#id_district").html(data);  // replace the contents of the city input with the data that came from the server
-        }
-      });
-
-    });
-    //load counties
-    $("#id_district").change(function () {
-      var url = $("#form").attr("data-counties-url");  // get the url of the `load_cities` view
-      var districtId = $(this).val();  // get the selected  ID from the HTML input
-
-      $.ajax({                       // initialize an AJAX request
-        url: url,                    // set the url of the request 
-        data: {
-          'district': districtId       // add the  id to the GET parameters
-        },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#id_county").html(data);  // replace the contents of the city input with the data that came from the server
-        
-        }
-      });
-    });
-    // load sub counties
-    $("#id_county").change(function () {
-      var url = $("#form").attr("data-sub_counties-url");  // get the url of the `load_cities` view
-      var countyId = $(this).val();  // get the selected  ID from the HTML input
-
-      $.ajax({                       // initialize an AJAX request
-        url: url,                    // set the url of the request 
-        data: {
-          'county': countyId       // add the  id to the GET parameters
-        },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#id_sub_county").html(data);  // replace the contents of the city input with the data that came from the server
-    
-        }
-      });
-    });
-
-    // load parishes ajax
-    $("#id_sub_county").change(function () {
-      var url = $("#form").attr("data-parishes-url");  // get the url of the `load_cities` view
-      var sub_countyId = $(this).val();  // get the selected  ID from the HTML input
-
-      $.ajax({                       // initialize an AJAX request
-        url: url,                    // set the url of the request 
-        data: {
-          'sub_county': sub_countyId       // add the  id to the GET parameters
-        },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#id_parish").html(data);  // replace the contents of the city input with the data that came from the server
-        
-        }
-      });
-    });
-
-      // load villages ajax
-      $("#id_parish").change(function () {
-      var url = $("#form").attr("data-villages-url");  // get the url of the `load_cities` view
-      var parishId = $(this).val();  // get the selected  ID from the HTML input
-
-      $.ajax({                       // initialize an AJAX request
-        url: url,                    // set the url of the request 
-        data: {
-          'parish': parishId       // add the  id to the GET parameters
-        },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#id_village").html(data);  // replace the contents of the city input with the data that came from the server
-        
-        }
-      });
-    });
 
     ///form validation 
     // example of adding a custom  validation method to the form

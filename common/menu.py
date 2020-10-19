@@ -26,7 +26,7 @@ def can_add_farmer_profile(user, context):
 def can_view_farms(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('farm.view_farm') or user.farmer
+    return user.has_perm('farm.view_farm')
 
 def can_view_enterprise(user, context):
     if user.is_superuser:
@@ -58,11 +58,12 @@ def can_view_resources(user, context):
 def can_view_service_provider(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('farm.view_resources')
+    return user.has_perm('openmarket.view_serviceprovider')
 
 def can_add_service_provider(user, context):
     if user.is_superuser:
         return True
+
     return user.has_perm('openmarket.add_serviceprovider')
 
 def can_register_services(user, context):
@@ -100,19 +101,29 @@ def can_register_agent(user, context):
         return True
     return user.has_perm('unffeagents.add_agentprofile')
 
+
+def can_view_notifications(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('unffeagents.view_notice')
+
 def can_add_product(user, context):
     if user.is_superuser:
         return True
     return user.has_perm('openmarket. add_product')
 
 
-def can_view_products(user, context):
-    if user.is_superuser:
-        return True
-    return user.has_perm('openmarket. product_list')
+# def can_view_products(user, context):
+#     if user.is_superuser:
+#         return True
+#     return user.has_perm('openmarket. product_list')
 # menu starts from here
 menus = [
     menu.Node(id='dashboard',css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>', pattern_name='common:home', link_attrs={'id': 'dashboard'}),
+    menu.Node(id='enterprises_selection', css_class="sidebar-header",
+                              label='<i data-feather="users"></i>Enterprise Selection',
+                             
+                              pattern_name='farm:enterprise_selection',link_attrs={'id': 'enterprise_selection'}),
     menu.PassTestNode(
         id='farmer-section',
         css_class="sidebar-header",
@@ -143,14 +154,21 @@ menus = [
         url='#',
         test=can_view_farms,
         children=[
-            menu.PassTestNode(id='farms',
-                              label='<i class="fa fa-circle"></i>Farms',
-                             
-                              pattern_name='farm:farm_list', test=can_view_farms),
+
             menu.PassTestNode(id='enterprises',
                               label='<i class="fa fa-circle"></i>Enterprise Selection',
                              
                               pattern_name='farm:enterprise_selection', test=can_view_enterprise),
+          menu.PassTestNode(id='enterprises',
+                              label='<i class="fa fa-circle"></i>Selections',
+                             
+                              pattern_name='farm:select_enterpise', test=can_view_enterprise),
+
+            menu.PassTestNode(id='farms',
+                              label='<i class="fa fa-circle"></i>Farms',
+                             
+                              pattern_name='farm:farm_list', test=can_view_farms),
+           
             menu.PassTestNode(id='enterprises',
                               label='<i class="fa fa-circle"></i>Enterprises',
                                         
@@ -284,6 +302,10 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Agents',
                              
                               pattern_name='unffeagents:agentprofile_list', test=can_view_unffeagents),
+            menu.PassTestNode(id='notifications',
+                              label='<i class="fa fa-circle"></i>Alerts & Notifications',
+                             
+                              pattern_name='unffeagents:notice_list', test=can_view_notifications),
            
          
         ]

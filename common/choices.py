@@ -39,7 +39,12 @@ SCALE = (
     ('Large', 'large'),
     ('small', 'small'),
 )
-
+SECTOR = (
+    (None, "--please select--"),
+    ('Animal Farming','Animal Farming'),
+    ('Fisheries','Fisheries'),
+    ('Crop Farming','Crop Farming')
+)
 
 INVENTORY_STATUS = (
      (None, "--please select--"),
@@ -127,3 +132,4 @@ RESOURCE_CATEGORY = (
     ('land', 'Land'),
     ('transportation', 'Transportation'),    
 )
+PAST_YEARS = [year for year in range(datetime.date.today().year, 1899, -1)]

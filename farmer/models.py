@@ -11,7 +11,7 @@ from farm .models import Sector
 
 class Group(TimeStampedModel, models.Model):
     name = models.CharField(_('Group Name'), max_length=100, null=False, blank=False)
-    description = models.TextField(blank=False)
+    description = models.TextField(blank=True, null=True)
     logo = models.ImageField(null=True)
     address = models.TextField(blank=False, null=False)
     contact_person = models.CharField(max_length=100)
@@ -30,19 +30,12 @@ class FarmerProfile(TimeStampedModel, models.Model):
     date_of_birth = models.DateField()
     level_of_education = models.CharField(max_length=100, null=False, blank=False)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
-    phone_1 = PhoneNumberField(_('Phone number 1'), blank=False, null=False)
-    phone_2 = PhoneNumberField(_('Phone number 2'), blank=True, null=True)
     number_of_dependants = models.PositiveIntegerField()
     credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=False, blank=False)
-    experience = models.FloatField(_('Experience in years'),null=False, blank=False)
-
-    # location
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
-    county = models.ForeignKey(County, on_delete=models.CASCADE)
-    sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE)
-    parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
-    village = models.ForeignKey(Village, on_delete=models.CASCADE)
+    experience = models.FloatField(_('Farming Experience in years'),null=False, blank=False)
+    occupation = models.CharField(max_length=100, null=True, blank=False)
+   
+   
 
     # farming information
     sector = models.ManyToManyField(Sector, related_name='farmer_sectors')
