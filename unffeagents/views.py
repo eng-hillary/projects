@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from rest_framework.views import APIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.permissions import IsAuthenticated
-from .forms import (AgentProfileForm)
+from .forms import (AgentProfileForm, NoticeForm)
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
@@ -136,7 +136,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows notices to be viewed or edited.
     """
-    queryset = Notice.objects.all().order_by('notice_title')
+    queryset = Notice.objects.all().order_by('-created')
     serializer_class = NoticeSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -170,3 +170,97 @@ class ResponseViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['session_id','duration','recording','agent__user__first_name','agent__user__last_name']
     ordering_fields = '__all__'
+
+# create notification
+
+# create farm 
+class CreateNoticeView(LoginRequiredMixin,CreateView):
+    template_name = 'create_notification.html'
+    success_url = reverse_lazy('unffeagents:notice_list')
+    form_class = NoticeForm
+    success_message = "Notice has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateNoticeView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateNoticeView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        notice = form.save(commit=False)
+        notice.posted_by = self.request.user
+        notice.save()
+        form.save_m2m()
+        
+        # send email to target audience
+        # current_site = get_current_site(self.request)
+        # subject = notice.notice_title
+        # message = render_to_string('notice_email.html', {
+        #     'user': self.request.user,
+        #     'domain': current_site.domain,
+        #     'message': notice.description,
+        #     })
+        # to_email = self.request.user.email
+        # email = EmailMessage(
+        #         subject, message, to=[to_email]
+        #     )
+        # email.content_subtype = "html"
+        # email.send()
+        return redirect('unffeagents:notice_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+class EditNoticeView(LoginRequiredMixin,UpdateView):
+    model =Notice
+    template_name = 'create_notification.html'
+    success_url = reverse_lazy('unffeagents:farm_list')
+    form_class = NoticeForm
+    success_message = "Notice has been updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditNoticeView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditNoticeView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        notice = form.save(commit=False)
+        notice.save()
+        form.save_m2m()
+        return redirect('unffeagents:notice_list')
+
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))

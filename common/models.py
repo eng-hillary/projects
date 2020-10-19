@@ -79,9 +79,18 @@ class Village(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = PhoneNumberField(blank=False, null=False)
+    phone_2 = PhoneNumberField(_('Phone number 2'), blank=True, null=True)
     home_address = models.TextField(max_length=100, blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     profile_pic = models.ImageField(null=True, blank=True)
+     # moved users location to profile to avoid redundancy
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True, blank=False)
+    district = models.ForeignKey(District, on_delete=models.CASCADE, null=True, blank=False)
+    county = models.ForeignKey(County, on_delete=models.CASCADE, null=True, blank=False)
+    sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE, null=True, blank=False)
+    parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True, blank=False)
+    village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True, blank=False)
+
 
     def __str__(self):
         return '{} {}'.format(self.user.first_name, self.user.last_name)

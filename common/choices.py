@@ -132,3 +132,4 @@ RESOURCE_CATEGORY = (
     ('land', 'Land'),
     ('transportation', 'Transportation'),    
 )
+PAST_YEARS = [year for year in range(datetime.date.today().year, 1899, -1)]
