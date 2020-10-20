@@ -47,7 +47,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     # initial capital moved to farm
     #initial_total_capital = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
 
-    status = models.CharField(choices=STATUS, default='in_active', max_length=20,null=False)
+    status = models.CharField(choices=STATUS, default='Pending', max_length=20,null=False)
     # handle approving of a farmer
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
