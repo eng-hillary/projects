@@ -40,11 +40,12 @@
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-xl-12 col-md-12">
-                                        {{ form.sector|as_crispy_field }}
-                                    </div> 
-                                    <div class="col-xl-12 col-md-12">
                                         {{ form.region|as_crispy_field }}
                                     </div>
+                                    <div class="col-xl-12 col-md-12">
+                                        {{ form.sector|as_crispy_field }}
+                                    </div> 
+                                  
                                     <div class="col-xl-6 col-md-6">
                                         {{ form.district|as_crispy_field }}
                                     </div>
