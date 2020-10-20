@@ -15,10 +15,10 @@
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
-                    <li class="breadcrumb-item"><a href="{% url 'farm:farm_list' %}"><i data-feather="home"></i></a>
+                    <li class="breadcrumb-item"><a href="{% url 'farm:select_enterpise' %}"><i data-feather="home"></i></a>
                     </li>
-                    <li class="breadcrumb-item add-new">Farms</li>
-                    <li class="breadcrumb-item active">Please fill in the form below to  </li>
+                    <li class="breadcrumb-item add-new">Enterprise Selection</li>
+                    <li class="breadcrumb-item active"></li>
                 </ol>
             </div>
         </div>
@@ -47,44 +47,62 @@
                 <form method="POST" id="group_form" novalidate enctype="multipart/form-data" class="card-body">
                     {% csrf_token %}
                     <div class="row">
-
-                        <div class="col-xl-12 col-md-6">
-                            {{ form.own_piece_of_land|as_crispy_field }}
+                        <legend>Personal Information</legend>
+                        <div class="col-xl-6 col-md-6">
+                            {{ form.profession|as_crispy_field }}
                         </div>
-                        <div id="land" class="row col-xl-12">
-                            <div class="col-xl-12 col-md-12">
-                                {{ form.rented_land|as_crispy_field }}
-                            </div>
+                        <div class="col-xl-6 col-md-6">
+                            {{ form.level_of_education|as_crispy_field }}
                         </div>
-                        <div class="col-xl-12 col-md-6">
-                            {{ form.involved_in_anyother_farming_activity|as_crispy_field }}
+                        <div class="col-xl-6 col-md-6">
+                            {{ form.interested_sector|as_crispy_field }}
                         </div>
-                        <div id="sector" class="row col-xl-12">
-                            <div class="col-xl- 12">
-                                {{ form.sector|as_crispy_field }}
-                            </div>
-                            <div class="col-xl-12">
-                                {{ form.scale|as_crispy_field }}
-                            </div>
+                        <div class="col-xl-6 col-md-6">
+                            {{ form.monthly_income|as_crispy_field }}
                         </div>
                         <div class="col-xl-6 col-md-6">
                             {{ form.capital|as_crispy_field }}
                         </div>
-                       
-                       
-                        <div class="col-xl-6 col-md-6">
-                            {{ form.interested_sector|as_crispy_field }}
+                        <div class="col-xl-12">
+                            {{ form.scale|as_crispy_field }}
                         </div>
-                          
-                        <div class="col-xl-12 col-md-6">
+                        <div class="col-xl-6 col-md-6">
                             {{ form.full_time_devotion|as_crispy_field }}
                         </div>
+                        
                         
                         <div class="col-xl-12 col-md-6">
                             {{ form.what_is_your_inspiration_for_considering_in_farming|as_crispy_field }}
                         </div>
 
-                        <input name="farmer" value="{{user.id}}" type="hidden">
+
+                        <legend>Land Information</legend>
+
+                        <div class="col-xl-12 col-md-6">
+                            {{ form.own_piece_of_land|as_crispy_field }}
+                        </div>
+                        <div id="land" class="row col-xl-12">
+                            <div class="col-xl-6 col-md-6">
+                                {{ form.land_size|as_crispy_field }}
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                {{ form.region|as_crispy_field }}
+                            </div>
+                            <div class="col-xl-12 col-md-6">
+                                {{ form.land_location|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div id="rented_land">
+                        <div class="col-xl-12 col-md-12">
+                            {{ form.rented_land|as_crispy_field }}
+                        </div>
+                    </div>
+                        <div class="col-xl-12 col-md-6">
+                            {{ form.involved_in_anyother_farming_activity|as_crispy_field }}
+                        </div>
+                       
+                   
+                        <!-- <input name="farmer" value="{{user.id}}" type="hidden"> -->
 
                     </div>
 
@@ -111,7 +129,8 @@
 
     $(document).ready(function () {
             $('#land').hide();
-            $('#sector').hide();
+            //$('#sector').hide();
+            $('#rented_land').hide();
           
         });
         
@@ -121,24 +140,26 @@
                 // alert('It works');
                 
                 $('#land').show();
+                $('#rented_land').hide();
                 
             }
             else {
                 
                 $('#land').hide();
+                $('#rented_land').show();
             }
         });
 
-        $('#id_involved_in_anyother_farming_activity').change(function () {
+        // $('#id_involved_in_anyother_farming_activity').change(function () {
           
-            if ($('#id_involved_in_anyother_farming_activity').val() == 'True') {
-             //alert('It works');
-                $('#sector').show();
-            }
-            else {
-                $('#sector').hide();
-            }
-        });
+        //     if ($('#id_involved_in_anyother_farming_activity').val() == 'True') {
+        //      //alert('It works');
+        //         //$('#sector').show();
+        //     }
+        //     else {
+        //         $('#sector').hide();
+        //     }
+        // });
 
 
 

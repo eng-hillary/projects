@@ -42,8 +42,12 @@ SCALE = (
 SECTOR = (
     (None, "--please select--"),
     ('Animal Farming','Animal Farming'),
+    ('Poultry Farming','Poultry Farming'),
     ('Fisheries','Fisheries'),
-    ('Crop Farming','Crop Farming')
+    ('Crop Farming','Crop Farming'),
+    ('Agro Forestry','Agro Forestry'),
+    
+
 )
 
 INVENTORY_STATUS = (
@@ -132,4 +136,24 @@ RESOURCE_CATEGORY = (
     ('land', 'Land'),
     ('transportation', 'Transportation'),    
 )
+PROFESSION = (
+    (None, "---please select---"),
+    ('Agriculture related', 'Agriculture related'),
+    ('Non-agriculture related', 'Non-agriculture related')
+)
+EDUCATION_LEVEL = (
+    (None, "---please select---"),
+    ('primary school','Primary School'),
+    ('olevel','Olevel'),
+    ('Alevel','Alevel'),
+    ('College','College'),
+    ('University','University'),
+    ('Never gone to school','Never gone to school'),
+
+)
+
+
+
+
+
 PAST_YEARS = [year for year in range(datetime.date.today().year, 1899, -1)]
