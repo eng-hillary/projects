@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Group, FarmerProfile
-from .serializers import GroupSerializer, FarmerProfileSerializer, FarmerApprovalSerializer
+from .serializers import GroupSerializer, FarmerProfileSerializer, FarmerApprovalSerializer,PostFarmerProfileSerializer
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -137,6 +137,7 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
     """
     #queryset = FarmerProfile.objects.all().order_by('region')
     serializer_class = FarmerProfileSerializer
+    write_serializer_class = PostFarmerProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def approved(self, request, pk, format=None):
@@ -172,6 +173,14 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def create(self, request, format=None):
+        serializer = PostFarmerProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.status ='Pending'
+            #serializer.user = self.request.user
+            serializer.save(user = self.request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 
 class FarmerProfileList(APIView, LoginRequiredMixin):

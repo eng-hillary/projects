@@ -10,13 +10,6 @@ var json = Highcharts.getJSON('/farm/api/maps/', function (json) {
         data.push(p);
     })
 
-//console.log(data);
-    // var select = document.getElementById('select');
-    // select.addEventListener('change', function() {
-    //   mapChart.get('Kabarole').zoomTo();
-    //   mapChart.mapZoom(2);
-    // })
-
     select.addEventListener('change', (e) => {
       var district = e.target.value;
       var districtArr = Highcharts.defaultOptions;
