@@ -75,7 +75,12 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
     def get_phone2(self, obj):
         return '{}'.format(obj.user.profile.phone_2)
     
-    
+class PostFarmerProfileSerializer(serializers.ModelSerializer):
+
+  
+    class Meta:
+        model = FarmerProfile
+        exclude=['user','created','modified']
 
 
 
