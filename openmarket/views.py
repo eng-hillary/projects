@@ -527,7 +527,7 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
 #Service Provider Detail View
 class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
     model = ServiceProvider
-    context_object_name = "profilerecord"
+    context_object_name = "providerrecord"
     template_name = "view_service_provider_profile.html"
 
     def get_context_data(self, **kwargs):
@@ -545,7 +545,7 @@ class ServiceDetailView(LoginRequiredMixin, DetailView):
     template_name = "view_services_details.html"
 
     def get_context_data(self, **kwargs):
-        context = super(ServiceProviderProfileDetailView, self).get_context_data(**kwargs)
+        context = super(ServiceDetailView, self).get_context_data(**kwargs)
         
         context.update({
 
