@@ -17,7 +17,8 @@ approve_farmer= FarmerProfileViewSet.as_view({
     'get': 'retrieve',
     'put': 'decline',
     'delete': 'destroy',
-    'get':'list'
+    'get':'list',
+    'post':'create'
 
 })
 # Wire up our API using automatic URL routing.
