@@ -14,7 +14,7 @@ class ResourceSerializer(serializers.ModelSerializer):
         return '{} {}'.format(obj.owner.user.first_name, obj.owner.user.last_name)
 
     def get_district(self, obj):
-        return '{}'.format(obj.owner.district.name)
+        return '{}'.format(obj.owner.user.profile.district.name)
 
 class ResourceSharingSerializer(serializers.ModelSerializer):
     class Meta:
