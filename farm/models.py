@@ -198,11 +198,11 @@ class EnterpriseSelection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False, related_name='enterpriseselection')
     own_piece_of_land = models.BooleanField(_('Do you own a piece of land or you intend to use rented land'), choices=YES_OR_NO, null=False, blank=False, default=True)
     what_is_your_inspiration_for_considering_in_farming = models.TextField(null=True, blank=True)
-    involved_in_anyother_farming_activity = models.BooleanField(_('Have  you been involved in other farming sectors'), choices=YES_OR_NO, null=False, blank=False, default=True)
+    involved_in_anyother_farming_activity = models.BooleanField(_('Have  you been or are you involved in other farming sectors'), choices=YES_OR_NO, null=False, blank=False, default=True)
     scale = models.CharField(_('If yes, at what scale do you do farming?'), max_length = 100, choices=SCALE, null=False, blank=False)
     sector = models.CharField(_('State your current sector of farming?'),max_length=100, null=True)
     interested_sector = models.CharField(_('What Sector of farming are you interested in'), max_length = 100, choices=SECTOR, null=True, blank=False)
     full_time_devotion = models.BooleanField(_('Do you want to devote full-time effort to the farm or would you prefer farming to be a part-time activity?'), choices=YES_OR_NO, null=False, blank=False, default=True)
     time_allocated_to_farming = models.FloatField(null= True, blank=True)
     capital=models.FloatField(_('How much capital do you have to start farming?'), null=True)
-
+    rented_land = models.BooleanField(_('Do you intend to use rented land?'),choices=YES_OR_NO, null=False, blank=False, default=True)

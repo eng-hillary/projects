@@ -74,7 +74,7 @@
             <div class="row">
                 <div class="col-md-8 offset-md-2 mt-2">
                     
-                        <h2 >Create A New Account</h2>
+                        <h2 class="text-center" >Create A New Account</h2>
                         <div class="">
                             {% if error %}
                             <p class="text-danger">{{ message }}</p>
@@ -302,16 +302,16 @@
     // $.validator.addMethod('year', function (value, element, param) {
     //             return (value != 0) && (value >= 1900) && (value == parseInt(value, 10));
     //         }, 'Please enter a valid year not less than 1900!');
-    //         $.validator.addMethod('username', function (value, element, param) {
-    //             var nameRegex = /^[a-zA-Z0-9]+$/;
-    //             return value.match(nameRegex);
-    //         }, 'Only a-z, A-Z, 0-9 characters are allowed');
+            $.validator.addMethod('username', function (value, element, param) {
+                var nameRegex = /^[a-zA-Z0-9]+$/;
+                return value.match(nameRegex);
+            }, 'Only a-z, A-Z, 0-9 characters are allowed');
 
 
             var val = {
                 // Specify validation rules
                 rules: {
-                  phone_1_1: {
+                  phone_number_1: {
                         required: true,
                         minlength:9,
                         digits: true
