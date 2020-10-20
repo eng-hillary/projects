@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils.translation import ugettext as _
-from common .models import(TimeStampedModel)
+from common .models import(TimeStampedModel,District,Region)
 from django.contrib.auth.models import User
-from common .choices import (TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO,QUERIES, SCALE,SECTOR)
+from common .choices import (TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO,QUERIES, SCALE,SECTOR,
+PROFESSION, EDUCATION_LEVEL)
 from geopy.geocoders import Nominatim
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
@@ -190,19 +191,25 @@ class FarmRecord(TimeStampedModel, models.Model):
         return self.name
 
 
-
-
-
 #Enterprise Selection
 class EnterpriseSelection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False, related_name='enterpriseselection')
-    own_piece_of_land = models.BooleanField(_('Do you own a piece of land or you intend to use rented land'), choices=YES_OR_NO, null=False, blank=False, default=True)
+    profession = models.CharField(_('What is your current proffession?'),max_length=200, choices = PROFESSION, null=False, default=False )
+    monthly_income = models.FloatField(null=True)
+    level_of_education = models.CharField(max_length=100, choices =EDUCATION_LEVEL, null=False, default=False)
+    capital = models.FloatField(_('How much money would you be willing to invest in farming?'), null=False, blank=False, default=True)
     what_is_your_inspiration_for_considering_in_farming = models.TextField(null=True, blank=True)
-    involved_in_anyother_farming_activity = models.BooleanField(_('Have  you been or are you involved in other farming sectors'), choices=YES_OR_NO, null=False, blank=False, default=True)
-    scale = models.CharField(_('If yes, at what scale do you do farming?'), max_length = 100, choices=SCALE, null=False, blank=False)
-    sector = models.CharField(_('State your current sector of farming?'),max_length=100, null=True)
     interested_sector = models.CharField(_('What Sector of farming are you interested in'), max_length = 100, choices=SECTOR, null=True, blank=False)
-    full_time_devotion = models.BooleanField(_('Do you want to devote full-time effort to the farm or would you prefer farming to be a part-time activity?'), choices=YES_OR_NO, null=False, blank=False, default=True)
+    scale = models.CharField(_('At what scale would you like to do farming?'), max_length = 100, choices=SCALE, null=True, blank=False)
+    #Land
+    own_piece_of_land = models.BooleanField(_('Do you own or have access to a piece of land to use for your farming activities'), choices=YES_OR_NO, null=False, blank=False, default=False)
+    land_size = models.FloatField(_('What is the size of the land in acres'), null=False, default=False)
+    land_location = models.ForeignKey(District,  on_delete=models.CASCADE, unique=False, related_name='district', default=True)
+    region = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='region', default=False)
+    involved_in_anyother_farming_activity = models.BooleanField(_('Have  you ever been involved in any farming activities'), choices=YES_OR_NO, null=False, blank=False, default=True)
+  #sector = models.CharField(_('State your current sector of farming?'),max_length=100, null=True)
+    full_time_devotion = models.BooleanField(_('Do you want to devote full-time effort to the farm?'), choices=YES_OR_NO, null=False, blank=False, default=True)
     time_allocated_to_farming = models.FloatField(null= True, blank=True)
-    capital=models.FloatField(_('How much capital do you have to start farming?'), null=True)
+
     rented_land = models.BooleanField(_('Do you intend to use rented land?'),choices=YES_OR_NO, null=False, blank=False, default=True)
+
