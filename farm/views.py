@@ -392,11 +392,14 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
+        
+
         if form.is_valid():
             return self.form_valid(form)
         else:
             print(form.errors)
         return self.form_invalid(form)
+        
 
 
     def form_valid(self, form):
@@ -623,6 +626,19 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
+        
+
+        crops_northen = ['cotton', 'millet', 'sorghum', 'legumes', 'sesame']#gulu, masindi
+        crops_lango = ['cassava','maize','millet','rice','sesame'] #lira Apac
+        crops_soroti = ['cotton','millet','ground nuts']#soroti, kumi, palisa
+        crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
+        crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
+        crops_lakevictoria = ['banana','coffee','maizr','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
+        crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
+        crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
+        crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale
+
+
         if form.is_valid():
             return self.form_valid(form)
         else:
