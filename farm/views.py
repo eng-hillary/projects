@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
-from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer,QuerySerializer
-,FarmMapSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer)
-
+from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
+,FarmMapSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer

@@ -56,15 +56,15 @@
   data-id-field="id"
   data-toolbar="#toolbar"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/api-openmarket/serviceregistration/?format=json">
+  data-url="/openmarket/api/serviceregistration/?format=json">
   <thead>
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="full_name" data-sortable="true">Service Provider</th>
       <th data-field="service_name" data-visible="false"  data-sortable="true">Service Name</th>
-      <th data-field="lon" data-visible="false"  data-sortable="true">Longitude</th>
-      <th data-field="lat" data-visible="false"  data-sortable="true">Latitude</th>
-      <th data-field="category" data-visible="false"  data-sortable="true">Category</th>
+      <th data-field="lon" data-visible="true"  data-sortable="true">Longitude</th>
+      <th data-field="lat" data-visible="true"  data-sortable="true">Latitude</th>
+      <th data-field="category" data-visible="true"  data-sortable="true">Category</th>
 
       <th data-field="name_of_storage_center" data-visible="false"  data-sortable="true">Name of Storage Centre</th>
       <th data-field="location_of_storage_center" data-visible="false"  data-sortable="true">Location of storage centre</th>
@@ -72,9 +72,9 @@
       <th data-field="vehicle_capacity" data-visible="false"  data-sortable="true">Vehicle Capacity</th>
     
       <th data-field="service_type" data-sortable="true">Service Type</th>
-      <th data-field="size" data-sortable="true">Size</th>
-      <th data-field="availability_date" data-sortable="true">Availability Date</th>
-      <th data-field="picture" data-visible="true"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
+      <th data-field="size" data-sortable="false">Size</th>
+      <th data-field="availability_date" data-sortable="true" data-visible="true">Availability Date</th>
+      <th data-field="picture" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
       <th data-formatter="operateFormatter" data-events="operateEvents" class="text-center">Action</th>      
     </tr>
   </thead>
