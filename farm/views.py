@@ -859,9 +859,14 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
         
         #print(enterprise.land_location.id)
         if enterprise.region.id == 1:
-            print(self.western_message)
+            crops=crops_ibanda
+        elif enterprise.region.id == 2:
+            crops = self.crops_soroti
+        elif enterprise.region.id == 3:
+            crops = self.crops_karamoja
         else:
             crops=crops_ibanda
+
         context = {
             "crops":crops,
         }
@@ -894,7 +899,7 @@ Enterprise selection redirect view
 
 class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'enterprise_selection_redirect.html'
+    template_name = 'enterprise_selection_list.html'
 
     def get(self, request):
        # queryset = Sector.objects.order_by('-id')
