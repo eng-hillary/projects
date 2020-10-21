@@ -31,7 +31,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     level_of_education = models.CharField(max_length=100, null=False, blank=False)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     number_of_dependants = models.PositiveIntegerField()
-    credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=False, blank=False)
+    credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=True, blank=False)
     experience = models.FloatField(_('Farming Experience in years'),null=False, blank=False)
     occupation = models.CharField(max_length=100, null=True, blank=False)
    

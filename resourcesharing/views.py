@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import (Resource, ResourceSharing, ResourceBooking)
 from .forms import(ResourceForm,ResourceBookingForm)
-from .serializers import ResourceSerializer, ResourceSharingSerializer, ResourceBookingSerializer
+from .serializers import ResourceSerializer,PostResourceSerializer, ResourceSharingSerializer, ResourceBookingSerializer
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -16,6 +16,8 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
+from django.db import IntegrityError
+from farmer.models import FarmerProfile
 # views for resources
 class ResourceList(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -33,7 +35,21 @@ class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
     
+    def create(self, request, format=None):
+        serializer = PostResourceSerializer(data=request.data)
 
+        if serializer.is_valid():
+            try:
+                serializer.status ='Not Available'
+                user = self.request.user
+                owner = FarmerProfile.objects.get(user=user)
+                #serializer.user = self.request.user
+                serializer.save(owner = owner)
+            except IntegrityError:
+                return Response({'error':'Resource account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 # create resource
 class CreateResourceView(LoginRequiredMixin,CreateView):
