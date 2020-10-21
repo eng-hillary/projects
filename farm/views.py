@@ -914,3 +914,12 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
   
+class EnterpriseSelectionDetailView(DetailView):
+    model = EnterpriseSelection
+    template_name = "view_farm_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EnterpriseSelectionDetailView, self).get_context_data(**kwargs)
+        context['enterpriseobject'] = self.object
+        
+        return context
