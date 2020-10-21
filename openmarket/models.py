@@ -111,13 +111,13 @@ class ServiceProvider(models.Model):
     # handle approving of a farmer
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent_service_provider",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
-    # location
-    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
-    district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
-    county = models.ForeignKey(County, on_delete=models.CASCADE,null=True)
-    sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE, null=True)
-    parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True)
-    village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True)
+    # # location
+    # region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
+    # district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
+    # county = models.ForeignKey(County, on_delete=models.CASCADE,null=True)
+    # sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE, null=True)
+    # parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True)
+    # village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True)
 
 
     class meta:
@@ -147,8 +147,8 @@ class Service(models.Model):
     lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your industry location")
     lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your industry location")
     others = models.CharField(_('Please state the category if its not among the above'), blank=True, null=True, max_length=100)
-    driver_contact =  PhoneNumberField(null=True)
-    driver_name =  models.CharField(max_length = 100, null=True) 
+    driver_contact =  PhoneNumberField(null=True, blank=True)
+    driver_name =  models.CharField(max_length = 100, null=True, blank = True) 
 
     
     class meta:

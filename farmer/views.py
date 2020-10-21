@@ -31,7 +31,7 @@ from django.contrib import messages
 from django.contrib.auth.models import Group as UserGroup
 from django.db.models import Count, Q
 import json
-
+from django.db import IntegrityError
 
 
 # views for groups
@@ -175,11 +175,16 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
 
     def create(self, request, format=None):
         serializer = PostFarmerProfileSerializer(data=request.data)
+
         if serializer.is_valid():
-            serializer.status ='Pending'
-            #serializer.user = self.request.user
-            serializer.save(user = self.request.user)
-            return Response(serializer.data)
+            try:
+                serializer.status ='Pending'
+                #serializer.user = self.request.user
+                serializer.save(user = self.request.user)
+            except IntegrityError:
+                return Response({'error':'Farmer account already exists'})
+                
+            return Response({'status':'successful'})
         return Response(serializer.errors, status=400)
 
 

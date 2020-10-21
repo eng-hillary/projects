@@ -65,46 +65,17 @@
                                           <div class="col-xl-6 col-md-6">
                                               {{ form.service_type|as_crispy_field }}
                                           </div>
-                                          <div class="col-xl-12 col-md-6">
-                                              {{ form.list_of_services_if_more_than_one|as_crispy_field }}
-                                          </div>
                                       </div>
                                   </div>
-                                 
-                                  <div class="tab" id="address" role="tabpanel" aria-labelledby="address-tabs">
-                                    
-                                        
-                                      <div class="row">
-                                          <div class="col-xl-6 col-md-6">
-                                              {{ form.region|as_crispy_field }}
-                                          </div>
-                                          <div class="col-xl-6 col-md-6">
-                                              {{ form.district|as_crispy_field }}
-                                          </div>
-                                          <div class="col-xl-6 col-md-6">
-                                              {{ form.county|as_crispy_field }}
-                                          </div>
-                                          <div class="col-xl-6 col-md-6">
-                                              {{ form.sub_county|as_crispy_field }}
-                                          </div>
-                                          <div class="col-xl-6 col-md-6">
-                                              {{ form.parish|as_crispy_field }}
-                                          </div>
-                                          <div class="col-xl-6 col-md-6">
-                                              {{ form.village|as_crispy_field }}
-                                          </div>
-          
-                                      </div>
-                                    
-                                  </div>
+                    
                                   <div class="tab" id="farming" role="tabpanel" aria-labelledby="farming-tabs">
                                      
                                         
                                       <div class="row">
-                              
+                                
                                           <div class="col-xl-6 col-md-6">
-                                              {{ form.service_type|as_crispy_field }}
-                                          </div>
+                                            {{ form.list_of_services_if_more_than_one|as_crispy_field }}
+                                        </div>
                                           
                                           <div class="col-xl-6 col-md-6">
                                               {{ form.service_location|as_crispy_field }}

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
+,FarmMapSerializer,PostFarmSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -20,9 +20,9 @@ from .forms import (FarmForm,EnterpriseForm,QueryForm, FarmRecordForm,FarmFnanci
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-from farmer .models import FarmerProfile
+from farmer.models import FarmerProfile
 import datetime
-
+from django.db import IntegrityError
 # views for sector
 class SectorViewSet(viewsets.ModelViewSet):
     """
@@ -93,22 +93,37 @@ class QueryViewSet(viewsets.ModelViewSet):
     """
     queryset = Query.objects.all()
     serializer_class = QuerySerializer
-    
     def get_queryset(self):
         """
-        This view should return a list of all the farmers profiles
+        This view should return a list of all the farms 
         for the currently authenticated user.
         """
         user = self.request.user
-        queries = Query.objects.all().order_by('query_category')
-        if  self.request.user.has_perm('farm.delete_Query'):
+        queries = Query.objects.all().order_by('farm')
+        
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = queries
         else:
-            queryset = queries.filter(user=user)
+            farm = farm.objects.get(user=user)
+            queryset = queries.filter(farm=farm)
         
         return queryset
 
+    def create(self, request, format=None):
+        serializer = PostQuerySerializer(data=request.data)
 
+        if serializer.is_valid():
+            try:
+                user = self.request.user
+                # farmer = FarmerProfile.objects.get(user=user)
+                # farm = Farm.objects.get(farmer=farmer)
+                #serializer.user = self.request.user
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Query already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 # create farm 
 class CreateQueryView(LoginRequiredMixin,CreateView):
@@ -206,6 +221,21 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def create(self, request, format=None):
+        serializer = PostEnterpriseSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                user = self.request.user
+                # farmer = FarmerProfile.objects.get(user=user)
+                # farm = Farm.objects.get(farmer=farmer)
+                #serializer.user = self.request.user
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Enterprise already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 class EnterpriseList(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -241,6 +271,21 @@ class FarmViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def create(self, request, format=None):
+        serializer = PostFarmSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.status ='active'
+                user = self.request.user
+                farmer = FarmerProfile.objects.get(user=user)
+                #serializer.user = self.request.user
+                serializer.save(farmer = farmer)
+            except IntegrityError:
+                return Response({'error':'Farm already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 # farm api for maps
 class FarmMapViewSet(viewsets.ModelViewSet):
@@ -626,19 +671,7 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        
-
-        crops_northen = ['cotton', 'millet', 'sorghum', 'legumes', 'sesame']#gulu, masindi
-        crops_lango = ['cassava','maize','millet','rice','sesame'] #lira Apac
-        crops_soroti = ['cotton','millet','ground nuts']#soroti, kumi, palisa
-        crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
-        crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
-        crops_lakevictoria = ['banana','coffee','maizr','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
-        crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
-        crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
-        crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale
-
-
+       
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -829,7 +862,18 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
     success_url = reverse_lazy('farm:select_enterpise')
     form_class = EnterpriseSelectionForm
     success_message = "Your answers were submitted successfully"
-    
+    crops_northen = ['cotton', 'millet', 'sorghum', 'legumes', 'sesame']#gulu, masindi
+    crops_lango = ['cassava','maize','millet','rice','sesame'] #lira Apac
+    crops_soroti = ['cotton','millet','ground nuts']#soroti, kumi, palisa
+    crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
+    crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
+    crops_lakevictoria = ['banana','coffee','maizr','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
+   
+    crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
+    crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale
+   
+    western_message = "Thank you for your interest in farming, We have analysed your personal profile and land profile and we would recommend the following"
+
 
     def dispatch(self, request, *args, **kwargs):
         return super(EnterpriseSelectionView, self).dispatch(request, *args, **kwargs)
@@ -850,31 +894,47 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
 
 
     def form_valid(self, form):
-        profile = form.save(commit=False)
-        # setting farmer profile to in-active
-        #profile.status = 'Pending'
-        profile.user = self.request.user
-        profile.save()
+        crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
+       
+        enterprise = form.save(commit=False)
+        enterprise.user = self.request.user
+        enterprise.save()
+        form.save_m2m()
+        crops =[]
+        
+        #print(enterprise.land_location.id)
+        if enterprise.region.id == 1:
+            crops=crops_ibanda
+        elif enterprise.region.id == 2:
+            crops = self.crops_soroti
+        elif enterprise.region.id == 3:
+            crops = self.crops_karamoja
+        else:
+            crops=crops_ibanda
 
+        context = {
+            "crops":crops,
+        }
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Service Successful'
         message = render_to_string('profile_created_successful.html', {
-            'user': profile.user,
+            'user': enterprise.user,
             'domain': current_site.domain
             })
-        to_email = profile.user.email
+        to_email = enterprise.user.email
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
         email.content_subtype = "html"
-        email.send()
-        return redirect('farm:select_enterpise')
+        #email.send()
+        return render(self.request, 'enterprise_selection_redirect.html', context)
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+    
 
 
 """
@@ -884,7 +944,7 @@ Enterprise selection redirect view
 
 class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'enterprise_selection_redirect.html'
+    template_name = 'enterprise_selection_list.html'
 
     def get(self, request):
        # queryset = Sector.objects.order_by('-id')
@@ -899,3 +959,12 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
   
+class EnterpriseSelectionDetailView(DetailView):
+    model = EnterpriseSelection
+    template_name = "view_farm_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EnterpriseSelectionDetailView, self).get_context_data(**kwargs)
+        context['enterpriseobject'] = self.object
+        
+        return context
