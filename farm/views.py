@@ -671,19 +671,7 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        
-
-        crops_northen = ['cotton', 'millet', 'sorghum', 'legumes', 'sesame']#gulu, masindi
-        crops_lango = ['cassava','maize','millet','rice','sesame'] #lira Apac
-        crops_soroti = ['cotton','millet','ground nuts']#soroti, kumi, palisa
-        crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
-        crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
-        crops_lakevictoria = ['banana','coffee','maizr','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
-        crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
-        crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
-        crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale
-
-
+       
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -874,7 +862,18 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
     success_url = reverse_lazy('farm:select_enterpise')
     form_class = EnterpriseSelectionForm
     success_message = "Your answers were submitted successfully"
-    
+    crops_northen = ['cotton', 'millet', 'sorghum', 'legumes', 'sesame']#gulu, masindi
+    crops_lango = ['cassava','maize','millet','rice','sesame'] #lira Apac
+    crops_soroti = ['cotton','millet','ground nuts']#soroti, kumi, palisa
+    crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
+    crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
+    crops_lakevictoria = ['banana','coffee','maizr','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
+   
+    crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
+    crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale
+   
+    western_message = "Thank you for your interest in farming, We have analysed your personal profile and land profile and we would recommend the following"
+
 
     def dispatch(self, request, *args, **kwargs):
         return super(EnterpriseSelectionView, self).dispatch(request, *args, **kwargs)
@@ -895,31 +894,51 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
 
 
     def form_valid(self, form):
-        profile = form.save(commit=False)
-        # setting farmer profile to in-active
-        #profile.status = 'Pending'
-        profile.user = self.request.user
-        profile.save()
+        crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
+       
+        enterprise = form.save(commit=False)
+        enterprise.user = self.request.user
+        enterprise.save()
+        form.save_m2m()
+        crops =[]
+        
+        #print(enterprise.land_location.id)
+        if enterprise.region.id == 1:
+            crops=crops_ibanda
+        elif enterprise.region.id == 2:
+            crops = self.crops_soroti
+        elif enterprise.region.id == 3:
+            crops = self.crops_karamoja
+        else:
+            crops=crops_ibanda
 
+        context = {
+            "crops":crops,
+        }
+        """
+        Another if
+        """
+        
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Service Successful'
         message = render_to_string('profile_created_successful.html', {
-            'user': profile.user,
+            'user': enterprise.user,
             'domain': current_site.domain
             })
-        to_email = profile.user.email
+        to_email = enterprise.user.email
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
         email.content_subtype = "html"
-        email.send()
-        return redirect('farm:select_enterpise')
+        #email.send()
+        return redirect('farm:view_enterprise_selection', pk = enterprise.pk)
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+    
 
 
 """
@@ -929,11 +948,24 @@ Enterprise selection redirect view
 
 class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'enterprise_selection_redirect.html'
+    template_name = 'enterprise_selection_list.html'
 
     def get(self, request):
        # queryset = Sector.objects.order_by('-id')
         return Response()
+
+class EnterpriseSelectionDetailView(LoginRequiredMixin, DetailView):
+    model = EnterpriseSelection
+    context_object_name = "profilerecord"
+    template_name = "enterprise_selection_redirect.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EnterpriseSelectionDetailView, self).get_context_data(**kwargs)
+        
+        context.update({
+
+        })
+        return context
 
 class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
     """
@@ -944,3 +976,4 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
   
+
