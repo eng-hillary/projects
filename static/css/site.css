@@ -24243,4 +24243,26 @@ min-width: 50px;
   object-fit: cover;
 }
 
-
+.weathersection {
+	position: relative;
+    margin: 1em 10px 1em 0;
+    padding: 1em 1em 2em 1em;
+    display: inline-block;
+    width: 370px;
+    height: auto;
+    background: #FCFAFA;
+    overflow: hidden;
+	
+}
+.cloud-image {
+	position: absolute;
+	top: 60px; 
+	left: 1em;
+	width: 200px;
+	height:145px;
+	background-image:url(http://webdesignertroy.com/dump/blank-200.jpg);
+}
+.weather-description {
+	text-align: left;
+	margin-left: 220px;
+}
