@@ -36,8 +36,9 @@ TYPE = (
 
 SCALE = (
     (None, "--please select--"),
-    ('Large', 'large'),
-    ('small', 'small'),
+    ('Subsistence Production', 'Subsistence Production'),
+    ('small Commercial Production', 'small Commercial Production'),
+    ('large Commercial Production','large Commercial Production')
 )
 SECTOR = (
     (None, "--please select--"),
@@ -48,6 +49,12 @@ SECTOR = (
     ('Agro Forestry','Agro Forestry'),
     
 
+)
+INCOME = (
+    (None, "--please select--"),
+    ("Below 500,000ugx", "Below 500,000ugx"),
+    ("500,000-2,000,000","500,000-2,000,000"),
+    ("Above 2,000,000","Above 2,000,000"),
 )
 
 INVENTORY_STATUS = (
@@ -104,7 +111,8 @@ SERVICE_CATEGORY = (
     ('transport', 'Transport'),
     ('value addition', 'Value Addition'),
     ('sorting and graining', 'Sorting and Graining'),
-    ('Medical Services', 'Medical Services'),
+    ('Veterinary Services', 'Veterinary Services'),
+    ('Agro-input providers','Agro-input providers'),
     ('machinery', 'Machinery'),
     ('land', 'Land'),
     ('others', 'Others')

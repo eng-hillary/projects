@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
+from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection,Ecological_Zones)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
 ,FarmMapSerializer,PostFarmSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
 from rest_framework import viewsets
@@ -895,10 +895,12 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
-       
+        
         enterprise = form.save(commit=False)
         enterprise.user = self.request.user
         enterprise.save()
+        
+       # region = enterprise.objects.get(id=enterprise.region_id)
         form.save_m2m()
         crops =[]
         
@@ -915,6 +917,10 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
         context = {
             "crops":crops,
         }
+        """
+        Another if
+        """
+        
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Service Successful'
@@ -928,7 +934,7 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
             )
         email.content_subtype = "html"
         #email.send()
-        return render(self.request, 'enterprise_selection_redirect.html', context)
+        return redirect('farm:view_enterprise_selection', pk = enterprise.pk)
 
     def form_invalid(self, form):
         if self.request.is_ajax():
@@ -950,6 +956,19 @@ class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
        # queryset = Sector.objects.order_by('-id')
         return Response()
 
+class EnterpriseSelectionDetailView(LoginRequiredMixin, DetailView):
+    model = EnterpriseSelection
+    context_object_name = "profilerecord"
+    template_name = "enterprise_selection_redirect.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EnterpriseSelectionDetailView, self).get_context_data(**kwargs)
+        
+        context.update({
+
+        })
+        return context
+
 class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
@@ -959,12 +978,4 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
   
-class EnterpriseSelectionDetailView(DetailView):
-    model = EnterpriseSelection
-    template_name = "view_farm_profile.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(EnterpriseSelectionDetailView, self).get_context_data(**kwargs)
-        context['enterpriseobject'] = self.object
-        
-        return context
