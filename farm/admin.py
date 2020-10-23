@@ -103,5 +103,9 @@ class EnterpriseSelectionAdmin(admin.ModelAdmin):
     search_fields = ['user','land_location']
 
 admin.site.register(EnterpriseSelection, EnterpriseSelectionAdmin)
-
-admin.site.register(Ecological_Zones)
+class EcologicalZonesAdmin(admin.ModelAdmin):
+  list_display = [
+        'ecological_zone_name',
+     
+    ]
+admin.site.register(Ecological_Zones,EcologicalZonesAdmin)
