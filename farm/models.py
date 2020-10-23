@@ -152,6 +152,12 @@ class FinancialRecord(TimeStampedModel, models.Model):
 
 
 class Query(TimeStampedModel, models.Model):
+    QUERY_TYPES = (
+        (None, '--please select--'),
+        ('extentional_reports', 'Extentional Report'),
+        ('others', 'Others')
+     )
+    query_type = models.CharField(choices=QUERY_TYPES, max_length=25, null=True, blank=False)
     query_category = models.CharField(choices=QUERIES, max_length=25, null=True, blank=False)
     farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_pests_and_diseases')
     description = models.TextField( blank=True, null=True)

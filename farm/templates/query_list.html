@@ -7,16 +7,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Resource List
-                      <small><a class="add-new" href="{% url 'resourcesharing:create_resource' %}">Add new</a></small>
+                    <h3>Queries List
+                      <small><a class="add-new" href="{% url 'farm:create_query' %}">Add new</a></small>
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Resources</li>
-                    <li class="breadcrumb-item active">Resource List</li>
+                    <li class="breadcrumb-item">Queries</li>
+                    <li class="breadcrumb-item active">Queries List</li>
                 </ol>
             </div>
         </div>
@@ -57,6 +57,7 @@
   <thead>
     <tr>
       <th data-field="state" data-checkbox="true"></th>
+      <th data-field="query_type" data-sortable="true">Query Type</th>
       <th data-field="query_category" data-sortable="true">Query Category</th>
       <th data-field="farm" data-sortable="true">Farm</th>
       <th data-field="description" data-sortable="true">Description</th>
