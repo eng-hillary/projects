@@ -52,16 +52,16 @@
                     <h3 class="product-title">farmer Details</h3>
                       <b>Farmer</b>: {{farmobject.farmer.user.profile}} <br>
                       <b>Email</b>: <a href = "mailto: {{farmobject.farmer.user.email}}" style="color:blue;">{{farmobject.farmer.user.email}} </a><br>
-                      <b>Phone</b>: {{farmobject.farmer.phone_1}}{% if farmobject.farmer.phone_2 %}/{{farmobject.farmer.phone_2}}{% endif %} <br>
+                      <b>Phone</b>: {{farmobject.farmer.user.profile.phone_number}}{% if farmobject.farmer.user.profile.phone_2 %}/{{farmobject.farmer.user.profile.phone_2}}{% endif %} <br>
                     <hr>
                     
                     <h6 class="product-title">Address</h6>
-                      <b>Region</b>: {{farmobject.farmer.region}} <br>
-                      <b>District</b>: {{farmobject.farmer.district}} <br>
-                      <b>County</b>: {{farmobject.farmer.county}} <br>
-                      <b>Sub county</b>: {{farmobject.farmer.sub_county}} <br>
-                      <b>Parish</b>: {{farmobject.farmer.parish}} <br>
-                      <b>Village</b>: {{farmobject.farmer.village}} <br>
+                      <b>Region</b>: {{farmobject.farmer.user.profile.region}} <br>
+                      <b>District</b>: {{farmobject.farmer.user.profile.district}} <br>
+                      <b>County</b>: {{farmobject.farmer.user.profile.county}} <br>
+                      <b>Sub county</b>: {{farmobject.farmer.user.profile.sub_county}} <br>
+                      <b>Parish</b>: {{farmobject.farmer.user.profile.parish}} <br>
+                      <b>Village</b>: {{farmobject.farmer.user.profile.village}} <br>
                       <hr>
 
                     <h6 class="product-title">Farming Information</h6>

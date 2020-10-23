@@ -16,6 +16,13 @@ class ResourceSerializer(serializers.ModelSerializer):
     def get_district(self, obj):
         return '{}'.format(obj.owner.user.profile.district.name)
 
+
+class PostResourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resource
+        exclude=['owner']  
+
+
 class ResourceSharingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResourceSharing

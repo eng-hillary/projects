@@ -105,6 +105,11 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
 
+class PostServiceProviderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceProvider
+        exclude=['user']
+
 class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProvider
@@ -124,7 +129,12 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
-    
+
+class PostServiceRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        exclude=['user']  
+
 class ContactDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactDetails

@@ -46,6 +46,10 @@ class FarmSerializer(serializers.ModelSerializer):
         else:
             return "No"
 
+class PostFarmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Farm
+        exclude=['farmer']
 
 class FarmRecordSerializer(serializers.ModelSerializer):
     record_type = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
@@ -81,6 +85,11 @@ class EnterpriseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PostEnterpriseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enterprise
+        exclude=[]
+
 class QuerySerializer(serializers.ModelSerializer):
     farm = FarmSerializer()
     class Meta:
@@ -89,6 +98,10 @@ class QuerySerializer(serializers.ModelSerializer):
         fields = ['id','query_category','farm', 'description', 'date_discovered',
         'action_taken', 'image', 'reporting_date', 'solution']
 
+class PostQuerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Query
+        exclude=[]
 
 class FarmFacilitySerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,17 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-
-
 from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
 CreateFarmView, EditFarmView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
 FarmProfileDetailView,QueryList,CreateFarmRecordView, FarmRecordsList, EditFarmRecordView,
 CreateFarmFinancialRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsList,EditQueryView, EnterpriseSelectionView,
 EnterpriseSelectionRedirect,EnterpriseSelectionDetailView)
-
-
-
-
 
 
 router = routers.DefaultRouter()
