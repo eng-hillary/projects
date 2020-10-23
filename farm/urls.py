@@ -5,7 +5,7 @@ from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmL
 CreateFarmView, EditFarmView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
 FarmProfileDetailView,QueryList,CreateFarmRecordView, FarmRecordsList, EditFarmRecordView,
 CreateFarmFinancialRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsList,EditQueryView, EnterpriseSelectionView,
-EnterpriseSelectionRedirect)
+EnterpriseSelectionRedirect,EnterpriseSelectionDetailView)
 
 
 router = routers.DefaultRouter()
@@ -46,4 +46,6 @@ urlpatterns = [
     path('<int:pk>/edit/financialrecord', EditFarmFinancialRecordView.as_view(), name="edit_financail_record"),
     path('create/enterpriseselection', EnterpriseSelectionView.as_view(), name='enterprise_selection'),
     path('selectenterprises', EnterpriseSelectionRedirect.as_view(), name='select_enterpise'),
+    path('<int:pk>/view/selectenterprise', EnterpriseSelectionDetailView.as_view(), name="view_enterprise_selection"),
+    #path('viewselectenterprises', EnterpriseSelectionDetailView.as_view(), name='enterprise_selection_detail'),
 ]
