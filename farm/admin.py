@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (Sector, Enterprise,Farm,EnterpriseType, Query,RecordType,EnterpriseSelection,
- FarmRecord)
+ FarmRecord, Ecological_Zones)
 # Register your models here.
 
 class SectorAdmin(admin.ModelAdmin):
@@ -17,6 +17,7 @@ admin.site.register(Sector, SectorAdmin)
 
 class QueryAdmin(admin.ModelAdmin):
     list_display = [
+        'query_type',
         'query_category',
         'farm',
         'description',
@@ -102,3 +103,9 @@ class EnterpriseSelectionAdmin(admin.ModelAdmin):
     search_fields = ['user','land_location']
 
 admin.site.register(EnterpriseSelection, EnterpriseSelectionAdmin)
+class EcologicalZonesAdmin(admin.ModelAdmin):
+  list_display = [
+        'ecological_zone_name',
+     
+    ]
+admin.site.register(Ecological_Zones,EcologicalZonesAdmin)

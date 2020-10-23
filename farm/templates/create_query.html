@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="page-header-left">
-                                <h3>Create Profile{{message}}
+                                <h3>Create Query Profile{{message}}
                                     <small>{{ user.groups.all.0 }} </small>
                                 </h3>
                             </div>
@@ -43,10 +43,14 @@
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade active show" id="queryinfo" role="tabpanel" aria-labelledby="queryinfo-tab">
                                         <div class="row">
-                                        
                                             <div class="col-xl-6 col-md-6">
+                                                {{ form.query_type|as_crispy_field }}
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-6" id="querycatergory">
                                                 {{ form.query_category|as_crispy_field }}
                                             </div>
+
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.farm|as_crispy_field }}
                                             </div>
@@ -61,7 +65,7 @@
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.reporting_date|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
+                                            <div class="col-xl-12 col-md-12">
                                                 {{ form.action_taken|as_crispy_field }}
                                             </div>
                                             <div class="col-xl-12 col-md-12">
@@ -83,11 +87,25 @@
             {% endblock %}
             
 {% block javascript %}
-    <script type="text/javascript">
-    {% for message in messages %}
-    $(document).ready(function() {
-        $.notify("{{message}}", "{{ message.tags }}", { position:"center" });
-    });
-    {% endfor %}
-    </script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+            $('#querycatergory').hide();   
+      
+
+
+    $('#id_query_type').change(function () {
+
+    if ($('#id_query_type').val() == 'others') {
+        $('#querycatergory').show();
+    }
+    else if ($('#id_query_type').val() == 'extentional_reports') {
+        $('#querycatergory').hide();
+    }
+
+    })
+    
+});
+</script>
+
 {% endblock %}
