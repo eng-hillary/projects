@@ -1,7 +1,5 @@
 /*
-Author       : Dreamguys
-Template Name: SmartHR - Bootstrap Admin Template
-Version      : 3.5
+
 */
 
 $(document).ready(function() {

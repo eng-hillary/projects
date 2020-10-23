@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 
     'navutils',
     'django.contrib.gis',
-
+  
     #Local apps
     'common',
     'farmer',
