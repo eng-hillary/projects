@@ -111,7 +111,8 @@ SERVICE_CATEGORY = (
     ('transport', 'Transport'),
     ('value addition', 'Value Addition'),
     ('sorting and graining', 'Sorting and Graining'),
-    ('Medical Services', 'Medical Services'),
+    ('Veterinary Services', 'Veterinary Services'),
+    ('Agro-input providers','Agro-input providers'),
     ('machinery', 'Machinery'),
     ('land', 'Land'),
     ('others', 'Others')

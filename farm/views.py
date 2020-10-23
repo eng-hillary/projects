@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
+from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection,Ecological_Zones)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
 ,FarmMapSerializer,PostFarmSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
 from rest_framework import viewsets
@@ -895,10 +895,12 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
-       
+        
         enterprise = form.save(commit=False)
         enterprise.user = self.request.user
         enterprise.save()
+        
+       # region = enterprise.objects.get(id=enterprise.region_id)
         form.save_m2m()
         crops =[]
         
