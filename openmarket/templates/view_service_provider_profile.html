@@ -32,8 +32,8 @@
 
                 <div class="col-auto">
                     <div class="avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
-                        {% if profilerecord.user.profile.profile_pic %}
-                        <img alt="" class="profile-pic" src="{{profilerecord.user.profile.profile_pic.url}}" />
+                        {% if providerrecord.user.profile.profile_pic %}
+                        <img alt="" class="profile-pic" src="{{providerrecord.user.profile.profile_pic.url}}" />
                         {% endif %}
                     </div>
                 </div>
@@ -41,25 +41,25 @@
             </div>
             <div class="col-md-9">
                 <div class="product-page-details product-right mb-0">
-                    <h2>{{profilerecord.user.profile}}</h2>
+                    <h2>{{providerrecord.user.profile}}</h2>
                     <hr>
                     <h3 class="product-title">Service Provider Details</h3>
 
-                    <b>Full Name</b>: {{profilerecord.user.profile}} <br>
-                    <b>Email</b>: {{profilerecord.user.email}} <br>
+                    <b>Full Name</b>: {{providerrecord.user.profile}} <br>
+                    <b>Email</b>: {{providerrecord.user.email}} <br>
                     <b>Phone</b>:
-                    {{profilerecord.phone_1}}{% if profilerecord.phone_2 %}/{{profilerecord.phone_2}}{% endif %} <br>
-                    <b>Service Provider Location</b>: {{profilerecord.service_provider_location}}<br>
+                    {{providerrecord.phone_1}}{% if providerrecord.phone_2 %}/{{providerrecord.phone_2}}{% endif %} <br>
+                    <b>Service Provider Location</b>: {{providerrecord.service_provider_location}}<br>
 
-                    <b>National ID Number</b>: {{profilerecord.nin}} <br>
-                    <b>List of services if more than one</b>: {{profilerecord.list_of_services_if_more_than_one}} <br>
+                    <b>National ID Number</b>: {{providerrecord.nin}} <br>
+                    <b>List of services if more than one</b>: {{providerrecord.list_of_services_if_more_than_one}} <br>
                     <h3 class="product-title">Address</h3>
-                    <b>Region</b>: {{profilerecord.region}} <br>
-                    <b>District</b>: {{profilerecord.district}} <br>
-                    <b>County</b>: {{profilerecord.county}} <br>
-                    <b>Sub county</b>: {{profilerecord.sub_county}} <br>
-                    <b>Parish</b>: {{profilerecord.parish}} <br>
-                    <b>Village</b>: {{profilerecord.village}} <br>
+                    <b>Region</b>: {{providerrecord.region}} <br>
+                    <b>District</b>: {{providerrecord.district}} <br>
+                    <b>County</b>: {{providerrecord.county}} <br>
+                    <b>Sub county</b>: {{providerrecord.sub_county}} <br>
+                    <b>Parish</b>: {{providerrecord.parish}} <br>
+                    <b>Village</b>: {{providerrecord.village}} <br>
                     <hr>
                     <h6 class="product-title size-text">Services Offered </h6>
                     <table data-toggle="table" data-show-toggle="true" data-search="true"
@@ -78,7 +78,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for service in profilerecord.serviceregistration.all %}
+                            {% for service in providerrecord.serviceregistration.all %}
                             <tr>
                                 <!--<td>{{service.farm_name}}</td>-->
                                 <td>{{service.service_name}}</td>

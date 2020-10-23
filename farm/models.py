@@ -3,11 +3,13 @@ from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel,District,Region)
 from django.contrib.auth.models import User
 from common .choices import (TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO,QUERIES, SCALE,SECTOR,
-PROFESSION, EDUCATION_LEVEL)
+PROFESSION, EDUCATION_LEVEL,INCOME)
 from geopy.geocoders import Nominatim
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
+from django_mysql.models import ListCharField
+
 # Create your models here.
 
 
@@ -195,7 +197,7 @@ class FarmRecord(TimeStampedModel, models.Model):
 class EnterpriseSelection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False, related_name='enterpriseselection')
     profession = models.CharField(_('What is your current proffession?'),max_length=200, choices = PROFESSION, null=False, default=False )
-    monthly_income = models.FloatField(null=True)
+    monthly_income = models.CharField(null=True, choices=INCOME, max_length=200)
     level_of_education = models.CharField(max_length=100, choices =EDUCATION_LEVEL, null=False, default=False)
     capital = models.FloatField(_('How much money would you be willing to invest in farming?'), null=False, blank=False, default=True)
     what_is_your_inspiration_for_considering_in_farming = models.TextField(null=True, blank=True)
@@ -213,3 +215,15 @@ class EnterpriseSelection(models.Model):
 
     rented_land = models.BooleanField(_('Do you intend to use rented land?'),choices=YES_OR_NO, null=False, blank=False, default=True)
 
+
+
+# class TagField(ListField):
+#     def formfield(self, **kwargs):
+#         return models.Field.formfield(self, StringListField, **kwargs)
+        
+class Ecological_Zones(models.Model):
+    ecological_zone_name = models.CharField(max_length=100, null=True)
+    #list_of_crops_per_ecological_zone = ListField()
+    list_of_crops_per_ecological_zone = ListCharField(base_field=models.CharField(max_length=10),size=6, max_length=(6 * 11)  # 6 * 10 character nominals, plus commas
+    )
+   

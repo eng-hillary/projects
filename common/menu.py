@@ -130,12 +130,9 @@ menus = [
         url='#',
         test=can_view_service_provider,
         children=[
-            menu.PassTestNode(id='Enterprise selection',
-                              label='<i class="fa fa-circle"></i>Enterprise Selection',
-                             
-                              pattern_name='farm:enterprise_selection', test=can_add_service_provider),
+            
             menu.PassTestNode(id='provider_list',
-                              label='<i class="fa fa-circle"></i>Selection Queries',
+                              label='<i class="fa fa-circle"></i>Enterprise Selection',
                              
                               pattern_name='farm:select_enterpise', test=can_view_service_provider),
            
