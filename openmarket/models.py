@@ -111,13 +111,13 @@ class ServiceProvider(models.Model):
     # handle approving of a farmer
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent_service_provider",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
-    # location
-    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
-    district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
-    county = models.ForeignKey(County, on_delete=models.CASCADE,null=True)
-    sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE, null=True)
-    parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True)
-    village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True)
+    # # location
+    # region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
+    # district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
+    # county = models.ForeignKey(County, on_delete=models.CASCADE,null=True)
+    # sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE, null=True)
+    # parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True)
+    # village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True)
 
 
     class meta:

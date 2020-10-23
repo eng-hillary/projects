@@ -12,7 +12,9 @@ from .serializers import (ProductSerializer,
                         LogisticsSerializer,
                         SoilScienceSerializer,
                         ServiceProviderApprovalSerializer,
-                        SellerApprovalSerializer
+                        SellerApprovalSerializer,
+                        PostServiceProviderSerializer,
+                        PostServiceRegistrationSerializer
                         )
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -34,6 +36,8 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
 import datetime
+from django.db import IntegrityError
+
 class ProductViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -264,7 +268,19 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
+    def create(self, request, format=None):
+        serializer = PostServiceProviderSerializer(data=request.data)
 
+        if serializer.is_valid():
+            try:
+                serializer.status ='Pending'
+                #serializer.user = self.request.user
+                serializer.save(user = self.request.user)
+            except IntegrityError:
+                return Response({'error':'Service Provider account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 
 class ServiceProviderList(APIView):
@@ -339,6 +355,20 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def create(self, request, format=None):
+        serializer = PostServiceRegistrationSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+            #     serializer.status ='Pending'
+                #serializer.user = self.request.user
+                serializer.save(user = self.request.user)
+            except IntegrityError:
+                return Response({'error':'Service account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
+
 class MapServiceDetailView(DetailView):
     model = Service
     template_name = "map_service_detail.html"
@@ -348,6 +378,8 @@ class MapServiceDetailView(DetailView):
         context['Serviceobject'] = self.object
         
         return context
+
+
 #service provider list
 class ServiceProviderProfileList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
@@ -357,10 +389,8 @@ class ServiceProviderProfileList(APIView, LoginRequiredMixin):
         queryset = ServiceProvider.objects.order_by('region')
         return Response({'serviceproviders': queryset})
 
-
+ 
 #views for creating a service provider profile
-
-
 
 class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
     template_name = 'register_service_provider.html'
@@ -407,7 +437,7 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
             )
         email.content_subtype = "html"
         email.send()
-        return redirect('openmarket:service_registration')
+        return redirect('openmarket:serviceprovider_list')
 
 #view for loading 
 def load_districts(request):

@@ -676,3 +676,51 @@ Highcharts.chart('barcontainer', {
   }]
 });
 })
+
+
+/// open weather api//
+$(document).ready(function () {
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 0
+  };
+  
+  function success(pos) {
+    var crd = pos.coords;
+    var wheather_api = "https://api.openweathermap.org/data/2.5/weather?lat="+crd.latitude+"&lon="+crd.longitude+"&appid=b63fe7d4cf27f561ccaed0342922db91";
+    var dairy_weather_url = "https://api.openweathermap.org/data/2.5/onecall?lat="+crd.latitude+"&lon="+crd.longitude+"&exclude=hourly,current,minutely,&appid=b63fe7d4cf27f561ccaed0342922db91";
+    console.log(dairy_weather_url);
+    // console.log('Your current position is:');
+    // console.log(`Latitude : ${crd.latitude}`);
+    // console.log(`Longitude: ${crd.longitude}`);
+    // console.log(`More or less ${crd.accuracy} meters.`);
+    $.ajax({
+      url: wheather_api,
+      dataType: 'json',
+      type:'GET',
+      data:{units:'metric'},
+      success:function(data){
+        
+        var weather='';
+        $.each(data.weather, function(index,val){
+          var icon ="http://openweathermap.org/img/wn/"+val.icon+"@2x.png"
+          weather+='<img src='+icon+'><br>'+'<p><h3>'+ data.name+'</b></h3>'+
+          data.main.temp +'&deg;C'+'|'+val.main+ ','+
+          val.description
+
+        });
+        $('#showweather').html(weather);
+      }
+
+    });
+ 
+  }
+  
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+  
+  navigator.geolocation.getCurrentPosition(success, error, options);
+
+});

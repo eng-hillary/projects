@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer, FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
+,FarmMapSerializer,PostFarmSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -20,9 +20,9 @@ from .forms import (FarmForm,EnterpriseForm,QueryForm, FarmRecordForm,FarmFnanci
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-from farmer .models import FarmerProfile
+from farmer.models import FarmerProfile
 import datetime
-
+from django.db import IntegrityError
 # views for sector
 class SectorViewSet(viewsets.ModelViewSet):
     """
@@ -93,22 +93,37 @@ class QueryViewSet(viewsets.ModelViewSet):
     """
     queryset = Query.objects.all()
     serializer_class = QuerySerializer
-    
     def get_queryset(self):
         """
-        This view should return a list of all the farmers profiles
+        This view should return a list of all the farms 
         for the currently authenticated user.
         """
         user = self.request.user
-        queries = Query.objects.all().order_by('query_category')
-        if  self.request.user.has_perm('farm.delete_Query'):
+        queries = Query.objects.all().order_by('farm')
+        
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = queries
         else:
-            queryset = queries.filter(user=user)
+            farm = farm.objects.get(user=user)
+            queryset = queries.filter(farm=farm)
         
         return queryset
 
+    def create(self, request, format=None):
+        serializer = PostQuerySerializer(data=request.data)
 
+        if serializer.is_valid():
+            try:
+                user = self.request.user
+                # farmer = FarmerProfile.objects.get(user=user)
+                # farm = Farm.objects.get(farmer=farmer)
+                #serializer.user = self.request.user
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Query already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 # create farm 
 class CreateQueryView(LoginRequiredMixin,CreateView):
@@ -206,6 +221,21 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def create(self, request, format=None):
+        serializer = PostEnterpriseSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                user = self.request.user
+                # farmer = FarmerProfile.objects.get(user=user)
+                # farm = Farm.objects.get(farmer=farmer)
+                #serializer.user = self.request.user
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Enterprise already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 class EnterpriseList(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -241,6 +271,21 @@ class FarmViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def create(self, request, format=None):
+        serializer = PostFarmSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.status ='active'
+                user = self.request.user
+                farmer = FarmerProfile.objects.get(user=user)
+                #serializer.user = self.request.user
+                serializer.save(farmer = farmer)
+            except IntegrityError:
+                return Response({'error':'Farm already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 # farm api for maps
 class FarmMapViewSet(viewsets.ModelViewSet):
