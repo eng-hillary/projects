@@ -27,7 +27,6 @@ from rest_framework import parsers, renderers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.compat import coreapi, coreschema
 from rest_framework.schemas import ManualSchema
-from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import viewsets
@@ -37,9 +36,10 @@ from farmer.views import FarmerProfile
 from django.db.models import Count, Q
 import json
 from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer
-,SubCountySerializer,ParishSerializer,VillageSerializer)
+,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer)
 from rest_framework import filters
 from django.core import serializers as django_serializers
+from rest_framework import status
 
 
 
@@ -388,20 +388,60 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = '__all__'
     ordering_fields = '__all__'
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows farms to be viewed or edited.
-    """
-    queryset = User.objects.all()
+
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['username','first_name','last_name','email','profile__gender','profile__phone_number']
     ordering_fields = '__all__'
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return UserSerializer
+        else:
+            return UserPostSerializer
+        return UserSerializer
+
+    def get_queryset(self):
+        users = User.objects.all()
+        user = self.request.user
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='Admin').exists():
+            queryset = users
+        else:
+            queryset = User.objects.filter(id=user.id)
+        
+        return queryset
+
+    def create(self, request, format=None):
+        serializer = UserPostSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer
+            user.save()
+            
+             #send an email
+            user_object = User.objects.get(username =serializer.data['username'])
+            current_site = get_current_site(request)
+            subject = 'Activate Your Account'
+            message = render_to_string('account_activation_email.html', {
+                'user': user_object,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user_object.id)),
+                'token': account_activation_token.make_token(user_object),
+                })
+            to_email = serializer.data['email']
+            email = EmailMessage(
+                subject, message, to=[to_email]
+                )
+            email.send()
+            response = {'message':'account created successfully'}
+            return Response(response, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DistrictViewSet(viewsets.ModelViewSet):
@@ -410,6 +450,7 @@ class DistrictViewSet(viewsets.ModelViewSet):
     """
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name','region__name']
     ordering_fields = '__all__'

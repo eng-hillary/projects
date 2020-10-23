@@ -79,6 +79,7 @@ class Caller(TimeStampedModel, models.Model):
     phone = PhoneNumberField(blank=False, null=True)
     session_id = models.CharField(max_length=200, null=False, blank=False)
     call_date = models.DateTimeField(null=False, blank=False)
+    agent_phone = models.CharField(max_length=12, null=True, blank=True)
 
     def __str__(self):
         return str(self.phone)

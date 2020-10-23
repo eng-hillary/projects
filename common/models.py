@@ -77,7 +77,7 @@ class Village(models.Model):
 
 #Extending the auth_user table
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone_number = PhoneNumberField(blank=False, null=False)
     phone_2 = PhoneNumberField(_('Phone number 2'), blank=True, null=True)
     home_address = models.TextField(max_length=100, blank=True)
