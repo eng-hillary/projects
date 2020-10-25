@@ -8,7 +8,7 @@ from geopy.geocoders import Nominatim
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
-from django_mysql.models import ListCharField
+
 
 # Create your models here.
 
@@ -228,8 +228,9 @@ class EnterpriseSelection(models.Model):
 #         return models.Field.formfield(self, StringListField, **kwargs)
         
 class Ecological_Zones(models.Model):
+    zone = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
     ecological_zone_name = models.CharField(max_length=100, null=True)
     #list_of_crops_per_ecological_zone = ListField()
-    list_of_crops_per_ecological_zone = ListCharField(base_field=models.CharField(max_length=10),size=6, max_length=(6 * 11)  # 6 * 10 character nominals, plus commas
-    )
+    #list_of_crops_per_ecological_zone = ListCharField(base_field=models.CharField(max_length=10),size=6, max_length=(6 * 11)  # 6 * 10 character nominals, plus commas
+    #)
    
