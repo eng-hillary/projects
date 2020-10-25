@@ -900,12 +900,30 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
         enterprise.user = self.request.user
         enterprise.save()
         
+        region = EnterpriseSelection.objects.get(id=enterprise.region_id)
+        zonewest = Ecological_Zones.objects.get(ecological_zone_name="Western")
+        # zoneeast =  Ecological_Zones.objects.get(ecological_zone_name="Eastern")
+        # zonenorth =  Ecological_Zones.objects.get(ecological_zone_name="Northern")
+        # zonecentral =  Ecological_Zones.objects.get(ecological_zone_name="Central")
+        if region.region.name == zonewest:
+            print("it works in the west")
+            crops = crops_ibanda
+        # elif region.region.name == zoneeast:
+        #     print("This is east")
+        # elif region.region.name == zonenorth:
+        #     print("This is north")
+        # elif region.region.name == zonecentral:
+        #     print("This is central")
+        else:
+            print("It doesn't work")
+        #region = EnterpriseSelection.objects.get(enterprise.region.id==1)
        # region = enterprise.objects.get(id=enterprise.region_id)
         form.save_m2m()
         crops =[]
         
         #print(enterprise.land_location.id)
         if enterprise.region.id == 1:
+            #print("It works")
             crops=crops_ibanda
         elif enterprise.region.id == 2:
             crops = self.crops_soroti
