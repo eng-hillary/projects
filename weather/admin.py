@@ -6,4 +6,12 @@ from .models import CommunityWeather
 @admin.register(CommunityWeather)
 
 class WeatherAdmin(OSMGeoAdmin):
-    list_display = ('location_name', 'longitude')
+    list_display = [
+        'weather',
+        'region',
+        'district',
+        'county',
+        'sub_county',
+        'parish',
+        'village'
+        ]

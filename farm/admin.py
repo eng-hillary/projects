@@ -17,6 +17,7 @@ admin.site.register(Sector, SectorAdmin)
 
 class QueryAdmin(admin.ModelAdmin):
     list_display = [
+        'query_type',
         'query_category',
         'farm',
         'description',

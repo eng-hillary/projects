@@ -5,4 +5,4 @@ from django.contrib.auth.models import User
 class CommunityWeatherSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityWeather 
-        fields = ('location_name','latitude', 'longitude', 'weather', 'date_reported', 'reported_by', 'general_remarks')
+        fields = '__all__'

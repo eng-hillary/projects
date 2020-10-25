@@ -261,7 +261,7 @@ class CreateNoticeView(LoginRequiredMixin,CreateView):
                     if user.profile.phone_number:
                         try:
                             request_type = "POST"
-                            url = 'http://techguy.thinvoidcloud.com/api.php'
+                            url = 'https://techguy.thinvoidcloud.com/api.php'
                             data = {'contacts': str(user.profile.phone_number),'message': notice.description,'username': 'ivr@unffeict4farmers.org','password': 'ccsrzwub'}
                             response = requests.request(request_type, url, data=data)
                             print(user.profile.phone_number)
