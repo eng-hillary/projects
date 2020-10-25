@@ -126,7 +126,7 @@ menus = [
     menu.PassTestNode(
         id='Enterprise-selection-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Select Enterprise</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="users"></i><span>Enterprise Selection</span><i class="fa fa-angle-right pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -142,7 +142,7 @@ menus = [
     menu.PassTestNode(
         id='farmer-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Farmer</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="user"></i><span>Farmer</span><i class="fa fa-angle-right pull-right"></i>',
         url='#',
         test=can_view_farmers,
         children=[
@@ -228,7 +228,7 @@ menus = [
 menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Services</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="move"></i><span>Services</span><i class="fa fa-angle-right pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -256,14 +256,8 @@ menu.PassTestNode(
         url='#',
         test=can_view_service_provider,
         children=[
-            menu.PassTestNode(id='provider_registration',
-                              label='<i class="fa fa-circle"></i>Add Products',
-                             
-                              pattern_name='openmarket:create_product', test=can_add_product),
-            menu.PassTestNode(id='provider_list',
-                              label='<i class="fa fa-circle"></i>My products',
-                             
-                              pattern_name='openmarket:product_list', test=can_view_products),
+          
+       
             menu.PassTestNode(id='register_service',
                               label='<i class="fa fa-circle"></i>Register Market',
                              
@@ -299,13 +293,30 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Applications',
                              
                               pattern_name='openmarket:seller_list', test=can_view_sellers),
-            menu.PassTestNode(id='register_service',
-                              label='<i class="fa fa-circle"></i>Products',
-                             
-                              pattern_name='openmarket:product_list', test=can_view_products), 
+           
          
         ]
     ),
+
+  menu.PassTestNode(
+        id='product-section',
+        css_class="sidebar-header",
+        label='<i data-feather="box"></i><span>Products</span><i class="fa fa-angle-right pull-right"></i>',
+        url='#',
+        test=can_view_sellers,
+        children=[
+            menu.PassTestNode(id='provider_registration',
+                              label='<i class="fa fa-circle"></i>Add Products',
+                             
+                              pattern_name='openmarket:create_product', test=can_add_product),
+            menu.PassTestNode(id='provider_list',
+                              label='<i class="fa fa-circle"></i>Products',
+                             
+                              pattern_name='openmarket:product_list', test=can_view_products),
+         
+        ]
+    ),
+
  menu.PassTestNode(
         id='agent-section',
         css_class="sidebar-header",
@@ -329,6 +340,27 @@ menu.PassTestNode(
          
         ]
     ),
+
+    menu.PassTestNode(
+        id='Seller-resource-sharing',
+        css_class="sidebar-header",
+        label='<i data-feather="users"></i><span>Resource Sharing</span><i class="fa fa-angle-right pull-right"></i>',
+        url='#',
+        test=can_view_sellers,
+        children=[
+            menu.PassTestNode(id='seller_registration',
+                              label='<i class="fa fa-circle"></i>Registration',
+                             
+                              pattern_name='openmarket:create_seller', test=can_add_seller),
+            menu.PassTestNode(id='seller_list',
+                              label='<i class="fa fa-circle"></i>Applications',
+                             
+                              pattern_name='openmarket:seller_list', test=can_view_sellers),
+           
+         
+        ]
+    ),
+
 
 ]
 for entry in menus:
