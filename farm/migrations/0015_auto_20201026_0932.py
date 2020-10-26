@@ -11,9 +11,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='enterpriseselection',
-            name='recommendation',
-            field=models.ForeignKey(default=True, on_delete=django.db.models.deletion.CASCADE, related_name='zone', to='farm.Ecological_Zones'),
-        ),
+        # migrations.AlterField(
+        #     model_name='enterpriseselection',
+        #     name='recommendation',
+        #     field=models.ForeignKey(default=True, on_delete=django.db.models.deletion.CASCADE, related_name='zone', to='farm.Ecological_Zones'),
+        # ),
     ]

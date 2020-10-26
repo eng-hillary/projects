@@ -10,28 +10,28 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='serviceprovider',
-            name='county',
-        ),
-        migrations.RemoveField(
-            model_name='serviceprovider',
-            name='district',
-        ),
-        migrations.RemoveField(
-            model_name='serviceprovider',
-            name='parish',
-        ),
-        migrations.RemoveField(
-            model_name='serviceprovider',
-            name='region',
-        ),
-        migrations.RemoveField(
-            model_name='serviceprovider',
-            name='sub_county',
-        ),
-        migrations.RemoveField(
-            model_name='serviceprovider',
-            name='village',
-        ),
+        # migrations.RemoveField(
+        #     model_name='serviceprovider',
+        #     name='county',
+        # ),
+        # migrations.RemoveField(
+        #     model_name='serviceprovider',
+        #     name='district',
+        # ),
+        # migrations.RemoveField(
+        #     model_name='serviceprovider',
+        #     name='parish',
+        # ),
+        # migrations.RemoveField(
+        #     model_name='serviceprovider',
+        #     name='region',
+        # ),
+        # migrations.RemoveField(
+        #     model_name='serviceprovider',
+        #     name='sub_county',
+        # ),
+        # migrations.RemoveField(
+        #     model_name='serviceprovider',
+        #     name='village',
+        # ),
     ]
