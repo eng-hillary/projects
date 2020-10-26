@@ -27,12 +27,12 @@ class Migration(migrations.Migration):
             name='scale',
             field=models.CharField(choices=[(None, '--please select--'), ('Subsistence Production', 'Subsistence Production'), ('small Commercial Production', 'small Commercial Production'), ('large Commercial Production', 'large Commercial Production')], max_length=100, null=True, verbose_name='At what scale would you like to do farming?'),
         ),
-        migrations.CreateModel(
-            name='Ecological_Zones',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ecological_zone_name', models.CharField(max_length=100, null=True)),
-                ('zone', models.ForeignKey(default=True, on_delete=django.db.models.deletion.CASCADE, related_name='zone', to='common.Region')),
-            ],
-        ),
+        # migrations.CreateModel(
+        #     name='Ecological_Zones',
+        #     fields=[
+        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        #         ('ecological_zone_name', models.CharField(max_length=100, null=True)),
+        #         ('zone', models.ForeignKey(default=True, on_delete=django.db.models.deletion.CASCADE, related_name='zone', to='common.Region')),
+        #     ],
+        # ),
     ]
