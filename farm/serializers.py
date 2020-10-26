@@ -158,6 +158,8 @@ class EnterpriseSelectionSerializer(serializers.ModelSerializer):
      def get_user_full_name(self, obj):
          return '{} {}'.format(obj.user.first_name, obj.user.last_name)
     
-     
-    #  def get_id(self, obj):
-    #      return '{}'.format(obj.user.id)
+   
+class PostEnterpriseSelectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnterpriseSelection
+        exclude=[]  
