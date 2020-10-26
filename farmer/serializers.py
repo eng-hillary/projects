@@ -34,7 +34,7 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
         model = FarmerProfile
         fields = ('user_id','user','full_name', 'date_of_birth', 'nin', 'sector', 'occupation', 'level_of_education', 'marital_status','region',
         'district','county','sub_county','parish','village','phone_1','phone_2','size_of_land', 'group', 'type_of_land', 'production_scale', 'number_of_dependants',
-        'credit_access', 'experience', 'status', 'general_remarks', 'approver', 'approved_date')
+        'credit_access','source_of_credit', 'experience', 'status', 'general_remarks', 'approver', 'approved_date')
     '''
     returns yes or no for boolean fields
     '''
