@@ -84,6 +84,7 @@ class Enterprise(TimeStampedModel, models.Model):
     name = models.CharField(_('Enterprise Name'), max_length=50, null=False, blank=False)
     farm = models.ForeignKey(Farm, on_delete=models.CASCADE, null=True, related_name='enterprises')
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE, null=True, blank=False)
+    source = models.CharField(_('Source(Operation wealth creation, etc)'),blank=False, null=True, max_length=200)
     enterprise_type = models.CharField(blank=False, null=True, max_length=200)
     animal_seed_density = models.PositiveIntegerField(blank=True, null=True, verbose_name='Number of animals/seedling per enterprise in a particular period of time.')
     capital_invested = models.DecimalField(decimal_places=2, max_digits=1000, null=True)
