@@ -89,15 +89,7 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
     });
 });
 
-//Search filters
-// Change map when item selected in dropdown
-// $("#mapDropdown").change(function () {
-//   var $selectedItem = $("option:selected", this),
-//    mapDesc = $selectedItem.text(),
-//    mapKey = 'custom/world';
-   $("input").keyup(function(){
-    //this code executes when the keyup event occurs
-  });
+
 // Display custom label with lat/lon next to crosshairs
 document.getElementById('farm_container').addEventListener('mousemove', function (e) {
     var position;
@@ -392,7 +384,7 @@ Highcharts.chart('piecontainer', {
     type: 'pie'
   },
   title: {
-    text: 'Percentage of Farmers in each Region with credit Access'
+    text: 'Number of farmers per region'
   },
   subtitle: {
     text: ''
@@ -411,233 +403,86 @@ Highcharts.chart('piecontainer', {
     series: {
       dataLabels: {
         enabled: true,
-        format: '{point.name}: {point.y:.1f}%'
+        format: '{point.name}: {point.y:.1f}%<br>' 
       }
     }
   },
 
   tooltip: {
     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total farmers<br/>'
+    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total farmers<br/>'+
+                 '<span style="color:{point.color}">{point.sectorone}</span>: <b>{point.one:.2f}%</b> of total sectors<br/>'+
+                 '<span style="color:{point.color}">{point.sectortwo}</span>: <b>{point.two:.2f}%</b> of total sectors<br/>'+
+                 '<span style="color:{point.color}">{point.sectorthree}</span>: <b>{point.three:.2f}%</b> of total sectors<br/>'+
+                 '<span style="color:{point.color}">{point.sectorfour}</span>: <b>{point.four:.2f}%</b> of total sectors<br/>'
   },
 
   series: [
     {
-      name: "Browsers",
+      name: "Farmers",
       colorByPoint: true,
       data: [
         {
           name: "Western",
+          sectorone: "livestock",
+          sectortwo: "poultry",
+          sectorthree: "fishery",
+          sectorfour: "crops",
           y: 62.74,
-          drilldown: "Western"
+          one: 15.68,
+          two: 3.92,
+          three: 3.92,
+          four: 3.92
         },
         {
           name: "Northern",
+          sectorone: "Livestock",
+          sectortwo: "Poultry",
+          sectorthree: "Pishery",
+          sectorfour: "Crops",
           y: 10.57,
-          drilldown: "Northern"
+          one: 15.68,
+          two: 3.92,
+          three: 3.92,
+          four: 3.92
         },
         {
           name: "Central",
+          sectorone: "livestock",
+          sectortwo: "poultry",
+          sector3: "fishery",
+          sector4: "crops",
           y: 7.23,
-          drilldown: "Central"
+          one: 15.68,
+          two: 3.92,
+          three: 3.92,
+          four: 3.92
         },
         {
           name: "Eastern",
+          sectorone: "livestock",
+          sectortwo: "poultry",
+          sector3: "fishery",
+          sector4: "crops",
           y: 5.58,
-          drilldown: "Eastern"
-        },
-        // {
-        //   name: "Edge",
-        //   y: 4.02,
-        //   drilldown: "Edge"
-        // }
+          one: 15.68,
+          two: 3.92,
+          three: 3.92,
+          four: 3.92
+        }
       ]
     }
-  ],
-  drilldown: {
-    series: [
-      {
-        name: "Eastern Region",
-        id: "Eastern Region",
-        data: [
-          [
-            "v65.0",
-            0.1
-          ],
-          [
-            "v64.0",
-            1.3
-          ],
-          [
-            "v63.0",
-            53.02
-          ],
-          [
-            "v62.0",
-            1.4
-          ],
-          [
-            "v61.0",
-            0.88
-          ],
-          [
-            "v60.0",
-            0.56
-          ],
-          [
-            "v59.0",
-            0.45
-          ],
-          [
-            "v58.0",
-            0.49
-          ],
-          [
-            "v57.0",
-            0.32
-          ],
-          [
-            "v56.0",
-            0.29
-          ],
-          [
-            "v55.0",
-            0.79
-          ],
-          [
-            "v54.0",
-            0.18
-          ],
-          [
-            "v51.0",
-            0.13
-          ],
-          [
-            "v49.0",
-            2.16
-          ],
-          [
-            "v48.0",
-            0.13
-          ],
-          [
-            "v47.0",
-            0.11
-          ],
-          [
-            "v43.0",
-            0.17
-          ],
-          [
-            "v29.0",
-            0.26
-          ]
-        ]
-      },
-      {
-        name: "Western Region",
-        id: "Western Region",
-        data: [
-          [
-            "v58.0",
-            1.02
-          ],
-          [
-            "v57.0",
-            7.36
-          ],
-          [
-            "v56.0",
-            0.35
-          ],
-          [
-            "v55.0",
-            0.11
-          ],
-          [
-            "v54.0",
-            0.1
-          ],
-          [
-            "v52.0",
-            0.95
-          ],
-          [
-            "v51.0",
-            0.15
-          ],
-          [
-            "v50.0",
-            0.1
-          ],
-          [
-            "v48.0",
-            0.31
-          ],
-          [
-            "v47.0",
-            0.12
-          ]
-        ]
-      },
-      {
-        name: "Northen Region",
-        id: "Northen Region",
-        data: [
-          [
-            "v11.0",
-            6.2
-          ],
-          [
-            "v10.0",
-            0.29
-          ],
-          [
-            "v9.0",
-            0.27
-          ],
-          [
-            "v8.0",
-            0.47
-          ]
-        ]
-      },
-      {
-        name: "Central Region",
-        id: "Central Region",
-        data: [
-          [
-            "v11.0",
-            6.2
-          ],
-          [
-            "v10.0",
-            0.29
-          ],
-          [
-            "v9.0",
-            0.27
-          ],
-          [
-            "v8.0",
-            0.47
-          ]
-        ]
-      }
-    ]
-  }
+  ]
 });
  
 
 // Create the chart
-
 Highcharts.getJSON('/farmer/api/farmerprofiles/', function (json) {
   var data = [];
   json.forEach(function (p) {
       p.z = p.region;
       data.push(p);
   })
-
 //console.log(data);
 
 
@@ -892,31 +737,97 @@ $(document).ready(function () {
       success: function(objectFromOWM){
         getWeather(objectFromOWM);
        // console.log(objectFromOWM);
+$(function() {
+    var region, name;
+    Highcharts.chart('barcontainer', {
+      chart: {
+        type: 'column'
       },
-      error: function(response){
-        console.log(response);
-      }
+      title: {
+        text: 'Percentage of Farmers in each Region with credit Access'
+      },
+      subtitle: {
+        text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
+      },
+      xAxis: {
+        categories: ['Western Region', 'Eastern Region', 'Northern Region', 'Central Region'],
+        title: {
+          text: null
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Population of Farmers',
+          align: 'high'
+        },
+        labels: {
+          overflow: 'justify'
+        }
+      },
+      tooltip: {
+        valueSuffix: ' Farmer/s'
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        x: -40,
+        y: 80,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor:
+          Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+        shadow: true
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        name: 'No_credit_access',
+        name: 'Credit_Access',
+        data: [1, 1, 0, 1],
+        region: 'Western'
+      },{
+        name: 'Credit_Access',
+        name: 'No_credit_access',
+        data: [1, 1, 0, 1],
+        region: 'Central'
+      }]
+    }, function(chart) {
+      $('.region').change(function() {
+        region = this.value;
+        if (region) {
+          Highcharts.each(chart.series, function(ob, j) {
+            if (ob.userOptions.region == region && (name ? ob.userOptions.name == name : true)) {
+              ob.show()
+            } else {
+              ob.hide()
+            }
+          });
+        }
+      });
+  
+      $('.name').change(function() {
+        name = this.value;
+        if (name) {
+          Highcharts.each(chart.series, function(ob, j) {
+            if (ob.userOptions.name == name && (region ? ob.userOptions.region == region : true)) {
+              ob.show()
+            } else {
+              ob.hide()
+            }
+          });
+        }
+      })
     });
-  
-  };
-  
-  // On button click, invoke APICall() and pass input text box value
-  $('#getWeather').on('click', function(e){
-  
-    // prevent natural form submit event
-    e.preventDefault();
-    // check to see if search box has value
-    if( $('#city-name').val().trim() === "" || $('#city-name').val().trim() === null ) {
-      // if search box is empty, do nothing
-      return;
-    } else {
-      //  clear old results
-      $('.section').remove();
-  
-      // get input box value and invoke APICall function
-      var cityName = $('#city-name').val().trim();
-      $('#city-name').val("");
-      APICall(cityName);
-    }
   });
-});
+
+})

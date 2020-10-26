@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection,Ecological_Zones)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer,PostFarmSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
+,FarmMapSerializer,PostFarmSerializer,PostEnterpriseSelectionSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -972,5 +972,31 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
     serializer_class = EnterpriseSelectionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-  
+    def get_queryset(self):
+        """
+        This view should return a list of all the farmers profiles
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        selections = EnterpriseSelection.objects.all().order_by('user')
+        if  self.request.user.has_perm('selections.delete_EnterpriseSelection'):
+            queryset = selections
+        else:
+            queryset = selections.filter(user=user)
+        
+        return queryset
+
+    def create(self, request, format=None):
+        serializer = PostEnterpriseSelectionSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                # serializer.status ='Pending'
+                #serializer.user = self.request.user
+                serializer.save(user = self.request.user)
+            except IntegrityError:
+                return Response({'error':'Enterprise selection account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 

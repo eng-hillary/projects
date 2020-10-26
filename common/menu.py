@@ -126,7 +126,7 @@ menus = [
     menu.PassTestNode(
         id='Enterprise-selection-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Enterprise Selection</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="users"></i><span>Enterprise</span><i class="fa fa-angle-right pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -258,18 +258,18 @@ menu.PassTestNode(
         children=[
           
        
-            menu.PassTestNode(id='register_service',
-                              label='<i class="fa fa-circle"></i>Register Market',
+            # menu.PassTestNode(id='register_service',
+            #                   label='<i class="fa fa-circle"></i>Register Market',
                              
-                              pattern_name='openmarket:service_registration', test=can_register_services),
-            menu.PassTestNode(id='services',
-                              label='<i class="fa fa-circle"></i>Markets',
+            #                   pattern_name='openmarket:service_registration', test=can_register_services),
+            # menu.PassTestNode(id='services',
+            #                   label='<i class="fa fa-circle"></i>Markets',
                              
-                              pattern_name='openmarket:serviceregistration_list', test=can_view_services),
-            menu.PassTestNode(id='services',
-                              label='<i class="fa fa-circle"></i>Hire',
+            #                   pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+            # menu.PassTestNode(id='services',
+            #                   label='<i class="fa fa-circle"></i>Hire',
                              
-                              pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+            #                   pattern_name='openmarket:serviceregistration_list', test=can_view_services),
  
          
          

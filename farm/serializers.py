@@ -95,7 +95,7 @@ class QuerySerializer(serializers.ModelSerializer):
     class Meta:
         model = Query
 
-        fields = ['id','query_category','farm', 'description', 'date_discovered',
+        fields = ['id','query_type','query_category','farm', 'description', 'date_discovered',
         'action_taken', 'image', 'reporting_date', 'solution']
 
 class PostQuerySerializer(serializers.ModelSerializer):
@@ -122,7 +122,6 @@ class FarmProduceSerializer(serializers.ModelSerializer):
 
 # serialiser for the maps 
 class FarmMapSerializer(serializers.ModelSerializer):
-
     farmer = serializers.SerializerMethodField(method_name='get_user_full_name',source='farmer__user')
     district = serializers.SerializerMethodField(method_name='get_district',source='farmer')
     region = serializers.SerializerMethodField(method_name='get_region',source='farmer')
@@ -159,6 +158,8 @@ class EnterpriseSelectionSerializer(serializers.ModelSerializer):
      def get_user_full_name(self, obj):
          return '{} {}'.format(obj.user.first_name, obj.user.last_name)
     
-     
-    #  def get_id(self, obj):
-    #      return '{}'.format(obj.user.id)
+   
+class PostEnterpriseSelectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnterpriseSelection
+        exclude=[]  
