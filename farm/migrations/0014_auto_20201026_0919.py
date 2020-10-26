@@ -26,13 +26,13 @@ class Migration(migrations.Migration):
             name='recommendation',
             field=models.CharField(blank=True, max_length=100, null=True),
         ),
-        migrations.CreateModel(
-            name='Ecological_Zones',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('list_of_crops_per_ecological_zone', models.CharField(blank=True, max_length=15, null=True)),
-                ('crops', models.ManyToManyField(related_name='ecological_zone_crops', to='farm.Crop')),
-                ('ecological_zone_name', models.ForeignKey(default=True, on_delete=django.db.models.deletion.CASCADE, related_name='zone', to='common.Region')),
-            ],
-        ),
+        # migrations.CreateModel(
+        #     name='Ecological_Zones',
+        #     fields=[
+        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        #         ('list_of_crops_per_ecological_zone', models.CharField(blank=True, max_length=15, null=True)),
+        #         ('crops', models.ManyToManyField(related_name='ecological_zone_crops', to='farm.Crop')),
+        #         ('ecological_zone_name', models.ForeignKey(default=True, on_delete=django.db.models.deletion.CASCADE, related_name='zone', to='common.Region')),
+        #     ],
+        # ),
     ]

@@ -15,8 +15,13 @@ router = routers.DefaultRouter()
 
 router.register(r'users', views.UserViewSet,'users')
 router.register(r'groups', views.GroupViewSet,'groups')
+router.register(r'counties',views.CountyViewSet,'counties')
+router.register(r'sub_counties',views.SubCountyViewSet,'sub_counties')
 router.register(r'districts', views.DistrictViewSet,'districts')
+router.register(r'parishes',views.ParishViewSet,'parishes')
+router.register(r'villages',views.VillageViewSet, 'villages')
 router.register(r'post_users', views.PostUserDataViewSet, 'post_users')
+
 
 
 app_name ='common'
