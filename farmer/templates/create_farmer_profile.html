@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="page-header-left">
-                                <h3>{% if farmerprofile %} Edit {% else %}Create {% endif %} Profile
+                                <h3>{% if farmerprofile %} Edit {% else %}Create {% endif %} Farmer Profile
                                    
                                 </h3>
                             </div>
@@ -69,6 +69,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 {{ form.credit_access|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-6" id="credit_source">
+                                                {{ form.source_of_credit|as_crispy_field }}
                                             </div>
                                             <div class="col-md-6">
                                                 {{ form.experience|as_crispy_field }}
@@ -141,18 +144,18 @@
       // add select 2 to dropdown fields
       $('#id_sector').select2( );
       $('#id_group').select2();
+      $('#credit_source').hide();  
      
+      $('#div_id_credit_access').change(function () {
 
+        if ($('#id_credit_access').val() == 'True') {
+            $('#credit_source').show();
+        }
+        else if ($('#id_credit_access').val() == 'False') {
+            $('#credit_source').hide();
+        }
 
-    ///form validation 
-    // example of adding a custom  validation method to the form
-    // $.validator.addMethod('year', function (value, element, param) {
-    //             return (value != 0) && (value >= 1900) && (value == parseInt(value, 10));
-    //         }, 'Please enter a valid year not less than 1900!');
-    //         $.validator.addMethod('username', function (value, element, param) {
-    //             var nameRegex = /^[a-zA-Z0-9]+$/;
-    //             return value.match(nameRegex);
-    //         }, 'Only a-z, A-Z, 0-9 characters are allowed');
+        })
 
 
             var val = {

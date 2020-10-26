@@ -36,7 +36,7 @@ from farmer.views import FarmerProfile
 from django.db.models import Count, Q
 import json
 from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer
-,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer)
+,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost)
 from rest_framework import filters
 from django.core import serializers as django_serializers
 from rest_framework import status
@@ -425,20 +425,20 @@ class UserViewSet(viewsets.ModelViewSet):
             user.save()
             
              #send an email
-            user_object = User.objects.get(username =serializer.data['username'])
-            current_site = get_current_site(request)
-            subject = 'Activate Your Account'
-            message = render_to_string('account_activation_email.html', {
-                'user': user_object,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user_object.id)),
-                'token': account_activation_token.make_token(user_object),
-                })
-            to_email = serializer.data['email']
-            email = EmailMessage(
-                subject, message, to=[to_email]
-                )
-            email.send()
+            # user_object = User.objects.get(username =serializer.data['username'])
+            # current_site = get_current_site(request)
+            # subject = 'Activate Your Account'
+            # message = render_to_string('account_activation_email.html', {
+            #     'user': user_object,
+            #     'domain': current_site.domain,
+            #     'uid': urlsafe_base64_encode(force_bytes(user_object.id)),
+            #     'token': account_activation_token.make_token(user_object),
+            #     })
+            # to_email = serializer.data['email']
+            # email = EmailMessage(
+            #     subject, message, to=[to_email]
+            #     )
+            # email.send()
             response = {'message':'account created successfully'}
             return Response(response, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -454,3 +454,13 @@ class DistrictViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name','region__name']
     ordering_fields = '__all__'
+
+
+class PostUserDataViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserApiPost
+    permission_classes = [permissions.IsAuthenticated]
+    
