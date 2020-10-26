@@ -125,4 +125,4 @@ class VillageSerializer(serializers.ModelSerializer):
 class UserApiPost(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields =['id','first_name','last_name','password','username']
+        fields =['id','first_name','last_name','username']
