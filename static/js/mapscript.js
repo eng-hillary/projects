@@ -392,10 +392,10 @@ Highcharts.chart('piecontainer', {
     type: 'pie'
   },
   title: {
-    text: 'Browser market shares. January, 2018'
+    text: 'Percentage of Farmers in each Region with credit Access'
   },
   subtitle: {
-    text: 'Click the slices to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+    text: ''
   },
 
   accessibility: {
@@ -647,10 +647,10 @@ Highcharts.chart('barcontainer', {
     type: 'column'
   },
   title: {
-    text: 'Percentage of Farmers in each Region with credit Access'
+    text: 'Number of Farmers in each Region with credit Access'
   },
   subtitle: {
-    text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
+    text: ''
   },
   xAxis: {
     categories: ['Western Region', 'Eastern Region', 'Northern Region', 'Central Region'],

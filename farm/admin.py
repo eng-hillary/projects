@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (Sector, Enterprise,Farm,EnterpriseType, Query,RecordType,EnterpriseSelection,
- FarmRecord, Ecological_Zones)
+ FarmRecord, Ecological_Zones,Crop)
 # Register your models here.
 
 class SectorAdmin(admin.ModelAdmin):
@@ -109,3 +109,9 @@ class EcologicalZonesAdmin(admin.ModelAdmin):
      
     ]
 admin.site.register(Ecological_Zones,EcologicalZonesAdmin)
+
+class CropAdmin(admin.ModelAdmin):
+    list_display = [
+        'crop',
+    ]
+admin.site.register(Crop, CropAdmin)
