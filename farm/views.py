@@ -907,7 +907,7 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
         results = Ecological_Zones.objects.get(ecological_zone_name = region.id)
         print(results.crops.all())
         crops = results.crops.all()
-        enterprise.recommendation = results.crops
+       # enterprise.recommendation = results.crops
 
         enterprise.save()
         form.save_m2m()

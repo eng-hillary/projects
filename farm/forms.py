@@ -92,4 +92,4 @@ class EnterpriseSelectionForm(forms.ModelForm):
 
     class Meta:
         model=EnterpriseSelection
-        exclude = ['user']
+        exclude = ['user','recommendation']

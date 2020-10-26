@@ -202,6 +202,22 @@ class FarmRecord(TimeStampedModel, models.Model):
         return self.name
 
 
+class Crop(models.Model):
+    crop = models.CharField(max_length = 100, null= True, blank=False)
+    benefits = models.CharField(max_length = 100, null=True, blank=True)
+    what_you_need_to_know = models.CharField(max_length = 500, null=True, blank=True)
+
+    def __str__(self):
+        return self.crop
+
+
+class Ecological_Zones(models.Model):
+    ecological_zone_name = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
+    list_of_crops_per_ecological_zone = models.CharField(max_length=15, null=True, blank=True)
+    crops = models.ManyToManyField(Crop, related_name='ecological_zone_crops')
+
+
+
 #Enterprise Selection
 class EnterpriseSelection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False, related_name='enterpriseselection')
@@ -220,22 +236,9 @@ class EnterpriseSelection(models.Model):
     involved_in_anyother_farming_activity = models.BooleanField(_('Have  you ever been involved in any farming activities'), choices=YES_OR_NO, null=False, blank=False, default=True)
     full_time_devotion = models.BooleanField(_('Do you want to devote full-time effort to the farm?'), choices=YES_OR_NO, null=False, blank=False, default=True)
     time_allocated_to_farming = models.FloatField(null= True, blank=True)
-
     rented_land = models.BooleanField(_('Do you intend to use rented land?'),choices=YES_OR_NO, null=False, blank=False, default=True)
-    recommendation = models.CharField(max_length=100, null=True,blank = True)
+    recommendation = models.ForeignKey(Ecological_Zones,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
 
 
-
-class Crop(models.Model):
-    crop = models.CharField(max_length = 100, null= True, blank=False)
-    benefits = models.CharField(max_length = 100, null=True, blank=True)
-    what_you_need_to_know = models.CharField(max_length = 500, null=True, blank=True)
-
-    def __str__(self):
-        return self.crop
 
         
-class Ecological_Zones(models.Model):
-    ecological_zone_name = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
-    list_of_crops_per_ecological_zone = models.CharField(max_length=15, null=True, blank=True)
-    crops = models.ManyToManyField(Crop, related_name='ecological_zone_crops')
