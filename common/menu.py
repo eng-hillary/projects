@@ -126,7 +126,7 @@ menus = [
     menu.PassTestNode(
         id='Enterprise-selection-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Enterprise Selection</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="users"></i><span>Enterprise</span><i class="fa fa-angle-right pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
