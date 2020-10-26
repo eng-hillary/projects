@@ -38,18 +38,49 @@
         experience. We hope that with the information you provided to us, We hope that we can help you select the right 
         enterprise for you.
         
+        You entered that you are from {{ profilerecord.region }} region, Due to the ecological zone that your region is in, we would 
+        recommend the following crops <br>
+
+        {% for reco in profilerecord.recommendation.crops.all %} 
+        <b>{{reco}}, </b>
+        {% endfor %} 
       
       <br>
       <br>
+      <!-- This is a table -->
+     
+     
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Crop recommended</th>
+            <th scope="col">Benefits of the crop</th>
+            <th scope="col">What you need to know to grow that crop</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+         
+          <tr>
+            {% for reco in profilerecord.recommendation.crops.all %} 
+
+            <th scope="row">1</th>
+            <td>{{reco.crop}}</td>
+            <td>{{reco.benefits}}</td>
+            <td>{{reco.what_you_need_to_know}}</td>
+           
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div> 
+       
+        
+
+      </div> <!--any html tag which you desire--> 
+     
       
-      Therefore we would recommend you to try out farming in the following sectors {{ crops }}
-      <br>
-      However, Since you indicated {{profilerecord.full_time_devotion }},{{ message }} We recommend that you invest in a sector that 
-      doesnt need much of your time
-      <br>
-      <br>
-      We provide more information about this enterprise by giving you a chance to speak to an expert
-      <br>
       <a href="tel:778-930-647">
       <button type="button" class="btn btn-primary m-r-10" style="align-self: center;">Talk to an expert</button>
       </a>
@@ -68,42 +99,7 @@
         </div>
 
       </div>
-      <div class="col-md-9">
-        <div class="product-page-details product-right mb-0">
-          <h2>{{profilerecord.user.profile}}</h2>
-          <hr>
-          <h6 class="product-title">User Profile Details</h6>
-
-          <b>Full Name</b>: {{profilerecord.user.profile}} <br>
-          <b>Email</b>: {{profilerecord.user.email}} <br>
-          <b>Phone</b>:
-          {{profilerecord.user.phone_1}}{% if profilerecord.phone_2 %}/{{profilerecord.phone_2}}{% endif %} <br>
-
-          <b>Profession</b>: {{profilerecord.profession}} <br>
-          <b>monthly Income</b>: {{profilerecord.monthly_income}} <br>
-          <b>Level of Education</b>: {{profilerecord.level_of_education}} <br>
-          <b>Capital</b>: {{profilerecord.capital}} <br>
-
-          <b>Inspiration/Reason for joining Farming</b>:
-          {{profilerecord.what_is_your_inspiration_for_considering_in_farming}} <br>
-          <b>Sector of Interest</b>: {{profilerecord.interested_sector}} <br>
-          <b>Production Scale</b>: {{profilerecord.scale}} <br>
-
-          <h6 class="product-title">Address</h6>
-          <b>DO you own a piece of land</b>: {{profilerecord.own_piece_of_land}} <br>
-          <b>Land Size</b>: {{profilerecord.land_size}} <br>
-          <b>Land Location</b>: {{profilerecord.land_location}} <br>
-          <b>Region</b>: {{profilerecord.region}} <br>
-          <b>Do you intend to use rented land</b>: {{profilerecord.rented_land}} <br>
-
-
-
-          <hr>
-          {% if request.user.is_superuser or perms.farmer.can_approve_farmers %}
-
-          {% endif %}
-        </div>
-      </div>
+  
     </div>
   </div>
 </div>
