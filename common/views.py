@@ -36,7 +36,7 @@ from farmer.views import FarmerProfile
 from django.db.models import Count, Q
 import json
 from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer
-,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer)
+,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost)
 from rest_framework import filters
 from django.core import serializers as django_serializers
 from rest_framework import status
@@ -454,3 +454,13 @@ class DistrictViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name','region__name']
     ordering_fields = '__all__'
+
+
+class PostUserDataViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserApiPost
+    permission_classes = [permissions.IsAuthenticated]
+    

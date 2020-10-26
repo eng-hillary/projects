@@ -121,3 +121,8 @@ class VillageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Village
         fields ='__all__'
+
+class UserApiPost(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields =['first_name','last_name','password','username']
