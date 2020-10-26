@@ -23,6 +23,13 @@ class Group(TimeStampedModel, models.Model):
 
 
 class FarmerProfile(TimeStampedModel, models.Model):
+    CREDIT = (
+        (None, '--please select--'),
+        ('SACCO', 'SACCO'),
+        ('VSLA', 'VSLA'),
+        ('Bank', 'Bank')
+     )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='farmer',primary_key=True)
     # personal information
 
@@ -32,6 +39,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     number_of_dependants = models.PositiveIntegerField()
     credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=True, blank=False)
+    source_of_credit = models.CharField(choices=CREDIT, max_length=25, null=True, blank=False)
     experience = models.FloatField(_('Farming Experience in years'),null=False, blank=False)
     occupation = models.CharField(max_length=100, null=True, blank=False)
    
