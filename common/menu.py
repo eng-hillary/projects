@@ -258,18 +258,18 @@ menu.PassTestNode(
         children=[
           
        
-            menu.PassTestNode(id='register_service',
-                              label='<i class="fa fa-circle"></i>Register Market',
+            # menu.PassTestNode(id='register_service',
+            #                   label='<i class="fa fa-circle"></i>Register Market',
                              
-                              pattern_name='openmarket:service_registration', test=can_register_services),
-            menu.PassTestNode(id='services',
-                              label='<i class="fa fa-circle"></i>Markets',
+            #                   pattern_name='openmarket:service_registration', test=can_register_services),
+            # menu.PassTestNode(id='services',
+            #                   label='<i class="fa fa-circle"></i>Markets',
                              
-                              pattern_name='openmarket:serviceregistration_list', test=can_view_services),
-            menu.PassTestNode(id='services',
-                              label='<i class="fa fa-circle"></i>Hire',
+            #                   pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+            # menu.PassTestNode(id='services',
+            #                   label='<i class="fa fa-circle"></i>Hire',
                              
-                              pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+            #                   pattern_name='openmarket:serviceregistration_list', test=can_view_services),
  
          
          
