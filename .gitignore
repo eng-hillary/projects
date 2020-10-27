@@ -13,3 +13,11 @@ angelenv/
 myvenv/
 lydiaenv/
 staticfiles/CACHE/
+common/migrations/
+farm/migrations/
+farmer/migrations/
+openmarket/migrations/
+resourcesharing/migrations/
+unffeagents/migrations/
+weather/migrations/
+lydiaenv/
