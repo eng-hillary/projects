@@ -456,6 +456,54 @@ class DistrictViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
 
 
+class CountyViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = County.objects.all()
+    serializer_class = CountySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['name','district__name']
+    ordering_fields = '__all__'
+
+
+class SubCountyViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = SubCounty.objects.all()
+    serializer_class = SubCountySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['name','county__name']
+    ordering_fields = '__all__'
+
+
+class ParishViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = Parish.objects.all()
+    serializer_class = ParishSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['name','sub_county__name']
+    ordering_fields = '__all__'
+
+
+class VillageViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows farms to be viewed or edited.
+    """
+    queryset = Village.objects.all()
+    serializer_class = VillageSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['name','parish__name']
+    ordering_fields = '__all__'
+
+
 class PostUserDataViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
