@@ -219,7 +219,7 @@ class Ecological_Zones(models.Model):
 
 #Enterprise Selection
 class EnterpriseSelection(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False, related_name='enterpriseselection')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False, related_name='enterpriseselections')
     profession = models.CharField(_('What is your current proffession?'),max_length=200, choices = PROFESSION, null=False, default=False )
     monthly_income = models.CharField(null=True, choices=INCOME, max_length=200)
     level_of_education = models.CharField(max_length=100, choices =EDUCATION_LEVEL, null=False, default=False)
@@ -238,6 +238,9 @@ class EnterpriseSelection(models.Model):
     rented_land = models.BooleanField(_('Do you intend to use rented land?'),choices=YES_OR_NO, null=False, blank=False, default=True)
     recommendation = models.ForeignKey(Ecological_Zones,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
 
+
+    def __str__(self):
+        return str(self.recommendation)
 
 
         
