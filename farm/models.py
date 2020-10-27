@@ -213,7 +213,6 @@ class Crop(models.Model):
 
 class Ecological_Zones(models.Model):
     ecological_zone_name = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
-    list_of_crops_per_ecological_zone = models.CharField(max_length=15, null=True, blank=True)
     crops = models.ManyToManyField(Crop, related_name='ecological_zone_crops')
 
 
