@@ -48,13 +48,21 @@
 <!-- page-wrapper Start-->
 <div class="page-wrapper">
 
+  
     <!-- Page Header Start-->
-    <div class="page-main-header">
-        <div class="main-header-right row">
-            <div class="main-header-left d-lg-none">
-                <div class="logo-wrapper"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo.png' %}" style="background-color: #ffffff;" alt=""></a></div>
+    <div class="page-main-header" style="width: 100%; height:80px; margin-left: 0px;">
+        <div class="main-header-right row" style="height:165%">
+            
+            <div class="logo">
+                  <img src="{% static 'images/logo_circle.png' %}"  class="img-responsive" alt="Responsive image" 
+                  style="margin-top: 10px; height:85px; width:85px; margin-left: 2px;">
+            
             </div>
-            <div class="mobile-sidebar">
+            
+            <div class="main-header-left d-lg-none">
+                <div class="logo-wrapper"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo_circle.png' %}"  alt=""></a></div>
+            </div>
+            <div class="mobile-sidebar" style="margin-left: 95px;">
                 <div class="media-body text-right switch-sm">
                     <label class="switch"><a href="#"><i id="sidebar-toggle" data-feather="align-left"></i></a></label>
                 </div>
@@ -86,18 +94,17 @@
                         </ul>
                     </li>
                     <li class="onhover-dropdown">
-                        {% if user.profile.profile_pic %}
-                        <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="{{user.profile.profile_pic.url}}" alt="header-user">
+                        {% if request.user.profile.profile_pic %}
+                        <diuv class="media align-items-center"><img class="align-self-center pull-right img-60 rounded-circle blur-up lazyloaded" src="{{ request.user.profile.profile_pic.url }}" alt="header-user">
                             <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
-                        </div>
+                       </diuv>
                         {% else %}
-
                         <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="{% static 'images/man.png' %}" alt="header-user">
                             <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
-                        </div>
-                        {% endif %}
+                       </div>
+                       {% endif %}
                         <ul class="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
-                            <li><a href="#"><i data-feather="user"></i>{{request.user}}</a></li>
+                            <li><a href="#"><i data-feather="user"></i>{{ request.user.first_name}}</a></li>
                             <li><a href="#"><i data-feather="settings"></i>Settings</a></li>
                             <li><a href="{% url 'logout' %}"><i data-feather="log-out"></i>Logout</a></li>
                         </ul>
@@ -113,27 +120,12 @@
     <div class="page-body-wrapper">
 
         <!-- Page Sidebar Start-->
-        <div class="page-sidebar">
-            <div class="main-header-left d-none d-lg-block">
-
-                <div class="logo-wrapper ml-3"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo_circle.png' %}" style="margin-top: 10px;" width="100%" height="180"  alt=""></a></div>
-
-            </div>
+        <div class="page-sidebar" style="margin-top: 80px;">
             <div class="sidebar custom-scrollbar">
-                <div class="sidebar-user text-center">
-                    <div>
-                        <br>
-                    </div>
-                    <p><br> <br></p>
-                    <p><br></p>
-                </div>
-              
-
-                    {% render_menu menu=menus.main user=request.user %}
-
-                   
                
+                {% render_menu menu=menus.main user=request.user %}
             </div>
+
         </div>
         <!-- Page Sidebar Ends-->
 
