@@ -306,7 +306,7 @@ $(document).ready(function () {
     // Function: Call api.openweathermap.com
     var APICall = function(theCity) {
       // get API url
-      var weatherUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + theCity;
+      var weatherUrl = "https://api.openweathermap.org/data/2.5/forecast/daily?q=" + theCity;
       // get API key
       var apiKey = "b0b34e0501286ae903bab8dde901b6ae";
       // get "unit" as imperial

@@ -16596,7 +16596,7 @@ ul.notification-dropdown.onhover-show-div {
       transition: 0.3s; }
     .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu li.active > a > .fa-angle-right:before {
       content: "";
-      font-family: FontAwesome;
+      font-family: Font Awesome 5 Free;
       -webkit-transition: 0.3s;
       transition: 0.3s; }
     .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu li.active > .sidebar-submenu {
@@ -24247,10 +24247,10 @@ min-width: 50px;
 
 .weathersection {
 	position: relative;
-    margin: 1em 10px 1em 0;
+    margin: 1em 10px 1em 10px;
     padding: 1em 1em 2em 1em;
     display: inline-block;
-    width: 370px;
+    width: 100%;
     height: auto;
     background: #FCFAFA;
     overflow: hidden;
@@ -24262,9 +24262,10 @@ min-width: 50px;
 	left: 1em;
 	width: 200px;
 	height:145px;
-	background-image:url(http://webdesignertroy.com/dump/blank-200.jpg);
+	background-image:url(https://webdesignertroy.com/dump/blank-200.jpg);
 }
 .weather-description {
 	text-align: left;
-	margin-left: 220px;
+  margin-left: 220px;
+  margin-right:220px ;
 }
