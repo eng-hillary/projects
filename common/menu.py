@@ -126,7 +126,7 @@ menus = [
     menu.PassTestNode(
         id='Enterprise-selection-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Agric Enterprise</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="users"></i><span>Agric Enterprise </span><i class="fa fa-angle-right pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -146,12 +146,9 @@ menus = [
         url='#',
         test=can_view_farmers,
         children=[
-            menu.PassTestNode(id='add_farmers',
-                              label='<i class="fas fa-circle"></i>Register',
-                             
-                              pattern_name='farmer:create_farmer', test=can_add_farmer_profile),
+            
             menu.PassTestNode(id='farmers',
-                              label='<i class="fa fa-circle"></i>Applications',
+                              label='<i class="fa fa-circle"></i>My Applications',
                              
                               pattern_name='farmer:farmerprofile_list', test=can_view_farmers),
             menu.PassTestNode(id='farmer_groups',
