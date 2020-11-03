@@ -3,6 +3,7 @@ from .models import CommunityWeather
 from django.contrib.auth.models import User
 
 class CommunityWeatherSerializer(serializers.ModelSerializer):
+    village = serializers.CharField(source='compute_location')
     class Meta:
         model = CommunityWeather 
-        fields = '__all__'
+        fields = ['id','weather','village']

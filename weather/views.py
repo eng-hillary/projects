@@ -12,7 +12,7 @@ class CommunityWeatherViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = CommunityWeather.objects.all().order_by('weather')
+    queryset = CommunityWeather.objects.all().order_by('-id')
     serializer_class = CommunityWeatherSerializer
     permission_classes = [permissions.IsAuthenticated]
 

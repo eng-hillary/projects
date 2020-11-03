@@ -7,7 +7,6 @@ PROFESSION, EDUCATION_LEVEL,INCOME)
 from geopy.geocoders import Nominatim
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
-from django.utils.translation import ugettext as _
 from django_postgres_extensions.models.fields import ArrayField
 
 
@@ -57,7 +56,7 @@ class Farm(TimeStampedModel, models.Model):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
         lat = str(self.lat)
         lon = str(self.lon)
-       
+
         try:
 
             location = geolocator.reverse(lat + "," + lon)
@@ -71,7 +70,7 @@ class EnterpriseType(TimeStampedModel, models.Model):
 
     name = models.CharField(max_length=50, null=False, blank=False)
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE, null=True)
-  
+
     def __str__(self):
         return self.name
 
@@ -241,6 +240,3 @@ class EnterpriseSelection(models.Model):
 
     def __str__(self):
         return str(self.recommendation)
-
-
-        
