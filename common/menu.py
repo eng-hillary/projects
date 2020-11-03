@@ -126,7 +126,7 @@ menus = [
     menu.PassTestNode(
         id='Enterprise-selection-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Enterprise</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="users"></i><span>Agric Enterprise</span><i class="fa fa-angle-right pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -213,10 +213,6 @@ menus = [
         url='#',
         test=can_view_service_provider,
         children=[
-            menu.PassTestNode(id='provider_registration',
-                              label='<i class="fa fa-circle"></i>Registration',
-                             
-                              pattern_name='openmarket:serviceprovider_registration', test=can_add_service_provider),
             menu.PassTestNode(id='provider_list',
                               label='<i class="fa fa-circle"></i>Applications',
                              
