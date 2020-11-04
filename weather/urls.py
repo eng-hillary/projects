@@ -5,7 +5,7 @@ from .views import CommunityWeatherList
 
 
 router = routers.DefaultRouter()
-router.register(r'community_weather', views.CommunityWeatherViewSet)
+router.register(r'community_weather', views.CommunityWeatherViewSet, 'community_weather')
 
 app_name = 'weather'
 urlpatterns = [

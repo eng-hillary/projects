@@ -23,7 +23,8 @@ class CommunityWeather(TimeStampedModel, models.Model):
     )
     
     weather = models.CharField(max_length=50,choices=WEATHER_CHOICES, null=False, blank=False)
-    date_reported = models.DateTimeField(auto_now=True)
+    date_reported = models.DateField(auto_now=True)
+    time_reported = models.TimeField(auto_now=True)
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='weather_agent')
     description = models.TextField(null=False, blank=False)
     #location of person reporting weather
