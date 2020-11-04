@@ -8,7 +8,9 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     <h3>Farmer profile List
-                        <small>{{ user.groups.all.0 }} Dashboard</small>
+                      {% if request.user.is_superuser or perms.farm.add_farmerprofile %}
+                      <small><a class="add-new" href="{% url 'farmer:create_farmer' %}">Add new</a></small>
+                      {% endif %}
                     </h3>
                 </div>
             </div>
