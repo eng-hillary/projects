@@ -869,7 +869,7 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
     crops_soroti = ['cotton','millet','ground nuts']#soroti, kumi, palisa
     crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
     crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
-    crops_lakevictoria = ['banana','coffee','maizr','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
+    crops_lakevictoria = ['banana','coffee','maize','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
    
     crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
     crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale

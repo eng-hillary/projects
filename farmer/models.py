@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from common.models import(Region, District, County, SubCounty, Parish, Village, TimeStampedModel)
-from common.choices import(GENDER_CHOICES, MARITAL_STATUSES,STATUS, LAND_TYPES, PRODUCTION_SCALE, YES_OR_NO)
+from common.choices import(GENDER_CHOICES, MARITAL_STATUSES,STATUS, LAND_TYPES, SCALE, YES_OR_NO)
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
@@ -26,8 +26,9 @@ class FarmerProfile(TimeStampedModel, models.Model):
     CREDIT = (
         (None, '--please select--'),
         ('SACCO', 'SACCO'),
-        ('VSLA', 'VSLA'),
-        ('Bank', 'Bank')
+        ('Village Savings and Loan Associate', 'Village Savings and Loan Associate'),
+        ('Bank', 'Bank'),
+        ('Farmer Groups', 'Farmer Groups'),
      )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='farmer',primary_key=True)
@@ -39,7 +40,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     number_of_dependants = models.PositiveIntegerField()
     credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=True, blank=False)
-    source_of_credit = models.CharField(choices=CREDIT, max_length=25, null=True, blank=False)
+    source_of_credit = models.CharField(choices=CREDIT, max_length=50, null=True, blank=False, default=False)
     experience = models.FloatField(_('Farming Experience in years'),null=False, blank=False)
     occupation = models.CharField(max_length=100, null=True, blank=False)
    
@@ -50,7 +51,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, null=True, blank=True)
     size_of_land = models.DecimalField(_('Size of land in acres') ,decimal_places=2, max_digits=20, blank=False)
     type_of_land = models.CharField(choices=LAND_TYPES, max_length=20)
-    production_scale = models.CharField(choices=PRODUCTION_SCALE, max_length=20)
+    production_scale = models.CharField(choices=SCALE, max_length=50)
     general_remarks = models.TextField(null=True, blank=True)
     # initial capital moved to farm
     #initial_total_capital = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
