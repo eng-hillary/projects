@@ -175,18 +175,17 @@ $(document).ready(function () {
         type:'GET',
         data:{},
         success:function(data){
-         // console.log(data[0]);
-          
+          console.log(data);
           var community_weather='';
-          $.each(data, function(index,val){
-            console.log(data);
+          $.each(data, function(index, val){
+      
             var icon ="http://openweathermap.org/img/wn/"+val.icon+"@2x.png"
-            community_weather+='<img src='+icon+'><br>'+'<p><h3>'+ data.weather+'</b></h3>'+
-            data.temp +'&deg;C'+'|'+val.main+ ','+
+            community_weather+='<img src='+icon+'><br>'+'<p><h3>'+ data[0].weather+'</b></h3>'+
+            data.temp +'&deg;C'+'|'+data.main+ ','+
             val.description
   
           });
-          $('#show_community_weather').html(weather);
+          $('#show_community_weather').html(community_weather);
         }
   
       });

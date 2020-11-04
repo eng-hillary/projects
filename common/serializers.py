@@ -44,10 +44,10 @@ class UserSerializer(serializers.Serializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    #profile_pic = serializers.FileField(allow_empty_file=True)
+  
     class Meta:
         model = Profile
-        fields = ['phone_number','phone_2','home_address','gender','profile_pic','region','district','parish','county','sub_county','village']
+        fields = ['user','phone_number','phone_2','home_address','gender','profile_pic','region','district','parish','county','sub_county','village']
 
 
 class UserPostSerializer(serializers.ModelSerializer):
