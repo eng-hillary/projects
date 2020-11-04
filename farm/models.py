@@ -228,7 +228,7 @@ class EnterpriseSelection(models.Model):
     scale = models.CharField(_('At what scale would you like to do farming?'), max_length = 100, choices=SCALE, null=True, blank=False)
     #Land
     own_piece_of_land = models.BooleanField(_('Do you own or have access to a piece of land to use for your farming activities'), choices=YES_OR_NO, null=False, blank=False, default=False)
-    land_size = models.FloatField(_('What is the size of the land in acres'), null=False, default=False)
+    land_size = models.FloatField(_('What is the size of the land in acres'), null=True, default=False,blank=True)
     land_location = models.ForeignKey(District,  on_delete=models.CASCADE, unique=False, related_name='district', default=True)
     region = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='region', default=False)
     involved_in_anyother_farming_activity = models.BooleanField(_('Have  you ever been involved in any farming activities'), choices=YES_OR_NO, null=False, blank=False, default=True)
