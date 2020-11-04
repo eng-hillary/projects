@@ -32,6 +32,7 @@ from django.contrib.auth.models import Group as UserGroup
 from django.db.models import Count, Q
 import json
 from django.db import IntegrityError
+from rest_framework import filters
 
 
 # views for groups
@@ -42,6 +43,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['name','contact_person','contact_person_email','contact_person_phone','address']
+    ordering_fields = '__all__'
 
 
 
