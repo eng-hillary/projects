@@ -105,8 +105,8 @@ class PostFarmerProfileSerializer(serializers.ModelSerializer):
   
     class Meta:
         model = FarmerProfile
-        #exclude=['user','created','modified']
-        exclude=['created','modified']
+        exclude=['user','created','modified']
+        #exclude=['created','modified']
 
 
 
