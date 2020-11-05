@@ -24,7 +24,7 @@ from farmer.models import FarmerProfile
 import datetime
 from django.db import IntegrityError
 from django_postgres_extensions.models.expressions import Index, SliceArray
-
+from rest_framework import filters
 # views for sector
 class SectorViewSet(viewsets.ModelViewSet):
     """
@@ -256,6 +256,9 @@ class FarmViewSet(viewsets.ModelViewSet):
     """
     serializer_class = FarmSerializer
     permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = []
 
     def get_queryset(self):
         """
@@ -869,7 +872,7 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
     crops_soroti = ['cotton','millet','ground nuts']#soroti, kumi, palisa
     crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
     crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
-    crops_lakevictoria = ['banana','coffee','maizr','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
+    crops_lakevictoria = ['banana','coffee','maize','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
    
     crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
     crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale

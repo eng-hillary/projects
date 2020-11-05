@@ -180,9 +180,9 @@ for(id=0; id<ids.length; id++){
     console.log(ids[id]);
 
 $.ajax({
-    url: "/farm/api/farms/"+ids[id],
-    data: {},
-    headers:{"X-CSRFToken": getCookie("csrftoken")},
+    url: "farm/api/enterpriseselection/"+ids[id],
+    data: {},(
+    headers:{"X-CSRFToken": getCookie"csrftoken")},
     type: 'DELETE',
     contentType: 'application/json',
     success: function(result) {

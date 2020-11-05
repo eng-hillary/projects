@@ -15,7 +15,8 @@
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
-                    <li class="breadcrumb-item"><a href="{% url 'farm:select_enterpise' %}"><i data-feather="home"></i></a>
+                    <li class="breadcrumb-item"><a href="{% url 'farm:select_enterpise' %}"><i
+                                data-feather="home"></i></a>
                     </li>
                     <li class="breadcrumb-item add-new">Enterprise Selection</li>
                     <li class="breadcrumb-item active"></li>
@@ -32,7 +33,8 @@
         <div class="col-sm-12">
             <div class="card tab2-card">
                 <div class="card-header">
-                    <h5>{% if farm %}Update {% else %} Please fill in the form below in order to be guided{% endif %} about enterprise selection</h5>
+                    <h5>{% if farm %}Update {% else %} Please fill in the form below in order to be guided{% endif %}
+                        about enterprise selection</h5>
                     {% if messages %}
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
                         {% for message in messages %}
@@ -69,7 +71,7 @@
                         <div class="col-xl-12 col-md-6">
                             {{ form.full_time_devotion|as_crispy_field }}
                         </div>
-                        
+
                         <div class="col-xl-12 col-md-6">
                             {{ form.what_is_your_inspiration_for_considering_in_farming|as_crispy_field }}
                         </div>
@@ -92,15 +94,15 @@
                             </div>
                         </div>
                         <div id="rented_land">
-                        <div class="col-xl-12 col-md-12">
-                            {{ form.rented_land|as_crispy_field }}
+                            <div class="col-xl-12 col-md-12">
+                                {{ form.rented_land|as_crispy_field }}
+                            </div>
                         </div>
-                    </div>
                         <div class="col-xl-12 col-md-6">
                             {{ form.involved_in_anyother_farming_activity|as_crispy_field }}
                         </div>
-                       
-                   
+
+
                         <!-- <input name="farmer" value="{{user.id}}" type="hidden"> -->
 
                     </div>
@@ -127,40 +129,29 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-            $('#land').hide();
-            //$('#sector').hide();
+        $('#land').hide();
+        //$('#sector').hide();
+        $('#rented_land').hide();
+
+    });
+
+    $('#id_own_piece_of_land').change(function () {
+
+        if ($('#id_own_piece_of_land').val() == 'True') {
+            // alert('It works');
+
+            $('#land').show();
             $('#rented_land').hide();
-          
-        });
-        
-        $('#id_own_piece_of_land').change(function () {
-            
-            if ($('#id_own_piece_of_land').val() == 'True') {
-                // alert('It works');
-                
-                $('#land').show();
-                $('#rented_land').hide();
-                
-            }
-            else {
-                
-                $('#land').hide();
-                $('#rented_land').show();
-            }
-        });
 
-        // $('#id_involved_in_anyother_farming_activity').change(function () {
-          
-        //     if ($('#id_involved_in_anyother_farming_activity').val() == 'True') {
-        //      //alert('It works');
-        //         //$('#sector').show();
-        //     }
-        //     else {
-        //         $('#sector').hide();
-        //     }
-        // });
+        }
+        else {
 
+            $('#land').hide();
+            $('#rented_land').show();
+        }
+    });
 
+    
 
 
 

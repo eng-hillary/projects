@@ -8,10 +8,9 @@ from .models import CommunityWeather
 class WeatherAdmin(OSMGeoAdmin):
     list_display = [
         'weather',
-        'region',
-        'district',
-        'county',
-        'sub_county',
-        'parish',
-        'village'
+        'reported_by',
+        'description',
+        'lon',
+        'lat',
+        
         ]

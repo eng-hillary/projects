@@ -13,7 +13,7 @@ from geopy.geocoders import Nominatim
 class SectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sector
-        fields = ['id','name', 'size']
+        fields = ['id','name']
 
 
 class FarmSerializer(serializers.ModelSerializer):

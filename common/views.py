@@ -36,7 +36,7 @@ from farmer.views import FarmerProfile
 from django.db.models import Count, Q
 import json
 from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer
-,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost)
+,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost,ProfileSerializer)
 from rest_framework import filters
 from django.core import serializers as django_serializers
 from rest_framework import status
@@ -512,3 +512,7 @@ class PostUserDataViewSet(viewsets.ModelViewSet):
     serializer_class = UserApiPost
     permission_classes = [permissions.IsAuthenticated]
     
+class PostProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
