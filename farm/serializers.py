@@ -146,13 +146,14 @@ class EnterpriseSelectionSerializer(serializers.ModelSerializer):
      #full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
      #user = serializers.SerializerMethodField(method_name='get_id')
      
+     
 
      
      class Meta:
          model = EnterpriseSelection
          fields = ('own_piece_of_land','what_is_your_inspiration_for_considering_in_farming',
         'involved_in_anyother_farming_activity','full_time_devotion',
-        'time_allocated_to_farming','interested_sector','capital','user', 'profession','monthly_income','level_of_education',
+        'time_allocated_to_farming','capital','user', 'profession','monthly_income','level_of_education',
         'capital','land_size','land_location','region','scale','recommendation')
     
      def get_user_full_name(self, obj):

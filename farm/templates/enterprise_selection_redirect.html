@@ -54,9 +54,10 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Crop recommended</th>
-            <th scope="col">Benefits of the crop</th>
-            <th scope="col">What you need to know to grow that crop</th>
+            <th scope="col">Recommended Enterprise</th>
+            <th scope="col">Benefits</th>
+            <th scope="col">What you need to know</th>
+            <th scope="col">Required capital</th>
           </tr>
         </thead>
         
@@ -69,6 +70,9 @@
             <td>{{reco.crop}}</td>
             <td>{{reco.benefits}}</td>
             <td>{{reco.what_you_need_to_know}}</td>
+            <td>{{reco.required_capital}}</td>
+            
+
            
           </tr>
           {% endfor %}
@@ -81,7 +85,7 @@
       </div> <!--any html tag which you desire--> 
      
       
-      <a href="tel:778-930-647">
+      <a href="tel:0800 209003">
       <button type="button" class="btn btn-primary m-r-10" style="align-self: center;">Talk to an expert</button>
       </a>
       <!-- <button class="btn btn-primary m-r-10" id="approve_btn" type="button">Approve</button>

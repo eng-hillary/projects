@@ -205,6 +205,7 @@ class Crop(models.Model):
     crop = models.CharField(max_length = 100, null= True, blank=False)
     benefits = models.CharField(max_length = 100, null=True, blank=True)
     what_you_need_to_know = models.CharField(max_length = 500, null=True, blank=True)
+    required_capital = models. CharField(max_length=40, null = False, blank=True )
 
     def __str__(self):
         return self.crop
@@ -224,13 +225,13 @@ class EnterpriseSelection(models.Model):
     level_of_education = models.CharField(max_length=100, choices =EDUCATION_LEVEL, null=False, default=False)
     capital = models.FloatField(_('How much money would you be willing to invest in farming?'), null=False, blank=False, default=True)
     what_is_your_inspiration_for_considering_in_farming = models.TextField(null=True, blank=True)
-    interested_sector = models.CharField(_('What Sector of farming are you interested in'), max_length = 100, choices=SECTOR, null=True, blank=False)
+   # interested_sector = models.CharField(_('What Sector of farming are you interested in'), max_length = 100, choices=SECTOR, null=True, blank=False)
     scale = models.CharField(_('At what scale would you like to do farming?'), max_length = 100, choices=SCALE, null=True, blank=False)
     #Land
     own_piece_of_land = models.BooleanField(_('Do you own or have access to a piece of land to use for your farming activities'), choices=YES_OR_NO, null=False, blank=False, default=False)
     land_size = models.FloatField(_('What is the size of the land in acres'), null=True, default=False,blank=True)
     land_location = models.ForeignKey(District,  on_delete=models.CASCADE, unique=False, related_name='district', default=True)
-    region = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='region', default=False)
+    region = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='region', default=False, help_text="What is your region of origin")
     involved_in_anyother_farming_activity = models.BooleanField(_('Have  you ever been involved in any farming activities'), choices=YES_OR_NO, null=False, blank=False, default=True)
     full_time_devotion = models.BooleanField(_('Do you want to devote full-time effort to the farm?'), choices=YES_OR_NO, null=False, blank=False, default=True)
     time_allocated_to_farming = models.FloatField(null= True, blank=True)
