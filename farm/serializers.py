@@ -52,7 +52,8 @@ class FarmSerializer(serializers.ModelSerializer):
 class PostFarmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Farm
-        exclude=['farmer']
+        #exclude=['farmer']
+        exclude=[]
 
 class FarmRecordSerializer(serializers.ModelSerializer):
     record_type = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
