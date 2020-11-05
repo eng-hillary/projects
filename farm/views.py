@@ -24,7 +24,7 @@ from farmer.models import FarmerProfile
 import datetime
 from django.db import IntegrityError
 from django_postgres_extensions.models.expressions import Index, SliceArray
-
+from rest_framework import filters
 # views for sector
 class SectorViewSet(viewsets.ModelViewSet):
     """
@@ -256,6 +256,9 @@ class FarmViewSet(viewsets.ModelViewSet):
     """
     serializer_class = FarmSerializer
     permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = []
 
     def get_queryset(self):
         """
