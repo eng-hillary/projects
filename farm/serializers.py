@@ -31,7 +31,10 @@ class FarmSerializer(serializers.ModelSerializer):
          'start_date','close_date',  'image','availability_of_services','availability_of_water','land_occupied','available_land', 'status', 'general_remarks')
 
     def get_farmer_name(self, obj):
-        return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
+        try:
+            return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
+        except:
+            return None
 
 
     def conversion_bool(self, instance):
@@ -132,14 +135,23 @@ class FarmMapSerializer(serializers.ModelSerializer):
 
 
     def get_user_full_name(self, obj):
-        return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
+        try:
+            return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
+        except:
+            return None
 
     def get_district(self, obj):
-        return '{}'.format(obj.farmer.user.profile.district)
+        try:
+            return '{}'.format(obj.farmer.user.profile.district)
+        except:
+            return None
 
     
     def get_region(self, obj):
-        return '{}'.format(obj.farmer.user.profile.region)
+        try:
+            return '{}'.format(obj.farmer.user.profile.region)
+        except:
+            return None
 
 class EnterpriseSelectionSerializer(serializers.ModelSerializer):
      user = serializers.SerializerMethodField(method_name='get_user_full_name')
@@ -156,7 +168,12 @@ class EnterpriseSelectionSerializer(serializers.ModelSerializer):
         'capital','land_size','land_location','region','scale','recommendation')
     
      def get_user_full_name(self, obj):
-         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+         try:
+            return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+         except:
+             return None
+        
+        
     
    
 class PostEnterpriseSelectionSerializer(serializers.ModelSerializer):
