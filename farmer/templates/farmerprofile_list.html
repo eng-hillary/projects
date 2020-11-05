@@ -47,10 +47,11 @@
   {% endif %}
 </div>
 <table
-  id="table"
-  data-toggle="table"
+id="table"
+ data-toggle="table"
   data-show-toggle="true"
   data-search="true"
+  data-show-search-button="true"
   data-show-refresh="true"
   data-show-fullscreen="true"
   data-show-columns="true"
@@ -60,8 +61,13 @@
   data-minimum-count-columns="2"
   data-show-pagination-switch="true"
   data-pagination="true"
-  data-id-field="user"
+  data-id-field="id"
+  data-total-field="count"
+  data-data-field="results"
   data-toolbar="#toolbar"
+  data-side-pagination="server"
+  data-server-sort="false"
+  data-page-list="[10, 25, 50, 100, all]"
   data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
   data-page-list="[10, 25, 50, 100, all]"
   data-url="/farmer/api/farmerprofiles/?format=json"
