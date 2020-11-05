@@ -57,7 +57,7 @@ class Farm(TimeStampedModel, models.Model):
             location = geolocator.reverse(lat + "," + lon)
             return '{}'.format(location)
         except:
-            location = str(self.lat) + "," + str(self.lon)
+            #location = str(self.lat) + "," + str(self.lon)
             return 'slow network, loading location ...'
 
 
