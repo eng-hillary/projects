@@ -5,10 +5,10 @@ from .views import CommunityWeatherList
 
 
 router = routers.DefaultRouter()
-router.register(r'community_weather', views.CommunityWeatherViewSet)
+router.register(r'community_weather', views.CommunityWeatherViewSet, 'community_weather')
 
 app_name = 'weather'
 urlpatterns = [
-    path('api', include(router.urls)),
+    path('api/', include(router.urls)),
     path('communityweather', CommunityWeatherList.as_view(), name='communityweather_list'),
 ]

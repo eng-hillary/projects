@@ -126,7 +126,7 @@ menus = [
     menu.PassTestNode(
         id='Enterprise-selection-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Enterprise</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<span class="fas fa-briefcase"></span>  <span>Agric Enterprise</span><i class="fas fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -142,16 +142,13 @@ menus = [
     menu.PassTestNode(
         id='farmer-section',
         css_class="sidebar-header",
-        label='<i data-feather="user"></i><span>Farmer</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<span class="fas fa-person-booth"></span>  <span>Farmer</span><i class="fas fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_farmers,
         children=[
-            menu.PassTestNode(id='add_farmers',
-                              label='<i class="fa fa-circle"></i>Register',
-                             
-                              pattern_name='farmer:create_farmer', test=can_add_farmer_profile),
+            
             menu.PassTestNode(id='farmers',
-                              label='<i class="fa fa-circle"></i>Applications',
+                              label='<i class="fa fa-circle"></i>My Applications',
                              
                               pattern_name='farmer:farmerprofile_list', test=can_view_farmers),
             menu.PassTestNode(id='farmer_groups',
@@ -165,7 +162,7 @@ menus = [
       menu.PassTestNode(
         id='farm-section',
         css_class="sidebar-header",
-        label='<i data-feather="truck"></i><span>Farm</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<span class="fas fa-tractor"></span>  <span>Farm</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_farms,
         children=[
@@ -209,14 +206,10 @@ menus = [
     menu.PassTestNode(
         id='Service-Provider-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Service Provider</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<span class="fas fa-people-carry"></span>  <span>Service Provider</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
-            menu.PassTestNode(id='provider_registration',
-                              label='<i class="fa fa-circle"></i>Registration',
-                             
-                              pattern_name='openmarket:serviceprovider_registration', test=can_add_service_provider),
             menu.PassTestNode(id='provider_list',
                               label='<i class="fa fa-circle"></i>Applications',
                              
@@ -228,7 +221,7 @@ menus = [
 menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="move"></i><span>Services</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="truck"></i><span>Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -252,7 +245,7 @@ menu.PassTestNode(
 menu.PassTestNode(
         id='Open-Market-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Open Market</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<span class="fas fa-balance-scale"></span>  <span>Open Market</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -281,7 +274,7 @@ menu.PassTestNode(
     menu.PassTestNode(
         id='Seller-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Seller</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<i data-feather="users"></i><span>Seller</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_sellers,
         children=[
@@ -301,7 +294,7 @@ menu.PassTestNode(
   menu.PassTestNode(
         id='product-section',
         css_class="sidebar-header",
-        label='<i data-feather="box"></i><span>Products</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<span class="fas fa-lemon"></span>  <span>Products</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_sellers,
         children=[
@@ -320,7 +313,7 @@ menu.PassTestNode(
  menu.PassTestNode(
         id='agent-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>UNFFE Agent</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<span class="fas fa-headset"></span>  <span>UNFFE Agent</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_unffeagents,
         children=[
@@ -344,7 +337,7 @@ menu.PassTestNode(
     menu.PassTestNode(
         id='Seller-resource-sharing',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Resource Sharing</span><i class="fa fa-angle-right pull-right"></i>',
+        label='<span class="fas fa-store"></span>  <span>Resource Sharing</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_sellers,
         children=[

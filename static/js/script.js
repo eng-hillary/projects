@@ -144,10 +144,11 @@ $(document).ready(function () {
       var crd = pos.coords;
       var wheather_api = "https://api.openweathermap.org/data/2.5/weather?lat="+crd.latitude+"&lon="+crd.longitude+"&appid=b63fe7d4cf27f561ccaed0342922db91";
       var dairy_weather_url = "https://api.openweathermap.org/data/2.5/onecall?lat="+crd.latitude+"&lon="+crd.longitude+"&exclude=hourly,current,minutely,&appid=b63fe7d4cf27f561ccaed0342922db91";
-      //console.log(dairy_weather_url);
+      var community_weather_url = "http://127.0.0.1:8000/weather/api/community_weather/?lon="+crd.longitude+"&lat="+crd.latitude;
+      console.log(community_weather_url);
       // console.log('Your current position is:');
-      // console.log(`Latitude : ${crd.latitude}`);
-      // console.log(`Longitude: ${crd.longitude}`);
+      console.log(`Latitude : ${crd.latitude}`);
+      console.log(`Longitude: ${crd.longitude}`);
       // console.log(`More or less ${crd.accuracy} meters.`);
       $.ajax({
         url: wheather_api,
@@ -165,6 +166,26 @@ $(document).ready(function () {
   
           });
           $('#showweather').html(weather);
+        }
+  
+      });
+      $.ajax({
+        url: community_weather_url,
+        dataType: 'json',
+        type:'GET',
+        data:{},
+        success:function(data){
+          console.log(data);
+          var community_weather='';
+          $.each(data, function(index, val){
+      
+            var icon ="http://openweathermap.org/img/wn/"+val.icon+"@2x.png"
+            community_weather+='<img src='+icon+'><br>'+'<p><h3>'+ data[0].weather+'</b></h3>'+
+            data.temp +'&deg;C'+'|'+data.main+ ','+
+            val.description
+  
+          });
+          $('#show_community_weather').html(community_weather);
         }
   
       });
@@ -306,7 +327,7 @@ $(document).ready(function () {
     // Function: Call api.openweathermap.com
     var APICall = function(theCity) {
       // get API url
-      var weatherUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + theCity;
+      var weatherUrl = "https://api.openweathermap.org/data/2.5/forecast/daily?q=" + theCity;
       // get API key
       var apiKey = "b0b34e0501286ae903bab8dde901b6ae";
       // get "unit" as imperial
@@ -348,3 +369,5 @@ $(document).ready(function () {
       }
     });
   });
+
+  
