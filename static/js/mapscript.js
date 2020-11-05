@@ -508,6 +508,11 @@ $(function() {
           text: 'Population of Farmers',
           align: 'high'
         },
+
+      //   boost: {
+      //     boost.enabled: true
+      // },
+  
         labels: {
           overflow: 'justify'
         }
