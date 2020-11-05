@@ -182,9 +182,9 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             try:
-                serializer.status ='Pending'
-                #serializer.user = self.request.user
-                serializer.save(user = self.request.user)
+                #serializer.status ='Pending'
+                #serializer.save(user = self.request.user)
+                serializer.save()
             except IntegrityError:
                 return Response({'error':'Farmer account already exists'})
                 
