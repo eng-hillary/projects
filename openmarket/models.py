@@ -7,6 +7,7 @@ from common.choices import(GENDER_CHOICES,
                            PAYMENT_MODE, 
                            PAYMENT_OPTIONS,
                            YES_OR_NO,
+                           EDUCATION_LEVEL,
                            SERVICE_CATEGORY)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise

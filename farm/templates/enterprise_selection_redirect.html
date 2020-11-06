@@ -38,12 +38,14 @@
         experience. We hope that with the information you provided to us, We hope that we can help you select the right 
         enterprise for you.
         
-        You entered that you are from {{ profilerecord.region }} region, Due to the ecological zone that your region is in, we would 
-        recommend the following crops <br>
+        You entered that you are from <b>{{ profilerecord.region }} region</b> , your available capital as <b>Ugx {{profilerecord.capital}} </b>
+        and your land size as <b>{{profilerecord.land_size}} acres</b>, We would recommend the following Enterprises <br>
 
         {% for reco in profilerecord.recommendation.crops.all %} 
-        <b>{{reco}}, </b>
+        <b>{{reco}}, <br> </b>
         {% endfor %} 
+
+        Should you wish to get 
       
       <br>
       <br>

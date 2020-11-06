@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from common.models import(Region, District, County, SubCounty, Parish, Village, TimeStampedModel)
-from common.choices import(GENDER_CHOICES, MARITAL_STATUSES,STATUS, LAND_TYPES, SCALE, YES_OR_NO)
+from common.choices import(GENDER_CHOICES, MARITAL_STATUSES,STATUS, LAND_TYPES, SCALE, YES_OR_NO,EDUCATION_LEVEL)
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
@@ -36,16 +36,13 @@ class FarmerProfile(TimeStampedModel, models.Model):
 
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=50, null=False, blank=False)
     date_of_birth = models.DateField()
-    level_of_education = models.CharField(max_length=100, null=False, blank=False)
+    level_of_education = models.CharField(choices = EDUCATION_LEVEL, max_length=100, null=False, blank=False)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     number_of_dependants = models.PositiveIntegerField()
     credit_access = models.BooleanField(_('Have access to credit ?.'), choices=YES_OR_NO, null=True, blank=False)
     source_of_credit = models.CharField(choices=CREDIT, max_length=50, null=True, blank=False, default=False)
     experience = models.FloatField(_('Farming Experience in years'),null=False, blank=False)
     occupation = models.CharField(max_length=100, null=True, blank=False)
-   
-   
-
     # farming information
     sector = models.ManyToManyField(Sector, related_name='farmer_sectors')
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, null=True, blank=True)
