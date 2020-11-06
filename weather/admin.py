@@ -10,7 +10,5 @@ class WeatherAdmin(OSMGeoAdmin):
         'weather',
         'reported_by',
         'description',
-        'lon',
-        'lat',
-        
+        'location',
         ]
