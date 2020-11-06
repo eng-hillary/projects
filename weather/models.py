@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from geopy.geocoders import Nominatim
+from django.contrib.gis.db import models
 
 # Create your models here.
 
@@ -11,15 +12,15 @@ class CommunityWeather(TimeStampedModel, models.Model):
     WEATHER_CHOICES=(
         (
         None, "--please select--"),
-        ('clear_sky','Clear sky'),
-        ('few_clouds','Few clouds'),
-        ('scattered_clouds','Scattered clouds'),
-        ('broken_clouds','Broken clouds'),
-        ('shower_rain','Shower rain'),
-        ('rain','Rain'),
-        ('thunderstorm','Thunderstorm'),
-        ('snow','Snow'),
-        ('mist','Mist')
+        ('01d','Clear sky'),
+        ('02d','Few clouds'),
+        ('03d','Scattered clouds'),
+        ('04d','Broken clouds'),
+        ('09d','Shower rain'),
+        ('10d','Rain'),
+        ('11d','Thunderstorm'),
+        ('13d','Snow'),
+        ('50d','Mist')
     )
     
     weather = models.CharField(max_length=50,choices=WEATHER_CHOICES, null=False, blank=False)
@@ -28,23 +29,21 @@ class CommunityWeather(TimeStampedModel, models.Model):
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='weather_agent')
     description = models.TextField(null=False, blank=False)
     #location of person reporting weather
-    lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your location")
-    lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your location")
-
-
+    location = models.PointField(srid=4326,null=True)
+   
     def __str__(self):
         return self.weather
 
     @property
     def compute_location(self):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        lat = str(self.lat)
-        lon = str(self.lon)
+        lat = str(self.location.y)
+        lon = str(self.location.x)
        
         try:
 
             location = geolocator.reverse(lat + "," + lon)
             return '{}'.format(location.address)
         except:
-            location = str(self.lat) + "," + str(self.lon)
+            location = str(self.location.y) + "," + str(self.location.x)
             return 'slow network, loading location ...'

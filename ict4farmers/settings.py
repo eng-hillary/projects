@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'phonenumber_field',
     'compressor',
-
+    'rest_framework_gis',
     'navutils',
     'django.contrib.gis',
   
@@ -99,7 +99,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE':  'django.contrib.gis.db.backends.postgis',
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
@@ -141,7 +141,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
-    
+    'DATETIME_FORMAT': "%b %d at %I:%M %P",
     'DEFAULT_PERMISSION_CLASSES': (
         #'rest_framework.permissions.AllowAny',
         'rest_framework.permissions.IsAuthenticated',
@@ -162,7 +162,7 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Kampala'
 
 USE_I18N = True
 

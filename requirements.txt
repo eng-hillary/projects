@@ -24,6 +24,7 @@ django-select2==7.4.2
 django-static-arrive==2.4.1.0
 django-static-jquery3==5.0.0
 djangorestframework==3.11.1
+djangorestframework-gis==0.16
 djangorestframework-jsonapi==3.2.0
 entrypoints==0.3
 geographiclib==1.50
@@ -60,6 +61,7 @@ pexpect==4.8.0
 phonenumbers==8.12.9
 pickleshare==0.7.5
 Pillow==7.2.0
+pkg-resources==0.0.0
 prometheus-client==0.8.0
 prompt-toolkit==3.0.7
 psycopg2==2.8.5
