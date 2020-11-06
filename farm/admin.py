@@ -5,12 +5,10 @@ from .models import (Sector, Enterprise,Farm,EnterpriseType, Query,RecordType,En
 
 class SectorAdmin(admin.ModelAdmin):
     list_display = [
-        'name',
-        'size'
-        
+        'name'
 
     ]
-    search_fields = ['name','size']
+    search_fields = ['name']
 
 
 admin.site.register(Sector, SectorAdmin)

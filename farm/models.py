@@ -15,13 +15,8 @@ from django_postgres_extensions.models.fields import ArrayField
 
 
 class Sector(TimeStampedModel, models.Model):
-    SECTOR_SIZE =(
-        (None, '--please select--'),
-        ('small', 'Small'),
-        ('large', 'Large')
-    )
+   
     name = models.CharField(max_length=50)
-    size = models.CharField(choices=SECTOR_SIZE, null=False, max_length=20)
 
     def __str__(self):
         return self.name
@@ -62,7 +57,7 @@ class Farm(TimeStampedModel, models.Model):
             location = geolocator.reverse(lat + "," + lon)
             return '{}'.format(location)
         except:
-            location = str(self.lat) + "," + str(self.lon)
+            #location = str(self.lat) + "," + str(self.lon)
             return 'slow network, loading location ...'
 
 
