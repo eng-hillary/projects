@@ -16,6 +16,10 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
             text: 'Farmers Locations'
         },
         
+        boost:{
+         enabled:true,
+        },
+
         mapNavigation: {
             enabled: true,
             buttonOptions: {
@@ -509,10 +513,11 @@ $(function() {
           align: 'high'
         },
 
-      //   boost: {
-      //     boost.enabled: true
-      // },
-  
+            
+      // //Boost
+      // boost: {useGPUTranslations: true},
+      // series: [{boostThreshold: 1 }],
+        
         labels: {
           overflow: 'justify'
         }
