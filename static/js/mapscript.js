@@ -28,10 +28,10 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         },
        
         tooltip: {
-            pointFormat: 'id: {point.id}<br>' +
-                'district: {point.district}<br>' +
-                'farmer: {point.farmer}<br>' +
+            pointFormat:'id: {point.id}<br>' + 
                 'farm name: {point.farm_name}<br>' +
+                'farmer: {point.farmer}<br>' +
+                // 'district: {point.district}<br>' +
                 'land occupied: {point.land_occupied}'+ ' acres'
       
         },
