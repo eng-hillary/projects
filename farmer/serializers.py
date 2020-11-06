@@ -52,35 +52,61 @@ class FarmerProfileSerializer(serializers.ModelSerializer):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
     def get_region(self, obj):
-        return '{}'.format(obj.user.profile.region)
+        try:
+            return '{}'.format(obj.user.profile.region)
+        except:
+            return None
     
     def get_district(self, obj):
-        return '{}'.format(obj.user.profile.district)
+        try:
+            return '{}'.format(obj.user.profile.district)
+        except:
+            return None
     
     def get_county(self, obj):
-        return '{}'.format(obj.user.profile.county)
+        try:
+            return '{}'.format(obj.user.profile.county)
+        except:
+            None
 
     def get_sub_county(self, obj):
-        return '{}'.format(obj.user.profile.sub_county)
+        try:
+            return '{}'.format(obj.user.profile.sub_county)
+        except:
+            return None
     
     def get_parish(self, obj):
-        return '{}'.format(obj.user.profile.parish)
+        try:
+            return '{}'.format(obj.user.profile.parish)
+        except:
+            return None
     
     def get_village(self, obj):
-        return '{}'.format(obj.user.profile.village)
+        try:
+            return '{}'.format(obj.user.profile.village)
+        except:
+            return None
 
     def get_phone1(self, obj):
-        return '{}'.format(obj.user.profile.phone_number)
+        try:
+            return '{}'.format(obj.user.profile.phone_number)
+        except:
+            return None
     
     def get_phone2(self, obj):
-        return '{}'.format(obj.user.profile.phone_2)
+        try:
+            return '{}'.format(obj.user.profile.phone_2)
+        except:
+            return None
     
+
 class PostFarmerProfileSerializer(serializers.ModelSerializer):
 
   
     class Meta:
         model = FarmerProfile
         exclude=['user','created','modified']
+        #exclude=['created','modified']
 
 
 

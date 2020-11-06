@@ -21,6 +21,7 @@ router.register(r'districts', views.DistrictViewSet,'districts')
 router.register(r'parishes',views.ParishViewSet,'parishes')
 router.register(r'villages',views.VillageViewSet, 'villages')
 router.register(r'post_users', views.PostUserDataViewSet, 'post_users')
+router.register(r'profiles', views.PostProfileViewSet, 'profiles')
 
 
 
