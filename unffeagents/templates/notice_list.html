@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Alerts and Notification List
+                    <h3>Alert & Opportunities
                       {% if request.user.is_superuser or perms.unffeagents.add_notice %}
                         <small><a class="add-new" href="{% url 'unffeagents:add_notice' %}">Add new</a></small>
                         {% endif %}
@@ -15,10 +15,10 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <ol class="breadcrumb pull-right">
+                <ol class="breadcrumb float-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Alerts and Notification</li>
-                    <li class="breadcrumb-item active">Notification List</li>
+                    <li class="breadcrumb-item">Alert & Opportunities</li>
+                    <li class="breadcrumb-item active">Alert & Opportunities List</li>
                 </ol>
             </div>
         </div>

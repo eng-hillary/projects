@@ -48,7 +48,9 @@ def can_view_pest_and_diseases(user, context):
         return True
     return user.has_perm('farm.view_pest_and_diseases')
 
-
+def can_add_resources(user, context):
+    if user.is_superuser:
+        return True
 
 def can_view_resources(user, context):
     if user.is_superuser:
@@ -112,8 +114,13 @@ def can_view_notifications(user, context):
 def can_add_product(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('openmarket. add_product')
+    return user.has_perm('openmarket.add_product')
 
+
+def can_view_weather(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('weather.view_communityweather')
 
 # def can_view_products(user, context):
 #     if user.is_superuser:
@@ -142,7 +149,7 @@ menus = [
     menu.PassTestNode(
         id='farmer-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-person-booth"></span>  <span>Farmer</span><i class="fas fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-person-booth"></span>  <span>Farmer Profile</span><i class="fas fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_farmers,
         children=[
@@ -162,7 +169,7 @@ menus = [
       menu.PassTestNode(
         id='farm-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-tractor"></span>  <span>Farm</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-tractor"></span>  <span>Farm Records</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_farms,
         children=[
@@ -193,10 +200,10 @@ menus = [
                               pattern_name='farm:query_list', test=can_view_pest_and_diseases),
 
 
-            menu.PassTestNode(id='resources',
-                              label='<i class="fa fa-circle"></i>Resources',
+            # menu.PassTestNode(id='resources',
+            #                   label='<i class="fa fa-circle"></i>Resources',
                              
-                              pattern_name='resourcesharing:resource_list', test=can_view_resources),
+            #                   pattern_name='resourcesharing:resource_list', test=can_view_resources),
  
 
          
@@ -211,7 +218,7 @@ menus = [
         test=can_view_service_provider,
         children=[
             menu.PassTestNode(id='provider_list',
-                              label='<i class="fa fa-circle"></i>Applications',
+                              label='<i class="fa fa-circle"></i>My Applications',
                              
                               pattern_name='openmarket:serviceprovider_list', test=can_view_service_provider),
            
@@ -221,7 +228,7 @@ menus = [
 menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="truck"></i><span>Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="truck"></i><span>MA Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -282,10 +289,10 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Registration',
                              
                               pattern_name='openmarket:create_seller', test=can_add_seller),
-            menu.PassTestNode(id='seller_list',
-                              label='<i class="fa fa-circle"></i>Applications',
+            # menu.PassTestNode(id='seller_list',
+            #                   label='<i class="fa fa-circle"></i>Applications',
                              
-                              pattern_name='openmarket:seller_list', test=can_view_sellers),
+            #                   pattern_name='openmarket:seller_list', test=can_view_sellers),
            
          
         ]
@@ -294,15 +301,15 @@ menu.PassTestNode(
   menu.PassTestNode(
         id='product-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-lemon"></span>  <span>Products</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-lemon"></span>  <span>My Products</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
-        test=can_view_sellers,
+        test=can_view_products,
         children=[
-            menu.PassTestNode(id='provider_registration',
+            menu.PassTestNode(id='create_product',
                               label='<i class="fa fa-circle"></i>Add Products',
                              
                               pattern_name='openmarket:create_product', test=can_add_product),
-            menu.PassTestNode(id='provider_list',
+            menu.PassTestNode(id='product_list',
                               label='<i class="fa fa-circle"></i>Products',
                              
                               pattern_name='openmarket:product_list', test=can_view_products),
@@ -325,10 +332,6 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Agents',
                              
                               pattern_name='unffeagents:agentprofile_list', test=can_view_unffeagents),
-            menu.PassTestNode(id='notifications',
-                              label='<i class="fa fa-circle"></i>Alerts & Notifications',
-                             
-                              pattern_name='unffeagents:notice_list', test=can_view_notifications),
            
          
         ]
@@ -341,19 +344,23 @@ menu.PassTestNode(
         url='#',
         test=can_view_sellers,
         children=[
-            menu.PassTestNode(id='seller_registration',
-                              label='<i class="fa fa-circle"></i>Registration',
+            menu.PassTestNode(id='create_resource',
+                              label='<i class="fa fa-circle"></i>Share Resource',
                              
-                              pattern_name='openmarket:create_seller', test=can_add_seller),
-            menu.PassTestNode(id='seller_list',
-                              label='<i class="fa fa-circle"></i>Applications',
+                              pattern_name='resourcesharing:create_resource', test=can_add_resources),
+            menu.PassTestNode(id='resource_list',
+                              label='<i class="fa fa-circle"></i>Manage',
                              
-                              pattern_name='openmarket:seller_list', test=can_view_sellers),
+                              pattern_name='resourcesharing:resource_list', test=can_view_resources),
            
          
         ]
     ),
-
+     menu.PassTestNode(id='notifications',
+                              label='<i data-feather="bell"></i>Alert & Opportunities',
+                             
+                              pattern_name='unffeagents:notice_list', test=can_view_notifications),
+    menu.PassTestNode(id='weather',css_class="sidebar-header", label='<span class="fas fa-cloud-sun"></span> <span>Micro Weather Services</span>',test=can_view_weather, pattern_name='weather:communityweather_list', link_attrs={'id': 'weather'}),
 
 ]
 for entry in menus:

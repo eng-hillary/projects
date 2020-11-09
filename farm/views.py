@@ -285,8 +285,7 @@ class FarmViewSet(viewsets.ModelViewSet):
                 user = self.request.user
                 farmer = FarmerProfile.objects.get(user=user)
                 #serializer.user = self.request.user
-                #serializer.save(farmer = farmer)
-                serializer.save()
+                serializer.save(farmer = farmer)
             except IntegrityError:
                 return Response({'error':'Farm already exists'})
                 
