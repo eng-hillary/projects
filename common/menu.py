@@ -48,7 +48,9 @@ def can_view_pest_and_diseases(user, context):
         return True
     return user.has_perm('farm.view_pest_and_diseases')
 
-
+def can_add_resources(user, context):
+    if user.is_superuser:
+        return True
 
 def can_view_resources(user, context):
     if user.is_superuser:
@@ -193,10 +195,10 @@ menus = [
                               pattern_name='farm:query_list', test=can_view_pest_and_diseases),
 
 
-            menu.PassTestNode(id='resources',
-                              label='<i class="fa fa-circle"></i>Resources',
+            # menu.PassTestNode(id='resources',
+            #                   label='<i class="fa fa-circle"></i>Resources',
                              
-                              pattern_name='resourcesharing:resource_list', test=can_view_resources),
+            #                   pattern_name='resourcesharing:resource_list', test=can_view_resources),
  
 
          
@@ -211,7 +213,7 @@ menus = [
         test=can_view_service_provider,
         children=[
             menu.PassTestNode(id='provider_list',
-                              label='<i class="fa fa-circle"></i>Applications',
+                              label='<i class="fa fa-circle"></i>My Applications',
                              
                               pattern_name='openmarket:serviceprovider_list', test=can_view_service_provider),
            
@@ -282,10 +284,10 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Registration',
                              
                               pattern_name='openmarket:create_seller', test=can_add_seller),
-            menu.PassTestNode(id='seller_list',
-                              label='<i class="fa fa-circle"></i>Applications',
+            # menu.PassTestNode(id='seller_list',
+            #                   label='<i class="fa fa-circle"></i>Applications',
                              
-                              pattern_name='openmarket:seller_list', test=can_view_sellers),
+            #                   pattern_name='openmarket:seller_list', test=can_view_sellers),
            
          
         ]
@@ -294,15 +296,15 @@ menu.PassTestNode(
   menu.PassTestNode(
         id='product-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-lemon"></span>  <span>Products</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-lemon"></span>  <span>My Products</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
-        test=can_view_sellers,
+        test=can_view_products,
         children=[
-            menu.PassTestNode(id='provider_registration',
+            menu.PassTestNode(id='create_product',
                               label='<i class="fa fa-circle"></i>Add Products',
                              
                               pattern_name='openmarket:create_product', test=can_add_product),
-            menu.PassTestNode(id='provider_list',
+            menu.PassTestNode(id='product_list',
                               label='<i class="fa fa-circle"></i>Products',
                              
                               pattern_name='openmarket:product_list', test=can_view_products),
@@ -341,14 +343,14 @@ menu.PassTestNode(
         url='#',
         test=can_view_sellers,
         children=[
-            menu.PassTestNode(id='seller_registration',
-                              label='<i class="fa fa-circle"></i>Registration',
+            menu.PassTestNode(id='create_resource',
+                              label='<i class="fa fa-circle"></i>Share Resource',
                              
-                              pattern_name='openmarket:create_seller', test=can_add_seller),
-            menu.PassTestNode(id='seller_list',
-                              label='<i class="fa fa-circle"></i>Applications',
+                              pattern_name='resourcesharing:create_resource', test=can_add_resources),
+            menu.PassTestNode(id='resource_list',
+                              label='<i class="fa fa-circle"></i>Manage',
                              
-                              pattern_name='openmarket:seller_list', test=can_view_sellers),
+                              pattern_name='resourcesharing:resource_list', test=can_view_resources),
            
          
         ]
