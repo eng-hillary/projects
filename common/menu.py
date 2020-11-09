@@ -114,8 +114,13 @@ def can_view_notifications(user, context):
 def can_add_product(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('openmarket. add_product')
+    return user.has_perm('openmarket.add_product')
 
+
+def can_view_weather(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('weather.view_communityweather')
 
 # def can_view_products(user, context):
 #     if user.is_superuser:
@@ -144,7 +149,7 @@ menus = [
     menu.PassTestNode(
         id='farmer-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-person-booth"></span>  <span>Farmer</span><i class="fas fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-person-booth"></span>  <span>Farmer Profile</span><i class="fas fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_farmers,
         children=[
@@ -164,7 +169,7 @@ menus = [
       menu.PassTestNode(
         id='farm-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-tractor"></span>  <span>Farm</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-tractor"></span>  <span>Farm Records</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_farms,
         children=[
@@ -223,7 +228,7 @@ menus = [
 menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="truck"></i><span>Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="truck"></i><span>MA Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
@@ -327,10 +332,6 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Agents',
                              
                               pattern_name='unffeagents:agentprofile_list', test=can_view_unffeagents),
-            menu.PassTestNode(id='notifications',
-                              label='<i class="fa fa-circle"></i>Alerts & Notifications',
-                             
-                              pattern_name='unffeagents:notice_list', test=can_view_notifications),
            
          
         ]
@@ -355,7 +356,11 @@ menu.PassTestNode(
          
         ]
     ),
-
+     menu.PassTestNode(id='notifications',
+                              label='<i data-feather="bell"></i>Alert & Opportunities',
+                             
+                              pattern_name='unffeagents:notice_list', test=can_view_notifications),
+    menu.PassTestNode(id='weather',css_class="sidebar-header", label='<span class="fas fa-cloud-sun"></span> <span>Micro Weather Services</span>',test=can_view_weather, pattern_name='weather:communityweather_list', link_attrs={'id': 'weather'}),
 
 ]
 for entry in menus:
