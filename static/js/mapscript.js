@@ -16,6 +16,10 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
             text: 'Farmers Locations'
         },
         
+        boost:{
+         enabled:true,
+        },
+
         mapNavigation: {
             enabled: true,
             buttonOptions: {
@@ -24,10 +28,10 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         },
        
         tooltip: {
-            pointFormat: 'id: {point.id}<br>' +
-                'district: {point.district}<br>' +
-                'farmer: {point.farmer}<br>' +
+            pointFormat:'id: {point.id}<br>' + 
                 'farm name: {point.farm_name}<br>' +
+                'farmer: {point.farmer}<br>' +
+                // 'district: {point.district}<br>' +
                 'land occupied: {point.land_occupied}'+ ' acres'
       
         },
@@ -508,6 +512,12 @@ $(function() {
           text: 'Population of Farmers',
           align: 'high'
         },
+
+            
+      // //Boost
+      // boost: {useGPUTranslations: true},
+      // series: [{boostThreshold: 1 }],
+        
         labels: {
           overflow: 'justify'
         }
