@@ -144,7 +144,7 @@ $(document).ready(function () {
       var crd = pos.coords;
       var wheather_api = "https://api.openweathermap.org/data/2.5/weather?lat="+crd.latitude+"&lon="+crd.longitude+"&appid=b63fe7d4cf27f561ccaed0342922db91";
       var dairy_weather_url = "https://api.openweathermap.org/data/2.5/onecall?lat="+crd.latitude+"&lon="+crd.longitude+"&exclude=hourly,current,minutely,&appid=b63fe7d4cf27f561ccaed0342922db91";
-      var community_weather_url = "http://127.0.0.1:8000/weather/api/community_weather/?lon="+crd.longitude+"&lat="+crd.latitude;
+      var community_weather_url = "/weather/api/community_weather/?lon="+crd.longitude+"&lat="+crd.latitude;
       console.log(community_weather_url);
       // console.log('Your current position is:');
       console.log(`Latitude : ${crd.latitude}`);
@@ -178,11 +178,10 @@ $(document).ready(function () {
           console.log(data);
           var community_weather='';
           $.each(data, function(index, val){
-      
+            var village =val.village.split(",")[0];
             var icon ="http://openweathermap.org/img/wn/"+val.icon+"@2x.png"
-            community_weather+='<img src='+icon+'><br>'+'<p><h3>'+ data[0].weather+'</b></h3>'+
-            data.temp +'&deg;C'+'|'+data.main+ ','+
-            val.description
+            community_weather+='<img src='+icon+'><br>'+'<h3>'+ village +'</b></h3><span>'+
+            val.date_reported +'|'+ data[0].time_reported+ ', '+val.weather+'</span>'
   
           });
           $('#show_community_weather').html(community_weather);
