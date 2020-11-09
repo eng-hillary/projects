@@ -20,7 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = [
        'name', 
        'enterprise', 
-       'slug', 
+       'local_name', 
        'image', 
        'description', 
        'price', 

@@ -179,4 +179,4 @@ class EnterpriseSelectionSerializer(serializers.ModelSerializer):
 class PostEnterpriseSelectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = EnterpriseSelection
-        exclude=[]  
+        exclude=['user']  
