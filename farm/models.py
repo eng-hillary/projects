@@ -230,7 +230,7 @@ class EnterpriseSelection(models.Model):
     full_time_devotion = models.BooleanField(_('Do you want to devote full-time effort to the farm?'), choices=YES_OR_NO, null=False, blank=False, default=True)
     time_allocated_to_farming = models.FloatField(null= True, blank=True)
     rented_land = models.BooleanField(_('Do you intend to use rented land?'),choices=YES_OR_NO, null=False, blank=False, default=True)
-    recommendation = models.ForeignKey(Ecological_Zones,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
+    recommendation = models.ForeignKey(Ecological_Zones,  on_delete=models.CASCADE, unique=False, null=True,related_name='zone', default=True)
 
 
     def __str__(self):

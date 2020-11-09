@@ -99,13 +99,25 @@ data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘
       var url =row.logo;
     return '<img class="img-thumbnail" src="'+url+'">'
   }
+
+  // function operateFormatter(value, row, index) {
+  //   console.log(row.id);
+  //   var url ="/farmer/group/" + row.id +"/edit";
+  //   return [
+  //   {% if request.user.is_superuser or perms.farmer.change_group %}
+  //     '<a class="Edit " href="'+url+'" title="Edit">',
+  //     '<i class="fa fa-pencil"></i>',
+  //     '</a>  ',
+  //       {% endif %}
+  //   ].join('')
+  // }
+
   function operateFormatter(value, row, index) {
-    console.log(row.id);
-    var url ="/farmer/group/" + row.id +"/edit";
+    var url ="/farmer/group/"+row.id+"/edit"
     return [
     {% if request.user.is_superuser or perms.farmer.change_group %}
-      '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+      '<a class="Edit " href="'+url+'" title="Update">',
+      '<i class="fa fa-edit"></i>',
       '</a>  ',
         {% endif %}
     ].join('')
