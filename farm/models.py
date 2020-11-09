@@ -159,6 +159,7 @@ class Query(TimeStampedModel, models.Model):
     query_type = models.CharField(choices=QUERY_TYPES, max_length=25, null=True, blank=False)
     query_category = models.CharField(choices=QUERIES, max_length=25, null=True, blank=False)
     farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_pests_and_diseases')
+    name = models.CharField(_('Extension Workers Name'),max_length=50, null=True, blank=False)
     description = models.TextField( blank=True, null=True)
     date_discovered = models.DateField()
     action_taken = models.TextField( blank=False, null=True)
