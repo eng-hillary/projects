@@ -98,7 +98,7 @@ class QuerySerializer(serializers.ModelSerializer):
     class Meta:
         model = Query
 
-        fields = ['id','query_type','query_category','farm', 'description', 'date_discovered',
+        fields = ['id','query_type','query_category','farm','name', 'description', 'date_discovered',
         'action_taken', 'image', 'reporting_date', 'solution']
 
 class PostQuerySerializer(serializers.ModelSerializer):
