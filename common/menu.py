@@ -186,7 +186,7 @@ menus = [
                              pattern_name='farm:enterprise_list', test=can_view_enterprise),
 
             menu.PassTestNode(id='farmrecords',
-                              label='<i class="fa fa-circle"></i>Farm Records',
+                              label='<i class="fa fa-circle"></i>Production Records',
                              
                               pattern_name='farm:farmrecords', test=can_view_farm_records),
             menu.PassTestNode(id='financialrecords',
