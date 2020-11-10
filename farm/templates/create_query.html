@@ -55,6 +55,10 @@
                                                 {{ form.farm|as_crispy_field }}
                                             </div>
 
+                                            <div class="col-xl-6 col-md-6" id="workername">
+                                                {{ form.name|as_crispy_field }}
+                                            </div>
+                                            
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.date_discovered|as_crispy_field }}
                                             </div>
@@ -90,7 +94,8 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-            $('#querycatergory').hide();   
+            $('#querycatergory').hide();  
+            $('#workername').hide(); 
       
 
 
@@ -101,6 +106,17 @@ $(document).ready(function () {
     }
     else if ($('#id_query_type').val() == 'extentional_reports') {
         $('#querycatergory').hide();
+    }
+
+    })
+
+    $('#id_query_type').change(function () {
+
+    if ($('#id_query_type').val() == 'extentional_reports') {
+        $('#workername').show();
+    }
+    else if ($('#id_query_type').val() == 'others') {
+        $('#workername').hide();
     }
 
     })
