@@ -71,7 +71,7 @@
             <div class="nav-right col">
               
                 <ul class="nav-menus">
-                    
+                                        <li style="padding: 5px; color:white; font-size: larger;">Call Us: 0800-209003</li>
                     <li>
                         <form class="form-inline search-form">
                             <div class="form-group">
@@ -98,7 +98,7 @@
                     </li>
                     <li class="onhover-dropdown">
                         {% if request.user.profile.profile_pic %}
-                        <diuv class="media align-items-center"><img class="align-self-center pull-right img-60 rounded-circle blur-up lazyloaded" src="{{ request.user.profile.profile_pic.url }}" alt="header-user">
+                        <div class="media align-items-center"><img class="align-self-center pull-right img-60 rounded-circle blur-up lazyloaded" src="{{ request.user.profile.profile_pic.url }}" alt="header-user">
                             <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
                        </diuv>
                         {% else %}

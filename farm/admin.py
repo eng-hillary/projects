@@ -18,6 +18,7 @@ class QueryAdmin(admin.ModelAdmin):
         'query_type',
         'query_category',
         'farm',
+        'name',
         'description',
         'date_discovered',
         'action_taken',
