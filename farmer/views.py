@@ -33,7 +33,6 @@ from django.db.models import Count, Q
 import json
 from django.db import IntegrityError
 from rest_framework import filters
-from common.models import Profile, Region
 
 
 # views for groups
@@ -183,9 +182,9 @@ class FarmerProfileViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             try:
-                serializer.status ='Pending'
-                serializer.save(user = self.request.user)
-                #serializer.save()
+               # serializer.status ='Pending'
+               # serializer.save(user = self.request.user)
+                serializer.save()
             except IntegrityError:
                 return Response({'error':'Farmer account already exists'})
                 
@@ -337,14 +336,16 @@ class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
 
 #Quering the farmers table for the data. 
 def farmer_class_view(request):
-    #Filtering the needed columns for the bargraph
-    regions = Region.objects.all()
-    #print(regions)
-    data = []
-    for region in regions:
-        data = FarmerProfile.objects.all()
+    dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
+        bank_count = Count('source_of_credit', filter=Q(source_of_credit='Bank')),
+        sacco_count = Count('source_of_credit', filter=Q(source_of_credit='SACCO')),
+        vsla_count = Count('source_of_credit', filter=Q(source_of_credit='Village Savings and Loan Associate')),
+        farmergroups_count = Count('source_of_credit', filter=Q(source_of_credit='Farmer Groups'))) \
+        .order_by('user__profile__region')
+    print(dataset)
 
-    print(data)
+
+    return render(request, 'home.html', {'dataset': dataset})
+
+
    
-    return render(request, 'credit.html')
-    
