@@ -247,7 +247,7 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = ServiceProvider.objects.all().order_by('service_type')
+    queryset = ServiceProvider.objects.all().order_by('nin')
     serializer_class = ServiceProviderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
