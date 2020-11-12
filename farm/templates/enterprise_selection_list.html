@@ -9,7 +9,7 @@
                 <div class="page-header-left">
                     <h3>Enterprises Recommended
                       {% if request.user.is_superuser or perms.farm.add_farm %}
-                        <small><a class="add-new" href="{% url 'farm:create_farm' %}">Add new</a></small>
+                        <small><a class="add-new" href="{% url 'farm:enterprise_selection' %}">Add new</a></small>
                         {% endif %}
                     </h3>
                 </div>

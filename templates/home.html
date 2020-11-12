@@ -179,13 +179,53 @@
                     </div>
                 </div>
 
-
+                {% endblock %}
             
             <!-- Container-fluid Ends-->
         <!-- </div> -->
-        
+     {% block javascript %}
 <script>
     
+     Highcharts.chart('barscontainer', {
+  chart: {
+      type: 'column'
+  },
+  title: {
+      text: 'Farmers and their sources of credit '
+  },
+  xAxis: {
+      categories: [
+        {% for entry in dataset %}'{{ entry.user__profile__region__name}} Region'{% if not forloop.last %}, {% endif %}{% endfor %}
+      ]
+  },
+  series: [{
+      name: 'bank',
+      data: [
+        {% for entry in dataset %}{{ entry.bank_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
+      ],
+      color: 'green'
+  }, {
+      name: 'Saccos',
+      data: [
+        {% for entry in dataset %}{{ entry.sacco_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
+      ],
+      color: 'blue'
+  },
+  {
+      name: 'Vsla',
+      data: [
+        {% for entry in dataset %}{{ entry.vsla_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
+      ],
+      color: 'red'
+  },
+  {
+      name: 'Farmer groups',
+      data: [
+        {% for entry in dataset %}{{ entry.farmergroups_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
+      ],
+      color: 'grey'
+  }]
+});
   
 </script>
 

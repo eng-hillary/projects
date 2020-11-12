@@ -336,16 +336,22 @@ class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
 
 #Quering the farmers table for the data. 
 def farmer_class_view(request):
-    dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
-        bank_count = Count('source_of_credit', filter=Q(source_of_credit='Bank')),
-        sacco_count = Count('source_of_credit', filter=Q(source_of_credit='SACCO')),
-        vsla_count = Count('source_of_credit', filter=Q(source_of_credit='Village Savings and Loan Associate')),
-        farmergroups_count = Count('source_of_credit', filter=Q(source_of_credit='Farmer Groups'))) \
-        .order_by('user__profile__region')
+
+
+    farmers = FarmerProfile.objects.all()
+    #print(farmers) 
+
+    for farmer in farmers:
+        dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
+            bank_count = Count('sector', filter=Q(sector=1)),
+            sacco_count = Count('sector', filter=Q(sector=2)),
+            vsla_count = Count('sector', filter=Q(sector=3)),
+            farmergroups_count = Count('sector', filter=Q(sector=4))) \
+            .order_by('user__profile__region')
     print(dataset)
+    
 
-
-    return render(request, 'home.html', {'dataset': dataset})
+    return render(request, 'credit.html', {'dataset': dataset})
 
 
    
