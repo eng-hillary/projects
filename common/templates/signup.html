@@ -306,7 +306,11 @@
                 var nameRegex = /^[a-zA-Z0-9]+$/;
                 return value.match(nameRegex);
             }, 'Only a-z, A-Z, 0-9 characters are allowed');
-
+            $.validator.addMethod('password2', function (value, element, param) {
+                var password1 = $("#id_password1").val();
+                return(value==password1);
+            }, 'Passwords do not match');
+            
 
             var val = {
                 // Specify validation rules
@@ -325,6 +329,19 @@
                     nin: {
                         required: true,
                         
+                    },
+                    password1:{
+                      required:true,
+                      digits:true,
+                      minlength:4,
+                      maxlength:5
+                    },
+                    password2:{
+                      required:true,
+                      digits:true,
+                      minlength:4,
+                      maxlength:5,
+                      password2:true
                     }
                 },
                 // Specify validation error messages

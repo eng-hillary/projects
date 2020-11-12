@@ -6,18 +6,10 @@ from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 class ServiceProviderProfileForm(forms.ModelForm):
-    #date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
-    phone_1 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
-    phone_2 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=False, initial='+256')
     
     class Meta:
         model = ServiceProvider
         exclude = ['user','status','status','approver','approved_date']
-
-    
-
-
-
 
  
 class SellerProfileForm(forms.ModelForm):

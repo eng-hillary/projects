@@ -50,45 +50,15 @@ class HomePage(LoginRequiredMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super(HomePage, self).get_context_data(**kwargs)
-        dataset = FarmerProfile.objects \
-        .values('sector') \
-        .annotate(credit_access_count=Count('sector', filter=Q(credit_access=True)),
-                  no_credit_access_count=Count('sector', filter=Q(credit_access=False))) \
-        .order_by('sector')
-    
-        categories = list()
-        credit_access_series_data = list()
-        no_credit_access_series_data = list()
-
-#Looping through the created dataset from above
-        for entry in dataset:
-            categories.append('%s Farmers' % entry['sector'])
-            credit_access_series_data.append(entry['credit_access_count'])
-            no_credit_access_series_data.append(entry['no_credit_access_count'])
-
-
-        credit_access_series = {
-            'name': 'Credit Access',
-            'data': credit_access_series_data,
-            'color': 'green'
-        }
-
-        no_credit_access_series = {
-            'name': 'No credit Access',
-            'data': no_credit_access_series_data,
-            'color': 'red'
-        }
-
-        chart = {
-            'chart': {'type': 'column'},
-            'title': {'text': 'Farmers Credit Access by Region'},
-            'xAxis': {'categories': categories},
-            'series': [credit_access_series, no_credit_access_series]
-        }
-
-        dump = json.dumps(chart)
+        dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
+        bank_count = Count('source_of_credit', filter=Q(source_of_credit='Bank')),
+        sacco_count = Count('source_of_credit', filter=Q(source_of_credit='SACCO')),
+        vsla_count = Count('source_of_credit', filter=Q(source_of_credit='Village Savings and Loan Associate')),
+        farmergroups_count = Count('source_of_credit', filter=Q(source_of_credit='Farmer Groups'))) \
+        .order_by('user__profile__region')
+        
         context["dataset"]=dataset
-        context["chart"] = json.dumps(chart)
+        #context["chart"] = json.dumps(chart)
         #context["credit.html"] = credit.html
         
             
