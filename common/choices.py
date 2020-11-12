@@ -151,10 +151,13 @@ PROFESSION = (
 )
 EDUCATION_LEVEL = (
     (None, "---please select---"),
-    ('primary school','Primary School'),
+    ('primary','primary'),
     ('olevel','Olevel'),
     ('Alevel','Alevel'),
     ('College','College'),
+    ('tertiary','tertiary'),
+    
+
     ('University','University'),
     ('Never gone to school','Never gone to school'),
 

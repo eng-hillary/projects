@@ -38,12 +38,14 @@
         experience. We hope that with the information you provided to us, We hope that we can help you select the right 
         enterprise for you.
         
-        You entered that you are from {{ profilerecord.region }} region, Due to the ecological zone that your region is in, we would 
-        recommend the following crops <br>
+        You entered that you are from <b>{{ profilerecord.region }} region</b> , your available capital as <b>Ugx {{profilerecord.capital}} </b>
+        and your land size as <b>{{profilerecord.land_size}} acres</b>, We would recommend the following Enterprises <br>
 
         {% for reco in profilerecord.recommendation.crops.all %} 
-        <b>{{reco}}, </b>
+        <b>{{reco}}, <br> </b>
         {% endfor %} 
+
+        Should you wish to get 
       
       <br>
       <br>
@@ -54,9 +56,10 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Crop recommended</th>
-            <th scope="col">Benefits of the crop</th>
-            <th scope="col">What you need to know to grow that crop</th>
+            <th scope="col">Recommended Enterprise</th>
+            <th scope="col">Benefits</th>
+            <th scope="col">What you need to know</th>
+            <th scope="col">Required capital</th>
           </tr>
         </thead>
         
@@ -69,6 +72,9 @@
             <td>{{reco.crop}}</td>
             <td>{{reco.benefits}}</td>
             <td>{{reco.what_you_need_to_know}}</td>
+            <td>{{reco.required_capital}}</td>
+            
+
            
           </tr>
           {% endfor %}
@@ -81,7 +87,7 @@
       </div> <!--any html tag which you desire--> 
      
       
-      <a href="tel:778-930-647">
+      <a href="tel:0800 209003">
       <button type="button" class="btn btn-primary m-r-10" style="align-self: center;">Talk to an expert</button>
       </a>
       <!-- <button class="btn btn-primary m-r-10" id="approve_btn" type="button">Approve</button>
