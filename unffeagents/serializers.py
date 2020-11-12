@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import (AgentProfile, Market, MarketPrice, Notice,Caller,CallRsponse)
+from .models import (AgentProfile, Market, MarketPrice, Notice,Call,CallRsponse)
 from django.contrib.auth.models import User
 
 
@@ -42,7 +42,7 @@ class NoticeSerializer(serializers.ModelSerializer):
 class CallSerializer(serializers.ModelSerializer):
     call_date = serializers.DateTimeField()
     class Meta:
-        model = Caller
+        model = Call
         fields = '__all__'
 
 
