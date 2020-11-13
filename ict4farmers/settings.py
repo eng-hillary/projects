@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'navutils',
     'django.contrib.gis',
+    'rest_framework_swagger',
   
     #Local apps
     'common',
@@ -93,6 +94,7 @@ WSGI_APPLICATION = 'ict4farmers.wsgi.application'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 COMPRESS_ENABLED=True
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -151,6 +153,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
     ),
+     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 #    'DEFAULT_SCHEMA_CLASS':('rest_framework.schemas.coreapi.AutoSchema'),
    # 'DEFAULT_FILTER_BACKENDS': (
    #     'django_filters.rest_framework.DjangoFilterBackend',
