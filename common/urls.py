@@ -13,7 +13,7 @@ from . import views
 
 router = routers.DefaultRouter()
 
-router.register(r'users', views.UserViewSet,'users')
+router.register(r'register', views.UserViewSet,'users')
 router.register(r'groups', views.GroupViewSet,'groups')
 router.register(r'counties',views.CountyViewSet,'counties')
 router.register(r'sub_counties',views.SubCountyViewSet,'sub_counties')

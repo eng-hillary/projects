@@ -142,10 +142,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DATETIME_FORMAT': "%b %d at %I:%M %P",
-    'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.AllowAny',
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.AllowAny',
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
