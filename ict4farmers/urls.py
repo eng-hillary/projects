@@ -20,9 +20,13 @@ from common .views import LoginView, LogoutView
 from django.conf.urls.static import static
 from django.conf import settings
 from common.views import obtain_auth_token 
+from rest_framework_swagger.views import get_swagger_view
+schema_view = get_swagger_view(title="ICT4Farmers API Docs")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # api documentation
+    path('api/docs', schema_view),
     # authentication urls
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),

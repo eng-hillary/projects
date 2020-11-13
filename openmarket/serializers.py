@@ -133,7 +133,7 @@ class LogisticsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Logistics
         fields = ('name', 'source', 'destination', 'quantity', 'time', 'product', 'payment_mode', 
-        'contact_details', 'image', 'description')
+        'contact_details')
 
 class SoilScienceSerializer(serializers.ModelSerializer):
     class Meta:
