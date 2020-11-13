@@ -169,7 +169,7 @@ menus = [
       menu.PassTestNode(
         id='farm-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-tractor"></span>  <span>Farm Records</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-tractor"></span>  <span>Farm Management</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_farms,
         children=[
@@ -186,7 +186,7 @@ menus = [
                              pattern_name='farm:enterprise_list', test=can_view_enterprise),
 
             menu.PassTestNode(id='farmrecords',
-                              label='<i class="fa fa-circle"></i>Production Records',
+                              label='<i class="fa fa-circle"></i>Farm Records',
                              
                               pattern_name='farm:farmrecords', test=can_view_farm_records),
             menu.PassTestNode(id='financialrecords',

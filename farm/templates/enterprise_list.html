@@ -117,7 +117,7 @@ data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘
       '<i class="fa fa-pencil"></i>',
       '</a>  ',
       {% if request.user.is_superuser or perms.farm.add_farmrecord %}
-      '<a class="Edit " href="'+create_farmrecord_url+'" title="Add Production Record">',
+      '<a class="Edit " href="'+create_farmrecord_url+'" title="Add Farm Record">',
       '<i class="fa fa-plus"></i>',
       '</a>  ',
         {% endif %}

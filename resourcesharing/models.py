@@ -59,7 +59,6 @@ class ResourceSharing(models.Model):
 
 class ResourceBooking(models.Model):
     resource = models.ForeignKey(Resource, on_delete = models.CASCADE)
-    farmer = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
     date_needed = models.DateTimeField(blank = True)
     payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, blank=True, max_length=25)
     payment_method = models.CharField(choices=PAYMENT_OPTIONS, max_length=25,null=True, blank=True)

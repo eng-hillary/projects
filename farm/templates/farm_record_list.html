@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Production Records
+                    <h3>Farm Records
                     
                     </h3>
                 </div>
@@ -66,7 +66,6 @@ data-page-list="[10, 25, 50, 100, all]"
       {% endif %}
       <th data-field="enterprise" data-sortable="true">Enterprise</th>
       <th data-field="name" data-sortable="true">Activity</th>
-      <th data-field="record_type" data-sortable="true">Type</th>
      
       <th data-field="from_date" data-sortable="true">From</th>
       <th data-field="to_date"  data-sortable="true">To</th>
@@ -103,19 +102,30 @@ data-page-list="[10, 25, 50, 100, all]"
       var url =row.image;
     return '<img class="img-thumbnail" src="'+url+'">'
   }
+  // function operateFormatter(value, row, index) {
+  //   console.log(row.id);
+  //   var url ="/farm/"+row.id+"/edit/farmrecord";
+  //   return [
+  //   {% if request.user.is_superuser or perms.farm.change_farmrecord %}
+  //     '<a class="Edit " href="'+url+'" title="Edit">',
+  //     '<i class="fa fa-pencil"></i>',
+  //     '</a>  ',
+  //       {% endif %}
+     
+  //   ].join('')
+  // }
+
   function operateFormatter(value, row, index) {
     console.log(row.id);
     var url ="/farm/"+row.id+"/edit/farmrecord";
     return [
     {% if request.user.is_superuser or perms.farm.change_farmrecord %}
       '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+      '<i class="fas fa-edit"></i>',
       '</a>  ',
         {% endif %}
-     
     ].join('')
   }
-
   ///used cookies to get crsf token
   function getCookie(c_name)
     {
