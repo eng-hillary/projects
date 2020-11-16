@@ -75,14 +75,18 @@ class Notice(TimeStampedModel, models.Model):
 
 # adding models for call response
 
-class Caller(TimeStampedModel, models.Model):
+class Call(TimeStampedModel, models.Model):
+    session_id = models.CharField(primary_key=True,unique=True, max_length=200, null=False, blank=False)
     phone = PhoneNumberField(blank=False, null=True)
-    session_id = models.CharField(max_length=200, null=False, blank=False)
-    call_date = models.DateTimeField(null=False, blank=False)
+    call_date = models.DateTimeField(null=True, blank=True)
+    call_type = models.CharField(max_length=200, null=True, blank=True)
+    active = models.IntegerField(null=True)
+    recording_url = models.URLField(null=True, blank=True)
     agent_phone = models.CharField(max_length=12, null=True, blank=True)
+    call_duration = models.DurationField(null=True, blank=True)
 
     def __str__(self):
-        return str(self.phone)
+        return str(self.session_id)
 
 # converstion record
 class CallRsponse(TimeStampedModel, models.Model):

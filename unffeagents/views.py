@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import (AgentProfile, Market, MarketPrice, Notice,CallRsponse,Caller)
+from .models import (AgentProfile, Market, MarketPrice, Notice,CallRsponse,Call)
 from .serializers import (AgentProfileSerializer, MarketSerializer, MarketPriceSerializer, 
 NoticeSerializer,CallSerializer,ResponseSerializer)
 from rest_framework import viewsets
@@ -156,7 +156,7 @@ class CallerViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
-    queryset = Caller.objects.all()
+    queryset = Call.objects.all()
     serializer_class = CallSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = '__all__'

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel,District,Region)
 from django.contrib.auth.models import User
-from common .choices import (TRANSACTION_TYPE, PAYMENT_MODE,YES_OR_NO,QUERIES, SCALE,SECTOR,
+from common .choices import (TRANSACTION_TYPE,PAYMENT_OPTIONS, PAYMENT_MODE,YES_OR_NO,QUERIES, SCALE,SECTOR,
 PROFESSION, EDUCATION_LEVEL,INCOME)
 from geopy.geocoders import Nominatim
 import phonenumbers
@@ -135,8 +135,16 @@ class FarmProduce(TimeStampedModel, models.Model):
 
 
 class FinancialRecord(TimeStampedModel, models.Model):
+    FINANCIAL_OPTIONS = (
+    (None, '--please select--'),
+    ('full_payment', 'full payment'),
+    ('installments', 'installments'),
+    ('debt', 'debt')
+    )
     enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_financial_record')
     transaction_type = models.CharField(choices=TRANSACTION_TYPE, max_length=100, null=False)
+    payment_mode = models.CharField(choices=FINANCIAL_OPTIONS, max_length=100, null=True)
+    transaction_date = models.DateField(auto_now=True)
     spent_on = models.CharField(_('Payment for'),max_length=200)
     transaction_to = models.CharField(_('Payment To/From'),max_length=100)
     amount = models.FloatField(_('Amount paid'),blank=False, null=False)
@@ -181,7 +189,6 @@ class RecordType(models.Model):
 class FarmRecord(TimeStampedModel, models.Model):
 
     enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=True, blank=False, related_name='farm_records')
-    record_type = models.ForeignKey(RecordType,null=True, blank=True, on_delete=models.DO_NOTHING)
     name = models.CharField(_('Activity'),max_length=200, null=False, blank=False)
     from_date = models.DateField()
     to_date = models.DateField()

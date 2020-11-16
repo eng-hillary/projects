@@ -68,7 +68,7 @@ class FarmRecordForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(FarmRecordForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs.update({'rows': '2'})
-        self.fields['record_type'].empty_label = '--please select--'
+       
         self.fields['enterprise'].empty_label = None
         farms = Farm.objects.filter(farmer_id=self.request.user.id)
         self.fields['enterprise'].queryset = Enterprise.objects.filter(farm__in=farms)

@@ -12,7 +12,7 @@ class CommunityWeather(TimeStampedModel, models.Model):
     WEATHER_CHOICES=(
         (
         None, "--please select--"),
-        ('01d','Clear sky'),
+        ('01d','Sunshine'),
         ('02d','Few clouds'),
         ('03d','Scattered clouds'),
         ('04d','Broken clouds'),
@@ -29,7 +29,7 @@ class CommunityWeather(TimeStampedModel, models.Model):
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='weather_agent')
     description = models.TextField(null=False, blank=False)
     #location of person reporting weather
-    location = models.PointField(srid=4326,null=True)
+    location = models.PointField( srid=4326,null=True)
    
     def __str__(self):
         return self.weather

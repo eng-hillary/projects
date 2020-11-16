@@ -103,16 +103,10 @@
   function operateFormatter(value, row, index) {
     console.log(row.id);
     var url ="/resourcesharing/"+row.id+"/edit/resource";
-    var create_resource_url ="/resourcesharing/create/resource/"+row.id;
     return [
     {% if request.user.is_superuser or perms.resourcesharing.change_resource %}
       '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
-      '</a>  ',
-        {% endif %}
-        {% if request.user.is_superuser or perms.resourcesharing.add_resource %}
-      '<a class="Edit " href="'+create_resource_url+'" title="Add Resource">',
-      '<i class="fa fa-plus"></i>',
+      '<i class="fas fa-edit"></i>',
       '</a>  ',
         {% endif %}
     ].join('')
