@@ -103,16 +103,16 @@ data-page-list="[10, 25, 50, 100, all]"
       var url =row.image;
     return '<img class="img-thumbnail" src="'+url+'">'
   }
+ 
   function operateFormatter(value, row, index) {
     console.log(row.id);
     var url ="/farm/"+row.id+"/edit/financialrecord";
     return [
     {% if request.user.is_superuser or perms.farm.change_financialrecord %}
       '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+      '<i class="fas fa-edit"></i>',
       '</a>  ',
         {% endif %}
-     
     ].join('')
   }
 

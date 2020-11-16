@@ -56,7 +56,6 @@
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="resource" data-sortable="true">Resource</th>
-      <th data-field="farmer" data-visible="false" data-sortable="true">Farmer</th>
       <th data-field="date_needed" data-sortable="true">Date Needed</th>
       <th data-field="payment_mode" data-sortable="true">Payment Mode</th>
       <th data-field="payment_method" data-visible="false" data-sortable="true">Payment Method</th>
@@ -89,20 +88,16 @@
   function operateFormatter(value, row, index) {
     console.log(row.id);
     var url ="/resourcesharing/"+row.id+"/edit/booking";
-    var create_booking_url ="/resourcesharing/create/booking/"+row.id;
     return [
     {% if request.user.is_superuser or perms.resourcesharing.change_booking %}
       '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
-      '</a>  ',
-        {% endif %}
-        {% if request.user.is_superuser or perms.resourcesharing.add_booking %}
-      '<a class="Edit " href="'+create_booking_url+'" title="Add Booking">',
-      '<i class="fa fa-plus"></i>',
+      '<i class="fas fa-edit"></i>',
       '</a>  ',
         {% endif %}
     ].join('')
   }
+
+  
 
   ///used cookies to get crsf token
   function getCookie(c_name)
