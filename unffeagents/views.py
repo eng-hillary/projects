@@ -80,7 +80,8 @@ class CreateAgentProfile(LoginRequiredMixin,CreateView):
         subject = 'Registrated Successful'
         message = render_to_string('profile_created_successful.html', {
             'user': profile.user,
-            'domain': current_site.domain
+            'domain': current_site.domain,
+            'message':'Your Agent account has been successfully created'
             })
         to_email = profile.user.email
         email = EmailMessage(
@@ -93,6 +94,61 @@ class CreateAgentProfile(LoginRequiredMixin,CreateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+
+
+
+# update farm view
+class EditAgentProfileView(LoginRequiredMixin,UpdateView):
+    model =AgentProfile
+    template_name = 'create_agentprofile.html'
+    success_url = reverse_lazy('unffeagents:agentprofile_list')
+    form_class = AgentProfileForm
+    success_message = "Your profile was edit successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditAgentProfileView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditAgentProfileView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        profile.save()
+
+          # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Registrated Successful'
+        message = render_to_string('profile_created_successful.html', {
+            'user': profile.user,
+            'domain': current_site.domain,
+            'message':'Your Agent account has been successfully updated'
+            })
+        to_email = profile.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.send()
+        return redirect('unffeagents:agentprofile_list')
+
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
 # views for market
 class MarketViewSet(viewsets.ModelViewSet):
     """
