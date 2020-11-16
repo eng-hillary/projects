@@ -424,7 +424,6 @@ class RegionViewSet(viewsets.ModelViewSet):
     """
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
-    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
