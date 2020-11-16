@@ -89,7 +89,12 @@ class UserPostSerializer(serializers.ModelSerializer):
        
         return user
 
-    
+
+class RegionSerializer(serializers.ModelSerializer):
+  
+    class Meta:
+        model = Region
+        fields ='__all__'   
 
 class DistrictSerializer(serializers.ModelSerializer):
   

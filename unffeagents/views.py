@@ -237,6 +237,8 @@ class CreateNoticeView(LoginRequiredMixin,CreateView):
                             print(user.profile.phone_number)
                         except:
                             print('unable to  send messages')
+                            
+                            
         else:
             users = User.objects.filter(is_active=True).exclude(email='')
             for user in users:
@@ -268,6 +270,8 @@ class CreateNoticeView(LoginRequiredMixin,CreateView):
                             print(response)
                         except:
                             print('unable to  send messages')
+                            
+
         return redirect('unffeagents:notice_list')
 
     def form_invalid(self, form):
