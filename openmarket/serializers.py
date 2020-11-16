@@ -77,8 +77,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = ServiceProvider
-        fields = ('id','user', 'nin','service_provider_location', 'list_of_services_if_more_than_one',
-       'phone_1', 'phone_2', 'service_type', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
+        fields = ('id','user', 'nin','service_provider_location', 'list_of_services_if_more_than_one', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
        )
     '''
     returns yes or no for boolean fields
@@ -134,7 +133,7 @@ class LogisticsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Logistics
         fields = ('name', 'source', 'destination', 'quantity', 'time', 'product', 'payment_mode', 
-        'contact_details', 'image', 'description')
+        'contact_details')
 
 class SoilScienceSerializer(serializers.ModelSerializer):
     class Meta:

@@ -4,9 +4,10 @@ from django.contrib.gis import forms
 from django.contrib.gis.geos import Point
 
 
+
 class WeatherForm(forms.ModelForm):
-    location = forms.PointField(widget=forms.OSMWidget(attrs={'map_width': 800, 'map_height': 500}),
-    initial=Point(x=0.2507599 , y=32.5780179, srid=4326))
+    location = forms.PointField(widget=forms.OSMWidget(attrs={'map_width': 800, 'map_height': 500, 'mouse_position': True,'default_zoom':7}),
+    initial=Point(y=1.0609637, x=32.5672804, srid=4326,z=6.98))
 
   
     class Meta:

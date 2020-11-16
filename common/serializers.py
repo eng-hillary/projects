@@ -47,7 +47,7 @@ class ProfileSerializer(serializers.ModelSerializer):
   
     class Meta:
         model = Profile
-        fields = ['user','phone_number','phone_2','home_address','gender','profile_pic','region','district','parish','county','sub_county','village']
+        fields = ['phone_number','phone_2','home_address','gender','profile_pic','region','district','parish','county','sub_county','village']
 
 
 class UserPostSerializer(serializers.ModelSerializer):

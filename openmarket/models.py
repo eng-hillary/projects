@@ -7,6 +7,7 @@ from common.choices import(GENDER_CHOICES,
                            PAYMENT_MODE, 
                            PAYMENT_OPTIONS,
                            YES_OR_NO,
+                           EDUCATION_LEVEL,
                            SERVICE_CATEGORY)
 from django.core.validators import RegexValidator
 from farm.models import Enterprise
@@ -99,29 +100,19 @@ class ServiceProvider(models.Model):
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=50, null=True, blank=False)
     service_provider_location = models.CharField(null=True, max_length=50)
     list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
-    #service_type = models.CharField(max_length=50, null=True)
-    phone_1 = PhoneNumberField(_('Phone number 1'), blank=False, null=True)
-    phone_2 = PhoneNumberField(_('Phone number 2'), blank=True, null=True)
     is_the_service_available = models.BooleanField(choices=YES_OR_NO, null=True)
     service_location = models.CharField(max_length=100, null=True)
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
     category = models.CharField(choices=SERVICE_CATEGORY,null=True,max_length=50)
-
     status = models.CharField(choices=STATUS, default='Pending', max_length=20,null=False)
     # handle approving of a farmer
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent_service_provider",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
-    # # location
-    # region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
-    # district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
-    # county = models.ForeignKey(County, on_delete=models.CASCADE,null=True)
-    # sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE, null=True)
-    # parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True)
-    # village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True)
+
 
 
     class meta:
-        ordering =("service_type")
+        ordering =("nin")
 
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
