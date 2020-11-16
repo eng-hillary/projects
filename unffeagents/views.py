@@ -73,8 +73,6 @@ class CreateAgentProfile(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         profile = form.save(commit=False)
-        # setting farmer profile to in-active
-        profile.user = self.request.user
         profile.save()
 
         # send email to farmer after registration
@@ -237,6 +235,8 @@ class CreateNoticeView(LoginRequiredMixin,CreateView):
                             print(user.profile.phone_number)
                         except:
                             print('unable to  send messages')
+                            
+                            
         else:
             users = User.objects.filter(is_active=True).exclude(email='')
             for user in users:
@@ -268,6 +268,8 @@ class CreateNoticeView(LoginRequiredMixin,CreateView):
                             print(response)
                         except:
                             print('unable to  send messages')
+                            
+
         return redirect('unffeagents:notice_list')
 
     def form_invalid(self, form):

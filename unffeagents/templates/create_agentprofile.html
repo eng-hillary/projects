@@ -19,7 +19,7 @@
                             <ol class="breadcrumb pull-right">
                                 <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                                 <li class="breadcrumb-item">UnffeAgents </li>
-                                <li class="breadcrumb-item active">Add Profile </li>
+                                <li class="breadcrumb-item active">Add Agent </li>
                             </ol>
                         </div>
                     </div>
@@ -45,22 +45,25 @@
                                     <div class="tab-pane fade active show" id="personalinfo" role="tabpanel" aria-labelledby="personalinfo-tab">
                                         <div class="row">
                                             <div class="col-xl-6 col-md-6">
+                                                {{ form.user|as_crispy_field }}
+                                            </div>
+                                            <div class="col-xl-6 col-md-6">
                                                 {{ form.contact|as_crispy_field }}
                                             </div>
 
-                                            <div class="col-xl-6 col-md-6">
+                                            <div class="col-md-4">
                                                 {{ form.region|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
+                                            <div class="col-md-4">
                                                 {{ form.district|as_crispy_field }}
                                             </div>
-                                            <div class="col-xl-6 col-md-6">
+                                            <div class="col-md-4">
                                                 {{ form.specific_role|as_crispy_field }}
                                             </div>
                                         </div>
                                     </div>
                                 
-                                <div class="pull-right">
+                                <div class="float-right">
                                    <input type='submit' class="btn btn-primary" value='save'/>
                                 </div>
                             </form>
@@ -68,10 +71,21 @@
                     </div>
                 </div>
             </div>
+        </div>
             <!-- Container-fluid Ends-->
             {% endblock %}
-           
+           <!-- latest jquery-->
+{% block javascript %}
+<!-- included them for stepwise forms  -->
 
+<script>
+
+   $(document).ready(function () {
+     // add select 2 to dropdown fields
+     $('#id_user').select2( );
+   });
+</script>
+{% endblock %}
 
 
 
