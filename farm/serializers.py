@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (Sector, Enterprise, Farm, FarmFacility, Produce, FarmProduce,Query, 
 
-                    FinancialRecord, FarmRecord, EnterpriseType,FarmRecord,EnterpriseSelection,)
+                    FinancialRecord,ProductionRecord, FarmRecord, EnterpriseType,FarmRecord,EnterpriseSelection,)
 
 from farmer .serializers import FarmerProfileSerializer
 from django.contrib.auth.models import User
@@ -55,7 +55,6 @@ class PostFarmSerializer(serializers.ModelSerializer):
         exclude=['farmer']
 
 class FarmRecordSerializer(serializers.ModelSerializer):
-    record_type = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     class Meta:
         model = FarmRecord
@@ -71,6 +70,13 @@ class FarmFinancilRecordSerializer(serializers.ModelSerializer):
         model = FinancialRecord
         fields = '__all__'
 
+
+class FarmProductionRecordSerializer(serializers.ModelSerializer):
+    enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+
+    class Meta:
+        model = ProductionRecord
+        fields = '__all__'
 
 class EnterpriseTypeSerializer(serializers.ModelSerializer):
     

@@ -43,6 +43,12 @@ def can_view_financial_records(user, context):
         return True
     return user.has_perm('farm.view_financialrecord')
 
+
+def can_view_production_records(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_productionrecord')
+
 def can_view_pest_and_diseases(user, context):
     if user.is_superuser:
         return True
@@ -193,6 +199,12 @@ menus = [
                               label='<i class="fa fa-circle"></i>Financial Records',
                              
                               pattern_name='farm:financialrecords', test=can_view_financial_records),
+         
+            menu.PassTestNode(id='productionrecords',
+                              label='<i class="fa fa-circle"></i>Production Records',
+                             
+                              pattern_name='farm:productionrecords', test=can_view_production_records),
+                              
 
             menu.PassTestNode(id='pests_and_diseases',
                               label='<i class="fa fa-circle"></i>Queries',
