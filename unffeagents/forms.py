@@ -12,14 +12,26 @@ class AgentProfileForm(forms.ModelForm):
     
     class Meta:
         model = AgentProfile
-        exclude = ['user']
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(AgentProfileForm, self).__init__(*args, **kwargs)
+        self.fields['user'].empty_label = '--please select--'
+        self.fields['district'].label = 'Allocate District'
         self.fields['district'].empty_label = '--please select--'
+        self.fields['region'].label = 'Allocate Region'
         self.fields['region'].empty_label = '--please select--'
         self.fields['specific_role'].empty_label = '--please select--'
+
+        if 'region' in self.data:
+            try:
+                region_id = int(self.data.get('region'))
+                self.fields['district'].queryset = District.objects.filter(region_id=region_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty district queryset
+        elif self.instance.pk:
+            self.fields['district'].queryset = self.instance.region.district_set.order_by('name')
 
 
 
