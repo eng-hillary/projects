@@ -2,14 +2,13 @@ from django import forms
 from .models import AgentProfile, Notice
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
-from common .models import (Region)
+from common .models import (Region,District)
 from farm .models import Sector
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 
 class AgentProfileForm(forms.ModelForm):
     contact = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
-    
     class Meta:
         model = AgentProfile
         exclude = []
