@@ -153,9 +153,8 @@ menus = [
         url='#',
         test=can_view_farmers,
         children=[
-            
             menu.PassTestNode(id='farmers',
-                              label='<i class="fa fa-circle"></i>My Applications',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Applications{% endif %}',
                              
                               pattern_name='farmer:farmerprofile_list', test=can_view_farmers),
             menu.PassTestNode(id='farmer_groups',

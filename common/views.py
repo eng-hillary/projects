@@ -35,7 +35,7 @@ from .forms import ProfileForm
 from farmer.views import FarmerProfile
 from django.db.models import Count, Q
 import json
-from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer
+from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer, RegionSerializer
 ,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost,ProfileSerializer)
 from rest_framework import filters
 from django.core import serializers as django_serializers
@@ -415,6 +415,19 @@ class UserViewSet(viewsets.ModelViewSet):
             response = {'message':'account created successfully'}
             return Response(response, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class RegionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for regions .
+    """
+    queryset = Region.objects.all()
+    serializer_class = RegionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = '__all__'
 
 
 class DistrictViewSet(viewsets.ModelViewSet):
