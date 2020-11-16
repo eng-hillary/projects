@@ -73,8 +73,6 @@ class CreateAgentProfile(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         profile = form.save(commit=False)
-        # setting farmer profile to in-active
-        profile.user = self.request.user
         profile.save()
 
         # send email to farmer after registration
