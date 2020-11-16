@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Notice
+from .models import Notice, AgentProfile
 
 # Register your models here.
 class NoticeAdmin(admin.ModelAdmin):
@@ -16,3 +16,17 @@ class NoticeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Notice, NoticeAdmin)
+
+class AgentAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'contact',
+            'region',
+        'district',
+        'specific_role'
+
+    ]
+    search_fields = ['user','specific_role','contact','district','region']
+
+
+admin.site.register(AgentProfile, AgentAdmin)

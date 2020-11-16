@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from . import views
 from .views import (AgentProfileList, MarketList, MarketPriceList, 
-NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView)
+NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView)
 
 
 router = routers.DefaultRouter()
@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('agentprofile', AgentProfileList.as_view(), name='agentprofile_list'),
     path('create/agentprofile', CreateAgentProfile.as_view(), name="create_agentprofile"),
+    path('<int:pk>/edit/agentprofile', EditAgentProfileView.as_view(), name="edit_agent_profile"),
 
     path('market', MarketList.as_view(), name='market_list'),
     path('marketprice', MarketPriceList.as_view(), name='marketprice_list'),

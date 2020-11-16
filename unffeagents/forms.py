@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe
 
 class AgentProfileForm(forms.ModelForm):
     contact = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
+    district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=District.objects.none())
     class Meta:
         model = AgentProfile
         exclude = []
