@@ -550,7 +550,7 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
         # updating profile for only changed fields
         profile.save()
 
-        return redirect('farmer:farmerprofile_list')
+        return redirect('openmarket:serviceprovider_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():

@@ -228,7 +228,7 @@ menus = [
 menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="truck"></i><span>MA Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="truck"></i><span>Service Management</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
