@@ -35,6 +35,11 @@ class Resource(models.Model):
             ("can_approve_resourcebooking", "Can approve resourcebooking"),
         )
 
+    class Meta:
+        permissions = (
+            ("can_cancel_resourcebooking", "Can cancel resourcebooking"),
+        )
+
     @property
     def compute_location(self):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)

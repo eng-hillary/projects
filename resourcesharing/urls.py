@@ -8,8 +8,6 @@ router = routers.DefaultRouter()
 router.register(r'resource', views.ResourceViewSet)
 router.register(r'resourcesharing', views.ResourceSharingViewSet)
 router.register(r'resourcebooking', views.ResourceBookingViewSet)
-router.register(r'resource', views.ResourceViewSet)
-
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 
