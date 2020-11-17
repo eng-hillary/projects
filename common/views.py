@@ -35,7 +35,7 @@ from .forms import ProfileForm
 from farmer.views import FarmerProfile
 from django.db.models import Count, Q
 import json
-from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer
+from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer, RegionSerializer
 ,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost,ProfileSerializer)
 from rest_framework import filters
 from django.core import serializers as django_serializers
@@ -417,64 +417,119 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+class RegionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for regions .
+    """
+    queryset = Region.objects.all()
+    serializer_class = RegionSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = '__all__'
+
+
 class DistrictViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows farms to be viewed or edited.
+        Optionally restricts the returned districts  to a given region,
+        by filtering against a  region query parameter in the URL.
     """
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name','region__name']
     ordering_fields = '__all__'
 
+    def get_queryset(self):
+      
+        queryset = District.objects.all()
+        region = self.request.query_params.get('region', None)
+        if region is not None:
+            queryset = queryset.filter(region=region)
+        return queryset
 
 class CountyViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows farms to be viewed or edited.
-    """
+        Optionally restricts the returned conties  to a given district,
+        by filtering against a  region query parameter in the URL.
+        """
     queryset = County.objects.all()
     serializer_class = CountySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name','district__name']
     ordering_fields = '__all__'
 
+    def get_queryset(self):
+       
+        queryset = County.objects.all()
+        district = self.request.query_params.get('district', None)
+        if district is not None:
+            queryset = queryset.filter(district=district)
+        return queryset
+
 
 class SubCountyViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows farms to be viewed or edited.
-    """
+        Optionally restricts the returned sub-conties  to a given county,
+        by filtering against a  county query parameter in the URL.
+        """
     queryset = SubCounty.objects.all()
     serializer_class = SubCountySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name','county__name']
     ordering_fields = '__all__'
 
+    def get_queryset(self):
+       
+        queryset = SubCounty.objects.all()
+        county = self.request.query_params.get('county', None)
+        if county is not None:
+            queryset = queryset.filter(county=county)
+        return queryset
+
 
 class ParishViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows farms to be viewed or edited.
-    """
+        Optionally restricts the returned Parishes  to a given sub_county,
+        by filtering against a  sub_county query parameter in the URL.
+        """
     queryset = Parish.objects.all()
     serializer_class = ParishSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name','sub_county__name']
     ordering_fields = '__all__'
 
+    def get_queryset(self):
+        
+        queryset = Parish.objects.all()
+        sub_county = self.request.query_params.get('sub_county', None)
+        if sub_county is not None:
+            queryset = queryset.filter(sub_county=sub_county)
+        return queryset
 
 class VillageViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows farms to be viewed or edited.
-    """
+        Optionally restricts the returned villages  to a given parish,
+        by filtering against a  parish query parameter in the URL.
+        """
     queryset = Village.objects.all()
     serializer_class = VillageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['name','parish__name']
     ordering_fields = '__all__'
+
+    def get_queryset(self):
+       
+        queryset = Village.objects.all()
+        parish = self.request.query_params.get('parish', None)
+        if parish is not None:
+            queryset = queryset.filter(parish=parish)
+        return queryset
 
 
 class PostUserDataViewSet(viewsets.ModelViewSet):

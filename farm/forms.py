@@ -1,4 +1,4 @@
-from .models  import (Farm, Enterprise, Sector, Query,FarmRecord,FinancialRecord,EnterpriseSelection)
+from .models  import (Farm, Enterprise,ProductionRecord, Sector, Query,FarmRecord,FinancialRecord,EnterpriseSelection)
 from django import forms
 from farmer.models import FarmerProfile
 from phonenumber_field.formfields import PhoneNumberField
@@ -57,7 +57,7 @@ class EnterpriseForm(forms.ModelForm):
 class FarmRecordForm(forms.ModelForm):
     from_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     to_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
-    next_activity_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    next_activity_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),required=False)
     contact = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
   
     class Meta:
@@ -75,7 +75,8 @@ class FarmRecordForm(forms.ModelForm):
 
 
 class FarmFnancialRecordForm(forms.ModelForm):
-   
+    next_payment_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    transaction_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     class Meta:
         model = FinancialRecord
         exclude = ['reported_by','transaction_date']
@@ -84,6 +85,21 @@ class FarmFnancialRecordForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(FarmFnancialRecordForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs.update({'rows': '2'})
+        self.fields['enterprise'].empty_label = None
+        farms = Farm.objects.filter(farmer_id=self.request.user.id)
+        self.fields['enterprise'].queryset = Enterprise.objects.filter(farm__in=farms)
+
+class FarmProductionRecordForm(forms.ModelForm):
+    record_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+   
+    class Meta:
+        model = ProductionRecord
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(FarmProductionRecordForm, self).__init__(*args, **kwargs)
+        self.fields['general_remarks'].widget.attrs.update({'rows': '2'})
         self.fields['enterprise'].empty_label = None
         farms = Farm.objects.filter(farmer_id=self.request.user.id)
         self.fields['enterprise'].queryset = Enterprise.objects.filter(farm__in=farms)

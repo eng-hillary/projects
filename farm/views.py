@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm, Query, FarmRecord, FinancialRecord, EnterpriseSelection,Ecological_Zones)
+from .models import (Sector, Enterprise, Farm,ProductionRecord, Query, FarmRecord, FinancialRecord, EnterpriseSelection,Ecological_Zones)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer,PostFarmSerializer,PostEnterpriseSelectionSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
+,FarmMapSerializer,FarmProductionRecordSerializer,PostFarmSerializer,PostEnterpriseSelectionSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -16,7 +16,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from .forms import (FarmForm,EnterpriseForm,QueryForm, FarmRecordForm,FarmFnancialRecordForm, EnterpriseSelectionForm)
+from .forms import (FarmForm,FarmProductionRecordForm,EnterpriseForm,QueryForm, FarmRecordForm,FarmFnancialRecordForm, EnterpriseSelectionForm)
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -858,6 +858,154 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
             farms = Farm.objects.filter(farmer =farmer)
             enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
+        
+        return queryset
+
+
+#create Production record
+class CreateFarmProductionRecordView(LoginRequiredMixin,CreateView):
+    template_name = 'create_farm_production_record.html'
+    success_url = reverse_lazy('farm:productionrecords')
+    form_class = FarmProductionRecordForm
+    success_message = "Farm Production Record has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateFarmProductionRecordView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateFarmProductionRecordView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        record = form.save(commit=False)
+        record.save()
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Farm Record production Captured Successfully'
+        message = render_to_string('farm_created_successful_email.html', {
+            'user': self.request.user,
+            'domain': current_site.domain,
+            'message': 'Your production record spent on '+record.record_name + ' has been recorded sucessfully',
+            })
+        to_email = self.request.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('farm:productionrecords')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_initial(self, *args, **kwargs):
+        initial = super(CreateFarmProductionRecordView, self).get_initial(**kwargs)
+        initial['enterprise'] = Enterprise.objects.get(pk=self.kwargs['enterprise_pk'])
+        return initial
+
+
+class FarmproductionRecordsList(LoginRequiredMixin, APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'farm_production_record_list.html'
+
+    def get(self, request):
+    
+        return Response()
+
+# update productionrecord view
+class EditFarmproductionRecordView(LoginRequiredMixin,UpdateView):
+    model =ProductionRecord
+    template_name = 'create_farm_production_record.html'
+    success_url = reverse_lazy('farm:productionrecords')
+    form_class = FarmProductionRecordForm
+    success_message = "Farm production Record has been updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditFarmProductionRecordView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditFarmProductionRecordView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        productionrecord = form.save(commit=False)
+        productionrecord.save()
+
+         # send email to farmer  a message after an update
+        current_site = get_current_site(self.request)
+        subject = 'Production Record Updated Successfully'
+        message = render_to_string('enterprise_email.html', {
+            'user': self.request.user,
+            'domain': current_site.domain,
+            'message': 'Your Production record spent on '+productionrecord.spent_on + ' has been recorded sucessfully',
+            })
+        to_email = self.request.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        return redirect('farm:productionrecords')
+
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+
+# production record viewset
+class FarmProductionRecordViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows sectors to be viewed or edited.
+    """
+    serializer_class = FarmProductionRecordSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the farms 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        productionrecords = ProductionRecord.objects.all().order_by('enterprise')
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
+            queryset = productionrecords
+        else:
+            farmer = FarmerProfile.objects.get(user=user)
+            farms = Farm.objects.filter(farmer =farmer)
+            enterprises = Enterprise.objects.filter(farm__in=farms)
+            queryset = productionrecords.filter(enterprise__in=enterprises)
         
         return queryset
 

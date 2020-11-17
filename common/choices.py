@@ -36,9 +36,9 @@ TYPE = (
 
 SCALE = (
     (None, "--please select--"),
-    ('Subsistence Production', 'Subsistence Production'),
-    ('small Commercial Production', 'small Commercial Production'),
-    ('large Commercial Production','large Commercial Production')
+    ('subsistence', 'Subsistence Production'),
+    ('small', 'small Commercial Production'),
+    ('large','large Commercial Production')
 )
 SECTOR = (
     (None, "--please select--"),

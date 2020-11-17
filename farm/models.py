@@ -144,6 +144,7 @@ class FinancialRecord(TimeStampedModel, models.Model):
     enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_financial_record')
     transaction_type = models.CharField(choices=TRANSACTION_TYPE, max_length=100, null=False)
     payment_mode = models.CharField(choices=FINANCIAL_OPTIONS, max_length=100, null=True)
+    next_payment_date = models.DateField(null=True, blank=True)
     transaction_date = models.DateField(auto_now=True)
     spent_on = models.CharField(_('Payment for'),max_length=200)
     transaction_to = models.CharField(_('Payment To/From'),max_length=100)
@@ -157,6 +158,20 @@ class FinancialRecord(TimeStampedModel, models.Model):
     def __str__(self):
         return self.spent_on
 
+
+
+class ProductionRecord(TimeStampedModel, models.Model):
+    enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_production_record')
+    record_name = models.CharField(max_length=25, null=True, blank=True)
+    production_activity = models.CharField(max_length=50, null=True, blank=True)
+    quantity = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    measurements = models.CharField(max_length=25, null=True, blank=True)
+    record_date = models.DateField()
+    record_taker = models.CharField(max_length=50, null=True, blank=True)
+    general_remarks = models.TextField(max_length=150, null=True, blank=True)
+
+    def __str__(self):
+        return self.record_name
 
 class Query(TimeStampedModel, models.Model):
     QUERY_TYPES = (
