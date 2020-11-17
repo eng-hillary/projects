@@ -17,6 +17,7 @@ router.register(r'enterpriseselection', views.EnterpriseSelectionViewSet,'api-en
 router.register(r'enterprise', views.EnterpriseViewSet, basename='Enterprise')
 router.register(r'farmrecords', views.FarmRecordViewSet, basename='FarmRecord')
 router.register(r'financialrecords',views.FarmFinancialRecordViewSet,'FinancialRecord')
+router.register(r'productionrecords',views.FarmProductionRecordViewSet,'ProductionRecord')
 router.register(r'query', views.QueryViewSet)
 
 # Wire up our API using automatic URL routing.

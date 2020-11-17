@@ -56,12 +56,12 @@ def can_view_pest_and_diseases(user, context):
 
 def can_add_resources(user, context):
     if user.is_superuser:
-        return True
+        return user.has_perm('resourcesharing.add_resource')
 
 def can_view_resources(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('resourcesharing.can_view_resources')
+    return user.has_perm('resourcesharing.view_resource') or user.has_perm('resourcesharing.add_resource')
 
 def can_view_service_provider(user, context):
     if user.is_superuser:
@@ -347,13 +347,13 @@ menu.PassTestNode(
          
         ]
     ),
-
+    # menu.Node(id='Seller-resource-sharing',css_class="sidebar-header", label='<i data-feather="home"></i><span>Resource Sharing</span>', pattern_name='common:home', link_attrs={'id': 'Seller-resource-sharing'}),
     menu.PassTestNode(
         id='Seller-resource-sharing',
         css_class="sidebar-header",
         label='<span class="fas fa-store"></span>  <span>Resource Sharing</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
-        test=can_view_sellers,
+        test=can_view_resources,
         children=[
             menu.PassTestNode(id='create_resource',
                               label='<i class="fa fa-circle"></i>Share Resource',

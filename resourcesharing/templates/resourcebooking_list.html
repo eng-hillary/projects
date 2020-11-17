@@ -27,9 +27,20 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
-  <button id="remove" class="btn btn-danger" disabled>
-    <i class="fa fa-trash"></i> Delete
+  {% if request.user.is_superuser or perms.owner.delete_resourcebooking %}
+  <button id="remove" class="btn btn-danger" title="Delete" disabled>
+    <i class="fa fa-trash"></i>
   </button>
+
+  {% endif %}
+  {% if request.user.is_superuser or perms.owner.can_approve_resourcebooking %}
+  <button id="decline" class="btn btn-decline" title="Decline" disabled>
+    <i class="fa fa-times"></i>
+  </button>
+  <button id="approve" class="btn btn-primary" title="Approve" disabled>
+    <i class="fa fa-check"></i>
+  </button>
+  {% endif %}
 </div>
 <table
   id="table"
