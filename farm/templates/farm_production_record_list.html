@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Financial Records
+                    <h3>Production Records
                     
                     </h3>
                 </div>
@@ -16,7 +16,7 @@
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Farms</li>
-                    <li class="breadcrumb-item active">Financial Records</li>
+                    <li class="breadcrumb-item active">Production Records</li>
                 </ol>
             </div>
         </div>
@@ -28,7 +28,7 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
-  {% if request.user.is_superuser or perms.farm.delete_financilarecord %}
+  {% if request.user.is_superuser or perms.farm.delete_productionrecord %}
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
@@ -57,25 +57,23 @@ data-data-field="results"
 data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
 data-page-list="[10, 25, 50, 100, all]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/farm/api/financialrecords/"
+  data-url="/farm/api/productionrecords/"
   data-response-handler="responseHandler">
   <thead>
     <tr>
-      {% if request.user.is_superuser or perms.farm.delete_financialrecord %}
+      {% if request.user.is_superuser or perms.farm.delete_productionrecord %}
       <th data-field="state" data-checkbox="true"></th>
       {% endif %}
       <th data-field="enterprise" data-sortable="true">Enterprise</th>
-      <th data-field="transaction_type" data-sortable="true">Type</th>
-      <th data-field="next_payment_date" data-sortable="true">Next Payment Date</th>
-      <th data-field="spent_on" data-sortable="true">Payment For</th>
-      
+      <th data-field="record_name" data-sortable="true">Record Name</th>
+      <th data-field="production_activity" data-sortable="true">Production Activity</th>
       <th data-field="quantity" data-sortable="true">Quantity</th>
-      <th data-field="amount"  data-sortable="true">Amount</th>
-      <th data-field="means_of_payment"  data-sortable="true">Payment Method</th>
-      <th data-field="transaction_to" data-sortable="true">To/From</th>
-      <th data-field="transaction_date" data-visible="false" data-sortable="true">Transaction Date</th>
-      <th data-field="description" data-visible="false"   data-sortable="true">Description</th>
-      <th data-formatter="operateFormatter"  class="text-center">Action</th>
+      <th data-field="measurements" data-sortable="true">Measurements</th>
+      
+      <th data-field="record_date" data-sortable="true">Record Date</th>
+      <th data-field="record_taker"  data-sortable="true">Record Taker</th>
+      <th data-field="general_remarks"  data-sortable="true">General Remarks</th>
+     <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
     </tr>
   </thead>
@@ -107,9 +105,9 @@ data-page-list="[10, 25, 50, 100, all]"
  
   function operateFormatter(value, row, index) {
     console.log(row.id);
-    var url ="/farm/"+row.id+"/edit/financialrecord";
+    var url ="/farm/"+row.id+"/edit/productionrecord";
     return [
-    {% if request.user.is_superuser or perms.farm.change_financialrecord %}
+    {% if request.user.is_superuser or perms.farm.change_productionrecord %}
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fas fa-edit"></i>',
       '</a>  ',
@@ -166,13 +164,13 @@ for(id=0; id<ids.length; id++){
     console.log(ids[id]);
 
 $.ajax({
-    url: "/farm/api/financialrecords/"+ids[id],
+    url: "/farm/api/productionrecords/"+ids[id],
     data: {},
     headers:{"X-CSRFToken": getCookie("csrftoken")},
     type: 'DELETE',
     contentType: 'application/json',
     success: function(result) {
-      console.log('deleted successfule');
+      console.log('deleted successful');
     },
    });
 swal("Your record/s have been deleted successfully!", {
