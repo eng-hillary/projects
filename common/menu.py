@@ -43,6 +43,12 @@ def can_view_financial_records(user, context):
         return True
     return user.has_perm('farm.view_financialrecord')
 
+
+def can_view_production_records(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_productionrecord')
+
 def can_view_pest_and_diseases(user, context):
     if user.is_superuser:
         return True
@@ -153,9 +159,8 @@ menus = [
         url='#',
         test=can_view_farmers,
         children=[
-            
             menu.PassTestNode(id='farmers',
-                              label='<i class="fa fa-circle"></i>My Applications',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Applications{% endif %}',
                              
                               pattern_name='farmer:farmerprofile_list', test=can_view_farmers),
             menu.PassTestNode(id='farmer_groups',
@@ -193,6 +198,12 @@ menus = [
                               label='<i class="fa fa-circle"></i>Financial Records',
                              
                               pattern_name='farm:financialrecords', test=can_view_financial_records),
+         
+            menu.PassTestNode(id='productionrecords',
+                              label='<i class="fa fa-circle"></i>Production Records',
+                             
+                              pattern_name='farm:productionrecords', test=can_view_production_records),
+                              
 
             menu.PassTestNode(id='pests_and_diseases',
                               label='<i class="fa fa-circle"></i>Queries',
@@ -329,7 +340,7 @@ menu.PassTestNode(
                              
                               pattern_name='unffeagents:create_agentprofile', test=can_register_agent),
             menu.PassTestNode(id='seller_list',
-                              label='<i class="fa fa-circle"></i>Agents',
+                              label='<i class="fa fa-circle"></i>View Agents',
                              
                               pattern_name='unffeagents:agentprofile_list', test=can_view_unffeagents),
            

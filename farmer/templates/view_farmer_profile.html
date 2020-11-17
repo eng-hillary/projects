@@ -114,7 +114,9 @@
             {% endif %}
         </td>
         <td>
+          {% if farm.image %}
             <img src="{{farm.image.url}}" class="img-thumbnail">
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
