@@ -328,7 +328,7 @@ menu.PassTestNode(
                              
                               pattern_name='unffeagents:create_agentprofile', test=can_register_agent),
             menu.PassTestNode(id='seller_list',
-                              label='<i class="fa fa-circle"></i>Agents',
+                              label='<i class="fa fa-circle"></i>View Agents',
                              
                               pattern_name='unffeagents:agentprofile_list', test=can_view_unffeagents),
            
