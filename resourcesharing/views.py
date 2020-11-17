@@ -5,6 +5,12 @@ from .serializers import ResourceSerializer,PostResourceSerializer, ResourceShar
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+
+from django.contrib import messages
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import redirect
@@ -185,7 +191,24 @@ class ResourceBookingView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         resource = form.save(commit=False)
-        resource.save()
+        # resource.save()
+        print(resource.resource.owner.user.email)
+
+        # send email to farmer after registration
+        current_site = get_current_site(self.request)
+        subject = 'Booked successfully Successfully'
+        message = render_to_string('profile_created_successful_email.html', {
+            'user': resource.resource.owner.user,
+            'domain': current_site.domain,
+            'message':'Booking successfully created\n'
+            })
+        to_email = resource.resource.owner.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        messages.add_message(self.request, messages.INFO, 'Please Register your farm from here, note that you can register more than one')
         return redirect('resourcesharing:resourcebooking_list')
 
     def form_invalid(self, form):

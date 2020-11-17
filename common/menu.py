@@ -168,7 +168,7 @@ menus = [
       menu.PassTestNode(
         id='farm-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-tractor"></span>  <span>Farm Records</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-tractor"></span>  <span>Farm Management</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_farms,
         children=[

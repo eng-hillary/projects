@@ -17,9 +17,9 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         },
         
         boost:{
-         enabled:true,
+          allowForce:true,
         },
-
+    
         mapNavigation: {
             enabled: true,
             buttonOptions: {
@@ -67,6 +67,7 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
             }
         },
         series: [{
+            boostThreshold: 50, 
             name: 'Basemap',
             mapData: map,
             borderColor: '#B0B0B0',
@@ -155,7 +156,7 @@ document.getElementById('farm_container').addEventListener('mouseout', function 
      
       tooltip: {
           pointFormat: 'ID: {point.id}<br>' +
-          'District: {point.district}<br>' +
+          // 'District: {point.district}<br>' +
           'Owner: {point.owner}<br>' +
           'Resource Status: {point.resource_status}<br>' +
           'Price: {point.price}<br>' + 'shs'

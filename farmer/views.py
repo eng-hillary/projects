@@ -342,14 +342,14 @@ def farmer_class_view(request):
     #print(farmers) 
 
     for farmer in farmers:
-        dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
-            bank_count = Count('sector', filter=Q(sector=1)),
-            sacco_count = Count('sector', filter=Q(sector=2)),
-            vsla_count = Count('sector', filter=Q(sector=3)),
-            farmergroups_count = Count('sector', filter=Q(sector=4))) \
-            .order_by('user__profile__region')
+        dataset = FarmerProfile.objects.values('user__profile__region__id'=='FarmerProfile.region').annotate(
+            animal = Count('sector_id=id', filter=Q(sector=1)),
+            crop = Count('sector', filter=Q(sector=2)),
+            fisheries = Count('sector', filter=Q(sector=3)),
+            forestry = Count('sector', filter=Q(sector=4))).order_by('user__profile__region')
+       
     print(dataset)
-    
+
 
     return render(request, 'credit.html', {'dataset': dataset})
 
