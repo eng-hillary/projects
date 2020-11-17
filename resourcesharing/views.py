@@ -191,16 +191,18 @@ class ResourceBookingView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         resource = form.save(commit=False)
-        # resource.save()
+        resource.booker = self.request.user
+        resource.save()
+        
         print(resource.resource.owner.user.email)
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Booked successfully Successfully'
-        message = render_to_string('profile_created_successful_email.html', {
+        message = render_to_string('booking_created_successfully_email.html', {
             'user': resource.resource.owner.user,
             'domain': current_site.domain,
-            'message':'Booking successfully created\n'
+            'resource':resource
             })
         to_email = resource.resource.owner.user.email
         email = EmailMessage(
@@ -208,7 +210,7 @@ class ResourceBookingView(LoginRequiredMixin,CreateView):
             )
         email.content_subtype = "html"
         email.send()
-        messages.add_message(self.request, messages.INFO, 'Please Register your farm from here, note that you can register more than one')
+        messages.add_message(self.request, messages.INFO, 'Please wait for approval from the resource owner')
         return redirect('resourcesharing:resourcebooking_list')
 
     def form_invalid(self, form):
@@ -216,7 +218,10 @@ class ResourceBookingView(LoginRequiredMixin,CreateView):
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
 
-
+    def get_initial(self, *args, **kwargs):
+        initial = super(ResourceBookingView, self).get_initial(**kwargs)
+        initial['resource'] = Resource.objects.get(pk=self.kwargs['resource_pk'])
+        return initial
 
 # edit resource view
 class EditBookingView(LoginRequiredMixin,UpdateView):

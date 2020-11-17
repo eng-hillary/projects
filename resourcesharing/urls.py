@@ -19,11 +19,10 @@ urlpatterns = [
     path('create/resource', CreateResourceView.as_view(), name="create_resource"),
     path('<int:pk>/edit/resource', EditResourceView.as_view(), name="edit_resource"),
     path('<int:pk>/view/', ResourceDetailView.as_view(), name="view_resource_detail"),
-    path('booking', ResourceBookingView.as_view(), name="resourcebooking"), 
+    path('booking/<int:resource_pk>', ResourceBookingView.as_view(), name="resourcebooking"), 
     path('resourcebooking', ResourceBookingList.as_view(), name='resourcebooking_list'),  
     path('<int:pk>/edit/booking', EditBookingView.as_view(), name="edit_booking"), 
     path('resource', ResourceList.as_view(), name='resource_list'),
     path('resourcesharing', ResourceSharingList.as_view(), name='resourcesharing_list'),
-
 
 ]
