@@ -96,7 +96,7 @@ class BuyerPost(models.Model):
         ordering =("name",)
 
 class ServiceProvider(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='serviceprovider')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='serviceprovider',primary_key=True)
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=50, null=True, blank=False)
     service_provider_location = models.CharField(null=True, max_length=50)
     list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
