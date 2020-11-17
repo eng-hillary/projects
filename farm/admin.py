@@ -81,7 +81,6 @@ admin.site.register(RecordType)
 class FarmRecordAdmin(admin.ModelAdmin):
     list_display = [
         'enterprise',
-        'record_type',
         'name',
         'from_date',
         'to_date',

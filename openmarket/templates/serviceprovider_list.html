@@ -88,28 +88,29 @@
 
   function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
-      return row.id
+      return row.user_id
     })
   }
 
   function responseHandler(res) {
     $.each(res.rows, function (i, row) {
-      row.state = $.inArray(row.id, selections) !== -1
+      row.state = $.inArray(row.user_id, selections) !== -1
     })
     return res
   }
 
 
   function operateFormatter(value, row, index) {
-    var url ="/openmarket/"+row.id+"/edit"
-    var view_url ="/openmarket/"+row.id+"/view"
+    
+    var url ="/openmarket/"+row.user_id+"/edit"
+    var view_url ="/openmarket/"+row.user_id+"/viewprovider"
     return [
    
-      '<a class="Edit " href="javascript:void(0)" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+      '<a class="Edit " href="'+url+'" title="Edit">',
+      '<i class="fas fa-edit"></i>',
       '</a>  ',
 
-      '<a class="Edit " href="'+view_url+'" title="Edit">',
+      '<a class="Edit " href="'+view_url+'" title="view">',
       '<i class="fa fa-eye"></i>',
       '</a>  ',
 
@@ -192,7 +193,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/api-openmarket/serviceproviders/"+ids[id],
+        url: "/openmarket/api/serviceproviders/"+ids[id],
 
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
@@ -204,7 +205,9 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
        });
     swal("Your record/s have been deleted successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
     swal("You have cancelled the deletion of records!");
   }
@@ -242,7 +245,9 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
        });
     swal("You have approve farmer/s successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
     swal("You have cancelled farmer approvals!");
   }
@@ -281,7 +286,9 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
        });
     swal("You have approved farmer/s successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
     swal("You have cancelled farmer approvals!");
   }

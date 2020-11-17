@@ -202,7 +202,7 @@
         console.log(ids[id]);
 
     $.ajax({
-        url: "/api-farmer/farmerprofiles/"+ids[id],
+        url: "/farmer/api/farmerprofiles/"+ids[id],
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'DELETE',
@@ -213,7 +213,9 @@
        });
     swal("Your record/s have been deleted successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
     swal("You have cancelled the deletion of records!");
   }
@@ -250,7 +252,9 @@
        });
     swal("You have approve farmer/s successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
     swal("You have cancelled farmer approvals!");
   }
@@ -288,7 +292,9 @@
        });
     swal("You have approved farmer/s successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
     swal("You have cancelled farmer approvals!");
   }
