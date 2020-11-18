@@ -1145,9 +1145,9 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
                 # serializer.status ='Pending'
                 #serializer.user = self.request.user
                 serializer.save(user = self.request.user)
-            except IntegrityError:
-                return Response({'error':'Enterprise selection account already exists'})
-                
+            except Exception as e:
+                return Response({'error':str(e)})
+                 
             return Response({'status':'successful'})
         return Response(serializer.errors, status=400)
 
