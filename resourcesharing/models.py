@@ -30,6 +30,16 @@ class Resource(models.Model):
     def __str__(self):
         return self.resource_name
 
+    class Meta:
+        permissions = (
+            ("can_approve_resourcebooking", "Can approve resourcebooking"),
+        )
+
+    class Meta:
+        permissions = (
+            ("can_cancel_resourcebooking", "Can cancel resourcebooking"),
+        )
+
     @property
     def compute_location(self):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
@@ -59,6 +69,7 @@ class ResourceSharing(models.Model):
 
 class ResourceBooking(models.Model):
     resource = models.ForeignKey(Resource, on_delete = models.CASCADE)
+    booker = models.CharField(max_length=25,null=True, blank=True)
     date_needed = models.DateTimeField(blank = True)
     payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, blank=True, max_length=25)
     payment_method = models.CharField(choices=PAYMENT_OPTIONS, max_length=25,null=True, blank=True)
