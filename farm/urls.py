@@ -2,9 +2,9 @@ from django.urls import include, path
 from rest_framework import routers
 from . import views
 from .views import (SectorList, SectorDetail, CreateSector,EnterpriseList, FarmListView, FarmViewSet, 
-CreateFarmView, EditFarmView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
+CreateFarmView, EditFarmView,FarmproductionRecordsList,FarmproductionRecordsList,CreateFarmProductionRecordView,FarmMapViewSet,CreateEnterpriseView,EditEnterpriseView,CreateQueryView,
 FarmProfileDetailView,QueryList,CreateFarmRecordView, FarmRecordsList, EditFarmRecordView,
-CreateFarmFinancialRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsList,EditQueryView, EnterpriseSelectionView,
+CreateFarmFinancialRecordView,EditFarmproductionRecordView, EditFarmFinancialRecordView, FarmFinancilRecordsList,EditQueryView, EnterpriseSelectionView,
 EnterpriseSelectionRedirect,EnterpriseSelectionDetailView)
 
 
@@ -17,6 +17,7 @@ router.register(r'enterpriseselection', views.EnterpriseSelectionViewSet,'api-en
 router.register(r'enterprise', views.EnterpriseViewSet, basename='Enterprise')
 router.register(r'farmrecords', views.FarmRecordViewSet, basename='FarmRecord')
 router.register(r'financialrecords',views.FarmFinancialRecordViewSet,'FinancialRecord')
+router.register(r'productionrecords',views.FarmProductionRecordViewSet,'ProductionRecord')
 router.register(r'query', views.QueryViewSet)
 
 # Wire up our API using automatic URL routing.
@@ -44,6 +45,9 @@ urlpatterns = [
     path('create/financilrecord/<int:enterprise_pk>', CreateFarmFinancialRecordView.as_view(), name="create_financial_record"), 
     path('financialrecords', FarmFinancilRecordsList.as_view(), name='financialrecords') ,
     path('<int:pk>/edit/financialrecord', EditFarmFinancialRecordView.as_view(), name="edit_financail_record"),
+    path('create/productionrecord/<int:enterprise_pk>', CreateFarmProductionRecordView.as_view(), name="create_production_record"), 
+    path('productionrecords', FarmproductionRecordsList.as_view(), name='productionrecords') ,
+    path('<int:pk>/edit/productionrecord', EditFarmproductionRecordView.as_view(), name="edit_production_record"),
     path('create/enterpriseselection', EnterpriseSelectionView.as_view(), name='enterprise_selection'),
     path('selectenterprises', EnterpriseSelectionRedirect.as_view(), name='select_enterpise'),
     path('<int:pk>/view/selectenterprise', EnterpriseSelectionDetailView.as_view(), name="view_enterprise_selection"),

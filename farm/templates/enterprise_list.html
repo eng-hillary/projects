@@ -65,7 +65,7 @@ data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘
       <th data-field="source" data-sortable="true">Source</th>
       <th data-field="farm" data-sortable="true">Farm</th>
       <th data-field="enterprise_type" data-sortable="true">Type</th>
-      <th data-field="land_occupied" data-sortable="true">Land Occupied(acres)</th>
+      <th data-field="land_occupied" data-visible="false" data-sortable="true">Land Occupied(acres)</th>
       
       <th data-field="start_date" data-sortable="true">Start Date</th>
       <th data-field="status" data-sortable="true">Status</th>
@@ -111,6 +111,7 @@ data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘
     var url ="/farm/"+row.id+"/edit/enterprise";
     var create_farmrecord_url ="/farm/create/record/"+row.id;
     var create_financialrecord_url ="/farm/create/financilrecord/"+row.id;
+    var create_productionrecord_url ="/farm/create/productionrecord/"+row.id;
     return [
    
       '<a class="Edit " href="'+url+'" title="Edit">',
@@ -124,6 +125,12 @@ data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘
 
         {% if request.user.is_superuser or perms.farm.add_financialrecord %}
       '<a class="Edit " href="'+create_financialrecord_url+'" title="Add Financial Record">',
+      '<i class="fa fa-plus"></i>',
+      '</a>  ',
+        {% endif %}
+
+        {% if request.user.is_superuser or perms.farm.add_productionrecord %}
+      '<a class="Edit " href="'+create_productionrecord_url+'" title="Add Production Record">',
       '<i class="fa fa-plus"></i>',
       '</a>  ',
         {% endif %}

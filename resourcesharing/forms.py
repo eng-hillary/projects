@@ -25,7 +25,7 @@ class ResourceBookingForm(forms.ModelForm):
    
     class Meta:
         model = ResourceBooking
-        exclude = []
+        exclude = ['booker']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)

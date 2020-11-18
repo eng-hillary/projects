@@ -43,6 +43,12 @@ def can_view_financial_records(user, context):
         return True
     return user.has_perm('farm.view_financialrecord')
 
+
+def can_view_production_records(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_productionrecord')
+
 def can_view_pest_and_diseases(user, context):
     if user.is_superuser:
         return True
@@ -50,12 +56,12 @@ def can_view_pest_and_diseases(user, context):
 
 def can_add_resources(user, context):
     if user.is_superuser:
-        return True
+        return user.has_perm('resourcesharing.add_resource')
 
 def can_view_resources(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('resourcesharing.can_view_resources')
+    return user.has_perm('resourcesharing.view_resource') or user.has_perm('resourcesharing.add_resource')
 
 def can_view_service_provider(user, context):
     if user.is_superuser:
@@ -192,6 +198,12 @@ menus = [
                               label='<i class="fa fa-circle"></i>Financial Records',
                              
                               pattern_name='farm:financialrecords', test=can_view_financial_records),
+         
+            menu.PassTestNode(id='productionrecords',
+                              label='<i class="fa fa-circle"></i>Production Records',
+                             
+                              pattern_name='farm:productionrecords', test=can_view_production_records),
+                              
 
             menu.PassTestNode(id='pests_and_diseases',
                               label='<i class="fa fa-circle"></i>Queries',
@@ -335,13 +347,13 @@ menu.PassTestNode(
          
         ]
     ),
-
+    # menu.Node(id='Seller-resource-sharing',css_class="sidebar-header", label='<i data-feather="home"></i><span>Resource Sharing</span>', pattern_name='common:home', link_attrs={'id': 'Seller-resource-sharing'}),
     menu.PassTestNode(
         id='Seller-resource-sharing',
         css_class="sidebar-header",
         label='<span class="fas fa-store"></span>  <span>Resource Sharing</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
-        test=can_view_sellers,
+        test=can_view_resources,
         children=[
             menu.PassTestNode(id='create_resource',
                               label='<i class="fa fa-circle"></i>Share Resource',
