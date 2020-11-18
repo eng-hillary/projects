@@ -92,7 +92,7 @@ def can_add_seller(user, context):
 def can_view_sellers(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('openmarket.view_seller')
+    return user.has_perm('openmarket.view_seller') and not user.farmer
     
 def can_view_products(user, context):
      if user.is_superuser:
@@ -160,7 +160,7 @@ menus = [
         test=can_view_farmers,
         children=[
             menu.PassTestNode(id='farmers',
-                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Applications{% endif %}',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Application{% endif %}',
                              
                               pattern_name='farmer:farmerprofile_list', test=can_view_farmers),
             menu.PassTestNode(id='farmer_groups',
@@ -297,9 +297,9 @@ menu.PassTestNode(
         test=can_view_sellers,
         children=[
             menu.PassTestNode(id='seller_registration',
-                              label='<i class="fa fa-circle"></i>Registration',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Application{% endif %}',
                              
-                              pattern_name='openmarket:create_seller', test=can_add_seller),
+                              pattern_name='openmarket:seller_list', test=can_add_seller),
             # menu.PassTestNode(id='seller_list',
             #                   label='<i class="fa fa-circle"></i>Applications',
                              

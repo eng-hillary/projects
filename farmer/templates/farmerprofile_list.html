@@ -7,15 +7,21 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Farmer profile List
-                      {% if request.user.is_superuser or perms.farm.add_farmerprofile %}
-                      <small><a class="add-new" href="{% url 'farmer:create_farmer' %}">Add new</a></small>
+                    <h3>Farmer profile List <br>
+                      {% if request.user.is_superuser or perms.farmer.add_farmerprofile %}
+                      <span><a class="add-new" href="{% url 'farmer:create_farmer' %}">
+                        {% if request.user.is_superuser %}
+                        Add new
+                        {% else %}
+                        Register
+                        {% endif %}
+                      </a></span>
                       {% endif %}
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
-                <ol class="breadcrumb pull-right">
+                <ol class="breadcrumb float-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Farmer profile</li>
                     <li class="breadcrumb-item active">Farmer profile List</li>

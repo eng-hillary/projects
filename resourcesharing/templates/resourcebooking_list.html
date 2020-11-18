@@ -27,13 +27,19 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
-  {% if request.user.is_superuser or perms.owner.delete_resourcebooking %}
+  {% if request.user.is_superuser or perms.resourcesharing.delete_resourcebooking %}
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i>
   </button>
-
   {% endif %}
-  {% if request.user.is_superuser or perms.owner.can_approve_resourcebooking %}
+
+  {% if request.user.is_superuser or perms.resourcesharing.can_cancel_resourcebooking %}
+  <button id="cancel" class="btn btn-warning" title="cancel" disabled>
+    <i class="fas fa-ban"></i>
+  </button>
+  {% endif %}
+
+  {% if request.user.is_superuser or perms.resourcesharing.can_approve_resourcebooking %}
   <button id="decline" class="btn btn-decline" title="Decline" disabled>
     <i class="fa fa-times"></i>
   </button>
@@ -65,7 +71,9 @@
   data-response-handler="responseHandler">
   <thead>
     <tr>
+      {% if request.user.is_superuser or perms.resourcesharing.delete_resourcebooking %}
       <th data-field="state" data-checkbox="true"></th>
+      {% endif %}
       <th data-field="resource" data-sortable="true">Resource</th>
       <th data-field="date_needed" data-sortable="true">Date Needed</th>
       <th data-field="payment_mode" data-sortable="true">Payment Mode</th>
@@ -80,8 +88,11 @@
 <!-- latest jquery-->
 {% block javascript %}
 <script>
-  var $table = $('#table');
+  var $table = $('#table')
   var $remove = $('#remove')
+  var $cancel = $('#cancel')
+  var $approve = $('#approve')
+  var $decline = $('#decline')
   var selections = []
 
   function getIdSelections() {
@@ -132,6 +143,9 @@ $table.on('check.bs.table uncheck.bs.table ' +
   'check-all.bs.table uncheck-all.bs.table',
 function () {
   $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+  $approve.prop('disabled', !$table.bootstrapTable('getSelections').length)
+  $cancel.prop('disabled', !$table.bootstrapTable('getSelections').length)
+  $decline.prop('disabled', !$table.bootstrapTable('getSelections').length)
 
 
   // save your data, here just save the current page
@@ -141,6 +155,7 @@ function () {
 $table.on('all.bs.table', function (e, name, args) {
   console.log(name, args)
 })
+
 ///multiple delete
 $remove.click(function () {
   var ids = getIdSelections()
@@ -180,6 +195,120 @@ swal("You have cancelled the deletion of records!");
 
 })
 
+    ///cancel resourcebooking request
+    $cancel.click(function () {
+      var ids = getIdSelections()
+      $cancel.prop('disabled', true)
+
+      swal({
+  title: "Cancel Application",
+  text: "Are you sure You want to Cancel these Applications?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: false,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    for(id=0; id<ids.length; id++){
+        console.log(ids[id]);
+
+    $.ajax({
+        url: "/resourcesharing/"+ids[id]+'/cancel/',
+        data: {},
+        headers:{"X-CSRFToken": getCookie("csrftoken")},
+        type: 'PUT',
+        //contentType: 'application/json',
+        success: function(result) {
+          console.log('cancelled successfully');
+        },
+       });
+    swal("You have cancelled resourcebooking/s successfully!", {
+      icon: "success",
+    });}
+  } else {
+    swal("You have cancelled resourcebooking approvals!");
+  }
+});
+
+    })
+
+
+
+
+    ///approve resourcebookings profiles
+    $approve.click(function () {
+      var ids = getIdSelections()
+      $approve.prop('disabled', true)
+
+      swal({
+  title: "Approve ResourceBooking Applications?",
+  text: "Are you sure you want to approve these applications!",
+  icon: "success",
+  buttons: true,
+  dangerMode: false,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    for(id=0; id<ids.length; id++){
+        console.log(ids[id]);
+
+    $.ajax({
+        url: "/resourcesharing/"+ids[id]+'/approve/',
+        data: {},
+        headers:{"X-CSRFToken": getCookie("csrftoken")},
+        type: 'PATCH',
+        //contentType: 'application/json',
+        success: function(result) {
+          console.log('approved successfully');
+        },
+       });
+    swal("You have approve resourcebooking/s successfully!", {
+      icon: "success",
+    });}
+  } else {
+    swal("You have cancelled resourcebooking approvals!");
+  }
+});
+
+    })
+
+
+    ///decline resourcebooking request
+    $decline.click(function () {
+      var ids = getIdSelections()
+      $decline.prop('disabled', true)
+
+      swal({
+  title: "Decline Application",
+  text: "Are you sure You want to decline these Applications?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: false,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    for(id=0; id<ids.length; id++){
+        console.log(ids[id]);
+
+    $.ajax({
+        url: "/resourcesharing/"+ids[id]+'/approve/',
+        data: {},
+        headers:{"X-CSRFToken": getCookie("csrftoken")},
+        type: 'PUT',
+        //contentType: 'application/json',
+        success: function(result) {
+          console.log('approved successfully');
+        },
+       });
+    swal("You have approved resourcebooking/s successfully!", {
+      icon: "success",
+    });}
+  } else {
+    swal("You have cancelled resourcebooking approvals!");
+  }
+});
+
+    })
 
 
 

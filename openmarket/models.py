@@ -33,17 +33,16 @@ class Product(models.Model):
 
 class Seller(models.Model):
     #personal information
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='seller',primary_key=True)
     date_of_birth = models.DateField(max_length=8)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     seller_type = models.CharField(choices=TYPE,max_length=15, null=False)
-    enterprise = models.ForeignKey(to='farm.Enterprise',on_delete=models.CASCADE)
     major_products = models.CharField(max_length=50,blank=True)
 
     #Location
     business_number = PhoneNumberField()
-    business_location = models.CharField(null=True, max_length=50)
+    business_location = models.TextField(_('Business Address'),null=True)
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
@@ -58,6 +57,9 @@ class Seller(models.Model):
 
     class Meta:
         ordering = ('seller_type',)
+        permissions = (
+            ("can_approve_sellers", "Can approve Sellers"),
+        )
     def __str__(self):
         return self.seller_type
 
