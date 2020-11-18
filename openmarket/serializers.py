@@ -25,10 +25,8 @@ class ProductSerializer(serializers.ModelSerializer):
          'date_created', 'date_updated')
 
 class SellerSerializer(serializers.ModelSerializer):
-    enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
-    enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    major_products = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    user = serializers.SlugRelatedField(many=False,read_only=True, slug_field='username')
+    #major_products = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
@@ -41,10 +39,15 @@ class SellerSerializer(serializers.ModelSerializer):
    # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
-        fields = ('id','user', 'business_number', 'business_location', 'seller_type', 'date_of_birth','region',
-         'district', 'county', 'sub_county', 'parish', 'village', 'gender','marital_status', 'enterprise',
-          'major_products', 'status', 'approver','approved_date')
+        fields = ('user','full_name', 'business_number', 'business_location', 'seller_type', 'date_of_birth', 'gender','marital_status',
+          'major_products', 'status', 'approver','approved_date','region','district','county','sub_county'
+          ,'parish','village')
+    
+    def get_user_full_name(self, obj):
+        return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
+    
+   
 
 class SellerApprovalSerializer(serializers.ModelSerializer):
     class Meta:

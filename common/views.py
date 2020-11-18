@@ -212,12 +212,23 @@ def activate(request, uidb64, token):
     else:
         return render(request, 'account_activation_invalid.html')
 
-class ProfileView(LoginRequiredMixin, TemplateView):
-    template_name = "signup.html"
+# class ProfileView1(LoginRequiredMixin, DetailView):
+#     template_name = "user_details.html"
+
+#     def get_context_data(self, **kwargs):
+#         context = super(ProfileView, self).get_context_data(**kwargs)
+#         context["user_obj"] = self.request.user
+#         return context
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = User
+    context_object_name = "user"
+    template_name = "user_details.html"
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
-        context["user_obj"] = self.request.user
+        
+       
         return context
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
