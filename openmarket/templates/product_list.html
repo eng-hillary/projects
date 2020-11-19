@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Farmer profile List
+                    <h3>Product profile List
                         <small>{{ user.groups.all.0 }} Dashboard</small>
                     </h3>
                 </div>
@@ -15,8 +15,8 @@
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Farmer profile</li>
-                    <li class="breadcrumb-item active">Farmer profile List</li>
+                    <li class="breadcrumb-item">Product profile</li>
+                    <li class="breadcrumb-item active">Product profile List</li>
                 </ol>
             </div>
         </div>
@@ -29,13 +29,13 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
-  {% if request.user.is_superuser or perms.farmer.delete_farmerprofile %}
+  {% if request.user.is_superuser or perms.openmarket.delete_product %}
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i>
   </button>
 
   {% endif %}
-  {% if request.user.is_superuser or perms.farmer.can_approve_farmers %}
+  {% if request.user.is_superuser or perms.openmarket.can_approve_products %}
   <button id="decline" class="btn btn-decline" title="Decline" disabled>
     <i class="fa fa-times"></i>
   </button>
@@ -58,11 +58,11 @@
   data-minimum-count-columns="2"
   data-show-pagination-switch="true"
   data-pagination="true"
-  data-id-field="user"
+  data-id-field="id"
   data-toolbar="#toolbar"
   data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/api-openmarket/products/"
+  data-url="/openmarket/api/products/"
   data-response-handler="responseHandler">
   <thead>
     <tr>
@@ -109,15 +109,15 @@
 
 
   function operateFormatter(value, row, index) {
-    var url ="/farmer/"+row.user_id+"/edit"
-    var view_url ="/farmer/"+row.user_id+"/view"
+    var url ="/openmarket/"+row.user_id+"/edit"
+    var view_url ="/openmarket/"+row.user_id+"/view"
     return [
-    {% if request.user.is_superuser or perms.farmer.change_farmerprofile %}
+    {% if request.user.is_superuser or perms.openmarket.change_product %}
       '<a class="Edit " href="'+url+'" title="Update">',
       '<i class="fa fa-edit"></i>',
       '</a>  ',
         {% endif %}
-        {% if request.user.is_superuser or perms.farmer.view_farmerprofile %}
+        {% if request.user.is_superuser or perms.openmarket.view_product %}
         '<a class="Edit " href="'+view_url+'" title="De"tails>',
       '<i class="fa fa-eye"></i>',
       '</a>  ',
@@ -219,7 +219,7 @@
         console.log(ids[id]);
 
     $.ajax({
-        url: "/farmer/"+ids[id]+'/approve/',
+        url: "/openmarket/"+ids[id]+'/approve/',
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PATCH',
