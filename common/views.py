@@ -40,7 +40,7 @@ from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,Co
 from rest_framework import filters
 from django.core import serializers as django_serializers
 from rest_framework import status
-
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 class HomePage(LoginRequiredMixin, TemplateView):
@@ -275,6 +275,33 @@ class ForgotPasswordView(PasswordResetView):
     email_template_name = 'password_reset_email.html'
     from_email = 'nonereply@unffe.org'
 
+
+class ChangePasswordView(LoginRequiredMixin, TemplateView):
+    template_name = "change_password.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangePasswordView, self).get_context_data(**kwargs)
+        context["form"] = PasswordChangeForm(self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        error, errors = "", ""
+        form = PasswordChangeForm(self.request.user, self.request.POST)
+        if form.is_valid():
+            user = request.user
+            # if not check_password(request.POST.get('CurrentPassword'),
+            #                       user.password):
+            #     error = "Invalid old password"
+            # else:
+            user.set_password(request.POST.get('new_password1'))
+            user.is_active = True
+            user.save()
+            return HttpResponseRedirect('/')
+        else:
+            errors = form.errors
+        return render(request, "change_password.html",
+                      {'error': error, 'errors': errors,
+                       'form': form})
 
 
 # used to obtain authentication token

@@ -38,6 +38,8 @@ from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
 import datetime
 from django.db import IntegrityError
+from django.contrib.auth.models import Group 
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
@@ -113,6 +115,8 @@ class SellerViewSet(viewsets.ModelViewSet):
         profile = self.get_object()
         serializer = SellerApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
+            seller_group = Group.objects.get(name='Sellers')
+            profile.user.groups.add(seller_group)
             serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)

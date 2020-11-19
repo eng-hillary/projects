@@ -101,7 +101,7 @@
                        {% endif %}
                         <ul class="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
                             <li><a href="{% url 'common:view_profile' request.user.id %}"><i data-feather="user"></i>{{ request.user.first_name}}</a></li>
-                            <li><a href="#"><i data-feather="settings"></i>Settings</a></li>
+                            <li><a href="{% url 'common:change_password' %}"><i data-feather="settings"></i>settings</a></li>
                             <li><a href="{% url 'logout' %}"><i data-feather="log-out"></i>Logout</a></li>
                         </ul>
                     </li>

@@ -10,13 +10,13 @@
                     
                     <h3>Seller List <br>
                       {% if  perms.openmarket.add_seller and not request.user.seller %}
-                      <span><a class="add-new" href="{% url 'openmarket:create_seller' %}">
+                      <small><a class="add-new" href="{% url 'openmarket:create_seller' %}">
                         {% if request.user.is_superuser %}
                         Add new
                         {% else %}
                         Register
                         {% endif %}
-                      </a></span>
+                      </a></small>
                       {% endif %}
                     </h3>
                 </div>
@@ -89,7 +89,7 @@
       <th data-field="village" data-visible="false" data-sortable="true">Village Business is Located</th>
       <th data-field="gender" data-visible="false" data-sortable="true">Gender</th>
       <th data-field="date_of_birth" data-visible="false" data-sortable="true">Date of Birth</th>
-      <th data-field="marital_status" data-visible="false" data-sortable="true">Marital status</th>
+      
   
       <th data-field="status" data-sortable="true">Status</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>     
@@ -109,13 +109,13 @@
 
   function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
-      return row.id
+      return row.user
     })
   }
 
   function responseHandler(res) {
     $.each(res.rows, function (i, row) {
-      row.state = $.inArray(row.id, selections) !== -1
+      row.state = $.inArray(row.user, selections) !== -1
     })
     return res
   }
@@ -223,7 +223,7 @@
         console.log(ids[id]);
 
     $.ajax({
-        url: "/openmarket/"+ids[id]+'/approve/',
+        url: "/openmarket/"+ids[id]+'/approve/seller',
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PATCH',
