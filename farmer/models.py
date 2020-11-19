@@ -34,7 +34,7 @@ class FarmerProfile(TimeStampedModel, models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='farmer',primary_key=True)
     # personal information
 
-    nin = models.CharField(_('National Identity Number (NIN)'),max_length=50, null=False, blank=False)
+    nin = models.CharField(_('National Identity Number (NIN)'),max_length=14, null=False, blank=False)
     date_of_birth = models.DateField()
     level_of_education = models.CharField(choices = EDUCATION_LEVEL, max_length=100, null=False, blank=False)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)

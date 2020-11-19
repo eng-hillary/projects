@@ -60,6 +60,7 @@
                         <div class="col-xl-6 col-md-6">
                             {{ form.region|as_crispy_field }}
                         </div>
+                        
                         <div class="col-xl-6 col-md-6">
                             {{ form.monthly_income|as_crispy_field }}
                         </div>
@@ -147,6 +148,11 @@
 
             $('#land').hide();
             $('#rented_land').show();
+            // Simulate an HTTP redirect:
+            swal({
+                text: "Since you do not have a piece of land, We recommend that you check our services Map to find service providers who have land available for rent in your area of interest",
+            });
+            
         }
         else {
             $('#rented_land').hide(); 
