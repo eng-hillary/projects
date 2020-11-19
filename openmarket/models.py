@@ -13,7 +13,7 @@ from django.core.validators import RegexValidator
 from farm.models import Enterprise
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
-
+from geopy.geocoders import Nominatim
 # Create your models here.phone_2 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
 
 class Product(models.Model):
@@ -103,7 +103,7 @@ class ServiceProvider(models.Model):
     is_the_service_available = models.BooleanField(choices=YES_OR_NO, null=True)
     service_location = models.CharField(max_length=100, null=True)
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
-    category = models.CharField(choices=SERVICE_CATEGORY,null=True,max_length=50)
+    category = models.CharField(_('Service Categories'),choices=SERVICE_CATEGORY,null=True,max_length=50)
     status = models.CharField(choices=STATUS, default='Pending', max_length=20,null=False)
     # handle approving of a farmer
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent_service_provider",null=True,blank=True)
@@ -144,20 +144,22 @@ class Service(models.Model):
     
     class meta:
         ordering =("service_type")
+    
+    @property
+    def compute_location(self):
+        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
+        lat = str(self.lat)
+        lon = str(self.lon)
 
-"""
-location
-contact details
-availability date and time
-terms and conditions
+        try:
 
-select an enterprise for value addition and sorting and graining 
-capacity for transport
-size in square feet
+            location = geolocator.reverse(lat + "," + lon)
+            return '{}'.format(location)
+        except:
+            #location = str(self.lat) + "," + str(self.lon)
+            return 'slow network, loading location ...'
 
 
-
-"""
 
 class ContactDetails(models.Model):
     name = models.CharField(max_length=25, null=True)

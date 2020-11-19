@@ -221,7 +221,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
       $approve.prop('disabled', true)
     
       swal({
-  title: "Approve Farmer Applications?",
+  title: "Approve Service Provider Application/s?",
   text: "Are you sure you want to approve these applications!",
   icon: "success",
   buttons: true,
@@ -243,13 +243,13 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
           console.log('approved successfully');
         },
        });
-    swal("You have approve farmer/s successfully!", {
+    swal("You have approve Service Provider/s successfully!", {
       icon: "success",
     }).then(() =>{
         window.location.reload()});
     }
   } else {
-    swal("You have cancelled farmer approvals!");
+    swal("You have cancelled Service Provider approvals!");
   }
 });
       
@@ -284,13 +284,13 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
           console.log('approved successfully');
         },
        });
-    swal("You have approved farmer/s successfully!", {
+    swal("You have declined Service Provider/s successfully!", {
       icon: "success",
     }).then(() =>{
         window.location.reload()});
     }
   } else {
-    swal("You have cancelled farmer approvals!");
+    swal("You have cancelled Service Provider approvals!");
   }
 });
       

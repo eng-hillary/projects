@@ -221,31 +221,47 @@ menus = [
          
         ]
     ),
+    # menu.PassTestNode(
+    #     id='Service-Provider-section',
+    #     css_class="sidebar-header",
+    #     label='<span class="fas fa-people-carry"></span>  <span>Service Provider</span><i class="fa fa-angle-right fa-pull-right"></i>',
+    #     url='#',
+    #     test=can_view_service_provider,
+    #     children=[
+    #         menu.PassTestNode(id='provider_list',
+    #                           label='<i class="fa fa-circle"></i>My Applications',
+                             
+    #                           pattern_name='openmarket:serviceprovider_list', test=can_view_service_provider),
+           
+    #     ]
+    # ),
+
     menu.PassTestNode(
-        id='Service-Provider-section',
+        id='provider-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-people-carry"></span>  <span>Service Provider</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-people-carry"></span>  <span>Service Providers</span><i class="fas fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
-            menu.PassTestNode(id='provider_list',
-                              label='<i class="fa fa-circle"></i>My Applications',
+            menu.PassTestNode(id='provider-children',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Applications{% endif %}',
                              
                               pattern_name='openmarket:serviceprovider_list', test=can_view_service_provider),
-           
+            
+         
         ]
     ),
 
 menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="truck"></i><span>Service Management</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="truck"></i><span>Manage Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
             
             menu.PassTestNode(id='register_service',
-                              label='<i class="fa fa-circle"></i>Register Service',
+                              label='<i class="fa fa-circle"></i>Register',
                              
                               pattern_name='openmarket:service_registration', test=can_register_services),
             menu.PassTestNode(id='services',

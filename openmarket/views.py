@@ -590,7 +590,7 @@ class UpdateServiceView(LoginRequiredMixin,UpdateView):
     model = Service
     template_name = 'register_service.html'
     success_url = reverse_lazy('openmarket:serviceregistration_list')
-    form_class = ServiceProviderProfileForm
+    form_class = ServiceProfileForm
     success_message = "Your Service was Updated successfully"
 
 

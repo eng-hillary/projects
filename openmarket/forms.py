@@ -1,11 +1,12 @@
 from django import forms
 from .models import Seller,Product,ServiceProvider, Service
 from common.models import Region, District, County, SubCounty, Parish, Village
-
+from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 class ServiceProviderProfileForm(forms.ModelForm):
+    category = forms.MultipleChoiceField(choices = SERVICE_CATEGORY)
     
     class Meta:
         model = ServiceProvider
