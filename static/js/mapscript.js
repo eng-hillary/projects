@@ -28,10 +28,11 @@ Highcharts.getJSON('/farm/api/maps/', function (json) {
         },
        
         tooltip: {
-            pointFormat:'id: {point.id}<br>' + 
-                'farm name: {point.farm_name}<br>' +
-                'farmer: {point.farmer}<br>' +
+            pointFormat:'farm name: {point.farm_name}<br>' +
+
                 // 'district: {point.district}<br>' +
+                'farmer: {point.farmer}<br>' +
+                'Phone Number: {point.phone_number}<br>' +
                 'land occupied: {point.land_occupied}'+ ' acres'
       
         },
@@ -146,7 +147,11 @@ document.getElementById('farm_container').addEventListener('mouseout', function 
       title: {
           text: 'Resource Locations'
       },
-      
+       
+      boost:{
+        allowForce:true,
+      },
+  
       mapNavigation: {
           enabled: true,
           buttonOptions: {
@@ -155,8 +160,7 @@ document.getElementById('farm_container').addEventListener('mouseout', function 
       },
      
       tooltip: {
-          pointFormat: 'ID: {point.id}<br>' +
-          // 'District: {point.district}<br>' +
+          pointFormat:
           'Owner: {point.owner}<br>' +
           'Resource Status: {point.resource_status}<br>' +
           'Price: {point.price}<br>' + 'shs'
@@ -194,6 +198,7 @@ document.getElementById('farm_container').addEventListener('mouseout', function 
           }
       },
       series: [{
+          boostThreshold: 50, 
           name: 'Basemap',
           mapData: map,
           borderColor: '#B0B0B0',
@@ -280,8 +285,7 @@ Highcharts.getJSON('/openmarket/api/serviceregistration/', function (json) {
       },
      
       tooltip: {
-          pointFormat: 'id: {point.id}<br>' +
-              'Service Name: {point.service_name}<br>' +
+          pointFormat: 'Service Name: {point.service_name}<br>' +
               'Service Type: {point.service_type}<br>' +
               'Availability Date: {point.availability_date}<br>' 
     
