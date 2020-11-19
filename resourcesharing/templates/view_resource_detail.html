@@ -57,7 +57,7 @@
                           <b>Price</b>: {{Resourceobject.price}}<br>
                           <hr>
                         </div>
-                        <a class="btn btn-primary" href="{% url 'resourcesharing:resourcebooking' %}">BOOK</a>
+                        <a class="btn btn-primary" href="{% url "resourcesharing:resourcebooking" Resourceobject.pk %}">BOOK</a>
                        </div>
 
                 </div>

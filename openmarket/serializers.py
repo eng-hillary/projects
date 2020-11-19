@@ -1,13 +1,13 @@
 from rest_framework import serializers
-from .models import (Product, 
-                     Seller, 
-                     Buyer, 
-                     SellerPost, 
-                     BuyerPost, 
-                     ServiceProvider, 
+from .models import (Product,
+                     Seller,
+                     Buyer,
+                     SellerPost,
+                     BuyerPost,
+                     ServiceProvider,
                      Service,
-                     ContactDetails, 
-                     Logistics, 
+                     ContactDetails,
+                     Logistics,
                      SoilScience)
 from django.contrib.auth.models import User
 from farm.serializers import EnterpriseSerializer
@@ -18,32 +18,35 @@ from common.serializers import UserSerializer
 class ProductSerializer(serializers.ModelSerializer):
     enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
     enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    
+
     class Meta:
         model = Product
         fields = ('id', 'name', 'enterprise', 'local_name', 'image', 'description', 'price', 'available',
          'date_created', 'date_updated')
 
 class SellerSerializer(serializers.ModelSerializer):
-    enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
-    enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    major_products = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    user = serializers.SlugRelatedField(many=False,read_only=True, slug_field='username')
+   
+    full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    
+    approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
+
 
    # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
-        fields = ('id','user', 'business_number', 'business_location', 'seller_type', 'date_of_birth','region',
-         'district', 'county', 'sub_county', 'parish', 'village', 'gender','marital_status', 'enterprise',
-          'major_products', 'status', 'approver','approved_date')
+        fields = ('user','full_name', 'business_number', 'business_location', 'seller_type', 'date_of_birth', 'gender',
+          'major_products', 'status', 'approver','approved_date','region','district','county','sub_county'
+          ,'parish','village')
+
+    def get_user_full_name(self, obj):
+        return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+
+
 
 
 class SellerApprovalSerializer(serializers.ModelSerializer):
@@ -74,7 +77,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     #sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
    # user = UserSerializer()
     user = serializers.SerializerMethodField(method_name='get_user_full_name')
-   
+
     class Meta:
         model = ServiceProvider
         fields = ('user_id','user', 'nin','service_provider_location', 'list_of_services_if_more_than_one', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
@@ -107,14 +110,16 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(method_name='get_user_full_name')
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
+
     location = serializers.CharField(source='compute_location')
+
 
     class Meta:
         model = Service
         fields = ('id','user', 'category', 'service_name', 'service_type', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
         'available_services','rent','name_of_storage_center','location_of_storage_center','certification_status',
         'vehicle_type','vehicle_capacity','location','others','full_name')
-   
+
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
@@ -122,7 +127,7 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
 class PostServiceRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        exclude=['user']  
+        exclude=['user']
 
 class ContactDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -133,7 +138,7 @@ class ContactDetailsSerializer(serializers.ModelSerializer):
 class LogisticsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Logistics
-        fields = ('name', 'source', 'destination', 'quantity', 'time', 'product', 'payment_mode', 
+        fields = ('name', 'source', 'destination', 'quantity', 'time', 'product', 'payment_mode',
         'contact_details')
 
 class SoilScienceSerializer(serializers.ModelSerializer):

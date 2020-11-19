@@ -4,7 +4,7 @@ from common.models import(Region, District, County, SubCounty, Parish, Village, 
 from common.choices import(GENDER_CHOICES,
                            MARITAL_STATUSES,REGISTER_STATUS,
                            STATUS,INVENTORY_STATUS, TYPE,
-                           PAYMENT_MODE, 
+                           PAYMENT_MODE,
                            PAYMENT_OPTIONS,
                            YES_OR_NO,
                            EDUCATION_LEVEL,
@@ -33,24 +33,22 @@ class Product(models.Model):
 
 class Seller(models.Model):
     #personal information
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='seller',primary_key=True)
     date_of_birth = models.DateField(max_length=8)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
-    marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     seller_type = models.CharField(choices=TYPE,max_length=15, null=False)
-    enterprise = models.ForeignKey(to='farm.Enterprise',on_delete=models.CASCADE)
     major_products = models.CharField(max_length=50,blank=True)
 
     #Location
     business_number = PhoneNumberField()
-    business_location = models.CharField(null=True, max_length=50)
+    business_location = models.TextField(_('Business Address'),null=True)
     region = models.ForeignKey(Region, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
     sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE)
     parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
     village = models.ForeignKey(Village, on_delete=models.CASCADE)
-    
+
     status = models.CharField(choices=REGISTER_STATUS, default='in_active', max_length=20,null=False)
       # handle approving of a seller
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
@@ -58,12 +56,15 @@ class Seller(models.Model):
 
     class Meta:
         ordering = ('seller_type',)
+        permissions = (
+            ("can_approve_sellers", "Can approve Sellers"),
+        )
     def __str__(self):
         return self.seller_type
 
 class Buyer(TimeStampedModel, models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
-    
+
     class meta:
         ordering =("created")
 
@@ -79,7 +80,7 @@ class SellerPost(models.Model):
 
     class Meta:
         ordering = ('-name',)
-   
+
 
 class BuyerPost(models.Model):
     name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
@@ -123,7 +124,7 @@ class Service(models.Model):
     size =  models.FloatField(max_length=50, null=True,blank=True)
     terms_and_conditions = models.BooleanField(default=True)
     availability_date = models.DateField(blank=True, null=True)
-    availability_time = models.DateTimeField(auto_now_add=True, null=True) 
+    availability_time = models.DateTimeField(auto_now_add=True, null=True)
     picture = models.ImageField(null=True, blank=True)
     description = models.TextField(blank=True)
     available_services = models.CharField(max_length=50, blank=True)
@@ -131,7 +132,7 @@ class Service(models.Model):
     #image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     rent = models.CharField(max_length=25, null=True, blank=True)
     name_of_storage_center = models.CharField(max_length=50, null=True,blank=True)
-    location_of_storage_center = models.CharField(null=True, max_length=50, blank=True)  
+    location_of_storage_center = models.CharField(null=True, max_length=50, blank=True)
     certification_status = models.BooleanField(_('Is the Service Certified'),choices = YES_OR_NO, null=True, blank=True)
     vehicle_type = models.CharField(max_length=100, null = True, blank=True)
     vehicle_capacity = models.FloatField(max_length=50, null=True, help_text="capacity of your vehicle in tonnes", blank=True)
@@ -139,9 +140,9 @@ class Service(models.Model):
     lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your industry location")
     others = models.CharField(_('Please state the category if its not among the above'), blank=True, null=True, max_length=100)
     driver_contact =  PhoneNumberField(null=True, blank=True)
-    driver_name =  models.CharField(max_length = 100, null=True, blank = True) 
+    driver_name =  models.CharField(max_length = 100, null=True, blank = True)
 
-    
+
     class meta:
         ordering =("service_type")
     
@@ -166,7 +167,7 @@ class ContactDetails(models.Model):
     #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = PhoneNumberField() # validators should be a list
 
-   
+
     class Meta:
         ordering =("name",)
 
@@ -179,23 +180,23 @@ class Logistics(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, max_length=50)
     contact_details = models.ForeignKey(ContactDetails, on_delete=models.CASCADE)
-  
+
 
     class Meta:
         ordering =("name",)
 
 # class Storage(models.Model):
 #     storage = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
-     
+
 #     size = models.FloatField(null=True)
 #     type = models.CharField(max_length=50, null=False)
-    
 
-        
-# class Packaging(models.Model): #value addition. 
+
+
+# class Packaging(models.Model): #value addition.
 #     name = models.CharField(max_length=50, null=True)
 #     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     location = models.CharField(null=True, max_length=50) 
+#     location = models.CharField(null=True, max_length=50)
 #     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
 #     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
 #     #rent = models.CharField(max_length=25, null=True)
@@ -206,7 +207,7 @@ class Logistics(models.Model):
 # class Medical(models.Model):
 #     name = models.CharField(max_length=50, null=True)
 #     enterprise = models.ForeignKey(to='farm.Enterprise',related_name='medical',on_delete=models.CASCADE)
-#     location = models.CharField(null=True, max_length=50) 
+#     location = models.CharField(null=True, max_length=50)
 #     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
 #     time = models.DateTimeField(auto_now_add=True)
 
@@ -216,11 +217,10 @@ class Logistics(models.Model):
 
 class SoilScience(models.Model):
     name = models.CharField(max_length=50, null=True)
-    location = models.CharField(null=True, max_length=50) 
+    location = models.CharField(null=True, max_length=50)
     operation_mode = models.CharField(max_length=50, null=True)
     time = models.DateTimeField(auto_now_add=True)
     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
 
     class Meta:
         ordering =("name",)
-

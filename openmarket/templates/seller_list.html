@@ -8,9 +8,15 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     
-                    <h3>Seller List
-                      {% if request.user.is_superuser or perms.farm.add_farmerprofile %}
-                      <small><a class="add-new" href="{% url 'openmarket:create_seller' %}">Add new</a></small>
+                    <h3>Seller List <br>
+                      {% if  perms.openmarket.add_seller and not request.user.seller %}
+                      <small><a class="add-new" href="{% url 'openmarket:create_seller' %}">
+                        {% if request.user.is_superuser %}
+                        Add new
+                        {% else %}
+                        Register
+                        {% endif %}
+                      </a></small>
                       {% endif %}
                     </h3>
                 </div>
@@ -32,15 +38,20 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
+  {% if request.user.is_superuser or perms.openmarket.delete_seller %}
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i> 
   </button>
+  {% endif %}
+  
+  {% if request.user.is_superuser or perms.openmarket.can_approve_sellers %}
   <button id="decline" class="btn btn-decline" title="Decline" disabled>
     <i class="fa fa-times"></i>
   </button>
   <button id="approve" class="btn btn-primary" title="Approve" disabled>
     <i class="fa fa-check"></i>
   </button>
+  {% endif %}
 </div>
 <table
   id="table"
@@ -56,30 +67,30 @@
   data-minimum-count-columns="2"
   data-show-pagination-switch="true"
   data-pagination="true"
-  data-id-field="id"
+  data-id-field="user"
   data-toolbar="#toolbar"
   data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
   data-page-list="[10, 25, 50, 100, all]"
-  data-url="/api-openmarket/sellers/?format=json"
+  data-url="/openmarket/api/sellers/"
   data-response-handler="responseHandler">
   <thead>
     <tr>
       <th data-field="state" data-checkbox="true"></th>
-      <th data-field="user" data-sortable="true">User</th>
-      <th data-field="business_number" data-sortable="true">Business_number</th>
-      <th data-field="business_location" data-sortable="true">Business_location</th>
-      <th data-field="seller_type" data-sortable="true">Seller_type</th>
-      <th data-field="date_of_birth" data-sortable="true">Date_of_birth</th>
-      <th data-field="region" data-sortable="true">Region</th>
-      <th data-field="district" data-sortable="true">District</th>
-      <th data-field="county" data-sortable="true">County</th>
-      <th data-field="sub_county" data-sortable="true">Sub_county</th>
-      <th data-field="parish" data-sortable="true">Parish</th>
-      <th data-field="village" data-sortable="true">Village</th>
-      <th data-field="gender" data-sortable="true">Gender</th>
-      <th data-field="marital_status" data-sortable="true">Marital_status</th>
-      <th data-field="enterprise" data-sortable="true">Enterprise</th>
-      <th data-field="major_products" data-sortable="true">Major_products</th>
+      <th data-field="full_name" data-sortable="true">User</th>
+      <th data-field="business_number" data-sortable="true">Business Number</th>
+      <th data-field="business_location" data-sortable="true">Business Address</th>
+      <th data-field="seller_type" data-sortable="true">Seller Type</th>
+      <th data-field="major_products" data-sortable="true">Major Products</th>
+      <th data-field="region" data-visible="false" data-sortable="true">Region Business is Located</th>
+      <th data-field="district" data-visible="false" data-sortable="true">District Business is Located</th>
+      <th data-field="county" data-visible="false" data-sortable="true">County Business is Located</th>
+      <th data-field="sub_county" data-visible="false" data-sortable="true">Sub county Business is Located</th>
+      <th data-field="parish" data-visible="false" data-sortable="true">Parish Business is Located</th>
+      <th data-field="village" data-visible="false" data-sortable="true">Village Business is Located</th>
+      <th data-field="gender" data-visible="false" data-sortable="true">Gender</th>
+      <th data-field="date_of_birth" data-visible="false" data-sortable="true">Date of Birth</th>
+      
+  
       <th data-field="status" data-sortable="true">Status</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>     
     </tr>
@@ -98,13 +109,13 @@
 
   function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
-      return row.id
+      return row.user
     })
   }
 
   function responseHandler(res) {
     $.each(res.rows, function (i, row) {
-      row.state = $.inArray(row.id, selections) !== -1
+      row.state = $.inArray(row.user, selections) !== -1
     })
     return res
   }
@@ -112,11 +123,11 @@
 
 
   function operateFormatter(value, row, index) {
-    var url ="/openmarket/"+row.id+"/edit"
+    var url ="/openmarket/"+row.user+"/edit"
     return [
 
       '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+      '<i class="fas fa-edit"></i>',
       '</a>  ',
 
     ].join('')
@@ -173,7 +184,7 @@
         console.log(ids[id]);
 
     $.ajax({
-        url: "/api-openmarket/sellers/"+ids[id],
+        url: "/openmarket/api/sellers/"+ids[id],
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'DELETE',
@@ -212,7 +223,7 @@
         console.log(ids[id]);
 
     $.ajax({
-        url: "/openmarket/"+ids[id]+'/approve/',
+        url: "/openmarket/"+ids[id]+'/approve/seller',
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
         type: 'PATCH',

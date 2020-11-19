@@ -59,7 +59,7 @@
                                                 {{ form.name|as_crispy_field }}
                                             </div>
                                             
-                                            <div class="col-xl-6 col-md-6">
+                                            <div class="col-xl-6 col-md-6" id="date_discovered">
                                                 {{ form.date_discovered|as_crispy_field }}
                                             </div>
                                             
@@ -79,7 +79,7 @@
                                     </div>
                                  </div>
                                                                     
-                                 <div class="pull-right">
+                                 <div class="float-right">
                                     <input type="submit" value="Submit" class="btn btn-primary">
                                  </div>
                             </form>
@@ -96,6 +96,8 @@
 $(document).ready(function () {
             $('#querycatergory').hide();  
             $('#workername').hide(); 
+            $('#date_discovered').hide(); 
+           
       
 
 
@@ -117,6 +119,17 @@ $(document).ready(function () {
     }
     else if ($('#id_query_type').val() == 'others') {
         $('#workername').hide();
+    }
+
+    })
+
+    $('#id_query_type').change(function () {
+
+    if ($('#id_query_type').val() == 'extentional_reports') {
+        $('#date_discovered').hide();
+    }
+    else if ($('#id_query_type').val() == 'others') {
+        $('#date_discovered').show();
     }
 
     })

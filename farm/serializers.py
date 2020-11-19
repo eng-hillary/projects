@@ -100,7 +100,8 @@ class PostEnterpriseSerializer(serializers.ModelSerializer):
         exclude=[]
 
 class QuerySerializer(serializers.ModelSerializer):
-    farm = FarmSerializer()
+    farm = serializers.SlugRelatedField(many=False,read_only=True, slug_field='farm_name')
+    
     class Meta:
         model = Query
 
@@ -132,17 +133,25 @@ class FarmProduceSerializer(serializers.ModelSerializer):
 # serialiser for the maps 
 class FarmMapSerializer(serializers.ModelSerializer):
     farmer = serializers.SerializerMethodField(method_name='get_user_full_name',source='farmer__user')
+    phone_number =  serializers.SerializerMethodField(method_name='get_user_phone_number',source='farmer__user__profile')
     district = serializers.SerializerMethodField(method_name='get_district',source='farmer')
     region = serializers.SerializerMethodField(method_name='get_region',source='farmer')
     class Meta:
         model = Farm
-        fields = ('id','region','district','farm_name','farmer',  'lat', 'lon','land_occupied')
+        fields = ('id','region','phone_number','district','farm_name','farmer',  'lat', 'lon','land_occupied')
 
 
 
     def get_user_full_name(self, obj):
         try:
             return '{} {}'.format(obj.farmer.user.first_name, obj.farmer.user.last_name)
+        except:
+            return None
+
+    
+    def get_user_phone_number(self, obj):
+        try:
+            return '{}'.format(obj.farmer.user.profile.phone_number)
         except:
             return None
 

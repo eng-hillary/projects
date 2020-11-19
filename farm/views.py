@@ -694,7 +694,7 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
         message = render_to_string('enterprise_email.html', {
             'user': self.request.user,
             'domain': current_site.domain,
-            'message': 'Your '+farmrecord.farm_name + ' Details have been updated sucessfully',
+            'message': 'Your '+farmrecord.enterprise.name + ' Details have been updated sucessfully',
             })
         to_email = self.request.user.email
         email = EmailMessage(
@@ -938,10 +938,10 @@ class EditFarmproductionRecordView(LoginRequiredMixin,UpdateView):
 
 
     def dispatch(self, request, *args, **kwargs):
-        return super(EditFarmProductionRecordView, self).dispatch(request, *args, **kwargs)
+        return super(EditFarmproductionRecordView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(EditFarmProductionRecordView, self).get_form_kwargs()
+        kwargs = super(EditFarmproductionRecordView, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
 
@@ -1145,9 +1145,9 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
                 # serializer.status ='Pending'
                 #serializer.user = self.request.user
                 serializer.save(user = self.request.user)
-            except IntegrityError:
-                return Response({'error':'Enterprise selection account already exists'})
-                
+            except Exception as e:
+                return Response({'error':str(e)})
+                 
             return Response({'status':'successful'})
         return Response(serializer.errors, status=400)
 
