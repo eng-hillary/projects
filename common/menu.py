@@ -249,7 +249,7 @@ menu.PassTestNode(
                              
                               pattern_name='openmarket:service_registration', test=can_register_services),
             menu.PassTestNode(id='services',
-                              label='<i class="fa fa-circle"></i>Services',
+                              label='<i class="fa fa-circle"></i>My Services',
                              
                               pattern_name='openmarket:serviceregistration_list', test=can_view_services),
  
