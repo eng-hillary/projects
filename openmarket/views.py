@@ -554,7 +554,7 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
         # updating profile for only changed fields
         profile.save()
 
-        return redirect('farmer:farmerprofile_list')
+        return redirect('openmarket:serviceprovider_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
@@ -594,7 +594,7 @@ class UpdateServiceView(LoginRequiredMixin,UpdateView):
     model = Service
     template_name = 'register_service.html'
     success_url = reverse_lazy('openmarket:serviceregistration_list')
-    form_class = ServiceProviderProfileForm
+    form_class = ServiceProfileForm
     success_message = "Your Service was Updated successfully"
 
 
