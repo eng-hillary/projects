@@ -128,11 +128,7 @@ def can_view_weather(user, context):
         return True
     return user.has_perm('weather.view_communityweather')
 
-# def can_view_products(user, context):
-#     if user.is_superuser:
-#         return True
-#     return user.has_perm('openmarket. product_list')
-# menu starts from here
+
 menus = [
     menu.Node(id='dashboard',css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>', pattern_name='common:home', link_attrs={'id': 'dashboard'}),
     

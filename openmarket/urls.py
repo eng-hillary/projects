@@ -12,7 +12,7 @@ from .views import (ProductList,
                     BuyerPostList,
                     ContactDetailsList,
                     LogiticsList,
-                    # StorageList,
+                    SellerViewSet,
                     # PackagingList,
                     # MedicalList,
                     SoilScienceList,
@@ -38,9 +38,6 @@ router.register(r'serviceproviders', views.ServiceProviderViewSet)
 router.register(r'serviceregistration', views.ServiceRegistrationViewSet)
 router.register(r'contactdetails', views.ContactDetailsViewSet)
 router.register(r'logistics', views.LogisticsViewSet)
-# router.register(r'storages', views.StorageViewSet)
-# router.register(r'packagings', views.PackagingViewSet)
-# router.register(r'medicals', views.MedicalViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
 
 # Wire up our API using automatic URL routing.
@@ -53,7 +50,16 @@ approve_serviceprovider= ServiceProviderViewSet.as_view({
     'put': 'decline',
     'delete': 'destroy',
     'get':'list'})
-    
+
+approve_seller= SellerViewSet.as_view({
+    'patch': 'approved',
+    'get': 'retrieve',
+    'put': 'decline',
+    'delete': 'destroy',
+    'get':'list',
+    'post':'create'
+
+})
 
 app_name = 'openmarket'
 
@@ -62,6 +68,7 @@ urlpatterns = [
     path('products', ProductList.as_view(), name='product_list'),
     path('create/products', CreateProductProfile.as_view(), name="create_product"),
     path('sellers', SellerList.as_view(), name='seller_list'),
+    path('<int:pk>/approve/seller', approve_seller, name='approve_seller'),
     path('create/profile', CreateSellerProfile.as_view(), name="create_seller"),
     path('buyers', BuyerList.as_view(), name='buyer_list'),
     path('sellerposts', SellerPostList.as_view(), name='sellerpost_list'),

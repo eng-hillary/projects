@@ -17,7 +17,7 @@ class AgentProfile(models.Model):
         ('call centre agent', 'Call Centre Agent'),
         ('notifications and alerts', 'Notifications and Alerts'),
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='agents')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='agent')
     contact = PhoneNumberField(blank=False)
     # agent address
     region = models.ForeignKey(Region, on_delete=models.CASCADE)

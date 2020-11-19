@@ -9,13 +9,13 @@
                 <div class="page-header-left">
                     <h3>Farmer profile List <br>
                       {% if request.user.is_superuser or perms.farmer.add_farmerprofile %}
-                      <span><a class="add-new" href="{% url 'farmer:create_farmer' %}">
+                      <small><a class="add-new" href="{% url 'farmer:create_farmer' %}">
                         {% if request.user.is_superuser %}
                         Add new
                         {% else %}
                         Register
                         {% endif %}
-                      </a></span>
+                      </a></small>
                       {% endif %}
                     </h3>
                 </div>
@@ -67,7 +67,7 @@
   data-minimum-count-columns="2"
   data-show-pagination-switch="true"
   data-pagination="true"
-  data-id-field="id"
+  data-id-field="user_id"
   data-total-field="count"
   data-data-field="results"
   data-toolbar="#toolbar"
