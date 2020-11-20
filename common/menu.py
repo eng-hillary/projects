@@ -12,6 +12,11 @@ def can_view_farmers(user, context):
         return True
     return user.has_perm('farmer.view_farmerprofile')
 
+# function to check whether a user is a unffeagent
+def is_unffeagent(user, context):
+    if user.is_superuser:
+        return True
+    return has_group(user, 'UNFFE Agents') 
 # function to check whether a user has permissions to view farmers groups
 def can_view_farmer_groups(user, context):
     if user.is_superuser:
@@ -206,31 +211,10 @@ menus = [
                              
                               pattern_name='farm:query_list', test=can_view_pest_and_diseases),
 
-
-            # menu.PassTestNode(id='resources',
-            #                   label='<i class="fa fa-circle"></i>Resources',
-                             
-            #                   pattern_name='resourcesharing:resource_list', test=can_view_resources),
- 
-
-         
          
         ]
     ),
-    # menu.PassTestNode(
-    #     id='Service-Provider-section',
-    #     css_class="sidebar-header",
-    #     label='<span class="fas fa-people-carry"></span>  <span>Service Provider</span><i class="fa fa-angle-right fa-pull-right"></i>',
-    #     url='#',
-    #     test=can_view_service_provider,
-    #     children=[
-    #         menu.PassTestNode(id='provider_list',
-    #                           label='<i class="fa fa-circle"></i>My Applications',
-                             
-    #                           pattern_name='openmarket:serviceprovider_list', test=can_view_service_provider),
-           
-    #     ]
-    # ),
+
 
     menu.PassTestNode(
         id='provider-section',
@@ -304,7 +288,7 @@ menu.PassTestNode(
     menu.PassTestNode(
         id='Seller-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Seller</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="users"></i><span>Seller Profile</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_sellers,
         children=[
@@ -345,7 +329,7 @@ menu.PassTestNode(
         css_class="sidebar-header",
         label='<span class="fas fa-headset"></span>  <span>UNFFE Agent</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
-        test=can_view_unffeagents,
+        test=is_unffeagent,
         children=[
             menu.PassTestNode(id='agent_registration',
                               label='<i class="fa fa-circle"></i>Register Agent',

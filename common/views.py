@@ -344,11 +344,13 @@ class ObtainAuthToken(APIView):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         picture = None
-        if user.profile.profile_pic:
-            picture = user.profile.profile_pic.url
-        else:
-            picture = None
-
+        try:
+            if user.profile.profile_pic:
+                picture = user.profile.profile_pic.url
+            else:
+                picture = None
+        except:
+            None
         return Response({'token': token.key,'created': created,'id':user.pk,'username':user.username, 'email':user.email,
             'first_name':user.first_name,'last_name':user.last_name,'profile_pic':picture
             })
