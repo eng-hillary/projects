@@ -327,7 +327,7 @@ menu.PassTestNode(
  menu.PassTestNode(
         id='agent-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-headset"></span>  <span>UNFFE Agent</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-headset"></span>  <span>Call Center</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=is_unffeagent,
         children=[
@@ -335,15 +335,24 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Register Agent',
                              
                               pattern_name='unffeagents:create_agentprofile', test=can_register_agent),
-            menu.PassTestNode(id='seller_list',
-                              label='<i class="fa fa-circle"></i>View Agents',
+            menu.PassTestNode(id='agents_list',
+                              label='<i class="fa fa-circle"></i>View UNFFE Agents',
                              
                               pattern_name='unffeagents:agentprofile_list', test=can_view_unffeagents),
+            menu.PassTestNode(id='calls_list',
+                              label='<i class="fa fa-circle"></i>Calls',
+                             
+                              pattern_name='unffeagents:calls', test=can_view_unffeagents),
+            menu.PassTestNode(id='enquiry_list',
+                              label='<i class="fa fa-circle"></i>Enquiries',
+                             
+                              pattern_name='unffeagents:enquiries', test=can_view_unffeagents),
+           
+         
            
          
         ]
     ),
-    # menu.Node(id='Seller-resource-sharing',css_class="sidebar-header", label='<i data-feather="home"></i><span>Resource Sharing</span>', pattern_name='common:home', link_attrs={'id': 'Seller-resource-sharing'}),
     menu.PassTestNode(
         id='Seller-resource-sharing',
         css_class="sidebar-header",
