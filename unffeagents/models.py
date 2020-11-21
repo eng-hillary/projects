@@ -90,10 +90,28 @@ class Call(TimeStampedModel, models.Model):
 
 # converstion record
 class CallRsponse(TimeStampedModel, models.Model):
+    QUESTION_TYPE=(
+        (None, '--please select--'),
+        ('enterprise','Enterprise Selection'),
+        ('farmer','Farmer Information'),
+        ('farm','Farm Information'),
+        ('service providers','Service Providers'),
+        ('services','Services'),
+        ('open market','Open Market'),
+        ('seller','Seller Information'),
+        ('product','Products'),
+        ('resource sharing','Resource Sharing'),
+        ('alerts','Alerts and Opportunities'),
+        ('weather','Micro Weather Services'),
+        ('agents','UNFFE Agents')
+    )
     agent = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    session_id = models.CharField(max_length=200, null=False, blank=False)
-    duration = models.DurationField(null=False, blank=False)
-    recording = models.FileField(null=False, blank=False)
+    caller_name = models.CharField(_('Caller\'s Name'),max_length=200, null=True,blank=False)
+    caller = PhoneNumberField(_('Phone Number'),blank=False, null=True)
+    type_of_question =  models.CharField(max_length=50, null=True, blank=False, choices=QUESTION_TYPE)
+    question = models.TextField(null=True)
+    solution = models.TextField(null=True)
+    called_from = models.ForeignKey(District, null=True, blank=False, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return str(self.session_id)
+        return str(self.type_of_question)
