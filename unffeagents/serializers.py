@@ -46,6 +46,8 @@ class NoticeSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
     call_date = serializers.DateTimeField()
+    responses = serializers.StringRelatedField(many=False)
+
     class Meta:
         model = Call
         fields = '__all__'

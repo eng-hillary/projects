@@ -483,9 +483,12 @@ class CreateEquiryView(LoginRequiredMixin,CreateView):
 
 
     def form_valid(self, form):
-        notice = form.save(commit=False)
-        notice.posted_by = self.request.user
-        notice.save()
+        call =  Call.objects.get(pk=self.kwargs['session_id'])
+        enquiry = form.save(commit=False)
+        enquiry.agent = self.request.user
+        enquiry.caller = call.phone
+        enquiry.call = call
+        enquiry.save()
         return redirect('unffeagents:enquiries')
 
     def form_invalid(self, form):

@@ -52,16 +52,15 @@ class NoticeForm(forms.ModelForm):
         self.fields['region'].widget = forms.CheckboxSelectMultiple()
        
 class EnquiryForm(forms.ModelForm):
-    caller = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
+    #caller = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
 
      
     class Meta:
         model = CallRsponse
-        exclude = ['agent']
+        exclude = ['agent','call','caller']
 
     def __init__(self, *args, **kwargs):
         super(EnquiryForm, self).__init__(*args, **kwargs)
         self.fields['question'].widget.attrs.update({'rows': '3'})
         self.fields['called_from'].empty_label = None
-        self.fields['caller'].empty_label = None
         self.fields['solution'].widget.attrs.update({'rows': '3'})

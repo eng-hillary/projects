@@ -97,11 +97,12 @@ data-page-list="[10, 25, 50, 100, all]"
    
     return [
     {% if request.user.is_superuser or perms.unffeagents.add_callrsponse %}
+    {% if not row.responses %}
       '<a class="Edit " href="'+url+'" title="Add Call Enquiry">',
       '<i class="fas fa-plus"></i>',
       '</a>  ',
         {% endif %}
-        
+        {% endif %}
     ].join('')
   }
 

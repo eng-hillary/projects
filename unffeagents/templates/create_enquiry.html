@@ -40,14 +40,11 @@
                                 {% csrf_token %}
                                 <div class="row">
                                     
-                                    <div class=" col-md-6">
+                                    <div class=" col-md-12">
                                         {{ form.caller_name|as_crispy_field }}
                                     </div>
                                
-                                    <div class=" col-md-6">
-                                        {{ form.caller|as_crispy_field }}
-                                    </div>
-                               
+                                
                                     
                                     <div class="col-md-6">
                                         {{ form.called_from|as_crispy_field }}

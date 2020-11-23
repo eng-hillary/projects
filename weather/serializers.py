@@ -25,7 +25,8 @@ class CommunityWeatherSerializer(serializers.ModelSerializer):
 
 class PostWeatherSerializer(serializers.ModelSerializer):
 
+
     class Meta:
         model = CommunityWeather 
-        fields = ['weather','description','lon','lat']
+        fields = ['weather','description','location']
     
