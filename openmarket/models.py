@@ -96,6 +96,15 @@ class BuyerPost(models.Model):
     class meta:
         ordering =("name",)
 
+
+
+class Category(TimeStampedModel, models.Model):
+    name = models.CharField(max_length=255)
+   
+    def __str__(self):
+        return self.name
+
+
 class ServiceProvider(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='serviceprovider',primary_key=True)
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=14, null=True, blank=False)
@@ -104,7 +113,8 @@ class ServiceProvider(models.Model):
     is_the_service_available = models.BooleanField(choices=YES_OR_NO, null=True)
     service_location = models.CharField(max_length=100, null=True)
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
-    category = models.CharField(_('Service Categories'),choices=SERVICE_CATEGORY,null=True,max_length=50)
+   # category = models.ManyToManyField(to='openmarket.Category', related_name='enterprise categories', choices=)
+    category = models.ManyToManyField(Category, related_name='Categories')
     status = models.CharField(choices=STATUS, default='Pending', max_length=20,null=False)
     # handle approving of a farmer
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="unffe_agent_service_provider",null=True,blank=True)
@@ -118,7 +128,8 @@ class ServiceProvider(models.Model):
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
-    category = models.CharField(choices=SERVICE_CATEGORY,null=True, max_length=50)
+   
+    category = models.CharField(choices=SERVICE_CATEGORY,null=True, max_length=50,default=True)
     service_name = models.CharField(max_length=200, null=True)
     service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True,blank=True)

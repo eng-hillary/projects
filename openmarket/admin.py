@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Seller, Product, ServiceProvider,Service
+from .models import Seller, Product, ServiceProvider,Service,Category
 from common.models import Region, District
 from django import forms
 #from .forms import ServiceProviderProfileForm
@@ -53,3 +53,9 @@ class ServiceAdmin(admin.ModelAdmin):
 ]
 admin.site.register(Service,  ServiceAdmin)
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = [
+       'name'
+       
+]
+admin.site.register(Category, CategoryAdmin)

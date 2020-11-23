@@ -169,7 +169,7 @@
                                         </div>
 
                                         <div style="height:800px;" class="tab-pane fade" id="service_container" role="tabpanel" aria-labelledby="service_container-tabs">
-                                            <div id="service_container" style="height:800px;"></div>
+                                            <div id="home" style="height:800px;"></div>
                                         </div>
 
                                     </div>
@@ -191,7 +191,7 @@
       type: 'column'
   },
   title: {
-      text: 'Farmers and their sources of credit '
+      text: 'Farmers credit Access '
   },
   xAxis: {
       categories: [
@@ -199,27 +199,27 @@
       ]
   },
   series: [{
-      name: 'bank',
+      name: 'BANK',
       data: [
         {% for entry in dataset %}{{ entry.bank_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
       ],
       color: 'green'
   }, {
-      name: 'Saccos',
+      name: 'SACCOS',
       data: [
         {% for entry in dataset %}{{ entry.sacco_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
       ],
       color: 'blue'
   },
   {
-      name: 'Vsla',
+      name: 'VSLA',
       data: [
         {% for entry in dataset %}{{ entry.vsla_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
       ],
       color: 'red'
   },
   {
-      name: 'Farmer groups',
+      name: 'FARMER GROUPS',
       data: [
         {% for entry in dataset %}{{ entry.farmergroups_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
       ],

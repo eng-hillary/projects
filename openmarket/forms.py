@@ -5,8 +5,9 @@ from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
+
 class ServiceProviderProfileForm(forms.ModelForm):
-    category = forms.MultipleChoiceField(choices = SERVICE_CATEGORY)
+   
     
     class Meta:
         model = ServiceProvider
@@ -102,6 +103,7 @@ class ProductProfileForm(forms.ModelForm):
 class ServiceProfileForm(forms.ModelForm):
     availability_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     #service_name = forms.CharField(label="Service Name")
+    
     class Meta:
         model = Service
         exclude = ['date_created', 'date_updated','user']
