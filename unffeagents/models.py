@@ -105,6 +105,7 @@ class CallRsponse(TimeStampedModel, models.Model):
         ('weather','Micro Weather Services'),
         ('agents','UNFFE Agents')
     )
+    call = models.OneToOneField(Call, on_delete=models.CASCADE, related_name='responses', null=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     caller_name = models.CharField(_('Caller\'s Name'),max_length=200, null=True,blank=False)
     caller = PhoneNumberField(_('Phone Number'),blank=False, null=True)
