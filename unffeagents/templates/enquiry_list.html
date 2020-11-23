@@ -8,9 +8,7 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     <h3>Enquiry List
-                      {% if request.user.is_superuser or perms.unffeagents.add_callrsponse %}
-                        <small><a class="add-new" href="{% url 'unffeagents:create_enquiry' %}">Add new</a></small>
-                        {% endif %}
+                     
                     </h3>
                 </div>
             </div>
@@ -30,7 +28,7 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
-  {% if request.user.is_superuser or perms.unffeagents.delete_farm %}
+  {% if request.user.is_superuser or perms.unffeagents.delete_callrsponse %}
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
@@ -63,19 +61,17 @@
   data-response-handler="responseHandler">
   <thead>
     <tr>
-      {% if request.user.is_superuser or perms.unffeagents.delete_farm %}
+      {% if request.user.is_superuser or perms.unffeagents.delete_callrsponse %}
       <th data-field="state" data-checkbox="true"></th>
       {% endif %}
-      <th data-field="farm_name" data-sortable="true">Name</th>
-      <th data-field="farmer" data-sortable="true">Farmer</th>
-      <th data-field="location" data-sortable="true">Location</th>
-      <th data-field="land_occupied" data-sortable="true">Land Size(acres)</th>
-      <th data-field="available_land"  data-sortable="true">Available Land(acres)</th>
-      <th data-field="start_date"  data-visible="false" data-sortable="true">Start Date</th>
-      <th data-field="status" data-sortable="true">Status</th>
-      <th data-field="availability_of_services" data-visible="false" data-sortable="true">Services Available</th>
-      <th data-field="availability_of_water" data-visible="false" data-sortable="true">Water Available</th>
-      <th data-field="image" data-visible="false"  data-formatter="imageFormatter" data-sortable="true">Picture</th>
+      <th data-field="caller_name" data-sortable="true">Caller's Name</th>
+      <th data-field="caller" data-sortable="true">Phone Number</th>
+      <th data-field="called_from" data-sortable="true">Called From</th>
+      <th data-field="type_of_question" data-sortable="true">Asked Aboout</th>
+      <th data-field="agent"  data-sortable="true">Worked On By</th>
+      <th data-field="question" data-sortable="true">Question Asked</th>
+      <th data-field="solution" data-sortable="true" data-visible="false">Solution Given</th>
+     
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
     </tr>
@@ -100,26 +96,18 @@
     })
     return res
   }
-  //displays an image
-    function imageFormatter(value, row) {
-      var url =row.image;
-    return '<img class="img-thumbnail" src="'+url+'">'
-  }
+
   function operateFormatter(value, row, index) {
     console.log(row.id);
-    var url ="/farm/"+row.id+"/edit/farm";
-    var create_enterprise_url ="/farm/create/enterprise/"+row.id;
+    var url ="/unffeagents/"+row.id+"/edit/enquiry";
+   
     return [
-    {% if request.user.is_superuser or perms.farm.change_farm %}
+    {% if request.user.is_superuser or perms.unffeagents.change_callrsponse %}
       '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+      '<i class="fas fa-edit"></i>',
       '</a>  ',
         {% endif %}
-        {% if request.user.is_superuser or perms.farm.add_enterprise %}
-      '<a class="Edit " href="'+create_enterprise_url+'" title="Add Enterprise">',
-      '<i class="fa fa-plus"></i>',
-      '</a>  ',
-        {% endif %}
+      
     ].join('')
   }
 
@@ -172,7 +160,7 @@ for(id=0; id<ids.length; id++){
     console.log(ids[id]);
 
 $.ajax({
-    url: "/farm/api/farms/"+ids[id],
+    url: "/unffeagents/api/response/"+ids[id],
     data: {},
     headers:{"X-CSRFToken": getCookie("csrftoken")},
     type: 'DELETE',

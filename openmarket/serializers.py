@@ -110,7 +110,7 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(method_name='get_user_full_name')
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
-
+    category = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
     location = serializers.CharField(source='compute_location')
 
 

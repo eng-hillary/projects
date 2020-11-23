@@ -239,7 +239,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
-    queryset = CallRsponse.objects.all()
+    queryset = CallRsponse.objects.order_by('-id')
     serializer_class = ResponseSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = ['type_of_question','question','solution','called_from__name','caller','agent__first_name','agent__last_name']
