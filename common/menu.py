@@ -133,6 +133,16 @@ def can_view_weather(user, context):
         return True
     return user.has_perm('weather.view_communityweather')
 
+def can_view_enterprise_selection(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_enterpriseselection')
+
+def can_add_enterprise_selection(user, context):
+    if user.is_superuser:
+        return True
+
+    return user.has_perm('farm.add_enterpriseselection')
 
 menus = [
     menu.Node(id='dashboard',css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>', pattern_name='common:home', link_attrs={'id': 'dashboard'}),
