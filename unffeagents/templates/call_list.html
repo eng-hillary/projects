@@ -42,7 +42,7 @@ data-click-to-select="true"
 data-minimum-count-columns="2"
 data-show-pagination-switch="true"
 data-pagination="true"
-data-id-field="id"
+data-id-field="session_id"
 data-toolbar="#toolbar"
 data-side-pagination="server"
 data-server-sort="false"
@@ -55,14 +55,15 @@ data-page-list="[10, 25, 50, 100, all]"
   data-response-handler="responseHandler">
   <thead>
     <tr>
-      <th data-field="session_id" data-sortable="true">Session ID</th>
+      <th data-field="session_id" data-visible="false" data-sortable="true">Session ID</th>
       <th data-field="phone" data-sortable="true">Caller </th>
       <th data-field="call_date" data-sortable="true">Call Date</th>
       <th data-field="call_type" data-visible="false"  data-sortable="true">Call Type</th>
       <th data-field="active" data-visible="false"  data-sortable="true">Status</th>
       <th data-field="call_duration"  data-sortable="true">Duration</th>
       <th data-field="agent_phone" data-sortable="true">Agent</th>
-      <th data-field="recording_url" data-formatter="audioFormatter" data-sortable="true">Recording</th>         
+      <th data-field="recording_url" data-formatter="audioFormatter" data-sortable="true">Recording</th>  
+      <th data-formatter="operateFormatter"  class="text-center">Action</th>       
     </tr>
   </thead>
 </table>
@@ -81,7 +82,7 @@ data-page-list="[10, 25, 50, 100, all]"
   }
   function responseHandler(res) {
     $.each(res.rows, function (i, row) {
-      row.state = $.inArray(row.id, selections) !== -1
+      row.state = $.inArray(row.session_id, selections) !== -1
     })
     return res
   }
@@ -92,10 +93,14 @@ data-page-list="[10, 25, 50, 100, all]"
   }
   function operateFormatter(value, row, index) {
     console.log(row.id);
-    var url ="/unffeagents/"+row.id+"/edit/alert&notification";
+    var url ="/unffeagents/create/enquiry/"+row.session_id;
    
     return [
-   
+    {% if request.user.is_superuser or perms.unffeagents.add_callrsponse %}
+      '<a class="Edit " href="'+url+'" title="Add Call Enquiry">',
+      '<i class="fas fa-plus"></i>',
+      '</a>  ',
+        {% endif %}
         
     ].join('')
   }

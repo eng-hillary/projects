@@ -52,6 +52,16 @@ class CallSerializer(serializers.ModelSerializer):
 
 
 class ResponseSerializer(serializers.ModelSerializer):
+    called_from = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    type_of_question = serializers.CharField(source='get_type_of_question_display')
+    agent = serializers.SerializerMethodField(method_name='get_agent_name',source='agent')
     class Meta:
         model = CallRsponse
         fields = '__all__'
+    
+
+    def get_agent_name(self, obj):
+        try:
+            return '{} {}'.format(obj.agent.first_name, obj.agent.last_name)
+        except:
+            return None

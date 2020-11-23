@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('agentprofile', AgentProfileList.as_view(), name='agentprofile_list'),
     path('create/agentprofile', CreateAgentProfile.as_view(), name="create_agentprofile"),
-    path('create/enquiry', CreateEquiryView.as_view(), name="create_enquiry"),
+    path('create/enquiry/<int:session_id>', CreateEquiryView.as_view(), name="create_enquiry"),
     path('<int:pk>/edit/agentprofile', EditAgentProfileView.as_view(), name="edit_agent_profile"),
     path('<int:pk>/edit/enquiry', EditEquiryView.as_view(), name="edit_equiry"),
     path('market', MarketList.as_view(), name='market_list'),
