@@ -422,12 +422,17 @@ class UserViewSet(viewsets.ModelViewSet):
         return UserSerializer
 
     def get_queryset(self):
-        users = User.objects.all()
+        users = User.objects.order_by('-id')
         user = self.request.user
+        phone = self.request.query_params.get('phone_number', None)
+        if phone is not None:
+            queryset = queryset.filter(phone_number=phone)
         if self.request.user.is_superuser or self.request.user.groups.filter(name='Admin').exists():
             queryset = users
         else:
             queryset = User.objects.filter(id=user.id)
+        
+
         
         return queryset
 

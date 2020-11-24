@@ -3,7 +3,7 @@ from rest_framework import routers
 from . import views
 from .views import (AgentProfileList, MarketList, MarketPriceList, 
 NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView,
-CallList,EquiryList,CreateEquiryView,EditEquiryView)
+CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList)
 
 
 router = routers.DefaultRouter()
@@ -33,5 +33,6 @@ urlpatterns = [
     path('enquiries',EquiryList.as_view(), name='enquiries'),
     path('create/alert&notification', CreateNoticeView.as_view(), name='add_notice'),
     path('<int:pk>/edit/alert&notification', EditNoticeView.as_view(), name="edit_notice"),
+    path('users', UsersList.as_view(), name="users_list"),
 
 ]
