@@ -17,6 +17,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     first_name = serializers.CharField(max_length=100)
     last_name = serializers.CharField(max_length=100)
     user_permissions = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')

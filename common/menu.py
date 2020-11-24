@@ -12,6 +12,11 @@ def can_view_farmers(user, context):
         return True
     return user.has_perm('farmer.view_farmerprofile')
 
+def can_view_users(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('auth.view_user')
+
 # function to check whether a user is a unffeagent
 def is_unffeagent(user, context):
     if user.is_superuser:
@@ -357,6 +362,10 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Enquiries',
                              
                               pattern_name='unffeagents:enquiries', test=can_view_unffeagents),
+            menu.PassTestNode(id='user_list',
+                              label='<i class="fa fa-circle"></i>System User',
+                             
+                              pattern_name='unffeagents:users_list', test=can_view_users),
            
          
            
