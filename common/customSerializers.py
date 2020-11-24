@@ -1,5 +1,6 @@
 from rest_framework_gis.serializers import GeometryField
-
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 
 class GeometryPointFieldSerializerFields(GeometryField):
 

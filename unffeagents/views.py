@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from rest_framework.views import APIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.permissions import IsAuthenticated
-from .forms import (AgentProfileForm, NoticeForm)
+from .forms import (AgentProfileForm, NoticeForm,EnquiryForm)
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
@@ -210,21 +210,39 @@ class CallerViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
-    queryset = Call.objects.all()
+    queryset = Call.objects.order_by('-session_id')
     serializer_class = CallSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = '__all__'
     ordering_fields = '__all__'
 
 
+class CallList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'call_list.html'
+
+    def get(self, request):
+      
+        return Response()
+
+
+class EquiryList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'enquiry_list.html'
+
+    def get(self, request):
+      
+        return Response()
+
+
 class ResponseViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
-    queryset = CallRsponse.objects.all()
+    queryset = CallRsponse.objects.order_by('-id')
     serializer_class = ResponseSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['session_id','duration','recording','agent__user__first_name','agent__user__last_name']
+    search_fields = ['type_of_question','question','solution','called_from__name','caller','agent__first_name','agent__last_name']
     ordering_fields = '__all__'
 
 # create notification
@@ -431,6 +449,84 @@ class EditNoticeView(LoginRequiredMixin,UpdateView):
                             print('unable to  send messages')
                             
         return redirect('unffeagents:notice_list')
+
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+# create inquiry view
+class CreateEquiryView(LoginRequiredMixin,CreateView):
+    template_name = 'create_enquiry.html'
+    success_url = reverse_lazy('unffeagents:enquiries')
+    form_class = EnquiryForm
+    success_message = "Notice has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateEquiryView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateEquiryView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        call =  Call.objects.get(pk=self.kwargs['session_id'])
+        enquiry = form.save(commit=False)
+        enquiry.agent = self.request.user
+        enquiry.caller = call.phone
+        enquiry.call = call
+        enquiry.save()
+        return redirect('unffeagents:enquiries')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+class EditEquiryView(LoginRequiredMixin,UpdateView):
+    model =CallRsponse
+    template_name = 'create_enquiry.html'
+    success_url = reverse_lazy('unffeagents:enquiries')
+    form_class = EnquiryForm
+    success_message = "Equiry has been updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditEquiryView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditEquiryView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        notice = form.save(commit=False)
+        notice.save()                  
+        return redirect('unffeagents:enquiries')
 
 
     def form_invalid(self, form):

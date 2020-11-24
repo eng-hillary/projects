@@ -1,5 +1,5 @@
 from django import forms
-from .models import AgentProfile, Notice
+from .models import AgentProfile, Notice,CallRsponse
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from common .models import (Region,District)
@@ -51,3 +51,16 @@ class NoticeForm(forms.ModelForm):
         self.fields['sector'].widget = forms.CheckboxSelectMultiple()
         self.fields['region'].widget = forms.CheckboxSelectMultiple()
        
+class EnquiryForm(forms.ModelForm):
+    #caller = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
+
+     
+    class Meta:
+        model = CallRsponse
+        exclude = ['agent','call','caller']
+
+    def __init__(self, *args, **kwargs):
+        super(EnquiryForm, self).__init__(*args, **kwargs)
+        self.fields['question'].widget.attrs.update({'rows': '3'})
+        self.fields['called_from'].empty_label = None
+        self.fields['solution'].widget.attrs.update({'rows': '3'})
