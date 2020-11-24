@@ -67,7 +67,7 @@ def can_view_pest_and_diseases(user, context):
 def can_view_queries(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('farm.view_pest_and_diseases')
+    return user.has_perm('farm.view_query')
 
 def can_add_resources(user, context):
     if user.is_superuser:
@@ -229,7 +229,7 @@ menus = [
             menu.PassTestNode(id='pests_and_diseases',
                               label='<i class="fa fa-circle"></i>Queries',
                              
-                              pattern_name='farm:query_list', test=can_view_pest_and_diseases),
+                              pattern_name='farm:query_list', test=can_view_queries),
 
          
         ]

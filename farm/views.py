@@ -106,9 +106,10 @@ class QueryViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = queries
         else:
-            farm = farm.objects.get(user=user)
-            queryset = queries.filter(farm=farm)
-        
+            farmer = FarmerProfile.objects.get(user=user)
+            farms = Farm.objects.filter(farmer =farmer)
+            queryset = queries.filter(farm__in=farms)
+           
         return queryset
 
     def create(self, request, format=None):
