@@ -103,11 +103,14 @@ def can_add_seller(user, context):
     if user.is_superuser:
         return True
     return user.has_perm('openmarket.add_seller')
+    
+        
+
 
 def can_view_sellers(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('openmarket.view_seller') and not user.farmer
+    return user.has_perm('openmarket.view_seller') and not has_group(user,"Farmers")
     
 def can_view_products(user, context):
      if user.is_superuser:
