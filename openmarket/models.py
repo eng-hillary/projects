@@ -99,7 +99,7 @@ class BuyerPost(models.Model):
 
 
 class Category(TimeStampedModel, models.Model):
-    name = models.CharField(max_length=255)
+    cat_name = models.CharField(max_length=255)
    
     def __str__(self):
         return self.name
@@ -131,7 +131,7 @@ class Service(models.Model):
    
     category = models.CharField(choices=SERVICE_CATEGORY,null=True, max_length=50,default=True)
     service_name = models.CharField(max_length=200, null=True)
-    service_type = models.CharField(max_length=50, null=True)
+    #service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True,blank=True)
     terms_and_conditions = models.BooleanField(default=True)
     availability_date = models.DateField(blank=True, null=True)

@@ -55,7 +55,7 @@ admin.site.register(Service,  ServiceAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = [
-       'name'
+       'cat_name'
        
 ]
 admin.site.register(Category, CategoryAdmin)
