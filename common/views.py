@@ -457,7 +457,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 subject, message, to=[to_email]
                 )
             email.send()
-            response = {'message':'account created successfully'}
+            response = {'status':'account created successfully'}
             return Response(response, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

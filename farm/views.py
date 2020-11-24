@@ -91,7 +91,7 @@ class QueryList(LoginRequiredMixin, APIView):
 # farm api for queries
 class QueryViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows farms to be viewed or edited.
+    API endpoint that allows farmer queries to be viewed or edited.
     """
     queryset = Query.objects.all()
     serializer_class = QuerySerializer
@@ -101,7 +101,7 @@ class QueryViewSet(viewsets.ModelViewSet):
         for the currently authenticated user.
         """
         user = self.request.user
-        queries = Query.objects.all().order_by('farm')
+        queries = Query.objects.order_by('farm')
         
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = queries
