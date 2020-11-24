@@ -21,7 +21,8 @@ from django.shortcuts import redirect
 #views for products
 class CommunityWeatherViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    API endpoint to show weather on the dashboard, you pass in lon->longitude and lat->latitude.
+    in the request e.g "/weather/api/community_weather/?lon=1.2345533&lat=32.5376262;
     """
     serializer_class = CommunityWeatherSerializer
     permission_classes = [permissions.IsAuthenticated]
