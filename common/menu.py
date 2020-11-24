@@ -64,6 +64,11 @@ def can_view_pest_and_diseases(user, context):
         return True
     return user.has_perm('farm.view_pest_and_diseases')
 
+def can_view_queries(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_pest_and_diseases')
+
 def can_add_resources(user, context):
     if user.is_superuser:
         return user.has_perm('resourcesharing.add_resource')
