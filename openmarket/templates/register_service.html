@@ -17,7 +17,7 @@
             <div class="col-lg-6">
                 <ol class="breadcrumb pull-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Service Providers </li>
+                    <li class="breadcrumb-item">Service  </li>
                     <li class="breadcrumb-item active">Add a Service </li>
                 </ol>
             </div>
@@ -46,7 +46,7 @@
                         <div class="tab-pane fade active show" id="personalinfo" role="tabpanel"
                             aria-labelledby="personalinfo-tab">
                             <div class="row">
-                               
+
 
                                 <div class="col-xl-6 col-md-6">
                                     {{ form.service_name|as_crispy_field }}
@@ -56,16 +56,14 @@
                                     {{ form.category|as_crispy_field }}
                                 </div>
                                 <div id="storage-div" class="col-md-12">
-                                
-                                
+
+
                                     <div class="col-xl-12 col-md-6">
                                         {{ form.name_of_storage_center|as_crispy_field }}
                                     </div>
-                                
-                                    <div class="col-xl-12 col-md-6">
-                                        {{ form.location_of_storage_center|as_crispy_field }}
-                                    </div>
-                                
+
+
+
                                     <div class="col-md-12" id="id_available_services_div">
                                         {{ form.available_services|as_crispy_field }}
                                     </div>
@@ -77,7 +75,7 @@
                                     <div class="col-xl-12">
                                         {{ form.driver_contact|as_crispy_field }}
                                     </div>
-                                    
+
                                     <div class="col-xl-12">
                                         {{ form.vehicle_type|as_crispy_field }}
                                     </div>
@@ -96,39 +94,35 @@
                                         {{ form.others|as_crispy_field }}
                                     </div>
                                 </div>
-                                
+
                                 <!-- <div class="col-xl-6 col-md-6">
                                     {{ form.certification_status|as_crispy_field }}
                                 </div> -->
-                               <legend>Current Location of the service</legend> 
+                                <legend>Current Location of the service</legend>
                                 <div class="col-xl-12 ">
                                     {{ form.lon|as_crispy_field }}
                                 </div>
                                 <div class="col-xl-12 ">
                                     {{ form.lat|as_crispy_field }}
                                 </div>
-                               
-                               
-                              
-                                
+
+
+
+
                                 <!--Value adittion div-->
                                 <div id="value-addition">
-                               
-                            </div>
+
+                                </div>
                                 <div id="value-addition-id" class="col-md-12">
-                                   
+
                                 </div>
-                                
-                               
-                                <div class="col-xl-6 col-md-6">
-                                    {{ form.service_type|as_crispy_field }}
-                                </div>
+
                                 <div id="size">
-                                <div class="col-xl-12">
-                                    {{ form.size|as_crispy_field }}
+                                    <div class="col-xl-12">
+                                        {{ form.size|as_crispy_field }}
+                                    </div>
+
                                 </div>
-                                
-                            </div>
                                 <div class="col-xl-6 col-md-6">
                                     {{ form.availability_date|as_crispy_field }}
                                 </div>
@@ -138,17 +132,11 @@
                                 <div class="col-xl-6 col-md-6">
                                     {{ form.terms_and_conditions|as_crispy_field }}
                                 </div>
-                              
-
-
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right">
-
+                    <div style="float:right;">
                         <input type="submit" value="Submit" class="btn btn-primary">
-
-
                     </div>
                 </form>
             </div>
@@ -169,8 +157,8 @@
     $(document).ready(function () {
         //$("#id_group").select2();
         //$("#id_call").attr('readonly', true);
-        // $("#Father_parent_death").hide();
-        // $("#Mother_parent_death").hide();
+        //$("#Father_parent_death").hide();
+        //$("#Mother_parent_death").hide();
       
         $('#id_available_services').hide();
         $('#id_location_of_storage_center').hide();

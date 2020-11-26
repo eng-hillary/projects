@@ -7,18 +7,16 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Agents List
-                      {% if request.user.is_superuser or perms.unffeagents.add_agentprofile %}
-                        <small><a class="add-new" href="{% url 'unffeagents:create_agentprofile' %}">Add new</a></small>
-                        {% endif %}
+                    <h3>Enquiry List
+                     
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
                 <ol class="breadcrumb float-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">UNFFE</li>
-                    <li class="breadcrumb-item active">Agents List</li>
+                    <li class="breadcrumb-item">Call Center</li>
+                    <li class="breadcrumb-item active">Equiry List</li>
                 </ol>
             </div>
         </div>
@@ -30,7 +28,7 @@
 
 <!-- bootstrap table begin here -->
 <div id="toolbar">
-  {% if request.user.is_superuser or perms.unffeagents.delete_agentprofile %}
+  {% if request.user.is_superuser or perms.unffeagents.delete_callrsponse %}
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
@@ -59,19 +57,21 @@
   data-server-sort="false"
   data-page-list="[10, 25, 50, 100, all]"
   data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’,'json']"
-  data-url="/unffeagents/api/agentprofile/"
+  data-url="/unffeagents/api/response/"
   data-response-handler="responseHandler">
   <thead>
     <tr>
-      {% if request.user.is_superuser or perms.unffeagents.delete_agentprofile %}
+      {% if request.user.is_superuser or perms.unffeagents.delete_callrsponse %}
       <th data-field="state" data-checkbox="true"></th>
       {% endif %}
-      <th data-field="user_names" data-sortable="true"> Names</th>
-      <th data-field="contact" data-sortable="true"> Contact</th>
-      <th data-field="region" data-sortable="true">Region</th>
-      <th data-field="district" data-sortable="true">District</th>
-      <th data-field="region" data-sortable="true">Region</th>
-      <th data-field="specific_role" data-sortable="true">Role</th>
+      <th data-field="caller_name" data-sortable="true">Caller's Name</th>
+      <th data-field="caller" data-sortable="true">Phone Number</th>
+      <th data-field="called_from" data-sortable="true">Called From</th>
+      <th data-field="type_of_question" data-sortable="true">Asked Aboout</th>
+      <th data-field="agent"  data-sortable="true">Worked On By</th>
+      <th data-field="question" data-sortable="true">Question Asked</th>
+      <th data-field="solution" data-sortable="true" data-visible="false">Solution Given</th>
+     
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
     </tr>
@@ -96,22 +96,18 @@
     })
     return res
   }
-  //displays an image
-    function imageFormatter(value, row) {
-      var url =row.image;
-    return '<img class="img-thumbnail" src="'+url+'">'
-  }
+
   function operateFormatter(value, row, index) {
     console.log(row.id);
-    var url ="/unffeagents/"+row.id+"/edit/agentprofile";
-
+    var url ="/unffeagents/"+row.id+"/edit/enquiry";
+   
     return [
-    {% if request.user.is_superuser or perms.unffeagents.change_agentprofile %}
+    {% if request.user.is_superuser or perms.unffeagents.change_callrsponse %}
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fas fa-edit"></i>',
       '</a>  ',
         {% endif %}
-       
+      
     ].join('')
   }
 
@@ -164,7 +160,7 @@ for(id=0; id<ids.length; id++){
     console.log(ids[id]);
 
 $.ajax({
-    url: "/unffeagents/api/agentprofile/"+ids[id],
+    url: "/unffeagents/api/response/"+ids[id],
     data: {},
     headers:{"X-CSRFToken": getCookie("csrftoken")},
     type: 'DELETE',

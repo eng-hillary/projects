@@ -12,6 +12,16 @@ def can_view_farmers(user, context):
         return True
     return user.has_perm('farmer.view_farmerprofile')
 
+def can_view_users(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('auth.view_user')
+
+# function to check whether a user is a unffeagent
+def is_unffeagent(user, context):
+    if user.is_superuser:
+        return True
+    return has_group(user, 'UNFFE Agents') 
 # function to check whether a user has permissions to view farmers groups
 def can_view_farmer_groups(user, context):
     if user.is_superuser:
@@ -54,6 +64,11 @@ def can_view_pest_and_diseases(user, context):
         return True
     return user.has_perm('farm.view_pest_and_diseases')
 
+def can_view_queries(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_query')
+
 def can_add_resources(user, context):
     if user.is_superuser:
         return user.has_perm('resourcesharing.add_resource')
@@ -88,11 +103,14 @@ def can_add_seller(user, context):
     if user.is_superuser:
         return True
     return user.has_perm('openmarket.add_seller')
+    
+        
+
 
 def can_view_sellers(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('openmarket.view_seller')
+    return user.has_perm('openmarket.view_seller') and not has_group(user,"Farmers")
     
 def can_view_products(user, context):
      if user.is_superuser:
@@ -128,11 +146,17 @@ def can_view_weather(user, context):
         return True
     return user.has_perm('weather.view_communityweather')
 
-# def can_view_products(user, context):
-#     if user.is_superuser:
-#         return True
-#     return user.has_perm('openmarket. product_list')
-# menu starts from here
+def can_view_enterprise_selection(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_enterpriseselection')
+
+def can_add_enterprise_selection(user, context):
+    if user.is_superuser:
+        return True
+
+    return user.has_perm('farm.add_enterpriseselection')
+
 menus = [
     menu.Node(id='dashboard',css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>', pattern_name='common:home', link_attrs={'id': 'dashboard'}),
     
@@ -160,7 +184,7 @@ menus = [
         test=can_view_farmers,
         children=[
             menu.PassTestNode(id='farmers',
-                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Applications{% endif %}',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Application{% endif %}',
                              
                               pattern_name='farmer:farmerprofile_list', test=can_view_farmers),
             menu.PassTestNode(id='farmer_groups',
@@ -208,44 +232,39 @@ menus = [
             menu.PassTestNode(id='pests_and_diseases',
                               label='<i class="fa fa-circle"></i>Queries',
                              
-                              pattern_name='farm:query_list', test=can_view_pest_and_diseases),
+                              pattern_name='farm:query_list', test=can_view_queries),
 
-
-            # menu.PassTestNode(id='resources',
-            #                   label='<i class="fa fa-circle"></i>Resources',
-                             
-            #                   pattern_name='resourcesharing:resource_list', test=can_view_resources),
- 
-
-         
          
         ]
     ),
+
+
     menu.PassTestNode(
-        id='Service-Provider-section',
+        id='provider-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-people-carry"></span>  <span>Service Provider</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-people-carry"></span>  <span>Service Providers</span><i class="fas fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
-            menu.PassTestNode(id='provider_list',
-                              label='<i class="fa fa-circle"></i>My Applications',
+            menu.PassTestNode(id='provider-children',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Applications{% endif %}',
                              
                               pattern_name='openmarket:serviceprovider_list', test=can_view_service_provider),
-           
+            
+         
         ]
     ),
 
 menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="truck"></i><span>MA Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="truck"></i><span>Manage Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
             
             menu.PassTestNode(id='register_service',
-                              label='<i class="fa fa-circle"></i>Register Service',
+                              label='<i class="fa fa-circle"></i>Register',
                              
                               pattern_name='openmarket:service_registration', test=can_register_services),
             menu.PassTestNode(id='services',
@@ -292,14 +311,14 @@ menu.PassTestNode(
     menu.PassTestNode(
         id='Seller-section',
         css_class="sidebar-header",
-        label='<i data-feather="users"></i><span>Seller</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="users"></i><span>Seller Profile</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_sellers,
         children=[
             menu.PassTestNode(id='seller_registration',
-                              label='<i class="fa fa-circle"></i>Registration',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage Applications {% else %}My Application{% endif %}',
                              
-                              pattern_name='openmarket:create_seller', test=can_add_seller),
+                              pattern_name='openmarket:seller_list', test=can_add_seller),
             # menu.PassTestNode(id='seller_list',
             #                   label='<i class="fa fa-circle"></i>Applications',
                              
@@ -331,23 +350,36 @@ menu.PassTestNode(
  menu.PassTestNode(
         id='agent-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-headset"></span>  <span>UNFFE Agent</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-headset"></span>  <span>Call Center</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
-        test=can_view_unffeagents,
+        test=is_unffeagent,
         children=[
             menu.PassTestNode(id='agent_registration',
                               label='<i class="fa fa-circle"></i>Register Agent',
                              
                               pattern_name='unffeagents:create_agentprofile', test=can_register_agent),
-            menu.PassTestNode(id='seller_list',
-                              label='<i class="fa fa-circle"></i>Agents',
+            menu.PassTestNode(id='agents_list',
+                              label='<i class="fa fa-circle"></i>View UNFFE Agents',
                              
                               pattern_name='unffeagents:agentprofile_list', test=can_view_unffeagents),
+            menu.PassTestNode(id='calls_list',
+                              label='<i class="fa fa-circle"></i>Calls',
+                             
+                              pattern_name='unffeagents:calls', test=can_view_unffeagents),
+            menu.PassTestNode(id='enquiry_list',
+                              label='<i class="fa fa-circle"></i>Enquiries',
+                             
+                              pattern_name='unffeagents:enquiries', test=can_view_unffeagents),
+            menu.PassTestNode(id='user_list',
+                              label='<i class="fa fa-circle"></i>System User',
+                             
+                              pattern_name='unffeagents:users_list', test=can_view_users),
+           
+         
            
          
         ]
     ),
-    # menu.Node(id='Seller-resource-sharing',css_class="sidebar-header", label='<i data-feather="home"></i><span>Resource Sharing</span>', pattern_name='common:home', link_attrs={'id': 'Seller-resource-sharing'}),
     menu.PassTestNode(
         id='Seller-resource-sharing',
         css_class="sidebar-header",

@@ -32,12 +32,7 @@
   <button id="remove" class="btn btn-danger" title="Delete" disabled>
     <i class="fa fa-trash"></i> 
   </button>
-  <button id="decline" class="btn btn-decline" title="Decline" disabled>
-    <i class="fa fa-times"></i>
-  </button>
-  <button id="approve" class="btn btn-primary" title="Approve" disabled>
-    <i class="fa fa-check"></i>
-  </button>
+ 
 </div>
 <table
   id="table"
@@ -62,15 +57,12 @@
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="full_name" data-sortable="true">Service Provider</th>
       <th data-field="service_name" data-visible="false"  data-sortable="true">Service Name</th>
-      <th data-field="lon" data-visible="true"  data-sortable="true">Longitude</th>
-      <th data-field="lat" data-visible="true"  data-sortable="true">Latitude</th>
+      <th data-field="location" data-visible="true"  data-sortable="true">Service Location</th>
       <th data-field="category" data-visible="true"  data-sortable="true">Category</th>
-
       <th data-field="name_of_storage_center" data-visible="false"  data-sortable="true">Name of Storage Centre</th>
       <th data-field="location_of_storage_center" data-visible="false"  data-sortable="true">Location of storage centre</th>
       <th data-field="vehicle_type" data-visible="false"  data-sortable="true">Vehicle Type</th>
       <th data-field="vehicle_capacity" data-visible="false"  data-sortable="true">Vehicle Capacity</th>
-    
       <th data-field="service_type" data-sortable="true">Service Type</th>
       <th data-field="size" data-sortable="false">Size</th>
       <th data-field="availability_date" data-sortable="true" data-visible="true">Availability Date</th>
@@ -86,8 +78,7 @@
 <script>
  var $table = $('#table')
   var $remove = $('#remove')
-  var $approve = $('#approve')
-  var $decline = $('#decline')
+  
   var selections = []
 
   function getIdSelections() {
@@ -112,11 +103,11 @@
     var view_url ="/openmarket/"+row.id+"/viewservice"
     return [
    
-      '<a class="Edit " href="javascript:void(0)" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+      '<a class="Edit " href="'+url+'" title="Edit">',
+      '<i class="fa fa-edit"></i>',
       '</a>  ',
 
-      '<a class="Edit " href="'+view_url+'" title="Edit">',
+      '<a class="Edit " href="'+view_url+'" title="View">',
       '<i class="fa fa-eye"></i>',
       '</a>  ',
 
@@ -198,8 +189,8 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
     for(id=0; id<ids.length; id++){
         console.log(ids[id]);
 
-    $.ajax({
-        url: "/api-openmarket/serviceregistration/"+ids[id],
+        $.ajax({
+        url: "/openmarket/api/serviceregistration/"+ids[id],
 
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
@@ -211,7 +202,9 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
        });
     swal("Your record/s have been deleted successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
     swal("You have cancelled the deletion of records!");
   }

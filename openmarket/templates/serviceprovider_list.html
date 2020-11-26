@@ -61,9 +61,11 @@
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="user" data-sortable="true">Service Provider Name</th>
+      <th data-field="nin" data-sortable="true">NIN Number</th>
+      <th data-field="category" data-sortable="true">Service Categories</th>
       <th data-field="service_provider_location" data-sortable="true">Location</th>
       <th data-field="list_of_services_if_more_than_one" data-sortable="true">List_of_services</th>
-      <th data-field="nin" data-sortable="true">NIN Number</th>
+     
       <!-- <th data-field="region" data-sortable="true">Region</th>
       <th data-field="district" data-sortable="true">District</th>
       <th data-field="county" data-sortable="true">County</th>
@@ -88,28 +90,29 @@
 
   function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
-      return row.id
+      return row.user_id
     })
   }
 
   function responseHandler(res) {
     $.each(res.rows, function (i, row) {
-      row.state = $.inArray(row.id, selections) !== -1
+      row.state = $.inArray(row.user_id, selections) !== -1
     })
     return res
   }
 
 
   function operateFormatter(value, row, index) {
-    var url ="/openmarket/"+row.id+"/edit"
-    var view_url ="/openmarket/"+row.id+"/view"
+    
+    var url ="/openmarket/"+row.user_id+"/edit"
+    var view_url ="/openmarket/"+row.user_id+"/viewprovider"
     return [
    
-      '<a class="Edit " href="javascript:void(0)" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+      '<a class="Edit " href="'+url+'" title="Edit">',
+      '<i class="fas fa-edit"></i>',
       '</a>  ',
 
-      '<a class="Edit " href="'+view_url+'" title="Edit">',
+      '<a class="Edit " href="'+view_url+'" title="view">',
       '<i class="fa fa-eye"></i>',
       '</a>  ',
 
@@ -192,7 +195,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
         console.log(ids[id]);
 
     $.ajax({
-        url: "/api-openmarket/serviceproviders/"+ids[id],
+        url: "/openmarket/api/serviceproviders/"+ids[id],
 
         data: {},
         headers:{"X-CSRFToken": getCookie("csrftoken")},
@@ -204,7 +207,9 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
        });
     swal("Your record/s have been deleted successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
     swal("You have cancelled the deletion of records!");
   }
@@ -218,7 +223,7 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
       $approve.prop('disabled', true)
     
       swal({
-  title: "Approve Farmer Applications?",
+  title: "Approve Service Provider Application/s?",
   text: "Are you sure you want to approve these applications!",
   icon: "success",
   buttons: true,
@@ -240,11 +245,13 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
           console.log('approved successfully');
         },
        });
-    swal("You have approve farmer/s successfully!", {
+    swal("You have approve Service Provider/s successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
-    swal("You have cancelled farmer approvals!");
+    swal("You have cancelled Service Provider approvals!");
   }
 });
       
@@ -279,11 +286,13 @@ $(e.currentTarget).find('input[name="bookId"]').val(bookId);
           console.log('approved successfully');
         },
        });
-    swal("You have approved farmer/s successfully!", {
+    swal("You have declined Service Provider/s successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});
+    }
   } else {
-    swal("You have cancelled farmer approvals!");
+    swal("You have cancelled Service Provider approvals!");
   }
 });
       

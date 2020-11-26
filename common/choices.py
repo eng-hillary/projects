@@ -31,7 +31,7 @@ REGISTER_STATUS = (
 TYPE = (
     (None, "--please select--"),
     ('wholeseller', 'wholeseller'),
-    ('retail', 'retail'),
+    ('retail', 'Retail'),
 )
 
 SCALE = (

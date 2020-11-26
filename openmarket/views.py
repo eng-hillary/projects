@@ -26,6 +26,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import(SellerProfileForm,ProductProfileForm, ServiceProviderProfileForm, ServiceProfileForm)
 from django.shortcuts import redirect
+from django.contrib.auth.models import Group as UserGroup
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -37,6 +38,8 @@ from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
 import datetime
 from django.db import IntegrityError
+from django.contrib.auth.models import Group 
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
@@ -112,6 +115,8 @@ class SellerViewSet(viewsets.ModelViewSet):
         profile = self.get_object()
         serializer = SellerApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
+            seller_group = Group.objects.get(name='Sellers')
+            profile.user.groups.add(seller_group)
             serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
@@ -256,7 +261,10 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
         profile = self.get_object()
         serializer = ServiceProviderApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
-            serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
+            provider_group = UserGroup.objects.get(name='Service Providers')
+            profile.user.groups.add(provider_group)
+            serializer.save(status ='Active', approved_date = datetime.datetime.now(),
+            approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
@@ -304,6 +312,7 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(CreateServiceView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
 
@@ -323,6 +332,7 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
         profile.status = 'Pending'
         profile.user = self.request.user
         profile.save()
+        form.save_m2m()
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
@@ -423,6 +433,7 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
         profile.status = 'Pending'
         profile.user = self.request.user
         profile.save()
+        form.save_m2m()
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
@@ -546,7 +557,7 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
         # updating profile for only changed fields
         profile.save()
 
-        return redirect('farmer:farmerprofile_list')
+        return redirect('openmarket:serviceprovider_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
@@ -581,4 +592,42 @@ class ServiceDetailView(LoginRequiredMixin, DetailView):
 
         })
         return context
+
+class UpdateServiceView(LoginRequiredMixin,UpdateView):
+    model = Service
+    template_name = 'register_service.html'
+    success_url = reverse_lazy('openmarket:serviceregistration_list')
+    form_class = ServiceProfileForm
+    success_message = "Your Service was Updated successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(UpdateServiceView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateServiceView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        # updating profile for only changed fields
+        profile.save()
+
+        return redirect('openmarket:serviceregistration_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
 
