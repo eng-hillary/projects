@@ -43,10 +43,10 @@ admin.site.register(ServiceProvider, ServiceProviderAdmin)
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = [
-       'service_name', 
-       'category', 
+       'service_name',  
        'lon', 
        'lat', 
+       
        'availability_date', 
        'picture', 
         
