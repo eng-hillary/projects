@@ -533,3 +533,12 @@ class EditEquiryView(LoginRequiredMixin,UpdateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+    
+
+class UsersList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'users_list.html'
+
+    def get(self, request):
+      
+        return Response()

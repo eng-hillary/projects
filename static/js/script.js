@@ -181,7 +181,7 @@ $(document).ready(function () {
             var village =val.village.split(",")[0];
             var icon ="http://openweathermap.org/img/wn/"+val.icon+"@2x.png"
             community_weather+='<img src='+icon+'><br>'+'<h3>'+ village +'</b></h3><span>'+
-            val.date_reported +'|'+ data[0].time_reported+ ', '+val.weather+'</span>'
+            val.date_reported +'|'+ val.time_reported + ', '+val.weather+'</span>'
   
           });
           $('#show_community_weather').html(community_weather);
