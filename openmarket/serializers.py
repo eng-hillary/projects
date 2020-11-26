@@ -76,11 +76,12 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     #sector = serializers.PrimaryKeyRelatedField(many=True, queryset=Sector.objects.all())
     #sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
    # user = UserSerializer()
+    category = serializers.SlugRelatedField(many=True,read_only=True, slug_field='cat_name')
     user = serializers.SerializerMethodField(method_name='get_user_full_name')
-
+    
     class Meta:
         model = ServiceProvider
-        fields = ('user_id','user', 'nin','service_provider_location', 'list_of_services_if_more_than_one', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
+        fields = ('user_id','user',  'nin','service_provider_location','category', 'list_of_services_if_more_than_one', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
        )
     '''
     returns yes or no for boolean fields
@@ -117,7 +118,7 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ('id','user', 'service_name', 'size', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
+        fields = ('id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
         'available_services','rent','name_of_storage_center','location_of_storage_center','certification_status',
         'vehicle_type','vehicle_capacity','location','others','full_name')
 

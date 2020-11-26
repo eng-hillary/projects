@@ -312,6 +312,7 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(CreateServiceView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
 
@@ -331,6 +332,7 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
         profile.status = 'Pending'
         profile.user = self.request.user
         profile.save()
+        form.save_m2m()
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
@@ -431,6 +433,7 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
         profile.status = 'Pending'
         profile.user = self.request.user
         profile.save()
+        form.save_m2m()
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
