@@ -32,12 +32,12 @@ class CommunityWeatherViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
        
-        #queryset =  CommunityWeather.objects.all().order_by('-id')
+        #,'-id','-date_reported','time_reported'
         lon = float(self.request.query_params.get('lon', None))
         lat = float(self.request.query_params.get('lat', None))
         user_location = Point(lon, lat, srid=4326)
-        queryset = CommunityWeather.objects.annotate(distance=Distance("location", user_location) ).order_by('distance','-id')[0:1]
-        #print(queryset)
+        queryset = CommunityWeather.objects.annotate(distance=Distance("location", user_location)).order_by('-date_reported','-time_reported','distance')[0:1]
+        print(queryset)
         return queryset
 
     def create(self, request, format=None):
