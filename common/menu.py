@@ -12,6 +12,11 @@ def can_view_farmers(user, context):
         return True
     return user.has_perm('farmer.view_farmerprofile')
 
+def can_view_users(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('auth.view_user')
+
 # function to check whether a user is a unffeagent
 def is_unffeagent(user, context):
     if user.is_superuser:
@@ -59,6 +64,11 @@ def can_view_pest_and_diseases(user, context):
         return True
     return user.has_perm('farm.view_pest_and_diseases')
 
+def can_view_queries(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('farm.view_query')
+
 def can_add_resources(user, context):
     if user.is_superuser:
         return user.has_perm('resourcesharing.add_resource')
@@ -93,11 +103,14 @@ def can_add_seller(user, context):
     if user.is_superuser:
         return True
     return user.has_perm('openmarket.add_seller')
+    
+        
+
 
 def can_view_sellers(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('openmarket.view_seller') and not user.farmer
+    return user.has_perm('openmarket.view_seller') and not has_group(user,"Farmers")
     
 def can_view_products(user, context):
      if user.is_superuser:
@@ -219,7 +232,7 @@ menus = [
             menu.PassTestNode(id='pests_and_diseases',
                               label='<i class="fa fa-circle"></i>Queries',
                              
-                              pattern_name='farm:query_list', test=can_view_pest_and_diseases),
+                              pattern_name='farm:query_list', test=can_view_queries),
 
          
         ]
@@ -357,6 +370,10 @@ menu.PassTestNode(
                               label='<i class="fa fa-circle"></i>Enquiries',
                              
                               pattern_name='unffeagents:enquiries', test=can_view_unffeagents),
+            menu.PassTestNode(id='user_list',
+                              label='<i class="fa fa-circle"></i>System User',
+                             
+                              pattern_name='unffeagents:users_list', test=can_view_users),
            
          
            

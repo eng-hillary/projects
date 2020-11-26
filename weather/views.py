@@ -21,7 +21,8 @@ from django.shortcuts import redirect
 #views for products
 class CommunityWeatherViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    API endpoint to show weather on the dashboard, you pass in lon->longitude and lat->latitude.
+    in the request e.g "/weather/api/community_weather/?lon=1.2345533&lat=32.5376262;
     """
     serializer_class = CommunityWeatherSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -31,12 +32,12 @@ class CommunityWeatherViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
        
-        #queryset =  CommunityWeather.objects.all().order_by('-id')
+        #,'-id','-date_reported','time_reported'
         lon = float(self.request.query_params.get('lon', None))
         lat = float(self.request.query_params.get('lat', None))
         user_location = Point(lon, lat, srid=4326)
-        queryset = CommunityWeather.objects.annotate(distance=Distance("location", user_location) ).order_by('distance','-id')[0:1]
-        #print(queryset)
+        queryset = CommunityWeather.objects.annotate(distance=Distance("location", user_location)).filter(distance__lte=1000).order_by('-date_reported','-time_reported','distance')[0:1]
+        print(queryset)
         return queryset
 
     def create(self, request, format=None):

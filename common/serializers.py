@@ -17,6 +17,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     first_name = serializers.CharField(max_length=100)
     last_name = serializers.CharField(max_length=100)
     user_permissions = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
@@ -27,7 +28,7 @@ class UserSerializer(serializers.Serializer):
     phone_number = serializers.CharField(source='profile.phone_number')
     gender = serializers.CharField(source='profile.get_gender_display')
     home_address = serializers.CharField(source='profile.home_address')
-    profile_pic = serializers.FileField(source='profile.profile_pic')
+    profile_pic = serializers.FileField(source='profile.profile_pic',required=False,)
     region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
@@ -44,11 +45,12 @@ class UserSerializer(serializers.Serializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    #profile_pic = serializers.FileField(required=False, source='profile.profile_pic')
   
     class Meta:
         model = Profile
-        fields = ['phone_number','phone_2','home_address','gender','profile_pic','region','district','parish','county','sub_county','village']
-
+        fields = ['phone_number','phone_2','home_address','gender','region','district','parish','county','sub_county','village']
+        
 
 class UserPostSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
@@ -77,7 +79,7 @@ class UserPostSerializer(serializers.ModelSerializer):
             phone_2 = profile_data['phone_2'],
             home_address = profile_data['home_address'],
             gender =  profile_data['gender'],
-            profile_pic = profile_data['profile_pic'],
+            #profile_pic = profile_data['profile_pic'],
             region = profile_data['region'],
             district = profile_data['district'],
             county = profile_data['county'],
