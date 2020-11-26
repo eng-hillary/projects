@@ -465,8 +465,25 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class RegionViewSet(viewsets.ModelViewSet):
     """
-    API endpoint for regions .
+    retrieve:
+        Retrieve a specific region by passing in an id
+
+    list:
+        Return a list of all regions.
+
+    create:
+        Create a new Region.
+
+    destroy:
+        Delete a Region.
+
+    update:
+        Update a Region.
+
+    partial_update:
+        Update a Region(partial update).
     """
+    
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
@@ -476,9 +493,28 @@ class RegionViewSet(viewsets.ModelViewSet):
 
 class DistrictViewSet(viewsets.ModelViewSet):
     """
+    retrieve:
+         
+        Returns the details of a district by passing in id .
+
+    list:
         Optionally restricts the returned districts  to a given region,
-        by filtering against a  region query parameter in the URL.
+        by filtering against a  region query parameter in the URL.e.g /api/districts/region=1
+        Return a list of all districts.
+
+    create:
+        Create a new District.
+
+    destroy:
+        Delete a District.
+
+    update:
+        Update a District.
+
+    partial_update:
+        Update a District(partial update).
     """
+    
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
     #permission_classes = [permissions.IsAuthenticated]
@@ -496,9 +532,27 @@ class DistrictViewSet(viewsets.ModelViewSet):
 
 class CountyViewSet(viewsets.ModelViewSet):
     """
-        Optionally restricts the returned conties  to a given district,
-        by filtering against a  region query parameter in the URL.
-        """
+    retrieve:
+         Optionally restricts the returned counties  to a given district,
+        by filtering against a  district query parameter in the URL.
+        Also returns the details of a county by passing in id as a parameter
+
+    list:
+        Return a list of all counties.
+
+    create:
+        Create a new County.
+
+    destroy:
+        Delete a County.
+
+    update:
+        Update a County.
+
+    partial_update:
+        Update a County(partial update).
+    """
+   
     queryset = County.objects.all()
     serializer_class = CountySerializer
     #permission_classes = [permissions.IsAuthenticated]
@@ -538,9 +592,27 @@ class SubCountyViewSet(viewsets.ModelViewSet):
 
 class ParishViewSet(viewsets.ModelViewSet):
     """
-        Optionally restricts the returned Parishes  to a given sub_county,
+    retrieve:
+         Optionally restricts the returned parishes  to a given sub-county,
         by filtering against a  sub_county query parameter in the URL.
-        """
+        Also returns the details of a parish by passing in id as a parameter
+
+    list:
+        Return a list of all Parishes.
+
+    create:
+        Create a new Parishes.
+
+    destroy:
+        Delete a Parishes.
+
+    update:
+        Update a Parishes.
+
+    partial_update:
+        Update a Parishes(partial update).
+    """
+   
     queryset = Parish.objects.all()
     serializer_class = ParishSerializer
     #permission_classes = [permissions.IsAuthenticated]
@@ -558,9 +630,25 @@ class ParishViewSet(viewsets.ModelViewSet):
 
 class VillageViewSet(viewsets.ModelViewSet):
     """
-        Optionally restricts the returned villages  to a given parish,
+    retrieve:
+         Optionally restricts the returned villages  to a given parish,
         by filtering against a  parish query parameter in the URL.
-        """
+
+    list:
+        Return a list of all villages.
+
+    create:
+        Create a new Village.
+
+    destroy:
+        Delete a village.
+
+    update:
+        Update a village.
+
+    partial_update:
+        Update a village.
+    """
     queryset = Village.objects.all()
     serializer_class = VillageSerializer
     #permission_classes = [permissions.IsAuthenticated]
