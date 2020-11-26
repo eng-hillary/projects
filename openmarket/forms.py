@@ -1,5 +1,5 @@
 from django import forms
-from .models import Seller,Product,ServiceProvider, Service
+from .models import Seller,Product,ServiceProvider, Service, Category
 from common.models import Region, District, County, SubCounty, Parish, Village
 from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField
@@ -103,7 +103,7 @@ class ProductProfileForm(forms.ModelForm):
 class ServiceProfileForm(forms.ModelForm):
     availability_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     #service_name = forms.CharField(label="Service Name")
-    
+
     class Meta:
         model = Service
         exclude = ['date_created', 'date_updated','user']
@@ -111,3 +111,6 @@ class ServiceProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ServiceProfileForm, self).__init__(*args, **kwargs)
+        self.fields['category'].empty_label = '--please select--'
+        servicecategories = ServiceProvider.objects.filter(user=self.request.user).values('category')
+        self.fields['category'].queryset = Category.objects.filter(id__in = servicecategories)

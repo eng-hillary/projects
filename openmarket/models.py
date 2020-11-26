@@ -102,7 +102,7 @@ class Category(TimeStampedModel, models.Model):
     cat_name = models.CharField(max_length=255)
    
     def __str__(self):
-        return self.name
+        return self.cat_name
 
 
 class ServiceProvider(models.Model):
@@ -129,7 +129,7 @@ class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
    
-    category = models.CharField(choices=SERVICE_CATEGORY,null=True, max_length=50,default=True)
+    category = models.ManyToManyField(Category)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True,blank=True)
