@@ -100,9 +100,10 @@ data-page-list="[10, 25, 50, 100, all]"
   
   function operateFormatter(value, row, index) {
     var url ="/unffeagents/create/enquiry/"+row.session_id;
+    var enquery_url ="/unffeagents/enquiries"
     var response = row.responses;
     console.log("responses"+ response);
-    if(row.response){
+    if(row.responses==null){
     return [
       
     {% if request.user.is_superuser or perms.unffeagents.add_callrsponse %}
@@ -113,9 +114,12 @@ data-page-list="[10, 25, 50, 100, all]"
         {% endif %}
       
     ].join('')
-      }else{
+      }
+      else{
         return[
-        '<b>response submited</b>'
+        '<a class="Edit" href="'+enquery_url+'" title="View Call Enquiries">',
+      '<i class="fas fa-eye"></i>',
+      '</a>  '
       ].join('')
       }
   }
