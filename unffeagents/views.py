@@ -210,7 +210,7 @@ class CallerViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
-    queryset = Call.objects.order_by('-session_id')
+    queryset = Call.objects.order_by('-call_date')
     serializer_class = CallSerializer
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]
     search_fields = '__all__'
@@ -535,10 +535,19 @@ class EditEquiryView(LoginRequiredMixin,UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
     
 
-class UsersList(APIView):
+class UsersList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'users_list.html'
 
     def get(self, request):
-      
-        return Response()
+        queryset = User.objects.order_by('-id')
+        phone=self.request.query_params.get('phone', None)
+        if phone is not None:
+            print(str(phone))
+            # queryset = queryset.filter(
+            #         profile__phone_number__icontains=self.request.query_params.get('phone'))
+            queryset = User.objects.filter(profile__phone_number=str(phone))
+           
+        print(queryset)
+        return Response({'users': queryset})
+
