@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics,SoilScience
+from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics,SoilScience, Category
 from common.models import Region, District
 from .serializers import (ProductSerializer,
                         SellerSerializer, 
@@ -14,9 +14,10 @@ from .serializers import (ProductSerializer,
                         ServiceProviderApprovalSerializer,
                         SellerApprovalSerializer,
                         PostServiceProviderSerializer,
-                        PostServiceRegistrationSerializer
-                        )
+                        PostServiceRegistrationSerializer,
+                        CategorySerializer)
 from rest_framework import viewsets
+from rest_framework import filters
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -48,6 +49,33 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by('-id')
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+        retrieve a sigle category by its id
+
+    list:
+        Return a list of all Categories.
+
+    create:
+        Create a new Category.
+
+    destroy:
+        Delete a Category.
+
+    update:
+        Update a Category.
+
+    partial_update:
+        Update a Category.
+    """
+    queryset = Category.objects.order_by('-id')
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['id','cat_name']
+    ordering_fields = '__all__'
 
 
 class ProductList(APIView):
@@ -252,10 +280,23 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = ServiceProvider.objects.all().order_by('nin')
+    #queryset = ServiceProvider.objects.all().order_by('nin')
     serializer_class = ServiceProviderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        """
+        This view should return a list of all the service  provider profiles
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        servicesproviders = ServiceProvider.objects.order_by('-user_id')
+        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_serviceprovider'):
+            queryset = servicesproviders
+        else:
+            queryset = servicesproviders.filter(user=user)
+        
+        return queryset
 
     def approved(self, request, pk, format=None):
         profile = self.get_object()
