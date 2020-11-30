@@ -207,18 +207,14 @@ def activate(request, uidb64, token):
         group = Group.objects.get(name='Buyers')
         user.groups.add(group)
         user.save()
-        login(request, user)
-        return redirect('common:home')
+        #login(request, user)
+        return redirect('common:activated')
     else:
         return render(request, 'account_activation_invalid.html')
 
-# class ProfileView1(LoginRequiredMixin, DetailView):
-#     template_name = "user_details.html"
+def account_activated(request):
+    return render(request, 'account_activated.html')
 
-#     def get_context_data(self, **kwargs):
-#         context = super(ProfileView, self).get_context_data(**kwargs)
-#         context["user_obj"] = self.request.user
-#         return context
 
 class ProfileView(LoginRequiredMixin, DetailView):
     model = User
