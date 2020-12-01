@@ -371,11 +371,7 @@ $(document).ready(function () {
 
   
   var map;
-  var icon = "images/farms.png";
-  var json = "/farm/api/maps/";
-  console.log("-------");
-  console.log(json);
-
+  var icon = ""
   function initialize() {
     var infowindow = new google.maps.InfoWindow();
     var mapProp = {
@@ -386,50 +382,47 @@ $(document).ready(function () {
   
     map = new google.maps.Map(document.getElementById("map"), mapProp);
   
-    //  $.getJSON(json, function(json1) {
-    var json1 = {
-      "farms": [{
-            "id": 1,
-            "region": "western",
-            "phone_number": "+256782998057",
-            "district": "kabarole",
-            "farm_name": "poultry farm",
-            "farmer": "karungi lydia",
-            "lat": 1.2710068,
-            "lon": 31.1084552,
-            "land_occupied": 9.0
-        }
-    ]
-    };
-    $.each(json1.farms, function(key, data) {
+    $.getJSON('/farm/api/maps/', function(json) {
+      var farmdata = [];
+      json.forEach(function (p) {
+        p.z = p.land_occupied;
+        farmdata.push(p);
+      })
+      //console.log(farmdata)
+  
+    $.each(farmdata, function(key, data) {
   
       var latlon = new google.maps.LatLng(data.lat, data.lon);
-  
+      console.log(data)
       var marker = new google.maps.Marker({
         position: latlon,
         map: map,
-        // icon: icon,
+        //icon: icon,
         farm_name: data.farm_name
       });
   
       
-      var details = "ID:" + data.id + "<br>" + "REGION:" + data.region + "<br>" + "DISTRICT:" +
+      var details = "REGION:" + data.region + "<br>" + "DISTRICT:" +
       data.district + "<br>" + "FARMER:" + data.farmer + "<br>" + "PHONE NUMBER:" + data.phone_number + ".";
   
       bindInfoWindow(marker, map, infowindow, details);
   
-      //    });
+      });
   
     });
   
   }
   
   function bindInfoWindow(marker, map, infowindow, strDescription) {
-    google.maps.event.addListener(marker, 'click', function() {
+    google.maps.event.addListener(marker, 'mouseover', function() {
       infowindow.setContent(strDescription);
       infowindow.open(map, marker);
     });
+
+  
   }
+  
+  
   
   google.maps.event.addDomListener(window, 'load', initialize);
 
