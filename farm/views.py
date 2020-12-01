@@ -900,7 +900,7 @@ class CreateFarmProductionRecordView(LoginRequiredMixin,CreateView):
         message = render_to_string('farm_created_successful_email.html', {
             'user': self.request.user,
             'domain': current_site.domain,
-            'message': 'Your production record spent on '+record.record_name + ' has been recorded sucessfully',
+            'message': 'Your production record  '+record.record_name + ' has been recorded sucessfully',
             })
         to_email = self.request.user.email
         email = EmailMessage(
@@ -967,7 +967,7 @@ class EditFarmproductionRecordView(LoginRequiredMixin,UpdateView):
         message = render_to_string('enterprise_email.html', {
             'user': self.request.user,
             'domain': current_site.domain,
-            'message': 'Your Production record spent on '+productionrecord.spent_on + ' has been recorded sucessfully',
+            'message': 'Your Production record  '+productionrecord.record_name + ' has been updated sucessfully',
             })
         to_email = self.request.user.email
         email = EmailMessage(

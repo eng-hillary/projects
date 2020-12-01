@@ -8,14 +8,14 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     <h3>Enterprises Recommended
-                      {% if request.user.is_superuser or perms.farm.add_farm %}
+                      {% if request.user.is_superuser or perms.farm.add_enterpriseselection %}
                         <small><a class="add-new" href="{% url 'farm:enterprise_selection' %}">Add new</a></small>
                         {% endif %}
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
-                <ol class="breadcrumb pull-right">
+                <ol class="breadcrumb float-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Enterprise Selection</li>
                     <li class="breadcrumb-item active"> Recommendations</li>

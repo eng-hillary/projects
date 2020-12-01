@@ -30,11 +30,12 @@ from .views import (ProductList,
 
 router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet)
+router.register(r'categories', views.CategoryViewSet)
 router.register(r'sellers', views.SellerViewSet)
 router.register(r'buyers', views.BuyerViewSet)
 router.register(r'sellerposts', views.SellerPostViewSet)
 router.register(r'buyersposts', views.BuyerPostViewSet)
-router.register(r'serviceproviders', views.ServiceProviderViewSet)
+router.register(r'serviceproviders', views.ServiceProviderViewSet, basename='service_providers')
 router.register(r'serviceregistration', views.ServiceRegistrationViewSet)
 router.register(r'contactdetails', views.ContactDetailsViewSet)
 router.register(r'logistics', views.LogisticsViewSet)
