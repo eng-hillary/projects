@@ -593,19 +593,19 @@ class ServiceDetailView(LoginRequiredMixin, DetailView):
         })
         return context
 
-class UpdateServiceView(LoginRequiredMixin,UpdateView):
+class EditServiceView(LoginRequiredMixin,UpdateView):
     model = Service
     template_name = 'register_service.html'
     success_url = reverse_lazy('openmarket:serviceregistration_list')
     form_class = ServiceProfileForm
-    success_message = "Your Service was Updated successfully"
+    success_message = "Service has been updated successfully"
 
 
     def dispatch(self, request, *args, **kwargs):
-        return super(UpdateServiceView, self).dispatch(request, *args, **kwargs)
+        return super(EditServiceView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(UpdateServiceView, self).get_form_kwargs()
+        kwargs = super(EditServiceView, self).get_form_kwargs()
         return kwargs
 
 
@@ -620,11 +620,25 @@ class UpdateServiceView(LoginRequiredMixin,UpdateView):
 
 
     def form_valid(self, form):
-        profile = form.save(commit=False)
-        # updating profile for only changed fields
-        profile.save()
+        farm = form.save(commit=False)
+        farm.save()
 
+         # send email to farmer  a message after an update
+        current_site = get_current_site(self.request)
+        subject = 'Farm Updated Successfully'
+        message = render_to_string('farm_created_successful_email.html', {
+            'user': openmarket.serviceprovider.user,
+            'domain': current_site.domain,
+            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
+            })
+        to_email = farm.farmer.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
         return redirect('openmarket:serviceregistration_list')
+
 
     def form_invalid(self, form):
         if self.request.is_ajax():
