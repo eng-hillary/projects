@@ -40,7 +40,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows sectors to be viewed or edited.
     """
-    queryset = Group.objects.all().order_by('name')
+    queryset = Group.objects.all().order_by('-id')
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter,filters.OrderingFilter]

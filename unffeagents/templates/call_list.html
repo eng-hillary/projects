@@ -56,7 +56,7 @@ data-page-list="[10, 25, 50, 100, all]"
   <thead>
     <tr>
       <th data-field="session_id" data-visible="false" data-sortable="true">Session ID</th>
-      <th data-field="phone" data-sortable="true">Caller </th>
+      <th data-formatter="numberFormatter" data-sortable="true">Caller </th>
       <th data-field="call_date" data-sortable="true">Call Date</th>
       <th data-field="call_type" data-visible="false"  data-sortable="true">Call Type</th>
       <th data-field="active" data-visible="false"  data-sortable="true">Status</th>
@@ -93,24 +93,35 @@ data-page-list="[10, 25, 50, 100, all]"
  
   //handles number link
   function numberFormatter(value, row) {
-      var url =row.recording_url;
-    return '<audio controls > <source src="'+url+'" type="audio/ogg"><source src="'+url+'" type="audio/mpeg"></audio>'
+      var number = row.phone;
+      var redirecturl ="/unffeagents/users?phone="+encodeURIComponent(number);
+    return '<a class="Edit" href="'+redirecturl+'" title="'+row.phone+'">'+row.phone+'</a>'
   }
   
   function operateFormatter(value, row, index) {
     var url ="/unffeagents/create/enquiry/"+row.session_id;
+    var enquery_url ="/unffeagents/enquiries"
     var response = row.responses;
     console.log("responses"+ response);
+    if(row.responses==null){
     return [
+      
     {% if request.user.is_superuser or perms.unffeagents.add_callrsponse %}
-    {% with name="" %}  
-      '<a class="Edit " href="'+url+'" title="Add Call Enquiry">',
+    
+      '<a class="Edit" href="'+url+'" title="Add Call Enquiry">',
       '<i class="fas fa-plus"></i>',
       '</a>  ',
-      {% endwith %}
         {% endif %}
-        
+      
     ].join('')
+      }
+      else{
+        return[
+        '<a class="Edit" href="'+enquery_url+'" title="View Call Enquiries">',
+      '<i class="fas fa-eye"></i>',
+      '</a>  '
+      ].join('')
+      }
   }
 
   ///used cookies to get crsf token
