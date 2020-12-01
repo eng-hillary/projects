@@ -647,6 +647,7 @@ class UpdateServiceView(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(UpdateServiceView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
 
