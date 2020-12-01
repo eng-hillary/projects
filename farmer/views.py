@@ -33,6 +33,8 @@ from django.db.models import Count, Q
 import json
 from django.db import IntegrityError
 from rest_framework import filters
+from farm .models import Sector
+
 
 
 # views for groups
@@ -261,7 +263,6 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
 
 
 
-
 '''
 Edit farmer profile profile
 '''
@@ -289,7 +290,6 @@ class UpdateFarmerProfile(LoginRequiredMixin,UpdateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         profile = form.save(commit=False)
@@ -339,14 +339,20 @@ def farmer_class_view(request):
 
 
     farmers = FarmerProfile.objects.all()
-    #print(farmers) 
+   # print(farmers) 
+    count = farmers.count()
+    sectors = Sector.objects.all()
+    print(count)
 
     for farmer in farmers:
-        dataset = FarmerProfile.objects.values('user__profile__region__id'=='FarmerProfile.region').annotate(
-            animal = Count('sector_id=id', filter=Q(sector=1)),
-            crop = Count('sector', filter=Q(sector=2)),
-            fisheries = Count('sector', filter=Q(sector=3)),
-            forestry = Count('sector', filter=Q(sector=4))).order_by('user__profile__region')
+        dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
+            farmers = Count('sector', filter = Q(sector__in=sectors)),
+            percentage = (( Count('sector', filter = Q(sector__in=sectors))/count)*100),
+            )
+            # crop = Count('sector', filter = Q(sector=2)),
+            # fisheries = Count('sector', filter=Q(sector=3)),
+            # forestry = Count('sector', filter=Q(sector=4)))
+            
        
     print(dataset)
 
