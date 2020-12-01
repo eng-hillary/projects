@@ -24095,12 +24095,12 @@ a.Detail{
   color: #2124b6;
 }
 
-#farm_container {
+/* #farm_container {
   height: 800px;
-  min-width: 310px;
+  min-width: 400px;
   max-width: 1000px;
   margin: 0 auto;
-}
+} */
 
 #resource_container {
   height: 800px;
@@ -24269,3 +24269,11 @@ min-width: 50px;
   margin-left: 220px;
   margin-right:220px ;
 }
+
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+       #map {
+        height: 100%;
+        width: 100% !important;
+      }
+     

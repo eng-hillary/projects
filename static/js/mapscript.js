@@ -3,97 +3,97 @@ var H = Highcharts,
     map = H.maps['countries/ug/ug-all'],
     chart;
 
-Highcharts.getJSON('/farm/api/maps/', function (json) {
-    var data = [];
-    json.forEach(function (p) {
-        p.z = p.land_occupied;
-        data.push(p);
-    })
+// Highcharts.getJSON('/farm/api/maps/', function (json) {
+//     var data = [];
+//     json.forEach(function (p) {
+//         p.z = p.land_occupied;
+//         data.push(p);
+//     })
 
-// console.log(data)  
-    chart = Highcharts.mapChart('farm_container', {
-        title: {
-            text: 'Farmers Locations'
-        },
+// // console.log(data)  
+//     chart = Highcharts.mapChart('farm_container', {
+//         title: {
+//             text: 'Farmers Locations'
+//         },
         
-        boost:{
-          allowForce:true,
-        },
+//         boost:{
+//           allowForce:true,
+//         },
     
-        mapNavigation: {
-            enabled: true,
-            buttonOptions: {
-                verticalAlign: 'bottom'
-            }
-        },
+//         mapNavigation: {
+//             enabled: true,
+//             buttonOptions: {
+//                 verticalAlign: 'bottom'
+//             }
+//         },
        
-        tooltip: {
-            pointFormat:'farm name: {point.farm_name}<br>' +
+//         tooltip: {
+//             pointFormat:'farm name: {point.farm_name}<br>' +
 
-                // 'district: {point.district}<br>' +
-                'farmer: {point.farmer}<br>' +
-                'Phone Number: {point.phone_number}<br>' +
-                'land occupied: {point.land_occupied}'+ ' acres'
+//                 // 'district: {point.district}<br>' +
+//                 'farmer: {point.farmer}<br>' +
+//                 'Phone Number: {point.phone_number}<br>' +
+//                 'land occupied: {point.land_occupied}'+ ' acres'
       
-        },
+//         },
 
-        xAxis: {
-            crosshair: {
-                zIndex: 5,
-                dashStyle: 'dot',
-                snap: false,
-                color: 'gray'
-            }
-        },
+//         xAxis: {
+//             crosshair: {
+//                 zIndex: 5,
+//                 dashStyle: 'dot',
+//                 snap: false,
+//                 color: 'gray'
+//             }
+//         },
 
-        yAxis: {
-            crosshair: {
-                zIndex: 5,
-                dashStyle: 'dot',
-                snap: false,
-                color: 'gray'
-            }
-        },
-        plotOptions:{
-            series:{
-                point:{
-                    events:{
-                        click: function(event){
-                             var url = "/farm/"+ event.point.id +"/view/";
-                             window.location.href = url;
-                            //alert(event.point.id);
-                        }
-                    }
-                }
-            }
-        },
-        series: [{
-            boostThreshold: 50, 
-            name: 'Basemap',
-            mapData: map,
-            borderColor: '#B0B0B0',
-            nullColor: 'rgba(200, 200, 200, 0.2)',
-            showInLegend: false
-        }, {
-            name: 'Separators',
-            type: 'mapline',
-            data: H.geojson(map, 'mapline'),
-            color: '#101010',
-            enableMouseTracking: false,
-            showInLegend: false
-        }, {
-            type: 'mapbubble',
-            dataLabels: {
-                enabled: true,
-                format: '{point.farm_name}'
-            },
-            name: 'Farms',
-            data: data,
-            maxSize: '5%',
-            color: 'green'
-        }]
-    });
-});
+//         yAxis: {
+//             crosshair: {
+//                 zIndex: 5,
+//                 dashStyle: 'dot',
+//                 snap: false,
+//                 color: 'gray'
+//             }
+//         },
+//         plotOptions:{
+//             series:{
+//                 point:{
+//                     events:{
+//                         click: function(event){
+//                              var url = "/farm/"+ event.point.id +"/view/";
+//                              window.location.href = url;
+//                             //alert(event.point.id);
+//                         }
+//                     }
+//                 }
+//             }
+//         },
+//         series: [{
+//             boostThreshold: 50, 
+//             name: 'Basemap',
+//             mapData: map,
+//             borderColor: '#B0B0B0',
+//             nullColor: 'rgba(200, 200, 200, 0.2)',
+//             showInLegend: false
+//         }, {
+//             name: 'Separators',
+//             type: 'mapline',
+//             data: H.geojson(map, 'mapline'),
+//             color: '#101010',
+//             enableMouseTracking: false,
+//             showInLegend: false
+//         }, {
+//             type: 'mapbubble',
+//             dataLabels: {
+//                 enabled: true,
+//                 format: '{point.farm_name}'
+//             },
+//             name: 'Farms',
+//             data: data,
+//             maxSize: '5%',
+//             color: 'green'
+//         }]
+//     });
+// });
 
 
 // Display custom label with lat/lon next to crosshairs
