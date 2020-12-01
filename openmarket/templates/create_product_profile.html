@@ -10,12 +10,12 @@
                         <div class="col">
                             <div class="page-header-left">
                                 <h3>Create Product Profile{{message}}
-                                    <small>{{ user.groups.all.0 }} </small>
+                                   
                                 </h3>
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <ol class="breadcrumb pull-right">
+                            <ol class="breadcrumb float-right">
                                 <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                                 <li class="breadcrumb-item">Products</li>
                                 <li class="breadcrumb-item active">Add Profile </li>
@@ -34,7 +34,7 @@
                             <div class="card-header">
                                 <h5> Add Profile</h5>
                             </div>
-                            <form id="form" class="card-body" action="" method="post">
+                            <form id="form"  novalidate enctype="multipart/form-data" class="card-body" action="" method="post">
                              {% csrf_token %}
 
                                 <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
@@ -55,17 +55,19 @@
                                                 {{ form.local_name|as_crispy_field }}
                                             </div>
                                             <div class="col-xl-6 col-md-6">
-                                                {{ form.image|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
-                                                {{ form.description|as_crispy_field }}
-                                            </div>
-                                            <div class="col-xl-6 col-md-6">
                                                 {{ form.price|as_crispy_field }}
+                                            </div>
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.image|as_crispy_field }}
                                             </div>
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.available|as_crispy_field }}
                                             </div>
+                                            <div class="col-xl-12 col-md-12">
+                                                {{ form.description|as_crispy_field }}
+                                            </div>
+                                           
+                                          
                                         </div>
                                     </div>
                                  </div>
