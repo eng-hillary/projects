@@ -306,6 +306,21 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
             profile.user.groups.add(provider_group)
             serializer.save(status ='Active', approved_date = datetime.datetime.now(),
             approver=self.request.user)
+            # sending message to the service provider for notification
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'Your application has been Approved'
+            message = render_to_string('farm_created_successful_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'message': 'Your application as a service provider has been approved successfully.',
+                })
+            to_email = user.email
+            email = EmailMessage(
+                subject, message, to=[to_email]
+                )
+            email.content_subtype = "html"
+            email.send()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
@@ -314,7 +329,24 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
         serializer = ServiceProviderApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
             serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            # sending message to the service provider for notification
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'Your application has been Declined'
+            message = render_to_string('farm_created_successful_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'message': 'Your application as a service provider has been declined.',
+                })
+            to_email = user.email
+            email = EmailMessage(
+                subject, message, to=[to_email]
+                )
+            email.content_subtype = "html"
+            email.send()
             return Response(serializer.data)
+        
+         
         return Response(serializer.errors, status=400)
 
     def create(self, request, format=None):
