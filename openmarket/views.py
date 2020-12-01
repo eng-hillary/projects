@@ -597,6 +597,7 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
         profile = form.save(commit=False)
         # updating profile for only changed fields
         profile.save()
+        form.save_m2m()
 
         return redirect('openmarket:serviceprovider_list')
 
@@ -623,7 +624,8 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
 
 class ServiceDetailView(LoginRequiredMixin, DetailView):
     model = Service
-    context_object_name = "profilerecord"
+    context_object_name = "providerrecord"
+
     template_name = "view_services_details.html"
 
     def get_context_data(self, **kwargs):

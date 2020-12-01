@@ -131,7 +131,6 @@ class ServiceProvider(models.Model):
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
-   
     category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)

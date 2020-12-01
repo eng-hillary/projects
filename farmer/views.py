@@ -29,11 +29,13 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.models import Group as UserGroup
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum, FloatField
 import json
 from django.db import IntegrityError
 from rest_framework import filters
 from farm .models import Sector
+from django.db.models.functions import Cast
+
 
 
 
@@ -340,21 +342,17 @@ def farmer_class_view(request):
 
     farmers = FarmerProfile.objects.all()
    # print(farmers) 
-    count = farmers.count()
+    count = float(farmers.count())
     sectors = Sector.objects.all()
     print(count)
 
     for farmer in farmers:
         dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
             farmers = Count('sector', filter = Q(sector__in=sectors)),
-            percentage = (( Count('sector', filter = Q(sector__in=sectors))/count)*100),
-            )
-            # crop = Count('sector', filter = Q(sector=2)),
-            # fisheries = Count('sector', filter=Q(sector=3)),
-            # forestry = Count('sector', filter=Q(sector=4)))
-            
-       
+            percentage =  Cast(((Count('sector', filter = Q(sector__in=sectors))/count)*100),FloatField()))
+                
     print(dataset)
+    
 
 
     return render(request, 'credit.html', {'dataset': dataset})
