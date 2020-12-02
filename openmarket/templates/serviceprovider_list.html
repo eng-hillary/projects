@@ -111,11 +111,11 @@
     var url ="/openmarket/"+row.user_id+"/edit"
     var view_url ="/openmarket/"+row.user_id+"/viewprovider"
     return [
-   
+    {% if request.user.is_superuser or perms.openmarket.change_serviceprovider %}
       '<a class="Edit " href="'+url+'" title="Edit">',
       '<i class="fas fa-edit"></i>',
       '</a>  ',
-
+        {% endif %}
       '<a class="Edit " href="'+view_url+'" title="view">',
       '<i class="fa fa-eye"></i>',
       '</a>  ',

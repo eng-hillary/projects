@@ -13,7 +13,7 @@ class ResourceForm(forms.ModelForm):
     available_to = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     class Meta:
         model = Resource
-        exclude = []
+        exclude = ['owner']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
