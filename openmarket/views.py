@@ -434,9 +434,23 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = Service.objects.all().order_by('service_name')
+    #queryset = Service.objects.all().order_by('service_name')
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the services 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        services = Service.objects.order_by('-id')
+        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_service'):
+            queryset = services
+        else:
+            queryset = services.filter(user=user)
+        
+        return queryset
 
     def create(self, request, format=None):
         serializer = PostServiceRegistrationSerializer(data=request.data)

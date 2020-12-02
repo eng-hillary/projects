@@ -91,6 +91,7 @@ class FarmFnancialRecordForm(forms.ModelForm):
 
 class FarmProductionRecordForm(forms.ModelForm):
     record_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    record_time = forms.TimeField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'time'}))
    
     class Meta:
         model = ProductionRecord

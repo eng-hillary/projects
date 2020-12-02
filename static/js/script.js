@@ -393,7 +393,7 @@ $(document).ready(function () {
     $.each(farmdata, function(key, data) {
   
       var latlon = new google.maps.LatLng(data.lat, data.lon);
-      console.log(data)
+      //console.log(data)
       var marker = new google.maps.Marker({
         position: latlon,
         map: map,
@@ -403,7 +403,8 @@ $(document).ready(function () {
   
       
       var details = "REGION:" + data.region + "<br>" + "DISTRICT:" +
-      data.district + "<br>" + "FARMER:" + data.farmer + "<br>" + "PHONE NUMBER:" + data.phone_number + ".";
+      data.district + "<br>" + "FARMER:" + data.farmer + "<br>" + "PHONE NUMBER:" + data.phone_number + "."+"<br>" 
+      +'<a style="color:blue;" href="/farm/'+ data.id +'/view/">Farm Details</a>';
   
       bindInfoWindow(marker, map, infowindow, details);
   
@@ -424,7 +425,7 @@ $(document).ready(function () {
   
   
   
-  google.maps.event.addDomListener(window, 'load', initialize);
+  //google.maps.event.addDomListener(window, 'load', initialize);
 
 // var map;
 
