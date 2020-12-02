@@ -369,19 +369,22 @@ $(document).ready(function () {
     });
   });
 
-  
+  //farm map 
   var map;
+  var resourcemap;
   var icon = ""
   function initialize() {
     var infowindow = new google.maps.InfoWindow();
     var mapProp = {
-      center: new google.maps.LatLng(1.0609637, 32.5672804), //LLANDRINDOD WELLS
+      center: new google.maps.LatLng(1.0609637, 32.5672804), 
       zoom: 8,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
   
     map = new google.maps.Map(document.getElementById("map"), mapProp);
-  
+    resourcemap = new google.maps.Map(document.getElementById("resourcemap"), mapProp);
+
+   //FARMS
     $.getJSON('/farm/api/maps/', function(json) {
       var farmdata = [];
       json.forEach(function (p) {
@@ -398,7 +401,7 @@ $(document).ready(function () {
         position: latlon,
         map: map,
         //icon: icon,
-        farm_name: data.farm_name
+        data: data.farm_name
       });
   
       
@@ -411,6 +414,36 @@ $(document).ready(function () {
       });
   
     });
+
+    //RESOURCES
+    $.getJSON('/resourcesharing/api/resource/', function(json) {
+      var resourcedata = [];
+      json.forEach(function (p) {
+        p.z = p.id;
+        resourcedata.push(p);
+      })
+      //console.log(farmdata)
+  
+    $.each(resourcedata, function(key, data) {
+  
+      var latlon = new google.maps.LatLng(data.lat, data.lon);
+      console.log(data)
+      var marker = new google.maps.Marker({
+        position: latlon,
+        map: resourcemap,
+        //icon: icon,
+        data: data.resource_name
+      });
+  
+      
+      var details = "OWNER:" + data.owner + "<br>" + "PHONE NUMBER:" +
+      data.Phone_number1 + "<br>" + "STATUS:" + data.resource_status + "<br>" + "PRICE:" + data.price + ".";
+  
+      bindInfoWindow(marker, resourcemap, infowindow, details);
+  
+      });
+  
+    });
   
   }
   
@@ -419,40 +452,7 @@ $(document).ready(function () {
       infowindow.setContent(strDescription);
       infowindow.open(map, marker);
     });
+}
 
-  
-  }
-  
-  
-  
-  //google.maps.event.addDomListener(window, 'load', initialize);
+  google.maps.event.addDomListener(window, 'load', initialize);
 
-// var map;
-
-// function initMap() {
-//   map = new google.maps.Map(document.getElementById("map"), {
-//     zoom: 8,
-//     center: new google.maps.LatLng(1.0609637, 32.5672804),
-//     mapTypeId: "terrain",
-//   });
-//   // Create a <script> tag and set the USGS URL as the source.
-//   const script = document.createElement("script");
-//   // This example uses a local copy of the GeoJSON stored at
-//   // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-//   script.src =
-//     "https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js";
-//   document.getElementsByTagName("head")[0].appendChild(script);
-// }
-
-// // Loop through the results array and place a marker for each
-// // set of coordinates.
-// const eqfeed_callback = function (results) {
-//   for (let i = 0; i < results.features.length; i++) {
-//     const coords = results.features[i].geometry.coordinates;
-//     const latLng = new google.maps.LatLng(coords[1], coords[0]);
-//     new google.maps.Marker({
-//       position: latLng,
-//       map: map,
-//     });
-//   }
-// };
