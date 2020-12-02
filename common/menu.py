@@ -260,7 +260,7 @@ menu.PassTestNode(
         css_class="sidebar-header",
         label='<i data-feather="truck"></i><span>Manage Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
-        test=can_view_service_provider,
+        test=can_view_services,
         children=[
             
             menu.PassTestNode(id='register_service',
@@ -387,12 +387,12 @@ menu.PassTestNode(
         url='#',
         test=can_view_resources,
         children=[
-            menu.PassTestNode(id='create_resource',
-                              label='<i class="fa fa-circle"></i>Share Resource',
+            # menu.PassTestNode(id='create_resource',
+            #                   label='<i class="fa fa-circle"></i>Share Resource',
                              
-                              pattern_name='resourcesharing:create_resource', test=can_add_resources),
+                            #   pattern_name='resourcesharing:create_resource', test=can_add_resources),
             menu.PassTestNode(id='resource_list',
-                              label='<i class="fa fa-circle"></i>Manage',
+                              label='<i class="fa fa-circle"></i>{% if  request.user.is_superuser %} Manage resources {% else %}Share Resource{% endif %}',
                              
                               pattern_name='resourcesharing:resource_list', test=can_view_resources),
            
