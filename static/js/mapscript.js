@@ -388,99 +388,99 @@ document.getElementById('service_container').addEventListener('mouseout', functi
 
 
 // Create the chart
-Highcharts.chart('piecontainer', {
-  chart: {
-    type: 'pie'
-  },
-  title: {
-    text: 'Number of farmers '
-  },
-  subtitle: {
-    text: 'Click the slices to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
-  },
+// Highcharts.chart('piecontainer', {
+//   chart: {
+//     type: 'pie'
+//   },
+//   title: {
+//     text: 'Number of farmers '
+//   },
+//   subtitle: {
+//     text: 'Click the slices to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+//   },
 
-  accessibility: {
-    announceNewData: {
-      enabled: true
-    },
-    point: {
-      valueSuffix: '%'
-    }
-  },
+//   accessibility: {
+//     announceNewData: {
+//       enabled: true
+//     },
+//     point: {
+//       valueSuffix: '%'
+//     }
+//   },
 
-  plotOptions: {
-    series: {
-      dataLabels: {
-        enabled: true,
-        format: '{point.name}: {point.y:.1f}%<br>' 
-      }
-    }
-  },
+//   plotOptions: {
+//     series: {
+//       dataLabels: {
+//         enabled: true,
+//         format: '{point.name}: {point.y:.1f}%<br>' 
+//       }
+//     }
+//   },
 
-  tooltip: {
-    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total farmers<br/>'+
-                 '<span style="color:{point.color}">{point.sectorone}</span>: <b>{point.one:.2f}%</b> of total sectors<br/>'+
-                 '<span style="color:{point.color}">{point.sectortwo}</span>: <b>{point.two:.2f}%</b> of total sectors<br/>'+
-                 '<span style="color:{point.color}">{point.sectorthree}</span>: <b>{point.three:.2f}%</b> of total sectors<br/>'+
-                 '<span style="color:{point.color}">{point.sectorfour}</span>: <b>{point.four:.2f}%</b> of total sectors<br/>'
-  },
+//   tooltip: {
+//     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+//     pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total farmers<br/>'+
+//                  '<span style="color:{point.color}">{point.sectorone}</span>: <b>{point.one:.2f}%</b> of total sectors<br/>'+
+//                  '<span style="color:{point.color}">{point.sectortwo}</span>: <b>{point.two:.2f}%</b> of total sectors<br/>'+
+//                  '<span style="color:{point.color}">{point.sectorthree}</span>: <b>{point.three:.2f}%</b> of total sectors<br/>'+
+//                  '<span style="color:{point.color}">{point.sectorfour}</span>: <b>{point.four:.2f}%</b> of total sectors<br/>'
+//   },
 
-  series: [
-    {
-      name: "Farmers",
-      colorByPoint: true,
-      data: [
-        {
-          name: "Western",
-          sectorone: "Livestock",
-          sectortwo: "Poultry",
-          sectorthree: "Fishery",
-          sectorfour: "Crops",
-          y: 62.74,
-          one: 15.68,
-          two: 3.92,
-          three: 3.92,
-          four: 3.92
-        },
-        {
-          name: "Northern",
-          sectorone: "Livestock",
-          sectortwo: "Poultry",
-          sectorthree: "Fishery",
-          sectorfour: "Crops",
-          y: 10.57,
-          one: 15.68,
-          two: 3.92,
-          three: 3.92,
-          four: 3.92
-        },
-        {
-          name: "Central",
-          sectorone: "Livestock",
-          sectortwo: "Poultry",
-          sector3: "Fishery",
-          sector4: "Crops",
-          y: 7.23,
-          one: 15.68,
-          two: 3.92,
-          three: 3.92,
-          four: 3.92
-        },
-        {
-          name: "Eastern",
-          sectorone: "Livestock",
-          sectortwo: "Poultry",
-          sector3: "Fishery",
-          sector4: "Crops",
-          y: 5.58,
-          one: 15.68,
-          two: 3.92,
-          three: 3.92,
-          four: 3.92
-        }
-      ]
-    }
-  ]
-});
+//   series: [
+//     {
+//       name: "Farmers",
+//       colorByPoint: true,
+//       data: [
+//         {
+//           name: "Western",
+//           sectorone: "Livestock",
+//           sectortwo: "Poultry",
+//           sectorthree: "Fishery",
+//           sectorfour: "Crops",
+//           y: 62.74,
+//           one: 15.68,
+//           two: 3.92,
+//           three: 3.92,
+//           four: 3.92
+//         },
+//         {
+//           name: "Northern",
+//           sectorone: "Livestock",
+//           sectortwo: "Poultry",
+//           sectorthree: "Fishery",
+//           sectorfour: "Crops",
+//           y: 10.57,
+//           one: 15.68,
+//           two: 3.92,
+//           three: 3.92,
+//           four: 3.92
+//         },
+//         {
+//           name: "Central",
+//           sectorone: "Livestock",
+//           sectortwo: "Poultry",
+//           sector3: "Fishery",
+//           sector4: "Crops",
+//           y: 7.23,
+//           one: 15.68,
+//           two: 3.92,
+//           three: 3.92,
+//           four: 3.92
+//         },
+//         {
+//           name: "Eastern",
+//           sectorone: "Livestock",
+//           sectortwo: "Poultry",
+//           sector3: "Fishery",
+//           sector4: "Crops",
+//           y: 5.58,
+//           one: 15.68,
+//           two: 3.92,
+//           three: 3.92,
+//           four: 3.92
+//         }
+//       ]
+//     }
+//   ]
+// });
  
