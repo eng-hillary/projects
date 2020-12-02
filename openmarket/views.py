@@ -306,6 +306,21 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
             profile.user.groups.add(provider_group)
             serializer.save(status ='Active', approved_date = datetime.datetime.now(),
             approver=self.request.user)
+            # sending message to the service provider for notification
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'Your application has been Approved'
+            message = render_to_string('farm_created_successful_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'message': 'Your application as a service provider has been approved successfully.',
+                })
+            to_email = user.email
+            email = EmailMessage(
+                subject, message, to=[to_email]
+                )
+            email.content_subtype = "html"
+            email.send()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
@@ -314,7 +329,24 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
         serializer = ServiceProviderApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
             serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            # sending message to the service provider for notification
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'Your application has been Declined'
+            message = render_to_string('farm_created_successful_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'message': 'Your application as a service provider has been declined.',
+                })
+            to_email = user.email
+            email = EmailMessage(
+                subject, message, to=[to_email]
+                )
+            email.content_subtype = "html"
+            email.send()
             return Response(serializer.data)
+        
+         
         return Response(serializer.errors, status=400)
 
     def create(self, request, format=None):
@@ -402,9 +434,23 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = Service.objects.all().order_by('service_name')
+    #queryset = Service.objects.all().order_by('service_name')
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the services 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        services = Service.objects.order_by('-id')
+        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_service'):
+            queryset = services
+        else:
+            queryset = services.filter(user=user)
+        
+        return queryset
 
     def create(self, request, format=None):
         serializer = PostServiceRegistrationSerializer(data=request.data)
@@ -648,8 +694,8 @@ class EditServiceView(LoginRequiredMixin,UpdateView):
         return super(EditServiceView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(EditServiceView, self).get_form_kwargs()
-        return kwargs
+
+        kwargs['request'] = self.request
 
 
     def post(self, request, *args, **kwargs):
@@ -668,6 +714,13 @@ class EditServiceView(LoginRequiredMixin,UpdateView):
 
          # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
+        subject = 'Service Updated Successfully'
+        message = render_to_string('farm_created_successful_email.html', {
+            'user': farm.user,
+            'domain': current_site.domain,
+            'message': 'Your '+farm.service_name + ' Details have been updated sucessfully',
+            })
+        to_email = farm.user.email
         subject = 'Farm Updated Successfully'
         message = render_to_string('farm_created_successful_email.html', {
             'user': openmarket.serviceprovider.user,
@@ -675,6 +728,7 @@ class EditServiceView(LoginRequiredMixin,UpdateView):
             'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
             })
         to_email = farm.farmer.user.email
+
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
