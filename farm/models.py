@@ -167,6 +167,7 @@ class ProductionRecord(TimeStampedModel, models.Model):
     quantity = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
     measurements = models.CharField(max_length=25, null=True, blank=True)
     record_date = models.DateField()
+    record_time = models.TimeField(auto_now=True, blank=True)
     record_taker = models.CharField(max_length=50, null=True, blank=True)
     general_remarks = models.TextField(max_length=150, null=True, blank=True)
 

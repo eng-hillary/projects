@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics,SoilScience
+from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics,SoilScience, Category
 from common.models import Region, District
 from .serializers import (ProductSerializer,
                         SellerSerializer, 
@@ -14,9 +14,10 @@ from .serializers import (ProductSerializer,
                         ServiceProviderApprovalSerializer,
                         SellerApprovalSerializer,
                         PostServiceProviderSerializer,
-                        PostServiceRegistrationSerializer
-                        )
+                        PostServiceRegistrationSerializer,
+                        CategorySerializer)
 from rest_framework import viewsets
+from rest_framework import filters
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -48,6 +49,33 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by('-id')
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    retrieve:
+        retrieve a sigle category by its id
+
+    list:
+        Return a list of all Categories.
+
+    create:
+        Create a new Category.
+
+    destroy:
+        Delete a Category.
+
+    update:
+        Update a Category.
+
+    partial_update:
+        Update a Category.
+    """
+    queryset = Category.objects.order_by('-id')
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['id','cat_name']
+    ordering_fields = '__all__'
 
 
 class ProductList(APIView):
@@ -252,10 +280,23 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = ServiceProvider.objects.all().order_by('nin')
+    #queryset = ServiceProvider.objects.all().order_by('nin')
     serializer_class = ServiceProviderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        """
+        This view should return a list of all the service  provider profiles
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        servicesproviders = ServiceProvider.objects.order_by('-user_id')
+        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_serviceprovider'):
+            queryset = servicesproviders
+        else:
+            queryset = servicesproviders.filter(user=user)
+        
+        return queryset
 
     def approved(self, request, pk, format=None):
         profile = self.get_object()
@@ -265,6 +306,21 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
             profile.user.groups.add(provider_group)
             serializer.save(status ='Active', approved_date = datetime.datetime.now(),
             approver=self.request.user)
+            # sending message to the service provider for notification
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'Your application has been Approved'
+            message = render_to_string('farm_created_successful_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'message': 'Your application as a service provider has been approved successfully.',
+                })
+            to_email = user.email
+            email = EmailMessage(
+                subject, message, to=[to_email]
+                )
+            email.content_subtype = "html"
+            email.send()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
@@ -273,7 +329,24 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
         serializer = ServiceProviderApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
             serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            # sending message to the service provider for notification
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'Your application has been Declined'
+            message = render_to_string('farm_created_successful_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'message': 'Your application as a service provider has been declined.',
+                })
+            to_email = user.email
+            email = EmailMessage(
+                subject, message, to=[to_email]
+                )
+            email.content_subtype = "html"
+            email.send()
             return Response(serializer.data)
+        
+         
         return Response(serializer.errors, status=400)
 
     def create(self, request, format=None):
@@ -361,9 +434,23 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = Service.objects.all().order_by('service_name')
+    #queryset = Service.objects.all().order_by('service_name')
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the services 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        services = Service.objects.order_by('-id')
+        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_service'):
+            queryset = services
+        else:
+            queryset = services.filter(user=user)
+        
+        return queryset
 
     def create(self, request, format=None):
         serializer = PostServiceRegistrationSerializer(data=request.data)
@@ -593,19 +680,20 @@ class ServiceDetailView(LoginRequiredMixin, DetailView):
         })
         return context
 
-class UpdateServiceView(LoginRequiredMixin,UpdateView):
+class EditServiceView(LoginRequiredMixin,UpdateView):
     model = Service
     template_name = 'register_service.html'
     success_url = reverse_lazy('openmarket:serviceregistration_list')
     form_class = ServiceProfileForm
-    success_message = "Your Service was Updated successfully"
+    success_message = "Service has been updated successfully"
 
 
     def dispatch(self, request, *args, **kwargs):
-        return super(UpdateServiceView, self).dispatch(request, *args, **kwargs)
+        return super(EditServiceView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(UpdateServiceView, self).get_form_kwargs()
+        kwargs = super(EditServiceView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
 
@@ -620,11 +708,25 @@ class UpdateServiceView(LoginRequiredMixin,UpdateView):
 
 
     def form_valid(self, form):
-        profile = form.save(commit=False)
-        # updating profile for only changed fields
-        profile.save()
+        farm = form.save(commit=False)
+        farm.save()
 
+         # send email to farmer  a message after an update
+        current_site = get_current_site(self.request)
+        subject = 'Service Updated Successfully'
+        message = render_to_string('farm_created_successful_email.html', {
+            'user': farm.user,
+            'domain': current_site.domain,
+            'message': 'Your '+farm.service_name + ' Details have been updated sucessfully',
+            })
+        to_email = farm.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
         return redirect('openmarket:serviceregistration_list')
+
 
     def form_invalid(self, form):
         if self.request.is_ajax():

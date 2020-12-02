@@ -181,7 +181,7 @@ $(document).ready(function () {
             var village =val.village.split(",")[0];
             var icon ="http://openweathermap.org/img/wn/"+val.icon+"@2x.png"
             community_weather+='<img src='+icon+'><br>'+'<h3>'+ village +'</b></h3><span>'+
-            val.date_reported +'|'+ data[0].time_reported+ ', '+val.weather+'</span>'
+            val.date_reported +'|'+ val.time_reported + ', '+val.weather+'</span>'
   
           });
           $('#show_community_weather').html(community_weather);
@@ -396,7 +396,7 @@ $(document).ready(function () {
     $.each(farmdata, function(key, data) {
   
       var latlon = new google.maps.LatLng(data.lat, data.lon);
-      console.log(data)
+      //console.log(data)
       var marker = new google.maps.Marker({
         position: latlon,
         map: map,
@@ -406,7 +406,8 @@ $(document).ready(function () {
   
       
       var details = "REGION:" + data.region + "<br>" + "DISTRICT:" +
-      data.district + "<br>" + "FARMER:" + data.farmer + "<br>" + "PHONE NUMBER:" + data.phone_number + ".";
+      data.district + "<br>" + "FARMER:" + data.farmer + "<br>" + "PHONE NUMBER:" + data.phone_number + "."+"<br>" 
+      +'<a style="color:blue;" href="/farm/'+ data.id +'/view/">Farm Details</a>';
   
       bindInfoWindow(marker, map, infowindow, details);
   

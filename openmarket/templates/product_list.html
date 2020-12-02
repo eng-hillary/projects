@@ -7,13 +7,13 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="page-header-left">
-                    <h3>Product profile List
+                    <h3>Products List
                         <small>{{ user.groups.all.0 }} Dashboard</small>
                     </h3>
                 </div>
             </div>
             <div class="col-lg-6">
-                <ol class="breadcrumb pull-right">
+                <ol class="breadcrumb float-right">
                     <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                     <li class="breadcrumb-item">Product profile</li>
                     <li class="breadcrumb-item active">Product profile List</li>
@@ -95,13 +95,13 @@
 
   function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
-      return row.user_id
+      return row.id
     })
   }
 
   function responseHandler(res) {
     $.each(res.rows, function (i, row) {
-      row.state = $.inArray(row.user_id, selections) !== -1
+      row.state = $.inArray(row.id, selections) !== -1
     })
     return res
   }
@@ -109,8 +109,8 @@
 
 
   function operateFormatter(value, row, index) {
-    var url ="/openmarket/"+row.user_id+"/edit"
-    var view_url ="/openmarket/"+row.user_id+"/view"
+    var url ="/openmarket/"+row.id+"/edit"
+    var view_url ="/openmarket/"+row.id+"/view"
     return [
     {% if request.user.is_superuser or perms.openmarket.change_product %}
       '<a class="Edit " href="'+url+'" title="Update">',

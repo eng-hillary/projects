@@ -8,7 +8,7 @@ from .models import (Product,
                      Service,
                      ContactDetails,
                      Logistics,
-                     SoilScience)
+                     SoilScience,Category)
 from django.contrib.auth.models import User
 from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
@@ -23,6 +23,13 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('id', 'name', 'enterprise', 'local_name', 'image', 'description', 'price', 'available',
          'date_created', 'date_updated')
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields =('id','cat_name')
+
+
 
 class SellerSerializer(serializers.ModelSerializer):
    

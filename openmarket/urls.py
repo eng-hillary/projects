@@ -25,17 +25,18 @@ from .views import (ProductList,
                     ServiceProviderProfileDetailView,
                     ServiceDetailView,
                     MapServiceDetailView,
-                    UpdateServiceView
+                    EditServiceView
                      )
 
 router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet)
+router.register(r'categories', views.CategoryViewSet)
 router.register(r'sellers', views.SellerViewSet)
 router.register(r'buyers', views.BuyerViewSet)
 router.register(r'sellerposts', views.SellerPostViewSet)
 router.register(r'buyersposts', views.BuyerPostViewSet)
-router.register(r'serviceproviders', views.ServiceProviderViewSet)
-router.register(r'serviceregistration', views.ServiceRegistrationViewSet)
+router.register(r'serviceproviders', views.ServiceProviderViewSet, basename='service_providers')
+router.register(r'serviceregistration', views.ServiceRegistrationViewSet,  basename='services')
 router.register(r'contactdetails', views.ContactDetailsViewSet)
 router.register(r'logistics', views.LogisticsViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
@@ -88,7 +89,7 @@ urlpatterns = [
     path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
     path('<int:pk>/edit/', UpdateServiceProviderProfile.as_view(), name="edit_service_provider_profile"),
     path('<int:pk>/viewprovider/', ServiceProviderProfileDetailView.as_view(), name="view_serviceprovider_profile"),
-    path('<int:pk>/editservice/', UpdateServiceView.as_view(), name="edit_service_provider_profile"),
+    path('<int:pk>/editservice/', EditServiceView.as_view(), name="edit_service_profile"),
     path('<int:pk>/viewservice/', ServiceDetailView.as_view(), name="view_service"),
     
     

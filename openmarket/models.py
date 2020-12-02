@@ -124,12 +124,15 @@ class ServiceProvider(models.Model):
 
     class meta:
         ordering =("nin")
+        permissions = (
+            ("can_approve_service_providers", "Can approve service providers"),
+        )
 
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
    
-    category = models.ManyToManyField(Category)
+    category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True,blank=True)
@@ -139,8 +142,6 @@ class Service(models.Model):
     picture = models.ImageField(null=True, blank=True)
     description = models.TextField(blank=True)
     available_services = models.CharField(max_length=50, blank=True)
-    #status = models.CharField(choices=STATUS, default='True', max_length=20, null=False, blank=True)
-    #image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     rent = models.CharField(max_length=25, null=True, blank=True)
     name_of_storage_center = models.CharField(max_length=50, null=True,blank=True)
     location_of_storage_center = models.CharField(null=True, max_length=50, blank=True)
