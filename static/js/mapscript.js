@@ -393,7 +393,7 @@ Highcharts.chart('piecontainer', {
     type: 'pie'
   },
   title: {
-    text: 'Number of farmers per region'
+    text: 'Number of farmers '
   },
   subtitle: {
     text: 'Click the slices to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'

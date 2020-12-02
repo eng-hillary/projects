@@ -32,9 +32,9 @@
             <div class="col-md-3">
 
                 <div class="col-auto">
-                    <div class="avatar-wrapper" data-tippy-placement="bottom" title="Profile image">
-                        {% if providerrecord.user.profile.profile_pic %}
-                        <img alt="" class="profile-pic" src="{{providerrecord.user.profile.profile_pic.url}}" />
+                    <div class="avatar-wrapper" data-tippy-placement="bottom" title="Service image">
+                        {% if providerrecord.picture %}
+                        <img alt="" class="profile-pic" src="{{providerrecord.picture.url}}" />
                         {% endif %}
                     </div>
                 </div>
@@ -42,7 +42,7 @@
             </div>
             <div class="col-md-9">
                 <div class="product-page-details product-right mb-0">
-                    <h2>{{providerrecord.user.profile}}</h2>
+                    <h2>{{providerrecord.service_name}}</h2>
                     <hr>
                     <h3 class="product-title">Service Details</h3>
 
@@ -50,14 +50,15 @@
                     <b>Email</b>: {{providerrecord.user.email}} <br>
                     <b>Phone</b>:
                     {{providerrecord.phone_1}}{% if providerrecord.phone_2 %}/{{providerrecord.phone_2}}{% endif %} <br>
-                    <b>Service Provider Location</b>: {{providerrecord.service_provider_location}}<br>
+                    <b>Service Name</b>: {{providerrecord.service_name}} <br>
+                    <b>Service Location</b>: {{providerrecord.compute_location}}<br>
 
-                    <b>National ID Number</b>: {{providerrecord.nin}} <br>
-                    <b>List of services if more than one</b>: {{providerrecord.list_of_services_if_more_than_one}} <br>
+                    <b>Category</b>: {{providerrecord.category}} <br>
+                    <b>Availability Date</b>: {{providerrecord.availability_date}} <br>
                     <h3 class="product-title">Address</h3>
                     
                     <hr>
-                    <h6 class="product-title size-text">Services Offered </h6>
+                    <h6 class="product-title size-text">Other Services Offered by {{providerrecord.user.profile}} </h6>
                     <table data-toggle="table" data-show-toggle="true" data-search="true"
                         data-show-columns-toggle-all="true" data-show-columns="true">
                         <thead>
@@ -77,12 +78,12 @@
                             {% for service in providerrecord.serviceregistration.all %}
                             <tr>
                                 <!--<td>{{service.farm_name}}</td>-->
-                                <td>{{service.service_name}}</td>
-                                <td>{{service.category}} </td>
-                                <td>{{service.service_type}}</td>
-                                <td>{{service.size}}</td>
+                                <td>{{providerrecord.service_name}}</td>
+                                <td>{{providerrecord.category}} </td>
+                                <td>{{providerrecord.service_type}}</td>
+                                <td>{{providerrecord.size}}</td>
 
-                                <td>{{service.availability_date}}</td>
+                                <td>{{providerrecord.availability_date}}</td>
                                 <td>
                                     <img src="{{service.picture.url}}" class="img-thumbnail">
                                 </td>

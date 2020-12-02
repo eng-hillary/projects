@@ -33,7 +33,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from .forms import ProfileForm
 from farmer.views import FarmerProfile
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum, FloatField
 import json
 from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer, RegionSerializer
 ,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost,ProfileSerializer)
@@ -41,6 +41,8 @@ from rest_framework import filters
 from django.core import serializers as django_serializers
 from rest_framework import status
 from django.contrib.auth.forms import PasswordChangeForm
+from farm .models import Sector
+from django.db.models.functions import Cast
 
 
 class HomePage(LoginRequiredMixin, TemplateView):
@@ -49,6 +51,10 @@ class HomePage(LoginRequiredMixin, TemplateView):
 
     
     def get_context_data(self, **kwargs):
+        farmers = FarmerProfile.objects.all()
+     # print(farmers) 
+        count = float(farmers.count())
+        sectors = Sector.objects.all()
         context = super(HomePage, self).get_context_data(**kwargs)
         dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
         bank_count = Count('source_of_credit', filter=Q(source_of_credit='Bank')),
@@ -57,7 +63,12 @@ class HomePage(LoginRequiredMixin, TemplateView):
         farmergroups_count = Count('source_of_credit', filter=Q(source_of_credit='Farmer Groups'))) \
         .order_by('user__profile__region')
         
+        piedataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
+            farmers = Count('sector', filter = Q(sector__in=sectors)),
+            percentage =  Cast(((Count('sector', filter = Q(sector__in=sectors))/count)*100),FloatField()))
+                
         context["dataset"]=dataset
+        context["piedataset"]= piedataset
         #context["chart"] = json.dumps(chart)
         #context["credit.html"] = credit.html
         

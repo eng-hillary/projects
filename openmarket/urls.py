@@ -36,7 +36,9 @@ router.register(r'buyers', views.BuyerViewSet)
 router.register(r'sellerposts', views.SellerPostViewSet)
 router.register(r'buyersposts', views.BuyerPostViewSet)
 router.register(r'serviceproviders', views.ServiceProviderViewSet, basename='service_providers')
+
 router.register(r'serviceregistration', views.ServiceRegistrationViewSet,  basename='services')
+
 router.register(r'contactdetails', views.ContactDetailsViewSet)
 router.register(r'logistics', views.LogisticsViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
