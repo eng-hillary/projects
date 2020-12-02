@@ -6,10 +6,16 @@ from common .models import (Region,District)
 from farm .models import Sector
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
+from django.contrib.auth.models import User
+
+class CustomUserChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+         return obj.get_full_name()
 
 class AgentProfileForm(forms.ModelForm):
     contact = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
     district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=District.objects.none())
+    user = CustomUserChoiceField(queryset=User.objects.all())
     class Meta:
         model = AgentProfile
         exclude = []
