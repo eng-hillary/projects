@@ -51,7 +51,13 @@ class HomePage(LoginRequiredMixin, TemplateView):
 
     
     def get_context_data(self, **kwargs):
+        
         farmers = FarmerProfile.objects.all()
+        count = float(farmers.count())
+        sectors = Sector.objects.all()
+        labels = []
+        data = []
+    
      # print(farmers) 
         count = float(farmers.count())
         sectors = Sector.objects.all()
@@ -63,12 +69,23 @@ class HomePage(LoginRequiredMixin, TemplateView):
         farmergroups_count = Count('source_of_credit', filter=Q(source_of_credit='Farmer Groups'))) \
         .order_by('user__profile__region')
         
-        piedataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
-            farmers = Count('sector', filter = Q(sector__in=sectors)),
-            percentage =  Cast(((Count('sector', filter = Q(sector__in=sectors))/count)*100),FloatField()))
+        
+        piedataset = FarmerProfile.objects.filter(user__profile__region__isnull = False).values('user__profile__region__name').annotate(
+                #crop_count = Count('sector', filter=Q(sector='Crop Farming')),
+                farmers = Count('sector', filter = Q(sector__in=sectors)),
+                percentage =  ((Count('sector', filter = Q(sector__in=sectors))/count)*100))
+                        
+        # print(dataset)
+        for entry in piedataset:
+            labels.append('%s Region' % entry['user__profile__region__name'] )
+            data1=data.append( entry['percentage'])
+                #data1.append('O')
                 
+        
         context["dataset"]=dataset
         context["piedataset"]= piedataset
+        context["labels"]=labels
+        context["data"]=data
         #context["chart"] = json.dumps(chart)
         #context["credit.html"] = credit.html
         
