@@ -643,6 +643,7 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
         profile = form.save(commit=False)
         # updating profile for only changed fields
         profile.save()
+        form.save_m2m()
 
         return redirect('openmarket:serviceprovider_list')
 
@@ -669,7 +670,8 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
 
 class ServiceDetailView(LoginRequiredMixin, DetailView):
     model = Service
-    context_object_name = "profilerecord"
+    context_object_name = "providerrecord"
+
     template_name = "view_services_details.html"
 
     def get_context_data(self, **kwargs):
@@ -692,9 +694,8 @@ class EditServiceView(LoginRequiredMixin,UpdateView):
         return super(EditServiceView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(EditServiceView, self).get_form_kwargs()
+
         kwargs['request'] = self.request
-        return kwargs
 
 
     def post(self, request, *args, **kwargs):
@@ -720,6 +721,14 @@ class EditServiceView(LoginRequiredMixin,UpdateView):
             'message': 'Your '+farm.service_name + ' Details have been updated sucessfully',
             })
         to_email = farm.user.email
+        subject = 'Farm Updated Successfully'
+        message = render_to_string('farm_created_successful_email.html', {
+            'user': openmarket.serviceprovider.user,
+            'domain': current_site.domain,
+            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
+            })
+        to_email = farm.farmer.user.email
+
         email = EmailMessage(
                 subject, message, to=[to_email]
             )

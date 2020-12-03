@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'unffeagents',
     'resourcesharing',
     'crispy_forms',
+    'django_nvd3',
 
 ]
 
