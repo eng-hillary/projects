@@ -337,25 +337,50 @@ class FarmerProfileDetailView(LoginRequiredMixin, DetailView):
 
 
 #Quering the farmers table for the data. 
+# def farmer_class_view(request):
+
+
+#     farmers = FarmerProfile.objects.all()
+#    # print(farmers) 
+#     count = float(farmers.count())
+#     sectors = Sector.objects.all()
+#     print(count)
+
+#     for farmer in farmers:
+#         dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
+#             farmers = Count('sector', filter = Q(sector__in=sectors)),
+#             percentage =  Cast(((Count('sector', filter = Q(sector__in=sectors))/count)*100),FloatField()))
+                
+#     print(dataset)
+    
+
+
+#     return render(request, 'credit.html', {'dataset': dataset})
+
 def farmer_class_view(request):
-
-
     farmers = FarmerProfile.objects.all()
-   # print(farmers) 
     count = float(farmers.count())
     sectors = Sector.objects.all()
     print(count)
 
-    for farmer in farmers:
-        dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
-            farmers = Count('sector', filter = Q(sector__in=sectors)),
-            percentage =  Cast(((Count('sector', filter = Q(sector__in=sectors))/count)*100),FloatField()))
+    labels = []
+    data = []
+  
+    dataset = FarmerProfile.objects.filter(user__profile__region__isnull = False).values('user__profile__region__name').annotate(
+        #crop_count = Count('sector', filter=Q(sector='Crop Farming')),
+        farmers = Count('sector', filter = Q(sector__in=sectors)),
+        percentage =  ((Count('sector', filter = Q(sector__in=sectors))/count)*100))
                 
     print(dataset)
-    
+    for entry in dataset:
+        labels.append('%s Region' % entry['user__profile__region__name'] )
+        data1=data.append( entry['percentage'])
+        #data1.append('O')
+        
+      
 
+    return render(request, 'credit.html', {
+        'labels': labels,
+        'data': data,
+    })
 
-    return render(request, 'credit.html', {'dataset': dataset})
-
-
-   
