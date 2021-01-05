@@ -33,8 +33,8 @@ class UserSerializer(serializers.Serializer):
     district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    #parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    #village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
 
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.first_name, obj.last_name)
@@ -49,7 +49,7 @@ class ProfileSerializer(serializers.ModelSerializer):
   
     class Meta:
         model = Profile
-        fields = ['phone_number','phone_2','home_address','gender','region','district','parish','county','sub_county','village']
+        fields = ['phone_number','phone_2','home_address','gender','region','district','county','sub_county']
         
 
 class UserPostSerializer(serializers.ModelSerializer):
@@ -84,8 +84,8 @@ class UserPostSerializer(serializers.ModelSerializer):
             district = profile_data['district'],
             county = profile_data['county'],
             sub_county = profile_data['sub_county'],
-            parish = profile_data['parish'],
-            village = profile_data['village']
+            # parish = profile_data['parish'],
+            # village = profile_data['village']
         )
         Token.objects.get_or_create(user=user)
        

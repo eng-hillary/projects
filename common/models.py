@@ -88,8 +88,8 @@ class Profile(models.Model):
     district = models.ForeignKey(District, on_delete=models.CASCADE, null=True, blank=False)
     county = models.ForeignKey(County, on_delete=models.CASCADE, null=True, blank=False)
     sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE, null=True, blank=False)
-    parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True, blank=False)
-    village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True, blank=False)
+    parish = models.ForeignKey(Parish, on_delete=models.CASCADE, null=True, blank=True)
+    village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True, blank=True)
 
 
     def __str__(self):
