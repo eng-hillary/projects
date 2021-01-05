@@ -146,9 +146,9 @@ $(document).ready(function () {
       var dairy_weather_url = "https://api.openweathermap.org/data/2.5/onecall?lat="+crd.latitude+"&lon="+crd.longitude+"&exclude=hourly,current,minutely,&appid=b63fe7d4cf27f561ccaed0342922db91";
       var community_weather_url = "/weather/api/community_weather/?lon="+crd.longitude+"&lat="+crd.latitude;
       console.log(community_weather_url);
-      // console.log('Your current position is:');
-     // console.log(`Latitude : ${crd.latitude}`);
-     // console.log(`Longitude: ${crd.longitude}`);
+       console.log('Your current position is:');
+       console.log(`Latitude : ${crd.latitude}`);
+       console.log(`Longitude: ${crd.longitude}`);
       // console.log(`More or less ${crd.accuracy} meters.`);
       $.ajax({
         url: wheather_api,
@@ -196,7 +196,7 @@ $(document).ready(function () {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
     
-    navigator.geolocation.getCurrentPosition(success, error, options);
+    navigator.geolocation.watchPosition(success, error, options);
   
   
     var getFutureDate = function (day) {

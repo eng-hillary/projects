@@ -185,7 +185,7 @@ class Query(TimeStampedModel, models.Model):
     farm = models.ForeignKey(Farm, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_pests_and_diseases')
     name = models.CharField(_('Extension Workers Name'),max_length=50, null=True, blank=True)
     description = models.TextField( blank=True, null=True)
-    date_discovered = models.DateField()
+    date_discovered = models.DateField(null=True, blank=True)
     action_taken = models.TextField( blank=False, null=True)
     image = models.ImageField(null=True, blank=False)
     reporting_date = models.DateField(auto_now=True)

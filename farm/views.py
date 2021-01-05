@@ -97,19 +97,19 @@ class QueryViewSet(viewsets.ModelViewSet):
     serializer_class = QuerySerializer
     def get_queryset(self):
         """
-        This view should return a list of all the farms 
+        This view should return a list of all the farms
         for the currently authenticated user.
         """
         user = self.request.user
         queries = Query.objects.order_by('farm')
-        
+
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = queries
         else:
             farmer = FarmerProfile.objects.get(user=user)
             farms = Farm.objects.filter(farmer =farmer)
             queryset = queries.filter(farm__in=farms)
-           
+
         return queryset
 
     def create(self, request, format=None):
@@ -124,11 +124,11 @@ class QueryViewSet(viewsets.ModelViewSet):
                 serializer.save()
             except IntegrityError:
                 return Response({'error':'Query already exists'})
-                
+
             return Response({'status':'successful'})
         return Response(serializer.errors, status=400)
 
-# create farm 
+# create farm
 class CreateQueryView(LoginRequiredMixin,CreateView):
     template_name = 'create_query.html'
     success_url = reverse_lazy('farm:query_list')
@@ -141,6 +141,7 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(CreateQueryView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
 
@@ -209,11 +210,11 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        This view should return a list of all the farms 
+        This view should return a list of all the farms
         for the currently authenticated user.
         """
         user = self.request.user
-       
+
         enterprises = Enterprise.objects.all().order_by('farm')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = enterprises
@@ -221,7 +222,7 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
             farmer = FarmerProfile.objects.get(user=user)
             farms = Farm.objects.filter(farmer =farmer)
             queryset = enterprises.filter(farm__in=farms)
-        
+
         return queryset
 
     def create(self, request, format=None):
@@ -236,7 +237,7 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
                 serializer.save()
             except IntegrityError:
                 return Response({'error':'Enterprise already exists'})
-                
+
             return Response({'status':'successful'})
         return Response(serializer.errors, status=400)
 
@@ -263,18 +264,18 @@ class FarmViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        This view should return a list of all the farms 
+        This view should return a list of all the farms
         for the currently authenticated user.
         """
         user = self.request.user
-        
+
         farms = Farm.objects.all().order_by('farmer')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farms
         else:
             farmer = FarmerProfile.objects.get(user=user)
             queryset = farms.filter(farmer=farmer)
-        
+
         return queryset
 
     def create(self, request, format=None):
@@ -289,7 +290,7 @@ class FarmViewSet(viewsets.ModelViewSet):
                 serializer.save(farmer = farmer)
             except IntegrityError:
                 return Response({'error':'Farm already exists'})
-                
+
             return Response({'status':'successful'})
         return Response(serializer.errors, status=400)
 
@@ -300,7 +301,7 @@ class FarmMapViewSet(viewsets.ModelViewSet):
     """
     queryset = Farm.objects.all()
     serializer_class = FarmMapSerializer
-    
+
 
 
 
@@ -314,7 +315,7 @@ class FarmListView(APIView, LoginRequiredMixin):
 
 
 
-# create farm 
+# create farm
 class CreateFarmView(LoginRequiredMixin,CreateView):
     template_name = 'create_farm.html'
     success_url = reverse_lazy('farm:farm_list')
@@ -443,14 +444,14 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-        
+
 
         if form.is_valid():
             return self.form_valid(form)
         else:
             print(form.errors)
         return self.form_invalid(form)
-        
+
 
 
     def form_valid(self, form):
@@ -485,7 +486,7 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-    
+
     def get_initial(self, *args, **kwargs):
         initial = super(CreateEnterpriseView, self).get_initial(**kwargs)
         initial['farm'] = Farm.objects.get(pk=self.kwargs['farm_pk'])
@@ -560,7 +561,7 @@ class FarmProfileDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(FarmProfileDetailView, self).get_context_data(**kwargs)
         context['farmobject'] = self.object
-        
+
         return context
 
 # farm record viewset
@@ -573,11 +574,11 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        This view should return a list of all the farms 
+        This view should return a list of all the farms
         for the currently authenticated user.
         """
         user = self.request.user
-        
+
         farmrecords = FarmRecord.objects.all().order_by('enterprise')
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
@@ -586,7 +587,7 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
             farms = Farm.objects.filter(farmer =farmer)
             enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
-        
+
         return queryset
 
 
@@ -653,7 +654,7 @@ class FarmRecordsList(LoginRequiredMixin, APIView):
     template_name = 'farm_record_list.html'
 
     def get(self, request):
-    
+
         return Response()
 
 # update farmrecord view
@@ -677,7 +678,7 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-       
+
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -778,7 +779,7 @@ class FarmFinancilRecordsList(LoginRequiredMixin, APIView):
     template_name = 'farm_financial_record_list.html'
 
     def get(self, request):
-    
+
         return Response()
 
 # update farmrecord view
@@ -847,7 +848,7 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        This view should return a list of all the farms 
+        This view should return a list of all the farms
         for the currently authenticated user.
         """
         user = self.request.user
@@ -859,7 +860,7 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
             farms = Farm.objects.filter(farmer =farmer)
             enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
-        
+
         return queryset
 
 
@@ -926,7 +927,7 @@ class FarmproductionRecordsList(LoginRequiredMixin, APIView):
     template_name = 'farm_production_record_list.html'
 
     def get(self, request):
-    
+
         return Response()
 
 # update productionrecord view
@@ -995,7 +996,7 @@ class FarmProductionRecordViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        This view should return a list of all the farms 
+        This view should return a list of all the farms
         for the currently authenticated user.
         """
         user = self.request.user
@@ -1007,7 +1008,7 @@ class FarmProductionRecordViewSet(viewsets.ModelViewSet):
             farms = Farm.objects.filter(farmer =farmer)
             enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = productionrecords.filter(enterprise__in=enterprises)
-        
+
         return queryset
 
 
@@ -1022,10 +1023,10 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
     crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
     crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
     crops_lakevictoria = ['banana','coffee','maize','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
-   
+
     crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
     crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale
-   
+
     western_message = "Thank you for your interest in farming, We have analysed your personal profile and land profile and we would recommend the following"
 
 
@@ -1049,11 +1050,11 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
-        
+
         enterprise = form.save(commit=False)
         enterprise.user = self.request.user
         crops_info = []
-       
+
         region = form.cleaned_data.get('region')
         #print(region.id)
         results = Ecological_Zones.objects.get(ecological_zone_name = region.id)
@@ -1067,7 +1068,7 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
         #     "crops":crops,
         # }
 
-        
+
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Service Successful'
@@ -1087,7 +1088,7 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-    
+
 
 
 """
@@ -1110,7 +1111,7 @@ class EnterpriseSelectionDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(EnterpriseSelectionDetailView, self).get_context_data(**kwargs)
-        
+
         context.update({
 
         })
@@ -1135,7 +1136,7 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
             queryset = selections
         else:
             queryset = selections.filter(user=user)
-        
+
         return queryset
 
     def create(self, request, format=None):
@@ -1148,7 +1149,6 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
                 serializer.save(user = self.request.user)
             except Exception as e:
                 return Response({'error':str(e)})
-                 
+
             return Response({'status':'successful'})
         return Response(serializer.errors, status=400)
-

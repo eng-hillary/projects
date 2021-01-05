@@ -16,10 +16,11 @@ class FarmForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(FarmForm, self).__init__(*args, **kwargs)
+        
         self.fields['general_remarks'].widget.attrs.update({'rows': '2'})
       
 class QueryForm(forms.ModelForm):
-    date_discovered = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    date_discovered = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), required=False)
     reporting_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 
     class Meta:

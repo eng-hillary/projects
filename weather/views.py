@@ -36,7 +36,7 @@ class CommunityWeatherViewSet(viewsets.ModelViewSet):
         lon = float(self.request.query_params.get('lon', None))
         lat = float(self.request.query_params.get('lat', None))
         user_location = Point(lon, lat, srid=4326)
-        queryset = CommunityWeather.objects.annotate(distance=Distance("location", user_location)).filter(distance__lte=1000).order_by('-date_reported','-time_reported','distance')[0:1]
+        queryset = CommunityWeather.objects.annotate(distance=Distance("location", user_location)).filter(distance__lte=2000).order_by('-date_reported','-time_reported','distance')[0:1]
         print(queryset)
         return queryset
 
