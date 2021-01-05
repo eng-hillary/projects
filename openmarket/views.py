@@ -448,6 +448,10 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_service'):
             queryset = services
         else:
+            lon = self.request.query_params.get('lon', None)
+            lat = self.request.query_params.get('lat', None)
+            if lat is not None and lon is not None:
+                queryset = queryset.filter(lat=lat, lon=lon)
             queryset = services.filter(user=user)
         
         return queryset
