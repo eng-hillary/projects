@@ -57,7 +57,7 @@ class SignUpForm(UserCreationForm):
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),required=True)
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}),required=True, label="Enter Password")
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}),required=True, label="Confirm Password")
-    home_address = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 30}),
+    home_address = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'cols': 30}),
                                         required=False)
     phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
     phone_2 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=False, initial='+256')
@@ -67,20 +67,20 @@ class SignUpForm(UserCreationForm):
     district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=District.objects.none())
     county = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=County.objects.none())
     sub_county = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=SubCounty.objects.none())
-    parish = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Parish.objects.none())
-    village = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Village.objects.none())
+    #parish = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Parish.objects.none())
+    #village = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Village.objects.none())
 
     class Meta:
         model = User
-        fields = ['username','first_name', 'last_name', 'email','password1', 'password2','phone_number','phone_2','home_address','gender', 'profile_pic','region','district','county','sub_county','parish','village' ]
+        fields = ['username','first_name', 'last_name', 'email','password1', 'password2','phone_number','phone_2','home_address','gender', 'profile_pic','region','district','county','sub_county' ]
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.fields['district'].empty_label = '--please select--'
         self.fields['region'].empty_label = '--please select--'
         self.fields['county'].empty_label = '--please select--'
         self.fields['sub_county'].empty_label = '--please select--'
-        self.fields['parish'].empty_label = '--please select--'
-        self.fields['village'].empty_label = '--please select--'
+        # self.fields['parish'].empty_label = '--please select--'
+        # self.fields['village'].empty_label = '--please select--'
 
         if 'region' in self.data:
             try:
@@ -110,25 +110,25 @@ class SignUpForm(UserCreationForm):
             self.fields['sub_county'].queryset = self.instance.county.subcounty_set.order_by('name')
 
         
-        if 'sub_county' in self.data:
-            try:
-                sub_county_id = int(self.data.get('sub_county'))
-                self.fields['parish'].queryset = Parish.objects.filter(sub_county_id=sub_county_id).order_by('name')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty district queryset
-        elif self.instance.pk:
-            self.fields['parish'].queryset = self.instance.sub_county.parish_set.order_by('name')
-            print(self.instance.sub_county.parish_set)
+        # if 'sub_county' in self.data:
+        #     try:
+        #         sub_county_id = int(self.data.get('sub_county'))
+        #         self.fields['parish'].queryset = Parish.objects.filter(sub_county_id=sub_county_id).order_by('name')
+        #     except (ValueError, TypeError):
+        #         pass  # invalid input from the client; ignore and fallback to empty district queryset
+        # elif self.instance.pk:
+        #     self.fields['parish'].queryset = self.instance.sub_county.parish_set.order_by('name')
+        #     print(self.instance.sub_county.parish_set)
 
 
-        if 'parish' in self.data:
-            try:
-                parish_id = int(self.data.get('parish'))
-                self.fields['village'].queryset = Village.objects.filter(parish_id=parish_id).order_by('name')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty district queryset
-        elif self.instance.pk:
-            self.fields['village'].queryset = self.instance.parish.village_set.order_by('name')
+        # if 'parish' in self.data:
+        #     try:
+        #         parish_id = int(self.data.get('parish'))
+        #         self.fields['village'].queryset = Village.objects.filter(parish_id=parish_id).order_by('name')
+        #     except (ValueError, TypeError):
+        #         pass  # invalid input from the client; ignore and fallback to empty district queryset
+        # elif self.instance.pk:
+        #     self.fields['village'].queryset = self.instance.parish.village_set.order_by('name')
 
    
 
@@ -142,7 +142,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('phone_number', 'home_address', 'gender', 'region','district','county','sub_county','parish','village')
+        fields = ('phone_number', 'home_address', 'gender', 'region','district','county','sub_county')
 
 
 

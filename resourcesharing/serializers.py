@@ -11,10 +11,10 @@ class ResourceSerializer(serializers.ModelSerializer):
         'terms_and_conditions', 'resource_status', 'available_from','available_to', 'price','image']
 
     def get_user_full_name(self, obj):
-        return '{} {}'.format(obj.owner.user.first_name, obj.owner.user.last_name)
+        return '{} {}'.format(obj.owner.first_name, obj.owner.last_name)
 
     def get_district(self, obj):
-        return '{}'.format(obj.owner.user.profile.district.name)
+        return '{}'.format(obj.owner.profile.district.name)
 
 
 class PostResourceSerializer(serializers.ModelSerializer):

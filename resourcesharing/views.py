@@ -85,6 +85,7 @@ class CreateResourceView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         resource = form.save(commit=False)
+        resource.owner = self.request.user
         resource.save()
         return redirect('resourcesharing:resource_list')
 

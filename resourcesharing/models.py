@@ -5,7 +5,7 @@ from farmer.models import FarmerProfile
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
 from geopy.geocoders import Nominatim
-
+from django.contrib.auth.models import User
 # Create your models here.
 class Resource(models.Model):
     RESOURCE_STATUS = (
@@ -14,7 +14,7 @@ class Resource(models.Model):
         ('not available', 'Not Available')
     )
     resource_name = models.CharField(max_length=200, blank = False)
-    owner = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     Phone_number1 = PhoneNumberField(_('Phone number 1'), blank=False, null=True)
     Phone_number2 = PhoneNumberField(_('Phone number 2'), blank=False, null=True)
     resource_category = models.CharField(choices=RESOURCE_CATEGORY, max_length=25, null=False, blank=False)
