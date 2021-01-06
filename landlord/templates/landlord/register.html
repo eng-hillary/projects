@@ -1,0 +1,69 @@
+{% extends "landlord/header.html" %}
+{% block content %}
+
+{% if messages %}
+                
+                 <div class="alert-warning" >
+             
+                         <center>
+                                 {% for message in messages %}
+                                 {{message}}
+                                 {% endfor %}
+                         </center>
+                 </div>
+         
+{% endif %}
+                 
+
+    <div class="container">
+            <form action="" method="POST">
+                 {% csrf_token %}
+                 <div class="form-group">
+                         <label>{{ownerform.fname.label}}</label>
+                         {{ownerform.fname}}
+
+                 </div>
+
+                 <div class="form-group">
+                         <label>{{ownerform.lname.label}}</label>
+                         {{ownerform.lname}}
+
+                 </div>
+                 <div class="form-group">
+                         <label>{{ownerform.email.label}}</label>
+                         {{ownerform.email}}
+
+                 </div>
+                 <div class="form-group">
+                         <label>{{ownerform.address.label}}</label>
+                         {{ownerform.address}}
+
+                 </div>
+
+                 <div class="form-group">
+                         <label>{{ownerform.contact.label}}</label>
+                         {{ownerform.contact}}
+
+                 </div>
+                 <div class="form-group">
+                         <label>{{form.username.label}}</label>
+                         {{form.username}}
+
+                 </div>
+                 <div class="form-group">
+                         <label>{{form.password1.label}}</label>
+                         {{form.password1}}
+
+                 </div>
+                 <div class="form-group">
+                         <label>{{form.password2.label}}</label>
+                         {{form.password2}}
+
+                 </div>
+                 <button type="submit" class="button">Sign Up</button>
+
+            </form>
+
+    </div>
+   
+{% endblock %}

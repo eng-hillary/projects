@@ -1,0 +1,21 @@
+{% extends "landlord/header.html" %}
+
+{% block content %}
+{% if messages %}
+                
+                        <div class="alert-success">
+                    
+                                <center>
+                                        {% for message in messages %}
+                                        {{message}}
+                                        {% endfor %}
+                                </center>
+                        </div>
+                
+        {% endif %}
+    
+<div class="container">
+       <p>landlord home page</p>
+    </div>
+    
+{% endblock %}

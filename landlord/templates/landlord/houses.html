@@ -1,0 +1,31 @@
+{% extends "landlord/header.html" %}
+
+{% block content %}
+{% if messages %}
+                
+                        <div class="alert-success">
+                    
+                                <center>
+                                        {% for message in messages %}
+                                        {{message}}
+                                        {% endfor %}
+                                </center>
+                        </div>
+                
+        {% endif %}
+    
+<div class="container">
+      {% for house in houses %}
+      <div class="house">
+            <p>Type: {{house.category}}</p>
+      
+            <p>Address: {{house.address}}</p>
+            <p>Location: {{house.location}}</p>
+            <p>Price:{{house.price}}</p>
+            <p>Description: {{house.description}}</p>
+
+      </div>
+      
+      {% endfor %}
+    
+{% endblock %}

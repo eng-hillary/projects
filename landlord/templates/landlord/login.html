@@ -1,0 +1,40 @@
+{% extends "landlord/header.html" %}
+
+{% block content %}
+{% if messages %}
+                        
+<div class="alert-warning">
+
+        <center>
+                {% for message in messages %}
+                {{message}}
+                {% endfor %}
+        </center>
+</div>
+
+{% endif %}
+ 
+            <div class="container">
+        
+                    <form action="" method="POST">
+                            {% csrf_token %}
+                        <div class="form-group">
+            
+                          <input type="text" name="username" class="form-control" placeholder="User Name" id="uname" required>
+                        </div>
+                        <div class="form-group">
+                    
+                          <input type="password" name="password"  class="form-control" placeholder="password" id="pwd" required>
+                        </div>
+                        
+                        <button type="submit" class="button">Login</button>
+                      </form>
+                      
+            </div>
+            
+            <center>
+                       <a href="{% url 'reset-password' %}" class="link"> <small>foregot password?</small></a>
+            </center>
+
+    
+{% endblock %}

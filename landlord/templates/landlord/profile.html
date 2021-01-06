@@ -1,0 +1,52 @@
+{% extends "landlord/header.html" %}
+
+{% block content %}
+{% if messages %}
+                
+<div class="alert-success" >
+
+        <center>
+                {% for message in messages %}
+                {{message}}
+                {% endfor %}
+        </center>
+</div>
+
+{% endif %}
+    <div class="container">
+            
+            <center>
+                    <img src="{{request.user.owner.picture.url}}" alt="profile image" class="profile-img" > 
+                    <h5>{{request.user.username}}'s profile</h5>
+            </center>
+        <table class="table table-striped">
+                        <tr>
+                                        <td>Email</td>
+                                        <td>{{request.user.owner.email}}</td>
+        
+                                </tr>
+                                <tr>
+                                                <td>Contact</td>
+                                                <td>{{request.user.owner.contact}}</td>
+                
+                                 </tr>
+                                 <tr>
+                                                <td>Address</td>
+                                                <td>{{request.user.owner.address}}</td>
+                
+                                 </tr>
+                
+        </table>
+        <P>
+                        <a href="{% url 'lprofileupdate' request.user.owner.id %}">
+                                <button class="button">Edit Profile</button>
+                        </a>
+                    </P>
+
+    </div>
+    
+       
+               
+        
+
+{% endblock %}
