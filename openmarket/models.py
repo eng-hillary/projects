@@ -14,6 +14,8 @@ from farm.models import Enterprise
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
 from geopy.geocoders import Nominatim
+from django.contrib.gis.db import models
+from django.contrib.gis.db import models
 # Create your models here.phone_2 = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control','style': 'width:50%; display:inline-block;'}), required=True, initial='+256')
 
 class Product(models.Model):
@@ -147,8 +149,7 @@ class Service(models.Model):
     certification_status = models.BooleanField(_('Is the Service Certified'),choices = YES_OR_NO, null=True, blank=True)
     vehicle_type = models.CharField(max_length=100, null = True, blank=True)
     vehicle_capacity = models.FloatField(max_length=50, null=True, help_text="capacity of your vehicle in tonnes", blank=True)
-    lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your industry location")
-    lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your industry location")
+    location = models.PointField( srid=4326,null=True)
     others = models.CharField(_('Please state the category if its not among the above'), blank=True, null=True, max_length=100)
     driver_contact =  PhoneNumberField(null=True, blank=True)
     driver_name =  models.CharField(max_length = 100, null=True, blank = True)

@@ -4,7 +4,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from geopy.geocoders import Nominatim
-from django.contrib.gis.db import models
+
 
 # Create your models here.
 
