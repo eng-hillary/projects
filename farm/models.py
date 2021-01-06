@@ -226,6 +226,7 @@ class Crop(models.Model):
     benefits = models.CharField(max_length = 100, null=True, blank=True)
     what_you_need_to_know = models.CharField(max_length = 500, null=True, blank=True)
     required_capital = models. CharField(max_length=40, null = False, blank=True )
+   
 
     def __str__(self):
         return self.crop

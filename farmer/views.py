@@ -373,8 +373,8 @@ def farmer_class_view(request):
                 
     print(dataset)
     for entry in dataset:
-        labels.append('%s Region' % entry['user__profile__region__name'] )
-        data1=data.append( entry['percentage'])
+        labels.append(entry['user__profile__region__name'] )
+        data1=data.append(entry['percentage'])
         #data1.append('O')
         
       
