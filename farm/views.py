@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from .models import (Sector, Enterprise, Farm,ProductionRecord, Query, FarmRecord, FinancialRecord, EnterpriseSelection,Ecological_Zones)
-from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer
-,FarmMapSerializer,FarmProductionRecordSerializer,PostFarmSerializer,PostEnterpriseSelectionSerializer,PostEnterpriseSerializer, PostQuerySerializer,FarmRecordSerializer,FarmFinancilRecordSerializer,EnterpriseSelectionSerializer,QuerySerializer)
+from .models import (Sector, Enterprise, Farm, ProductionRecord, Query,
+                     FarmRecord, FinancialRecord, EnterpriseSelection, Ecological_Zones)
+from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer, FarmMapSerializer, FarmProductionRecordSerializer, PostFarmSerializer, PostEnterpriseSelectionSerializer,
+                          PostEnterpriseSerializer, PostQuerySerializer, FarmRecordSerializer, FarmFinancilRecordSerializer, EnterpriseSelectionSerializer, QuerySerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -12,11 +13,12 @@ from django.shortcuts import redirect
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.urls import reverse_lazy
-from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
+from django.http import (HttpResponseRedirect, JsonResponse, HttpResponse,
                          Http404)
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from .forms import (FarmForm,FarmProductionRecordForm,EnterpriseForm,QueryForm, FarmRecordForm,FarmFnancialRecordForm, EnterpriseSelectionForm)
+from .forms import (FarmForm, FarmProductionRecordForm, EnterpriseForm,
+                    QueryForm, FarmRecordForm, FarmFnancialRecordForm, EnterpriseSelectionForm)
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
@@ -26,6 +28,8 @@ from django.db import IntegrityError
 from django_postgres_extensions.models.expressions import Index, SliceArray
 from rest_framework import filters
 # views for sector
+
+
 class SectorViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows sectors to be viewed or edited.
@@ -89,12 +93,15 @@ class QueryList(LoginRequiredMixin, APIView):
         return Response()
 
 # farm api for queries
+
+
 class QueryViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farmer queries to be viewed or edited.
     """
     queryset = Query.objects.all()
     serializer_class = QuerySerializer
+
     def get_queryset(self):
         """
         This view should return a list of all the farms
@@ -107,7 +114,7 @@ class QueryViewSet(viewsets.ModelViewSet):
             queryset = queries
         else:
             farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer =farmer)
+            farms = Farm.objects.filter(farmer=farmer)
             queryset = queries.filter(farm__in=farms)
 
         return queryset
@@ -123,18 +130,19 @@ class QueryViewSet(viewsets.ModelViewSet):
                 #serializer.user = self.request.user
                 serializer.save()
             except IntegrityError:
-                return Response({'error':'Query already exists'})
+                return Response({'error': 'Query already exists'})
 
-            return Response({'status':'successful'})
+            return Response({'status': 'successful'})
         return Response(serializer.errors, status=400)
 
 # create farm
-class CreateQueryView(LoginRequiredMixin,CreateView):
+
+
+class CreateQueryView(LoginRequiredMixin, CreateView):
     template_name = 'create_query.html'
     success_url = reverse_lazy('farm:query_list')
     form_class = QueryForm
     success_message = "Query has been created successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateQueryView, self).dispatch(request, *args, **kwargs)
@@ -144,7 +152,6 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
         kwargs['request'] = self.request
         return kwargs
 
-
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
@@ -153,7 +160,6 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         farm = form.save(commit=False)
@@ -167,13 +173,12 @@ class CreateQueryView(LoginRequiredMixin,CreateView):
 
 
 # update farm view
-class EditQueryView(LoginRequiredMixin,UpdateView):
-    model =Query
+class EditQueryView(LoginRequiredMixin, UpdateView):
+    model = Query
     template_name = 'create_query.html'
     success_url = reverse_lazy('farm:query_list')
     form_class = QueryForm
     success_message = "Query has been updated successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(EditQueryView, self).dispatch(request, *args, **kwargs)
@@ -181,7 +186,6 @@ class EditQueryView(LoginRequiredMixin,UpdateView):
     def get_form_kwargs(self):
         kwargs = super(EditQueryView, self).get_form_kwargs()
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -192,12 +196,10 @@ class EditQueryView(LoginRequiredMixin,UpdateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         farm = form.save(commit=False)
         farm.save()
         return redirect('farm:query_list')
-
 
 
 # views for enterprise
@@ -220,7 +222,7 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
             queryset = enterprises
         else:
             farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer =farmer)
+            farms = Farm.objects.filter(farmer=farmer)
             queryset = enterprises.filter(farm__in=farms)
 
         return queryset
@@ -236,10 +238,11 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
                 #serializer.user = self.request.user
                 serializer.save()
             except IntegrityError:
-                return Response({'error':'Enterprise already exists'})
+                return Response({'error': 'Enterprise already exists'})
 
-            return Response({'status':'successful'})
+            return Response({'status': 'successful'})
         return Response(serializer.errors, status=400)
+
 
 class EnterpriseList(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -248,7 +251,6 @@ class EnterpriseList(LoginRequiredMixin, APIView):
     def get(self, request):
         queryset = Enterprise.objects.order_by('-id')
         return Response({'enterprise': queryset})
-
 
 
 # farm api viewset
@@ -283,26 +285,26 @@ class FarmViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             try:
-                serializer.status ='active'
+                serializer.status = 'active'
                 user = self.request.user
                 farmer = FarmerProfile.objects.get(user=user)
                 #serializer.user = self.request.user
-                serializer.save(farmer = farmer)
+                serializer.save(farmer=farmer)
             except IntegrityError:
-                return Response({'error':'Farm already exists'})
+                return Response({'error': 'Farm already exists'})
 
-            return Response({'status':'successful'})
+            return Response({'status': 'successful'})
         return Response(serializer.errors, status=400)
 
 # farm api for maps
+
+
 class FarmMapViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows farms to be viewed or edited.
     """
     queryset = Farm.objects.all()
     serializer_class = FarmMapSerializer
-
-
 
 
 # list of farms
@@ -314,14 +316,12 @@ class FarmListView(APIView, LoginRequiredMixin):
         return Response()
 
 
-
 # create farm
-class CreateFarmView(LoginRequiredMixin,CreateView):
+class CreateFarmView(LoginRequiredMixin, CreateView):
     template_name = 'create_farm.html'
     success_url = reverse_lazy('farm:farm_list')
     form_class = FarmForm
     success_message = "Farm has been created successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateFarmView, self).dispatch(request, *args, **kwargs)
@@ -329,7 +329,6 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
     def get_form_kwargs(self):
         kwargs = super(CreateFarmView, self).get_form_kwargs()
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -339,7 +338,6 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         farm = form.save(commit=False)
@@ -354,11 +352,11 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
             'user': farm.farmer.user,
             'domain': current_site.domain,
             'message': 'Your '+farm.farm_name + ' has been registered sucessfully',
-            })
+        })
         to_email = farm.farmer.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:farm_list')
@@ -370,13 +368,12 @@ class CreateFarmView(LoginRequiredMixin,CreateView):
 
 
 # update farm view
-class EditFarmView(LoginRequiredMixin,UpdateView):
-    model =Farm
+class EditFarmView(LoginRequiredMixin, UpdateView):
+    model = Farm
     template_name = 'create_farm.html'
     success_url = reverse_lazy('farm:farm_list')
     form_class = FarmForm
     success_message = "Farm has been updated successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(EditFarmView, self).dispatch(request, *args, **kwargs)
@@ -384,7 +381,6 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
     def get_form_kwargs(self):
         kwargs = super(EditFarmView, self).get_form_kwargs()
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -395,27 +391,25 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         farm = form.save(commit=False)
         farm.save()
 
-         # send email to farmer  a message after an update
+        # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
         subject = 'Farm Updated Successfully'
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.farmer.user,
             'domain': current_site.domain,
             'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
-            })
+        })
         to_email = farm.farmer.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:farm_list')
-
 
     def form_invalid(self, form):
         if self.request.is_ajax():
@@ -423,14 +417,12 @@ class EditFarmView(LoginRequiredMixin,UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-
 # create enterprise
-class CreateEnterpriseView(LoginRequiredMixin,CreateView):
+class CreateEnterpriseView(LoginRequiredMixin, CreateView):
     template_name = 'create_enterprise.html'
     success_url = reverse_lazy('farm:farm_list')
     form_class = EnterpriseForm
     success_message = "Farm has been created successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateEnterpriseView, self).dispatch(request, *args, **kwargs)
@@ -440,19 +432,15 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
         kwargs['request'] = self.request
         return kwargs
 
-
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-
 
         if form.is_valid():
             return self.form_valid(form)
         else:
             print(form.errors)
         return self.form_invalid(form)
-
-
 
     def form_valid(self, form):
         enterprise = form.save(commit=False)
@@ -464,7 +452,8 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
         # subtracting the enterprise land from the farm land
         farm_available_land = farm_land_occupied - enterprise.land_occupied
         # update the farm object
-        Farm.objects.filter(id=enterprise.farm_id).update(available_land=farm_available_land)
+        Farm.objects.filter(id=enterprise.farm_id).update(
+            available_land=farm_available_land)
         print(farm_available_land)
         # send email to farmer after registration
         current_site = get_current_site(self.request)
@@ -473,11 +462,11 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
             'user': enterprise.farm.farmer.user,
             'domain': current_site.domain,
             'message': 'Your '+enterprise.name + ' has been registered sucessfully',
-            })
+        })
         to_email = enterprise.farm.farmer.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:enterprise_list')
@@ -501,13 +490,12 @@ class CreateEnterpriseView(LoginRequiredMixin,CreateView):
 
 
 # update Enterprise view
-class EditEnterpriseView(LoginRequiredMixin,UpdateView):
-    model =Enterprise
+class EditEnterpriseView(LoginRequiredMixin, UpdateView):
+    model = Enterprise
     template_name = 'create_enterprise.html'
     success_url = reverse_lazy('farm:farm_list')
     form_class = EnterpriseForm
     success_message = "Enterprise has been updated successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(EditEnterpriseView, self).dispatch(request, *args, **kwargs)
@@ -516,7 +504,6 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
         kwargs = super(EditEnterpriseView, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -527,32 +514,31 @@ class EditEnterpriseView(LoginRequiredMixin,UpdateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         enterprise = form.save(commit=False)
         enterprise.save()
 
-         # send email to farmer  a message after an update
+        # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
         subject = 'Enterprise Updated Successfully'
         message = render_to_string('enterprise_email.html', {
             'user': enterprise.farm.farmer.user,
             'domain': current_site.domain,
             'message': 'Your '+enterprise.name + ' Details have been updated sucessfully',
-            })
+        })
         to_email = enterprise.farm.farmer.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:enterprise_list')
-
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
+
 
 class FarmProfileDetailView(DetailView):
     model = Farm
@@ -565,6 +551,8 @@ class FarmProfileDetailView(DetailView):
         return context
 
 # farm record viewset
+
+
 class FarmRecordViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows sectors to be viewed or edited.
@@ -584,7 +572,7 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
             queryset = farmrecords
         else:
             farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer =farmer)
+            farms = Farm.objects.filter(farmer=farmer)
             enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
 
@@ -592,12 +580,11 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
 
 
 # create farm record
-class CreateFarmRecordView(LoginRequiredMixin,CreateView):
+class CreateFarmRecordView(LoginRequiredMixin, CreateView):
     template_name = 'create_farm_record.html'
     success_url = reverse_lazy('farm:farm_list')
     form_class = FarmRecordForm
     success_message = "Farm Record has been created successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateFarmRecordView, self).dispatch(request, *args, **kwargs)
@@ -607,7 +594,6 @@ class CreateFarmRecordView(LoginRequiredMixin,CreateView):
         kwargs['request'] = self.request
         return kwargs
 
-
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
@@ -616,7 +602,6 @@ class CreateFarmRecordView(LoginRequiredMixin,CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         farm = form.save(commit=False)
@@ -629,11 +614,11 @@ class CreateFarmRecordView(LoginRequiredMixin,CreateView):
             'user': self.request.user,
             'domain': current_site.domain,
             'message': 'Your '+farm.name + ' has been recorded sucessfully',
-            })
+        })
         to_email = self.request.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:farmrecords')
@@ -645,7 +630,8 @@ class CreateFarmRecordView(LoginRequiredMixin,CreateView):
 
     def get_initial(self, *args, **kwargs):
         initial = super(CreateFarmRecordView, self).get_initial(**kwargs)
-        initial['enterprise'] = Enterprise.objects.get(pk=self.kwargs['enterprise_pk'])
+        initial['enterprise'] = Enterprise.objects.get(
+            pk=self.kwargs['enterprise_pk'])
         return initial
 
 
@@ -658,13 +644,14 @@ class FarmRecordsList(LoginRequiredMixin, APIView):
         return Response()
 
 # update farmrecord view
-class EditFarmRecordView(LoginRequiredMixin,UpdateView):
-    model =FarmRecord
+
+
+class EditFarmRecordView(LoginRequiredMixin, UpdateView):
+    model = FarmRecord
     template_name = 'create_farm_record.html'
     success_url = reverse_lazy('farm:farm_list')
     form_class = FarmRecordForm
     success_message = "Farm Record has been updated successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(EditFarmRecordView, self).dispatch(request, *args, **kwargs)
@@ -673,7 +660,6 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
         kwargs = super(EditFarmRecordView, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -685,27 +671,25 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         farmrecord = form.save(commit=False)
         farmrecord.save()
 
-         # send email to farmer  a message after an update
+        # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
         subject = 'Farm Record Updated Successfully'
         message = render_to_string('enterprise_email.html', {
             'user': self.request.user,
             'domain': current_site.domain,
             'message': 'Your '+farmrecord.enterprise.name + ' Details have been updated sucessfully',
-            })
+        })
         to_email = self.request.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:farmrecords')
-
 
     def form_invalid(self, form):
         if self.request.is_ajax():
@@ -715,12 +699,11 @@ class EditFarmRecordView(LoginRequiredMixin,UpdateView):
 
 # create financial record
 
-class CreateFarmFinancialRecordView(LoginRequiredMixin,CreateView):
+class CreateFarmFinancialRecordView(LoginRequiredMixin, CreateView):
     template_name = 'create_farm_financial_record.html'
     success_url = reverse_lazy('farm:financialrecords')
     form_class = FarmFnancialRecordForm
     success_message = "Farm Financial Record has been created successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateFarmFinancialRecordView, self).dispatch(request, *args, **kwargs)
@@ -729,7 +712,6 @@ class CreateFarmFinancialRecordView(LoginRequiredMixin,CreateView):
         kwargs = super(CreateFarmFinancialRecordView, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -740,10 +722,9 @@ class CreateFarmFinancialRecordView(LoginRequiredMixin,CreateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         record = form.save(commit=False)
-        record.transaction_date =datetime.date.today()
+        record.transaction_date = datetime.date.today()
         record.reported_by = self.request.user
         record.save()
 
@@ -754,11 +735,11 @@ class CreateFarmFinancialRecordView(LoginRequiredMixin,CreateView):
             'user': self.request.user,
             'domain': current_site.domain,
             'message': 'Your Financial record spent on '+record.spent_on + ' has been recorded sucessfully',
-            })
+        })
         to_email = self.request.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:financialrecords')
@@ -769,8 +750,10 @@ class CreateFarmFinancialRecordView(LoginRequiredMixin,CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_initial(self, *args, **kwargs):
-        initial = super(CreateFarmFinancialRecordView, self).get_initial(**kwargs)
-        initial['enterprise'] = Enterprise.objects.get(pk=self.kwargs['enterprise_pk'])
+        initial = super(CreateFarmFinancialRecordView,
+                        self).get_initial(**kwargs)
+        initial['enterprise'] = Enterprise.objects.get(
+            pk=self.kwargs['enterprise_pk'])
         return initial
 
 
@@ -783,13 +766,14 @@ class FarmFinancilRecordsList(LoginRequiredMixin, APIView):
         return Response()
 
 # update farmrecord view
-class EditFarmFinancialRecordView(LoginRequiredMixin,UpdateView):
-    model =FinancialRecord
+
+
+class EditFarmFinancialRecordView(LoginRequiredMixin, UpdateView):
+    model = FinancialRecord
     template_name = 'create_farm_financial_record.html'
     success_url = reverse_lazy('farm:financialrecords')
     form_class = FarmFnancialRecordForm
     success_message = "Farm Financial Record has been updated successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(EditFarmFinancialRecordView, self).dispatch(request, *args, **kwargs)
@@ -798,7 +782,6 @@ class EditFarmFinancialRecordView(LoginRequiredMixin,UpdateView):
         kwargs = super(EditFarmFinancialRecordView, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -809,33 +792,30 @@ class EditFarmFinancialRecordView(LoginRequiredMixin,UpdateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         farmrecord = form.save(commit=False)
         farmrecord.save()
 
-         # send email to farmer  a message after an update
+        # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
         subject = 'Farm Record Updated Successfully'
         message = render_to_string('enterprise_email.html', {
             'user': self.request.user,
             'domain': current_site.domain,
             'message': 'Your Financial record spent on '+farmrecord.spent_on + ' has been recorded sucessfully',
-            })
+        })
         to_email = self.request.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:financialrecords')
-
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-
 
 
 # farm record viewset
@@ -857,20 +837,19 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
             queryset = farmrecords
         else:
             farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer =farmer)
+            farms = Farm.objects.filter(farmer=farmer)
             enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = farmrecords.filter(enterprise__in=enterprises)
 
         return queryset
 
 
-#create Production record
-class CreateFarmProductionRecordView(LoginRequiredMixin,CreateView):
+# create Production record
+class CreateFarmProductionRecordView(LoginRequiredMixin, CreateView):
     template_name = 'create_farm_production_record.html'
     success_url = reverse_lazy('farm:productionrecords')
     form_class = FarmProductionRecordForm
     success_message = "Farm Production Record has been created successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateFarmProductionRecordView, self).dispatch(request, *args, **kwargs)
@@ -880,7 +859,6 @@ class CreateFarmProductionRecordView(LoginRequiredMixin,CreateView):
         kwargs['request'] = self.request
         return kwargs
 
-
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
@@ -889,7 +867,6 @@ class CreateFarmProductionRecordView(LoginRequiredMixin,CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         record = form.save(commit=False)
@@ -902,11 +879,11 @@ class CreateFarmProductionRecordView(LoginRequiredMixin,CreateView):
             'user': self.request.user,
             'domain': current_site.domain,
             'message': 'Your production record  '+record.record_name + ' has been recorded sucessfully',
-            })
+        })
         to_email = self.request.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:productionrecords')
@@ -917,8 +894,10 @@ class CreateFarmProductionRecordView(LoginRequiredMixin,CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_initial(self, *args, **kwargs):
-        initial = super(CreateFarmProductionRecordView, self).get_initial(**kwargs)
-        initial['enterprise'] = Enterprise.objects.get(pk=self.kwargs['enterprise_pk'])
+        initial = super(CreateFarmProductionRecordView,
+                        self).get_initial(**kwargs)
+        initial['enterprise'] = Enterprise.objects.get(
+            pk=self.kwargs['enterprise_pk'])
         return initial
 
 
@@ -931,13 +910,14 @@ class FarmproductionRecordsList(LoginRequiredMixin, APIView):
         return Response()
 
 # update productionrecord view
-class EditFarmproductionRecordView(LoginRequiredMixin,UpdateView):
-    model =ProductionRecord
+
+
+class EditFarmproductionRecordView(LoginRequiredMixin, UpdateView):
+    model = ProductionRecord
     template_name = 'create_farm_production_record.html'
     success_url = reverse_lazy('farm:productionrecords')
     form_class = FarmProductionRecordForm
     success_message = "Farm production Record has been updated successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(EditFarmproductionRecordView, self).dispatch(request, *args, **kwargs)
@@ -946,7 +926,6 @@ class EditFarmproductionRecordView(LoginRequiredMixin,UpdateView):
         kwargs = super(EditFarmproductionRecordView, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -957,33 +936,30 @@ class EditFarmproductionRecordView(LoginRequiredMixin,UpdateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         productionrecord = form.save(commit=False)
         productionrecord.save()
 
-         # send email to farmer  a message after an update
+        # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
         subject = 'Production Record Updated Successfully'
         message = render_to_string('enterprise_email.html', {
             'user': self.request.user,
             'domain': current_site.domain,
             'message': 'Your Production record  '+productionrecord.record_name + ' has been updated sucessfully',
-            })
+        })
         to_email = self.request.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('farm:productionrecords')
-
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-
 
 
 # production record viewset
@@ -1005,30 +981,35 @@ class FarmProductionRecordViewSet(viewsets.ModelViewSet):
             queryset = productionrecords
         else:
             farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer =farmer)
+            farms = Farm.objects.filter(farmer=farmer)
             enterprises = Enterprise.objects.filter(farm__in=farms)
             queryset = productionrecords.filter(enterprise__in=enterprises)
 
         return queryset
 
 
-class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
+class EnterpriseSelectionView(LoginRequiredMixin, CreateView):
     template_name = 'enterprise_selection.html'
     success_url = reverse_lazy('farm:select_enterpise')
     form_class = EnterpriseSelectionForm
     success_message = "Your answers were submitted successfully"
-    crops_northen = ['cotton', 'millet', 'sorghum', 'legumes', 'sesame']#gulu, masindi
-    crops_lango = ['cassava','maize','millet','rice','sesame'] #lira Apac
-    crops_soroti = ['cotton','millet','ground nuts']#soroti, kumi, palisa
-    crops_tororo = ['banana', 'cotton','millet','sorghum','maize'] #iganga, tororo, butaleja
-    crops_western_savanna = ['banana','coffee','maize','cattle'] #masindi, hoima, kamwengye, luwero
-    crops_lakevictoria = ['banana','coffee','maize','sweet potato','beans','vegetables', 'flowers']#wakiso, mukono, jinja, bugiri
+    crops_northen = ['cotton', 'millet', 'sorghum',
+                     'legumes', 'sesame']  # gulu, masindi
+    crops_lango = ['cassava', 'maize', 'millet', 'rice', 'sesame']  # lira Apac
+    crops_soroti = ['cotton', 'millet', 'ground nuts']  # soroti, kumi, palisa
+    crops_tororo = ['banana', 'cotton', 'millet',
+                    'sorghum', 'maize']  # iganga, tororo, butaleja
+    # masindi, hoima, kamwengye, luwero
+    crops_western_savanna = ['banana', 'coffee', 'maize', 'cattle']
+    crops_lakevictoria = ['banana', 'coffee', 'maize', 'sweet potato',
+                          'beans', 'vegetables', 'flowers']  # wakiso, mukono, jinja, bugiri
 
-    crops_karamoja = ['cattle','sorghum','maize','millet'] #moroto, kotido, karamoja
-    crops_kabale = ['sorghum','solanun potato','vegetables','coffee','maize'] #kabale, sironko, mbale
+    crops_karamoja = ['cattle', 'sorghum', 'maize',
+                      'millet']  # moroto, kotido, karamoja
+    crops_kabale = ['sorghum', 'solanun potato', 'vegetables',
+                    'coffee', 'maize']  # kabale, sironko, mbale
 
     western_message = "Thank you for your interest in farming, We have analysed your personal profile and land profile and we would recommend the following"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(EnterpriseSelectionView, self).dispatch(request, *args, **kwargs)
@@ -1036,7 +1017,6 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
     def get_form_kwargs(self):
         kwargs = super(EnterpriseSelectionView, self).get_form_kwargs()
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -1047,17 +1027,17 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
-        crops_ibanda = ['Diary cattle','Millet','Sorghum'] #mbarara, Bushenyi, Ibanda
+        crops_ibanda = ['Diary cattle', 'Millet',
+                        'Sorghum']  # mbarara, Bushenyi, Ibanda
 
         enterprise = form.save(commit=False)
         enterprise.user = self.request.user
         crops_info = []
 
         region = form.cleaned_data.get('region')
-        #print(region.id)
-        results = Ecological_Zones.objects.get(ecological_zone_name = region.id)
+        # print(region.id)
+        results = Ecological_Zones.objects.get(ecological_zone_name=region.id)
         print(results.crops.all())
         crops = results.crops.all()
         enterprise.recommendation = results
@@ -1068,27 +1048,25 @@ class EnterpriseSelectionView(LoginRequiredMixin,CreateView):
         #     "crops":crops,
         # }
 
-
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Service Successful'
         message = render_to_string('profile_created_successful.html', {
             'user': enterprise.user,
             'domain': current_site.domain
-            })
+        })
         to_email = enterprise.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
-        #email.send()
-        return redirect('farm:view_enterprise_selection', pk = enterprise.pk)
+        # email.send()
+        return redirect('farm:view_enterprise_selection', pk=enterprise.pk)
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-
 
 
 """
@@ -1104,18 +1082,21 @@ class EnterpriseSelectionRedirect(LoginRequiredMixin, APIView):
        # queryset = Sector.objects.order_by('-id')
         return Response()
 
+
 class EnterpriseSelectionDetailView(LoginRequiredMixin, DetailView):
     model = EnterpriseSelection
     context_object_name = "profilerecord"
     template_name = "enterprise_selection_redirect.html"
 
     def get_context_data(self, **kwargs):
-        context = super(EnterpriseSelectionDetailView, self).get_context_data(**kwargs)
+        context = super(EnterpriseSelectionDetailView,
+                        self).get_context_data(**kwargs)
 
         context.update({
 
         })
         return context
+
 
 class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
     """
@@ -1132,7 +1113,7 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
         """
         user = self.request.user
         selections = EnterpriseSelection.objects.all().order_by('user')
-        if  self.request.user.has_perm('selections.delete_EnterpriseSelection'):
+        if self.request.user.has_perm('selections.delete_EnterpriseSelection'):
             queryset = selections
         else:
             queryset = selections.filter(user=user)
@@ -1146,9 +1127,9 @@ class EnterpriseSelectionViewSet(viewsets.ModelViewSet):
             try:
                 # serializer.status ='Pending'
                 #serializer.user = self.request.user
-                serializer.save(user = self.request.user)
+                serializer.save(user=self.request.user)
             except Exception as e:
-                return Response({'error':str(e)})
+                return Response({'error': str(e)})
 
-            return Response({'status':'successful'})
+            return Response({'status': 'successful'})
         return Response(serializer.errors, status=400)
