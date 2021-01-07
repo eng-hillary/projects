@@ -145,6 +145,14 @@ PROFESSION = (
     ('Agriculture related', 'Agriculture related'),
     ('Non-agriculture related', 'Non-agriculture related')
 )
+
+UNIT = (
+    (None, "---please select---"),
+    ('kgs', 'Kgs'),
+    ('tonnes', 'Tonnes'),
+    ('litres', 'litres'),
+
+)
 EDUCATION_LEVEL = (
     (None, "---please select---"),
     ('primary','primary'),

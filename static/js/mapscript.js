@@ -388,7 +388,7 @@ document.getElementById('service_container').addEventListener('mouseout', functi
 
 
 // Create the chart
-Highcharts.chart('piecontainer', {
+Highcharts.chart('', {
   chart: {
     type: 'pie'
   },

@@ -77,11 +77,11 @@ class HomePage(LoginRequiredMixin, TemplateView):
                         
         # print(dataset)
         for entry in piedataset:
-            labels.append('%s Region' % entry['user__profile__region__name'] )
-            data1=data.append( entry['percentage'])
+            labels.append('%s' % entry['user__profile__region__name'] )
+            data.append(entry['percentage'])
                 #data1.append('O')
                 
-        
+
         context["dataset"]=dataset
         context["piedataset"]= piedataset
         context["labels"]=labels

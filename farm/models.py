@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel,District,Region)
 from django.contrib.auth.models import User
 from common .choices import (TRANSACTION_TYPE,PAYMENT_OPTIONS, PAYMENT_MODE,YES_OR_NO,QUERIES, SCALE,SECTOR,
-PROFESSION, EDUCATION_LEVEL,INCOME)
+PROFESSION, EDUCATION_LEVEL,INCOME, UNIT)
 from geopy.geocoders import Nominatim
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
@@ -165,6 +165,7 @@ class ProductionRecord(TimeStampedModel, models.Model):
     record_name = models.CharField(max_length=25, null=True, blank=True)
     production_activity = models.CharField(max_length=50, null=True, blank=True)
     quantity = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    unit_of_measure =  models.CharField(choices=UNIT, max_length=25, null=True, blank=False)
     measurements = models.CharField(max_length=25, null=True, blank=True)
     record_date = models.DateField()
     record_time = models.TimeField(auto_now=True, blank=True)
