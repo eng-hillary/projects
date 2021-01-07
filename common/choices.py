@@ -76,11 +76,7 @@ LAND_TYPES = (
     ('owned', 'Owned')
 )
 
-# PRODUCTION_SCALE = (
-#      (None, "---please select---"),
-#     ('subsistence', 'subsistence'),
-#     ('commercial', 'commercial')
-# )
+
 
 YES_OR_NO=(
     (None, '--please select--'),

@@ -5,16 +5,29 @@ from .models import (Resource, ResourceSharing, ResourceBooking)
 class ResourceSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     district = serializers.SerializerMethodField(method_name='get_district',source='owner')
+    lat = serializers.SerializerMethodField(method_name='get_lat',source='location')
+    lon = serializers.SerializerMethodField(method_name='get_lon',source='location')
     class Meta:
         model = Resource
         fields = ['id','resource_name','district', 'owner', 'Phone_number1', 'Phone_number2','resource_category', 'lat', 'lon',
         'terms_and_conditions', 'resource_status', 'available_from','available_to', 'price','image']
 
     def get_user_full_name(self, obj):
-        return '{} {}'.format(obj.owner.user.first_name, obj.owner.user.last_name)
+        return '{} {}'.format(obj.owner.first_name, obj.owner.last_name)
 
     def get_district(self, obj):
-        return '{}'.format(obj.owner.user.profile.district.name)
+        return '{}'.format(obj.owner.profile.district.name)
+ 
+    def get_lat(self,obj):
+        try:
+            return '{}'.format(obj.location.y)
+        except:
+            pass
+    def get_lon(self,obj):
+        try:
+            return '{}'.format(obj.location.x)
+        except:
+            pass
 
 
 class PostResourceSerializer(serializers.ModelSerializer):

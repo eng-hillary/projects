@@ -1,21 +1,21 @@
 from django.shortcuts import render
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics,SoilScience, Category
+from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, SoilScience, Category
 from common.models import Region, District
 from .serializers import (ProductSerializer,
-                        SellerSerializer, 
-                        BuyerSerializer, 
-                        SellerPostSerializer,
-                        BuyerPostSerializer,
-                        ServiceProviderSerializer, 
-                        ServiceRegistrationSerializer,
-                        ContactDetailsSerializer,
-                        LogisticsSerializer,
-                        SoilScienceSerializer,
-                        ServiceProviderApprovalSerializer,
-                        SellerApprovalSerializer,
-                        PostServiceProviderSerializer,
-                        PostServiceRegistrationSerializer,
-                        CategorySerializer)
+                          SellerSerializer,
+                          BuyerSerializer,
+                          SellerPostSerializer,
+                          BuyerPostSerializer,
+                          ServiceProviderSerializer,
+                          ServiceRegistrationSerializer,
+                          ContactDetailsSerializer,
+                          LogisticsSerializer,
+                          SoilScienceSerializer,
+                          ServiceProviderApprovalSerializer,
+                          SellerApprovalSerializer,
+                          PostServiceProviderSerializer,
+                          PostServiceRegistrationSerializer,
+                          CategorySerializer)
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import permissions
@@ -25,21 +25,25 @@ from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import(SellerProfileForm,ProductProfileForm, ServiceProviderProfileForm, ServiceProfileForm)
+from .forms import(SellerProfileForm, ProductProfileForm,
+                   ServiceProviderProfileForm, ServiceProfileForm)
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
+from django.http import (HttpResponseRedirect, JsonResponse, HttpResponse,
                          Http404)
 
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
 import datetime
 from django.db import IntegrityError
-from django.contrib.auth.models import Group 
+from django.contrib.auth.models import Group
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
+from common.menu import has_group
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -49,6 +53,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by('-id')
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -73,13 +78,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.order_by('-id')
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['id','cat_name']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['id', 'cat_name']
     ordering_fields = '__all__'
 
 
 class ProductList(APIView):
-    permission_classes = (IsAuthenticated,) 
+    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'product_list.html'
 
@@ -91,12 +96,13 @@ class ProductList(APIView):
 '''
 Create Product profile. Used class based view.
 '''
+
+
 class CreateProductProfile(CreateView):
     template_name = 'create_product_profile.html'
     success_url = reverse_lazy('openmarket:profile_list')
     form_class = ProductProfileForm
     success_message = "Product profile was created successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateProductProfile, self).dispatch(request, *args, **kwargs)
@@ -104,7 +110,6 @@ class CreateProductProfile(CreateView):
     def get_form_kwargs(self):
         kwargs = super(CreateProductProfile, self).get_form_kwargs()
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -114,7 +119,6 @@ class CreateProductProfile(CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         profile = form.save(commit=False)
@@ -128,8 +132,41 @@ class CreateProductProfile(CreateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-        
-#views for sellers
+
+
+# update product view
+class EditProductView(LoginRequiredMixin, UpdateView):
+    model = Product
+    template_name = 'create_product_profile.html'
+    success_url = reverse_lazy('openmarket:product_list')
+    form_class = ProductProfileForm
+    success_message = "Product has been updated successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditProductView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditProductView, self).get_form_kwargs()
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+        farm.save()
+        return redirect('openmarket:product_list')
+
+
+# views for sellers
+
+
 class SellerViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -138,14 +175,14 @@ class SellerViewSet(viewsets.ModelViewSet):
     serializer_class = SellerSerializer
     #permission_classes = [permissions.IsAuthenticated]
 
-
     def approved(self, request, pk, format=None):
         profile = self.get_object()
         serializer = SellerApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
             seller_group = Group.objects.get(name='Sellers')
             profile.user.groups.add(seller_group)
-            serializer.save(status ='Active', approved_date = datetime.datetime.now(),approver=self.request.user)
+            serializer.save(status='Active', approved_date=datetime.datetime.now(
+            ), approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
@@ -153,10 +190,12 @@ class SellerViewSet(viewsets.ModelViewSet):
         profile = self.get_object()
         serializer = SellerApprovalSerializer(profile, data=request.data)
         if serializer.is_valid():
-            serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            serializer.save(status='Rejected', approved_date=datetime.datetime.now(
+            ), approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
-    
+
+
 class SellerList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'seller_list.html'
@@ -165,15 +204,17 @@ class SellerList(APIView):
         queryset = Seller.objects.order_by('seller_type')
         return Response({'sellers': queryset})
 
+
 '''
 Create Seller profile. Used class based view.
 '''
-class CreateSellerProfile(LoginRequiredMixin,CreateView):
+
+
+class CreateSellerProfile(LoginRequiredMixin, CreateView):
     template_name = 'create_seller_profile.html'
     success_url = reverse_lazy('openmarket:seller_list')
     form_class = SellerProfileForm
     success_message = "Your profile was created successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateSellerProfile, self).dispatch(request, *args, **kwargs)
@@ -181,7 +222,6 @@ class CreateSellerProfile(LoginRequiredMixin,CreateView):
     def get_form_kwargs(self):
         kwargs = super(CreateSellerProfile, self).get_form_kwargs()
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -191,7 +231,6 @@ class CreateSellerProfile(LoginRequiredMixin,CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         profile = form.save(commit=False)
@@ -206,11 +245,11 @@ class CreateSellerProfile(LoginRequiredMixin,CreateView):
         message = render_to_string('profile_created_successful.html', {
             'user': profile.user,
             'domain': current_site.domain
-            })
+        })
         to_email = profile.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.send()
         return redirect('openmarket:seller_list')
 
@@ -218,7 +257,9 @@ class CreateSellerProfile(LoginRequiredMixin,CreateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-#views for buyers
+# views for buyers
+
+
 class BuyerViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -237,7 +278,7 @@ class BuyerList(APIView):
         return Response({'buyers': queryset})
 
 
-#views for sellerpost
+# views for sellerpost
 class SellerPostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -256,7 +297,7 @@ class SellerPostList(APIView):
         return Response({'sellerposts': queryset})
 
 
-#views for buyerpost
+# views for buyerpost
 class BuyerPostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -275,7 +316,7 @@ class BuyerPostList(APIView):
         return Response({'buyerposts': queryset})
 
 
-#views for service provider
+# views for service provider
 class ServiceProviderViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -295,17 +336,18 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
             queryset = servicesproviders
         else:
             queryset = servicesproviders.filter(user=user)
-        
+
         return queryset
 
     def approved(self, request, pk, format=None):
         profile = self.get_object()
-        serializer = ServiceProviderApprovalSerializer(profile, data=request.data)
+        serializer = ServiceProviderApprovalSerializer(
+            profile, data=request.data)
         if serializer.is_valid():
             provider_group = UserGroup.objects.get(name='Service Providers')
             profile.user.groups.add(provider_group)
-            serializer.save(status ='Active', approved_date = datetime.datetime.now(),
-            approver=self.request.user)
+            serializer.save(status='Active', approved_date=datetime.datetime.now(),
+                            approver=self.request.user)
             # sending message to the service provider for notification
             user = profile.user
             current_site = get_current_site(request)
@@ -314,11 +356,11 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
                 'user': user,
                 'domain': current_site.domain,
                 'message': 'Your application as a service provider has been approved successfully.',
-                })
+            })
             to_email = user.email
             email = EmailMessage(
                 subject, message, to=[to_email]
-                )
+            )
             email.content_subtype = "html"
             email.send()
             return Response(serializer.data)
@@ -326,9 +368,11 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
 
     def decline(self, request, pk, format=None):
         profile = self.get_object()
-        serializer = ServiceProviderApprovalSerializer(profile, data=request.data)
+        serializer = ServiceProviderApprovalSerializer(
+            profile, data=request.data)
         if serializer.is_valid():
-            serializer.save(status ='Rejected', approved_date = datetime.datetime.now(),approver=self.request.user)
+            serializer.save(status='Rejected', approved_date=datetime.datetime.now(
+            ), approver=self.request.user)
             # sending message to the service provider for notification
             user = profile.user
             current_site = get_current_site(request)
@@ -337,16 +381,15 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
                 'user': user,
                 'domain': current_site.domain,
                 'message': 'Your application as a service provider has been declined.',
-                })
+            })
             to_email = user.email
             email = EmailMessage(
                 subject, message, to=[to_email]
-                )
+            )
             email.content_subtype = "html"
             email.send()
             return Response(serializer.data)
-        
-         
+
         return Response(serializer.errors, status=400)
 
     def create(self, request, format=None):
@@ -354,13 +397,13 @@ class ServiceProviderViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             try:
-                serializer.status ='Pending'
+                serializer.status = 'Pending'
                 #serializer.user = self.request.user
-                serializer.save(user = self.request.user)
+                serializer.save(user=self.request.user)
             except IntegrityError:
-                return Response({'error':'Service Provider account already exists'})
-                
-            return Response({'status':'successful'})
+                return Response({'error': 'Service Provider account already exists'})
+
+            return Response({'status': 'successful'})
         return Response(serializer.errors, status=400)
 
 
@@ -372,13 +415,14 @@ class ServiceProviderList(APIView):
         queryset = ServiceProvider.objects.order_by('service_type')
         return Response({'serviceproviders': queryset})
 
-#View for creating a service
-class CreateServiceView(LoginRequiredMixin,CreateView):
+# View for creating a service
+
+
+class CreateServiceView(LoginRequiredMixin, CreateView):
     template_name = 'register_service.html'
     success_url = reverse_lazy('openmarket:serviceregistration_list')
     form_class = ServiceProfileForm
     success_message = "Your profile was created successfully"
-    
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateServiceView, self).dispatch(request, *args, **kwargs)
@@ -388,7 +432,6 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
         kwargs['request'] = self.request
         return kwargs
 
-
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
@@ -397,7 +440,6 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         profile = form.save(commit=False)
@@ -413,11 +455,11 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
         message = render_to_string('profile_created_successful.html', {
             'user': profile.user,
             'domain': current_site.domain
-            })
+        })
         to_email = profile.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('openmarket:serviceregistration_list')
@@ -428,7 +470,7 @@ class CreateServiceView(LoginRequiredMixin,CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-#views for service registration 
+# views for service registration
 
 class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
@@ -437,7 +479,7 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     #queryset = Service.objects.all().order_by('service_name')
     serializer_class = ServiceRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def get_queryset(self):
         """
         This view should return a list of all the services 
@@ -445,11 +487,21 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
         """
         user = self.request.user
         services = Service.objects.order_by('-id')
-        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_service'):
-            queryset = services
+        lon = self.request.query_params.get('lon', None)
+        lat = self.request.query_params.get('lat', None)
+
+        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.view_service'):
+            if lat is not None and lon is not None:
+                user_location = Point(float(lon), float(lat), srid=4326)
+                print(user_location)
+                queryset = Service.objects.annotate(distance=Distance(
+                    "location", user_location)).order_by('distance')
+            else:
+
+                queryset = services
         else:
             queryset = services.filter(user=user)
-        
+
         return queryset
 
     def create(self, request, format=None):
@@ -457,14 +509,15 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             try:
-            #     serializer.status ='Pending'
+                #     serializer.status ='Pending'
                 #serializer.user = self.request.user
-                serializer.save(user = self.request.user)
+                serializer.save(user=self.request.user)
             except IntegrityError:
-                return Response({'error':'Service account already exists'})
-                
-            return Response({'status':'successful'})
+                return Response({'error': 'Service account already exists'})
+
+            return Response({'status': 'successful'})
         return Response(serializer.errors, status=400)
+
 
 class MapServiceDetailView(DetailView):
     model = Service
@@ -473,11 +526,11 @@ class MapServiceDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(MapServiceDetailView, self).get_context_data(**kwargs)
         context['Serviceobject'] = self.object
-        
+
         return context
 
 
-#service provider list
+# service provider list
 class ServiceProviderProfileList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceprovider_list.html'
@@ -486,15 +539,14 @@ class ServiceProviderProfileList(APIView, LoginRequiredMixin):
         queryset = ServiceProvider.objects.order_by('region')
         return Response({'serviceproviders': queryset})
 
- 
-#views for creating a service provider profile
 
-class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
+# views for creating a service provider profile
+
+class CreateServiceProviderProfile(LoginRequiredMixin, CreateView):
     template_name = 'register_service_provider.html'
     success_url = reverse_lazy('openmarket:serviceprovider_list')
     form_class = ServiceProviderProfileForm
     success_message = "Your profile was created successfully"
-    
 
     def dispatch(self, request, *args, **kwargs):
         return super(CreateServiceProviderProfile, self).dispatch(request, *args, **kwargs)
@@ -502,7 +554,6 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
     def get_form_kwargs(self):
         kwargs = super(CreateServiceProviderProfile, self).get_form_kwargs()
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -512,7 +563,6 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
-
 
     def form_valid(self, form):
         profile = form.save(commit=False)
@@ -528,22 +578,22 @@ class CreateServiceProviderProfile(LoginRequiredMixin,CreateView):
         message = render_to_string('service_provider_reg_email.html', {
             'user': profile.user,
             'domain': current_site.domain
-            })
+        })
         to_email = profile.user.email
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('openmarket:serviceprovider_list')
 
-#view for loading 
+# view for loading
+
+
 def load_districts(request):
     region_id = request.GET.get('region')
     districts = District.objects.filter(region_id=region_id).order_by('name')
     return render(request, 'city_dropdown_list_options.html', {'cities': cities})
-
-
 
 
 class ServiceRegistrationList(APIView, LoginRequiredMixin):
@@ -554,7 +604,7 @@ class ServiceRegistrationList(APIView, LoginRequiredMixin):
         return Response()
 
 
-#views for ContactDetails
+# views for ContactDetails
 class ContactDetailsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -573,7 +623,7 @@ class ContactDetailsList(APIView):
         return Response({'contactdetails': queryset})
 
 
-#views for Logistics
+# views for Logistics
 class LogisticsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -592,8 +642,7 @@ class LogiticsList(APIView):
         return Response({'logistics': queryset})
 
 
-
-#views for packaging
+# views for packaging
 class SoilScienceViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -610,16 +659,15 @@ class SoilScienceList(APIView):
     def get(self, request):
         queryset = SoilScience.objects.order_by('name')
         return Response({'soilsciences': queryset})
-    
 
-#update service provider view
-class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
-    model =ServiceProvider
+
+# update service provider view
+class UpdateServiceProviderProfile(LoginRequiredMixin, UpdateView):
+    model = ServiceProvider
     template_name = 'register_service_provider.html'
     success_url = reverse_lazy('openmarket:serviceprovider_list')
     form_class = ServiceProviderProfileForm
     success_message = "Your profile was Updated successfully"
-
 
     def dispatch(self, request, *args, **kwargs):
         return super(UpdateServiceProviderProfile, self).dispatch(request, *args, **kwargs)
@@ -627,7 +675,6 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
     def get_form_kwargs(self):
         kwargs = super(UpdateServiceProviderProfile, self).get_form_kwargs()
         return kwargs
-
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -638,11 +685,11 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         profile = form.save(commit=False)
         # updating profile for only changed fields
         profile.save()
+        form.save_m2m()
 
         return redirect('openmarket:serviceprovider_list')
 
@@ -652,15 +699,16 @@ class UpdateServiceProviderProfile(LoginRequiredMixin,UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-#Service Provider Detail View
+# Service Provider Detail View
 class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
     model = ServiceProvider
     context_object_name = "providerrecord"
     template_name = "view_service_provider_profile.html"
 
     def get_context_data(self, **kwargs):
-        context = super(ServiceProviderProfileDetailView, self).get_context_data(**kwargs)
-        
+        context = super(ServiceProviderProfileDetailView,
+                        self).get_context_data(**kwargs)
+
         context.update({
 
         })
@@ -669,33 +717,32 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
 
 class ServiceDetailView(LoginRequiredMixin, DetailView):
     model = Service
-    context_object_name = "profilerecord"
+    context_object_name = "providerrecord"
+
     template_name = "view_services_details.html"
 
     def get_context_data(self, **kwargs):
         context = super(ServiceDetailView, self).get_context_data(**kwargs)
-        
+
         context.update({
 
         })
         return context
 
-class EditServiceView(LoginRequiredMixin,UpdateView):
+
+class EditServiceView(LoginRequiredMixin, UpdateView):
     model = Service
     template_name = 'register_service.html'
     success_url = reverse_lazy('openmarket:serviceregistration_list')
     form_class = ServiceProfileForm
     success_message = "Service has been updated successfully"
 
-
     def dispatch(self, request, *args, **kwargs):
         return super(EditServiceView, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        kwargs = super(EditServiceView, self).get_form_kwargs()
-        kwargs['request'] = self.request
-        return kwargs
 
+        kwargs['request'] = self.request
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -706,30 +753,35 @@ class EditServiceView(LoginRequiredMixin,UpdateView):
             print(form.errors)
         return self.form_invalid(form)
 
-
     def form_valid(self, form):
         farm = form.save(commit=False)
         farm.save()
 
-         # send email to farmer  a message after an update
+        # send email to farmer  a message after an update
         current_site = get_current_site(self.request)
         subject = 'Service Updated Successfully'
         message = render_to_string('farm_created_successful_email.html', {
             'user': farm.user,
             'domain': current_site.domain,
             'message': 'Your '+farm.service_name + ' Details have been updated sucessfully',
-            })
+        })
         to_email = farm.user.email
+        subject = 'Farm Updated Successfully'
+        message = render_to_string('farm_created_successful_email.html', {
+            'user': openmarket.serviceprovider.user,
+            'domain': current_site.domain,
+            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
+        })
+        to_email = farm.farmer.user.email
+
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.content_subtype = "html"
         email.send()
         return redirect('openmarket:serviceregistration_list')
-
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-

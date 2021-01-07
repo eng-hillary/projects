@@ -16,7 +16,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <ol class="breadcrumb pull-right">
+                            <ol class="breadcrumb float-right">
                                 <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
                                 <li class="breadcrumb-item">Service Providers </li>
                                 <li class="breadcrumb-item active">Add Profile </li>
@@ -221,10 +221,6 @@
                         minlength:9,
                         digits: true
 
-                    },
-                    nin: {
-                        required: true,
-                        minlength:14,
                     }
                 },
                 // Specify validation error messages
@@ -233,9 +229,6 @@
                         "Please enter a valid phone number",
                    phone_2_1: {
                         required: "Please enter a valid phone numbe"
-                    },
-                    nin: {
-                        required: "Please a valid NIN"
                     }
                 }
             }

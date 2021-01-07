@@ -5,7 +5,8 @@ from farmer.models import FarmerProfile
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import ugettext as _
 from geopy.geocoders import Nominatim
-
+from django.contrib.gis.db import models
+from django.contrib.auth.models import User
 # Create your models here.
 class Resource(models.Model):
     RESOURCE_STATUS = (
@@ -14,12 +15,11 @@ class Resource(models.Model):
         ('not available', 'Not Available')
     )
     resource_name = models.CharField(max_length=200, blank = False)
-    owner = models.ForeignKey(FarmerProfile, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     Phone_number1 = PhoneNumberField(_('Phone number 1'), blank=False, null=True)
-    Phone_number2 = PhoneNumberField(_('Phone number 2'), blank=False, null=True)
+    Phone_number2 = PhoneNumberField(_('Phone number 2'), blank=True, null=True)
     resource_category = models.CharField(choices=RESOURCE_CATEGORY, max_length=25, null=False, blank=False)
-    lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your location")
-    lon = models.FloatField(_('Longitude'), blank=True, null=True, help_text="Longitude of your location")
+    location = models.PointField( srid=4326,null=True)
     terms_and_conditions = models.TextField(max_length=400, blank = False)
     resource_status = models.CharField(max_length=20, choices=RESOURCE_STATUS)
     available_from = models.DateField(auto_now=True)
@@ -33,26 +33,23 @@ class Resource(models.Model):
     class Meta:
         permissions = (
             ("can_approve_resourcebooking", "Can approve resourcebooking"),
-        )
-
-    class Meta:
-        permissions = (
-            ("can_cancel_resourcebooking", "Can cancel resourcebooking"),
+              ("can_cancel_resourcebooking", "Can cancel resourcebooking")
         )
 
     @property
     def compute_location(self):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        lat = str(self.lat)
-        lon = str(self.lon)
+        lat = str(self.location.y)
+        lon = str(self.location.x)
        
         try:
 
             location = geolocator.reverse(lat + "," + lon)
-            return '{}'.format(location)
+            return '{}'.format(location.address)
         except:
-            location = str(self.lat) + "," + str(self.lon)
+            location = str(self.location.y) + "," + str(self.location.x)
             return 'slow network, loading location ...'
+   
 
 class ResourceSharing(models.Model):
     resource = models.ForeignKey(Resource, on_delete = models.CASCADE)

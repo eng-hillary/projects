@@ -33,7 +33,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from .forms import ProfileForm
 from farmer.views import FarmerProfile
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum, FloatField
 import json
 from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer, RegionSerializer
 ,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost,ProfileSerializer)
@@ -41,6 +41,8 @@ from rest_framework import filters
 from django.core import serializers as django_serializers
 from rest_framework import status
 from django.contrib.auth.forms import PasswordChangeForm
+from farm .models import Sector
+from django.db.models.functions import Cast
 
 
 class HomePage(LoginRequiredMixin, TemplateView):
@@ -49,6 +51,16 @@ class HomePage(LoginRequiredMixin, TemplateView):
 
     
     def get_context_data(self, **kwargs):
+        
+        farmers = FarmerProfile.objects.all()
+        count = float(farmers.count())
+        sectors = Sector.objects.all()
+        labels = []
+        data = []
+    
+     # print(farmers) 
+        count = float(farmers.count())
+        sectors = Sector.objects.all()
         context = super(HomePage, self).get_context_data(**kwargs)
         dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
         bank_count = Count('source_of_credit', filter=Q(source_of_credit='Bank')),
@@ -57,7 +69,23 @@ class HomePage(LoginRequiredMixin, TemplateView):
         farmergroups_count = Count('source_of_credit', filter=Q(source_of_credit='Farmer Groups'))) \
         .order_by('user__profile__region')
         
+        
+        piedataset = FarmerProfile.objects.filter(user__profile__region__isnull = False).values('user__profile__region__name').annotate(
+                #crop_count = Count('sector', filter=Q(sector='Crop Farming')),
+                farmers = Count('sector', filter = Q(sector__in=sectors)),
+                percentage =  ((Count('sector', filter = Q(sector__in=sectors))/count)*100))
+                        
+        # print(dataset)
+        for entry in piedataset:
+            labels.append('%s Region' % entry['user__profile__region__name'] )
+            data1=data.append( entry['percentage'])
+                #data1.append('O')
+                
+        
         context["dataset"]=dataset
+        context["piedataset"]= piedataset
+        context["labels"]=labels
+        context["data"]=data
         #context["chart"] = json.dumps(chart)
         #context["credit.html"] = credit.html
         
@@ -159,8 +187,8 @@ class SignUpView(CreateView):
         profile.district = form.cleaned_data.get('district')
         profile.county = form.cleaned_data.get('county')
         profile.sub_county = form.cleaned_data.get('sub_county')
-        profile.parish = form.cleaned_data.get('parish')
-        profile.village = form.cleaned_data.get('village')
+        #profile.parish = form.cleaned_data.get('parish')
+        #profile.village = form.cleaned_data.get('village')
         profile.home_address = form.cleaned_data.get('home_address')
         profile.gender = form.cleaned_data.get('gender')
         profile.profile_pic = form.cleaned_data.get('profile_pic')
@@ -191,8 +219,6 @@ class SignUpView(CreateView):
 
 def account_activation_sent(request):
     return render(request, 'account_activation_sent.html')
-
-
 
 
 def activate(request, uidb64, token):

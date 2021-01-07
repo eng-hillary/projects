@@ -25,7 +25,7 @@ from .views import (ProductList,
                     ServiceProviderProfileDetailView,
                     ServiceDetailView,
                     MapServiceDetailView,
-                    EditServiceView
+                    EditServiceView,EditProductView
                      )
 
 router = routers.DefaultRouter()
@@ -36,7 +36,9 @@ router.register(r'buyers', views.BuyerViewSet)
 router.register(r'sellerposts', views.SellerPostViewSet)
 router.register(r'buyersposts', views.BuyerPostViewSet)
 router.register(r'serviceproviders', views.ServiceProviderViewSet, basename='service_providers')
+
 router.register(r'serviceregistration', views.ServiceRegistrationViewSet,  basename='services')
+
 router.register(r'contactdetails', views.ContactDetailsViewSet)
 router.register(r'logistics', views.LogisticsViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
@@ -68,6 +70,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('products', ProductList.as_view(), name='product_list'),
     path('create/products', CreateProductProfile.as_view(), name="create_product"),
+    path('<int:pk>/edit/product/', EditProductView.as_view(), name="edit_product"),
     path('sellers', SellerList.as_view(), name='seller_list'),
     path('<int:pk>/approve/seller', approve_seller, name='approve_seller'),
     path('create/profile', CreateSellerProfile.as_view(), name="create_seller"),

@@ -44,9 +44,7 @@ admin.site.register(ServiceProvider, ServiceProviderAdmin)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = [
        'service_name',  
-       'lon', 
-       'lat', 
-       
+       'location',  
        'availability_date', 
        'picture', 
         

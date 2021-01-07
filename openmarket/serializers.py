@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
 from common.serializers import UserSerializer
+from common.customSerializers import GeometryPointFieldSerializerFields
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -119,8 +120,8 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField(method_name='get_user_full_name')
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     #category = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
-    #category = serializers.SlugRelatedField(many=True,read_only=True, slug_field='cat_name')
-    location = serializers.CharField(source='compute_location')
+    category = serializers.SlugRelatedField(many=False,read_only=True, slug_field='cat_name')
+    location = GeometryPointFieldSerializerFields()
 
 
     class Meta:
