@@ -377,9 +377,7 @@ def farmer_class_view(request):
     for entry in dataset:
         labels.append(entry['user__profile__region__name'] )
         data1=data.append(entry['percentage'])
-         #data1.append('O')
-       
-      
+     
 
     return render(request, 'credit.html', {
        'labels': labels,
