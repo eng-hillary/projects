@@ -368,91 +368,90 @@ $(document).ready(function () {
     }
   });
 });
-
-//farm map 
-var map;
-var resourcemap;
-var icon = ""
-function initialize() {
-  var infowindow = new google.maps.InfoWindow();
-  var mapProp = {
-    center: new google.maps.LatLng(1.0609637, 32.5672804),
-    zoom: 8,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-
-  map = new google.maps.Map(document.getElementById("map"), mapProp);
-  resourcemap = new google.maps.Map(document.getElementById("resourcemap"), mapProp);
+ //farm map 
+ var map;
+ var resourcemap;
+ var icon = ""
+ function initialize() {
+   var infowindow = new google.maps.InfoWindow();
+   var mapProp = {
+     center: new google.maps.LatLng(1.0609637, 32.5672804), 
+     zoom: 8,
+     mapTypeId: google.maps.MapTypeId.ROADMAP
+   };
+ 
+   map = new google.maps.Map(document.getElementById("map"), mapProp);
+   resourcemap = new google.maps.Map(document.getElementById("resourcemap"), mapProp);
 
   //FARMS
-  $.getJSON('/farm/api/maps/', function (json) {
-    var farmdata = [];
-    json.forEach(function (p) {
-      p.z = p.land_occupied;
-      farmdata.push(p);
-    })
-    //console.log(farmdata)
+   $.getJSON('/farm/api/maps/', function(json) {
+     var farmdata = [];
+     json.forEach(function (p) {
+       p.z = p.land_occupied;
+       farmdata.push(p);
+     })
+     //console.log(farmdata)
+ 
+   $.each(farmdata, function(key, data) {
+ 
+     var latlon = new google.maps.LatLng(data.lat, data.lon);
+     //console.log(data)
+     var marker = new google.maps.Marker({
+       position: latlon,
+       map: map,
+       //icon: icon,
+       data: data.farm_name
+     });
+ 
+     
+     var details = "REGION:" + data.region + "<br>" + "DISTRICT:" +
+     data.district + "<br>" + "FARMER:" + data.farmer + "<br>" + "PHONE NUMBER:" + data.phone_number + "."+"<br>" 
+     +'<a style="color:blue;" href="/farm/'+ data.id +'/view/">Farm Details</a>';
+ 
+     bindInfoWindow(marker, map, infowindow, details);
+ 
+     });
+ 
+   });
 
-    $.each(farmdata, function (key, data) {
-
-      var latlon = new google.maps.LatLng(data.lat, data.lon);
-      //console.log(data)
-      var marker = new google.maps.Marker({
-        position: latlon,
-        map: map,
-        //icon: icon,
-        data: data.farm_name
-      });
-
-
-      var details = "REGION:" + data.region + "<br>" + "DISTRICT:" +
-        data.district + "<br>" + "FARMER:" + data.farmer + "<br>" + "PHONE NUMBER:" + data.phone_number + "." + "<br>"
-        + '<a style="color:blue;" href="/farm/' + data.id + '/view/">Farm Details</a>';
-
-      bindInfoWindow(marker, map, infowindow, details);
-
-    });
-
-  });
-
-  //RESOURCES
-  $.getJSON('/resourcesharing/api/resource/', function (json) {
-    var resourcedata = [];
-    json.forEach(function (p) {
-      p.z = p.id;
-      resourcedata.push(p);
-    })
-    //console.log(farmdata)
-
-    $.each(resourcedata, function (key, data) {
-
-      var latlon = new google.maps.LatLng(data.lat, data.lon);
-      console.log(data)
-      var marker = new google.maps.Marker({
-        position: latlon,
-        map: resourcemap,
-        //icon: icon,
-        data: data.resource_name
-      });
-
-
-      var details = "OWNER:" + data.owner + "<br>" + "PHONE NUMBER:" +
-        data.Phone_number1 + "<br>" + "STATUS:" + data.resource_status + "<br>" + "PRICE:" + data.price + ".";
-
-      bindInfoWindow(marker, resourcemap, infowindow, details);
-
-    });
-
-  });
-
+   //RESOURCES
+   $.getJSON('/resourcesharing/api/resource/', function(json) {
+     var resourcedata = [];
+     json.forEach(function (p) {
+       p.z = p.id;
+       resourcedata.push(p);
+     })
+     //console.log(farmdata)
+ 
+   $.each(resourcedata, function(key, data) {
+ 
+     var latlon = new google.maps.LatLng(data.lat, data.lon);
+     console.log(data)
+     var marker = new google.maps.Marker({
+       position: latlon,
+       map: resourcemap,
+       //icon: icon,
+       data: data.resource_name
+     });
+ 
+     
+     var details = "OWNER:" + data.owner + "<br>" + "PHONE NUMBER:" +
+     data.Phone_number1 + "<br>" + "STATUS:" + data.resource_status + "<br>" + "PRICE:" + data.price + ".";
+ 
+     bindInfoWindow(marker, resourcemap, infowindow, details);
+ 
+     });
+ 
+   });
+ 
+ }
+ 
+ function bindInfoWindow(marker, map, infowindow, strDescription) {
+   google.maps.event.addListener(marker, 'mouseover', function() {
+     infowindow.setContent(strDescription);
+     infowindow.open(map, marker);
+   });
 }
 
-function bindInfoWindow(marker, map, infowindow, strDescription) {
-  google.maps.event.addListener(marker, 'mouseover', function () {
-    infowindow.setContent(strDescription);
-    infowindow.open(map, marker);
-  });
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
+ google.maps.event.addDomListener(window, 'load', initialize);
 
