@@ -143,7 +143,7 @@ document.getElementById('farm_container').addEventListener('mouseout', function 
   })
 //console.log(data);
  
-  chart = Highcharts.mapChart('resource_container', {
+  chart = Highcharts.mapChart('er', {
       title: {
           text: 'Resource Locations'
       },
@@ -388,7 +388,7 @@ document.getElementById('service_container').addEventListener('mouseout', functi
 
 
 // Create the chart
-Highcharts.chart('piecontainer', {
+Highcharts.chart('', {
   chart: {
     type: 'pie'
   },

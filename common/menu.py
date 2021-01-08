@@ -228,12 +228,6 @@ menus = [
                              
                               pattern_name='farm:productionrecords', test=can_view_production_records),
                               
-
-            menu.PassTestNode(id='pests_and_diseases',
-                              label='<i class="fa fa-circle"></i>Queries',
-                             
-                              pattern_name='farm:query_list', test=can_view_queries),
-
          
         ]
     ),
@@ -272,6 +266,25 @@ menu.PassTestNode(
                              
                               pattern_name='openmarket:serviceregistration_list', test=can_view_services),
  
+         
+        ]
+    ),
+
+    #Queries Section
+    menu.PassTestNode(
+        id='query-section',
+        css_class="sidebar-header",
+        label='<span class="fas fa-tractor"></span>  <span>Queries and Reports</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        url='#',
+        test=can_view_queries,
+        children=[
+
+
+            menu.PassTestNode(id='query-section',
+                              label='<i class="fa fa-circle"></i>Manage Queries',
+                             
+                              pattern_name='farm:query_list', test=can_view_queries),
+
          
         ]
     ),
