@@ -96,7 +96,7 @@ class ProductProfileForm(forms.ModelForm):
     
      class Meta:
         model = Product
-        exclude = ['date_created', 'date_updated']
+        exclude = ['date_created', 'date_updated','seller']
 
      def __init__(self, *args, **kwargs):
          self.request = kwargs.pop('request', None)
