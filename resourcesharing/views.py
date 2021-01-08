@@ -195,17 +195,17 @@ class ResourceBookingView(LoginRequiredMixin,CreateView):
         resource.booker = self.request.user
         resource.save()
         
-        print(resource.resource.owner.user.email)
+        print(resource.resource.owner.email)
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Booked successfully Successfully'
         message = render_to_string('booking_created_successfully_email.html', {
-            'user': resource.resource.owner.user,
+            'user': resource.resource.owner,
             'domain': current_site.domain,
             'resource':resource
             })
-        to_email = resource.resource.owner.user.email
+        to_email = resource.resource.owner.email
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
