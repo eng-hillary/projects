@@ -322,16 +322,16 @@ menus = [
     menu.PassTestNode(
         id='Open-Market-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-balance-scale"></span>  <span>Open Market</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-balance-scale"></span>  <span>Markets & Prices</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_service_provider,
         children=[
 
 
-            # menu.PassTestNode(id='register_service',
-            #                   label='<i class="fa fa-circle"></i>Register Market',
+            menu.PassTestNode(id='register_service',
+                              label='<i class="fa fa-circle"></i>Markets',
 
-            #                   pattern_name='openmarket:service_registration', test=can_register_services),
+                               pattern_name='unffeagents:market_list', test=can_register_services),
             # menu.PassTestNode(id='services',
             #                   label='<i class="fa fa-circle"></i>Markets',
 
