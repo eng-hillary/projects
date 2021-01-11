@@ -78,15 +78,10 @@
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="full_name" data-sortable="true">User</th>
       <th data-field="business_number" data-sortable="true">Business Number</th>
-      <th data-field="business_location" data-sortable="true">Business Address</th>
+      <th data-field="location" data-sortable="true">Business Address</th>
       <th data-field="seller_type" data-sortable="true">Seller Type</th>
       <th data-field="major_products" data-sortable="true">Major Products</th>
-      <th data-field="region" data-visible="false" data-sortable="true">Region Business is Located</th>
-      <th data-field="district" data-visible="false" data-sortable="true">District Business is Located</th>
-      <th data-field="county" data-visible="false" data-sortable="true">County Business is Located</th>
-      <th data-field="sub_county" data-visible="false" data-sortable="true">Sub county Business is Located</th>
-      <th data-field="parish" data-visible="false" data-sortable="true">Parish Business is Located</th>
-      <th data-field="village" data-visible="false" data-sortable="true">Village Business is Located</th>
+      
       <th data-field="gender" data-visible="false" data-sortable="true">Gender</th>
       <th data-field="date_of_birth" data-visible="false" data-sortable="true">Date of Birth</th>
       
@@ -123,7 +118,7 @@
 
 
   function operateFormatter(value, row, index) {
-    var url ="/openmarket/"+row.user+"/edit"
+    var url ="/openmarket/"+row.user+"/edit/seller/"
     return [
 
       '<a class="Edit " href="'+url+'" title="Edit">',
