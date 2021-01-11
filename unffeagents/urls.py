@@ -3,12 +3,13 @@ from rest_framework import routers
 from . import views
 from .views import (AgentProfileList, MarketList, MarketPriceList, 
 NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView,
-CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList)
+CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,
+EditMarketView)
 
 
 router = routers.DefaultRouter()
 router.register(r'agentprofile', views.AgentProfileViewSet)
-router.register(r'market', views.MarketViewSet)
+router.register(r'market', views.MarketViewSet, basename='markets_api')
 router.register(r'marketprice', views.MarketPriceViewSet)
 router.register(r'notice', views.NoticeViewSet)
 router.register(r'call', views.CallerViewSet)
@@ -27,6 +28,8 @@ urlpatterns = [
     path('<int:pk>/edit/agentprofile', EditAgentProfileView.as_view(), name="edit_agent_profile"),
     path('<int:pk>/edit/enquiry', EditEquiryView.as_view(), name="edit_equiry"),
     path('market', MarketList.as_view(), name='market_list'),
+    path('create/market', CreateMarket.as_view(), name='add_market'),
+    path('<int:pk>/edit/market/',EditMarketView.as_view(), name='edit_market'),
     path('marketprice', MarketPriceList.as_view(), name='marketprice_list'),
     path('alert&notification', NoticeList.as_view(), name='notice_list'),
     path('calls',CallList.as_view(), name='calls'),

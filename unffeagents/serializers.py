@@ -18,9 +18,24 @@ class AgentProfileSerializer(serializers.ModelSerializer):
 
 
 class MarketSerializer(serializers.ModelSerializer):
+    lat = serializers.SerializerMethodField(method_name='get_lat',source='location')
+    lon = serializers.SerializerMethodField(method_name='get_lon',source='location')
+    location = serializers.CharField(source='compute_location')
     class Meta:
         model = Market
-        fields = ['market_name', 'latitude', 'longitude', 'market_description']
+        fields = ['id','market_name', 'lon', 'lat', 'market_description','location']
+    
+
+    def get_lat(self,obj):
+        try:
+            return '{}'.format(obj.location.y)
+        except:
+            pass
+    def get_lon(self,obj):
+        try:
+            return '{}'.format(obj.location.x)
+        except:
+            pass
 
 
 class MarketPriceSerializer(serializers.ModelSerializer):

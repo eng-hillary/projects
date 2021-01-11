@@ -1,5 +1,5 @@
 from django import forms
-from .models import AgentProfile, Notice,CallRsponse
+from .models import AgentProfile, Notice,CallRsponse,Market
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from common .models import (Region,District)
@@ -7,6 +7,8 @@ from farm .models import Sector
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
+from django.contrib.gis import forms 
+from django.contrib.gis.geos import Point
 
 class CustomUserChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
@@ -70,3 +72,17 @@ class EnquiryForm(forms.ModelForm):
         self.fields['question'].widget.attrs.update({'rows': '3'})
         self.fields['called_from'].empty_label = None
         self.fields['solution'].widget.attrs.update({'rows': '3'})
+
+
+class MarketForm(forms.ModelForm):
+    location = forms.PointField(widget=forms.OSMWidget(attrs={'map_width': 800, 'map_height': 500, 'mouse_position': True,'default_zoom':7}),
+    initial=Point(y=1.0609637, x=32.5672804, srid=4326))
+
+  
+    class Meta:
+        model = Market
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+        super(MarketForm, self).__init__(*args, **kwargs)
+        self.fields['market_description'].widget.attrs.update({'rows': '2'})

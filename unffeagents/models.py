@@ -6,6 +6,8 @@ from django.utils.translation import ugettext as _
 from common .models import (District,County,Region,SubCounty, Parish,Village)
 from common .models import TimeStampedModel
 from farm .models import Sector
+from django.contrib.gis.db import models
+from geopy.geocoders import Nominatim
 
 
 # Create your models here.
@@ -30,9 +32,23 @@ class AgentProfile(models.Model):
 
 class Market(models.Model):
     market_name = models.CharField(max_length=100, blank = False)
-    latitude = models.FloatField(_('Latitude'), blank=True, null=True)
-    longitude = models.FloatField(_('Longitude'), blank=True, null=True)
     market_description = models.TextField(max_length=600, blank=False)
+    location = models.PointField( srid=4326,null=True)
+   
+
+    @property
+    def compute_location(self):
+        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
+        lat = str(self.location.y)
+        lon = str(self.location.x)
+       
+        try:
+
+            location = geolocator.reverse(lat + "," + lon)
+            return '{}'.format(location.address)
+        except:
+            location = str(self.location.y) + "," + str(self.location.x)
+            return 'slow network, loading location ...'
 
     def __str__(self):
         return self.market_name
