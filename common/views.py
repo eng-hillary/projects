@@ -1,6 +1,6 @@
 from django.views.generic import (
     CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
-from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
+from django.http import (HttpResponseRedirect, JsonResponse, HttpResponse,
                          Http404)
 from .forms import LoginForm, SignUpForm, PasswordResetEmailForm
 from django.contrib.auth.models import User, Group
@@ -19,7 +19,8 @@ from django.utils.encoding import force_text
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.urls import reverse_lazy
-from .models import (Profile, District, Region, County, SubCounty, Parish, Village)
+from .models import (Profile, District, Region, County,
+                     SubCounty, Parish, Village)
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import PasswordResetView
 from rest_framework.views import APIView
@@ -35,8 +36,8 @@ from .forms import ProfileForm
 from farmer.views import FarmerProfile
 from django.db.models import Count, Q, Sum, FloatField
 import json
-from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer,CountySerializer, RegionSerializer
-,SubCountySerializer,ParishSerializer,VillageSerializer,UserPostSerializer,UserApiPost,ProfileSerializer)
+from .serializers import (GroupSerializer, UserSerializer, DistrictSerializer, CountySerializer, RegionSerializer,
+                          SubCountySerializer, ParishSerializer, VillageSerializer, UserPostSerializer, UserApiPost, ProfileSerializer)
 from rest_framework import filters
 from django.core import serializers as django_serializers
 from rest_framework import status
@@ -49,49 +50,58 @@ class HomePage(LoginRequiredMixin, TemplateView):
 
     template_name = 'home.html'
 
-    
     def get_context_data(self, **kwargs):
-        
+
         farmers = FarmerProfile.objects.all()
         count = float(farmers.count())
         sectors = Sector.objects.all()
         labels = []
         data = []
-    
-     # print(farmers) 
+
+     # print(farmers)
         count = float(farmers.count())
         sectors = Sector.objects.all()
         context = super(HomePage, self).get_context_data(**kwargs)
         dataset = FarmerProfile.objects.values('user__profile__region__name').annotate(
-        bank_count = Count('source_of_credit', filter=Q(source_of_credit='Bank')),
-        sacco_count = Count('source_of_credit', filter=Q(source_of_credit='SACCO')),
-        vsla_count = Count('source_of_credit', filter=Q(source_of_credit='Village Savings and Loan Associate')),
-        farmergroups_count = Count('source_of_credit', filter=Q(source_of_credit='Farmer Groups'))) \
-        .order_by('user__profile__region')
-        
-        
-        piedataset = FarmerProfile.objects.filter(user__profile__region__isnull = False).values('user__profile__region__name').annotate(
-                #crop_count = Count('sector', filter=Q(sector='Crop Farming')),
-                farmers = Count('sector', filter = Q(sector__in=sectors)),
-                percentage =  ((Count('sector', filter = Q(sector__in=sectors))/count)*100))
-                        
+            bank_count=Count('source_of_credit',
+                             filter=Q(source_of_credit='Bank')),
+            sacco_count=Count('source_of_credit', filter=Q(
+                source_of_credit='SACCO')),
+            vsla_count=Count('source_of_credit', filter=Q(
+                source_of_credit='Village Savings and Loan Associate')),
+            farmergroups_count=Count('source_of_credit', filter=Q(source_of_credit='Farmer Groups'))) \
+            .order_by('user__profile__region')
+
+        piedataset = FarmerProfile.objects.filter(user__profile__region__isnull=False).values('user__profile__region__name').annotate(
+            #crop_count = Count('sector', filter=Q(sector='Crop Farming')),
+            farmers=Count('sector', filter=Q(sector__in=sectors)),
+            percentage=((Count('sector', filter=Q(sector__in=sectors))/count)*100))
+
         # print(dataset)
         for entry in piedataset:
-            labels.append('%s' % entry['user__profile__region__name'] )
+            labels.append('%s' % entry['user__profile__region__name'])
             data.append(entry['percentage'])
-                #data1.append('O')
-                
+            # data1.append('O')
 
-        context["dataset"]=dataset
-        context["piedataset"]= piedataset
-        context["labels"]=labels
-        context["data"]=data
+        context["dataset"] = dataset
+        context["piedataset"] = piedataset
+        context["labels"] = labels
+        context["data"] = data
         #context["chart"] = json.dumps(chart)
         #context["credit.html"] = credit.html
-        
-            
+
         return context
+
+
+class OpenMarketHomePage(TemplateView):
+
+    template_name = 'openmarket_index.html'
+
+    # def get_context_data(self, **kwargs):
+    #     # pass in context data from here
         
+    #     return context
+
 
 # login view
 class LoginView(TemplateView):
@@ -111,7 +121,8 @@ class LoginView(TemplateView):
         form = LoginForm(request.POST, request=request)
         if form.is_valid():
 
-            user = User.objects.filter(username=request.POST.get('username')).first()
+            user = User.objects.filter(
+                username=request.POST.get('username')).first()
 
             if user is not None:
                 if user.is_active:
@@ -144,12 +155,13 @@ class LoginView(TemplateView):
             "form": form
         })
 
+
 class LogoutView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         logout(request)
         request.session.flush()
-        return redirect("login")
+        return redirect("open_market")
 
 
 class SignUpView(CreateView):
@@ -174,6 +186,7 @@ class SignUpView(CreateView):
         else:
             print(form.errors)
         return self.form_invalid(form)
+
     def form_valid(self, form):
         user = form.save(commit=False)
         user.is_active = False
@@ -201,11 +214,11 @@ class SignUpView(CreateView):
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
-            })
+        })
         to_email = form.cleaned_data.get('email')
         email = EmailMessage(
-                subject, message, to=[to_email]
-            )
+            subject, message, to=[to_email]
+        )
         email.send()
         return redirect('common:account_activation_sent')
 
@@ -213,8 +226,6 @@ class SignUpView(CreateView):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
         return self.render_to_response(self.get_context_data(form=form))
-
-
 
 
 def account_activation_sent(request):
@@ -238,6 +249,7 @@ def activate(request, uidb64, token):
     else:
         return render(request, 'account_activation_invalid.html')
 
+
 def account_activated(request):
     return render(request, 'account_activated.html')
 
@@ -249,9 +261,9 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
-        
-       
+
         return context
+
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
     model = User
@@ -290,6 +302,7 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
         if "errors" in kwargs:
             context["errors"] = kwargs["errors"]
         return context
+
 
 class ForgotPasswordView(PasswordResetView):
     template_name = "forgot_password.html"
@@ -330,7 +343,8 @@ class ChangePasswordView(LoginRequiredMixin, TemplateView):
 class ObtainAuthToken(APIView):
     throttle_classes = ()
     permission_classes = ()
-    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    parser_classes = (parsers.FormParser,
+                      parsers.MultiPartParser, parsers.JSONParser,)
     renderer_classes = (renderers.JSONRenderer,)
     serializer_class = AuthTokenSerializer
     if coreapi is not None and coreschema is not None:
@@ -361,7 +375,7 @@ class ObtainAuthToken(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
-        
+
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
@@ -373,9 +387,9 @@ class ObtainAuthToken(APIView):
                 picture = None
         except:
             None
-        return Response({'token': token.key,'created': created,'id':user.pk,'username':user.username, 'email':user.email,
-            'first_name':user.first_name,'last_name':user.last_name,'profile_pic':picture
-            })
+        return Response({'token': token.key, 'created': created, 'id': user.pk, 'username': user.username, 'email': user.email,
+                         'first_name': user.first_name, 'last_name': user.last_name, 'profile_pic': picture
+                         })
 
 
 obtain_auth_token = ObtainAuthToken.as_view()
@@ -384,6 +398,8 @@ obtain_auth_token = ObtainAuthToken.as_view()
 '''
 Am using these methods to load data for cascading dropdowns of districts, counties and others
 '''
+
+
 def load_districts(request):
     region_id = request.GET.get('region')
     districts = District.objects.filter(region_id=region_id).order_by('name')
@@ -398,20 +414,22 @@ def load_counties(request):
 
 def load_sub_counties(request):
     county_id = request.GET.get('county')
-    sub_counties = SubCounty.objects.filter(county_id=county_id).order_by('name')
+    sub_counties = SubCounty.objects.filter(
+        county_id=county_id).order_by('name')
     return render(request, 'sub_county_dropdown_list_options.html', {'sub_counties': sub_counties})
 
 
 def load_parishes(request):
     sub_county_id = request.GET.get('sub_county')
-    parishes = Parish.objects.filter(sub_county_id=sub_county_id).order_by('name')
+    parishes = Parish.objects.filter(
+        sub_county_id=sub_county_id).order_by('name')
     return render(request, 'parish_dropdown_list_options.html', {'parishes': parishes})
+
 
 def load_villages(request):
     parish_id = request.GET.get('parish')
     villages = Village.objects.filter(parish_id=parish_id).order_by('name')
     return render(request, 'village_dropdown_list_options.html', {'villages': villages})
-
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -421,7 +439,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = '__all__'
     ordering_fields = '__all__'
 
@@ -432,8 +450,9 @@ class UserViewSet(viewsets.ModelViewSet):
     '''
 
     serializer_class = UserSerializer
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['username','first_name','last_name','email','profile__gender','profile__phone_number']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['username', 'first_name', 'last_name',
+                     'email', 'profile__gender', 'profile__phone_number']
     ordering_fields = '__all__'
 
     def get_serializer_class(self):
@@ -453,9 +472,7 @@ class UserViewSet(viewsets.ModelViewSet):
             queryset = users
         else:
             queryset = User.objects.filter(id=user.id)
-        
 
-        
         return queryset
 
     def create(self, request, format=None):
@@ -463,9 +480,10 @@ class UserViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             user = serializer
             user.save()
-            
-             #send an email
-            user_object = User.objects.get(username =serializer.data['username'])
+
+            # send an email
+            user_object = User.objects.get(
+                username=serializer.data['username'])
             current_site = get_current_site(request)
             subject = 'Activate Your Account'
             message = render_to_string('account_activation_email.html', {
@@ -473,16 +491,16 @@ class UserViewSet(viewsets.ModelViewSet):
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user_object.id)),
                 'token': account_activation_token.make_token(user_object),
-                })
+            })
             to_email = serializer.data['email']
             email = EmailMessage(
                 subject, message, to=[to_email]
-                )
+            )
             email.send()
-            response = {'status':'Your account has been created successfully, please check your email to activate it.'}
+            response = {
+                'status': 'Your account has been created successfully, please check your email to activate it.'}
             return Response(response, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class RegionViewSet(viewsets.ModelViewSet):
@@ -505,10 +523,10 @@ class RegionViewSet(viewsets.ModelViewSet):
     partial_update:
         Update a Region(partial update).
     """
-    
+
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
 
@@ -516,7 +534,7 @@ class RegionViewSet(viewsets.ModelViewSet):
 class DistrictViewSet(viewsets.ModelViewSet):
     """
     retrieve:
-         
+
         Returns the details of a district by passing in id .
 
     list:
@@ -536,21 +554,22 @@ class DistrictViewSet(viewsets.ModelViewSet):
     partial_update:
         Update a District(partial update).
     """
-    
+
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
     #permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['name','region__name']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'region__name']
     ordering_fields = '__all__'
 
     def get_queryset(self):
-      
+
         queryset = District.objects.all()
         region = self.request.query_params.get('region', None)
         if region is not None:
             queryset = queryset.filter(region=region)
         return queryset
+
 
 class CountyViewSet(viewsets.ModelViewSet):
     """
@@ -574,16 +593,16 @@ class CountyViewSet(viewsets.ModelViewSet):
     partial_update:
         Update a County(partial update).
     """
-   
+
     queryset = County.objects.all()
     serializer_class = CountySerializer
     #permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['name','district__name']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'district__name']
     ordering_fields = '__all__'
 
     def get_queryset(self):
-       
+
         queryset = County.objects.all()
         district = self.request.query_params.get('district', None)
         if district is not None:
@@ -599,12 +618,12 @@ class SubCountyViewSet(viewsets.ModelViewSet):
     queryset = SubCounty.objects.all()
     serializer_class = SubCountySerializer
     #permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['name','county__name']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'county__name']
     ordering_fields = '__all__'
 
     def get_queryset(self):
-       
+
         queryset = SubCounty.objects.all()
         county = self.request.query_params.get('county', None)
         if county is not None:
@@ -634,21 +653,22 @@ class ParishViewSet(viewsets.ModelViewSet):
     partial_update:
         Update a Parishes(partial update).
     """
-   
+
     queryset = Parish.objects.all()
     serializer_class = ParishSerializer
     #permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['name','sub_county__name']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'sub_county__name']
     ordering_fields = '__all__'
 
     def get_queryset(self):
-        
+
         queryset = Parish.objects.all()
         sub_county = self.request.query_params.get('sub_county', None)
         if sub_county is not None:
             queryset = queryset.filter(sub_county=sub_county)
         return queryset
+
 
 class VillageViewSet(viewsets.ModelViewSet):
     """
@@ -674,12 +694,12 @@ class VillageViewSet(viewsets.ModelViewSet):
     queryset = Village.objects.all()
     serializer_class = VillageSerializer
     #permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
-    search_fields = ['name','parish__name']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'parish__name']
     ordering_fields = '__all__'
 
     def get_queryset(self):
-       
+
         queryset = Village.objects.all()
         parish = self.request.query_params.get('parish', None)
         if parish is not None:
@@ -694,7 +714,8 @@ class PostUserDataViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserApiPost
     permission_classes = [permissions.IsAuthenticated]
-    
+
+
 class PostProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer

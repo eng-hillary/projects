@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from rest_framework.views import APIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.permissions import IsAuthenticated
-from .forms import (AgentProfileForm, NoticeForm,EnquiryForm)
+from .forms import (AgentProfileForm, NoticeForm,EnquiryForm, MarketForm)
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
@@ -25,6 +25,8 @@ from django.views.generic import (
 from rest_framework import filters
 from django.contrib.auth.models import User, Group
 import requests
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
 
 
 # views for agentprofiles
@@ -154,19 +156,102 @@ class MarketViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows markets to be viewed or edited.
     """
-    queryset = Market.objects.all().order_by('market_name')
+    #queryset = Market.objects.all().order_by('market_name')
     serializer_class = MarketSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
+    def get_queryset(self):
+        """
+      returns markets nearest to the user in case you pass in logitude and lat
+        """
+        lon = self.request.query_params.get('lon', None)
+        lat = self.request.query_params.get('lat', None)
+
+        if lat is not None and lon is not None:
+                user_location = Point(float(lon), float(lat), srid=4326)
+                queryset = Market.objects.annotate(distance=Distance(
+                    "location", user_location)).order_by('distance')
+        else:
+            queryset = Market.objects.all().order_by('market_name')
+     
+
+        return queryset
+
+
 class MarketList(APIView):
+    permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'market_list.html'
 
     def get(self, request):
-        queryset = Market.objects.order_by('market_name')
+        queryset = Market.objects.order_by('-id')
         return Response({'markets': queryset})
-        
+
+
+
+class CreateMarket(CreateView):
+    template_name = 'create_market.html'
+    form_class = MarketForm
+    success_message = "Market was created successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateMarket, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateMarket, self).get_form_kwargs()
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        market = form.save(commit=False)
+        market.save()
+        return redirect('unffeagents:market_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+  
+# update market
+# update product view
+class EditMarketView(LoginRequiredMixin, UpdateView):
+    model = Market
+    template_name = 'create_market.html'
+    success_url = reverse_lazy('unffeagents:market_list')
+    form_class = MarketForm
+    success_message = "Market has been updated successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditMarketView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditMarketView, self).get_form_kwargs()
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+       
+        farm.save()
+        return redirect('unffeagents:market_list')
+
 
 # views for marketprice
 class MarketPriceViewSet(viewsets.ModelViewSet):
@@ -176,6 +261,7 @@ class MarketPriceViewSet(viewsets.ModelViewSet):
     queryset = MarketPrice.objects.all().order_by('market')
     serializer_class = MarketPriceSerializer
     permission_classes = [permissions.IsAuthenticated]
+
 
 
 class MarketPriceList(APIView):
