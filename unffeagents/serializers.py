@@ -23,7 +23,7 @@ class MarketSerializer(serializers.ModelSerializer):
     location = serializers.CharField(source='compute_location')
     class Meta:
         model = Market
-        fields = ['market_name', 'lon', 'lat', 'market_description','location']
+        fields = ['id','market_name', 'lon', 'lat', 'market_description','location']
     
 
     def get_lat(self,obj):
