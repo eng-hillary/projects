@@ -85,4 +85,4 @@ class MarketForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(MarketForm, self).__init__(*args, **kwargs)
-        self.fields['description'].widget.attrs.update({'rows': '1'})
+        self.fields['market_description'].widget.attrs.update({'rows': '2'})

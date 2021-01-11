@@ -19,12 +19,10 @@ admin.site.register(Seller, SellerAdmin)
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
        'name', 
-       'enterprise', 
+       'market', 
        'local_name', 
        'image', 
        'description', 
-       'price', 
-       'available',
        'date_created', 
        'date_updated'
         

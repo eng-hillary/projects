@@ -25,13 +25,6 @@ from django.views.generic import (
 from django.db import IntegrityError
 from farmer.models import FarmerProfile
 # views for resources
-class ResourceList(LoginRequiredMixin, APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'resource_list.html'
-
-    def get(self, request):
-       # queryset = Sector.objects.order_by('-id')
-        return Response()
 
 # resourcesharing api for resourcess
 class ResourceViewSet(viewsets.ModelViewSet):
