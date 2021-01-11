@@ -118,10 +118,10 @@ SERVICE_CATEGORY = (
 
 PAYMENT_OPTIONS = (
     (None, '--please select--'),
-    ('credit', 'credit'),
-    ('full_payment', 'full_payment'),
-    ('installements', 'installements'),
-    ('exchange', 'exchange')
+    ('credit', 'Credit'),
+    ('full_payment', 'Full payment'),
+    ('installements', 'Installements'),
+    ('exchange', 'Exchange')
     )
 
 WEATHER_OPTIONS = (
