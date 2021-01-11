@@ -2,7 +2,8 @@ from django.contrib.auth import views as auth_views
 from common.views import (
     HomePage, account_activation_sent, activate, SignUpView, ProfileView,
     ForgotPasswordView, load_districts, load_counties,load_sub_counties,
-    load_parishes,load_villages, activate,ChangePasswordView,account_activated
+    load_parishes,load_villages, activate,ChangePasswordView,account_activated,
+    OpenMarketHomePage
 )
 
 from django.urls import path,include
@@ -29,7 +30,8 @@ app_name ='common'
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('', HomePage.as_view(), name='home'),
+    path('',OpenMarketHomePage.as_view(), name='open_market'),
+    path('home', HomePage.as_view(), name='home'),
     path('account/change_password', ChangePasswordView.as_view(), name='change_password'),
     path('account_activation_sent/', account_activation_sent, name='account_activation_sent'),
     path('signup/', SignUpView.as_view(), name='signup'),
