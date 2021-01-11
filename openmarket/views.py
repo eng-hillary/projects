@@ -124,7 +124,8 @@ class CreateProductProfile(CreateView):
         profile = form.save(commit=False)
         # setting product profile to pending
         profile.status = 'pending'
-        profile.user = self.request.user
+       
+        profile.seller = self.request.user
         profile.save()
         return redirect('openmarket:product_list')
 
@@ -160,6 +161,7 @@ class EditProductView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         farm = form.save(commit=False)
+       
         farm.save()
         return redirect('openmarket:product_list')
 

@@ -19,11 +19,19 @@ from common.customSerializers import GeometryPointFieldSerializerFields
 class ProductSerializer(serializers.ModelSerializer):
     enterprise = serializers.PrimaryKeyRelatedField(many=False, queryset=Enterprise.objects.all())
     enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    seller = serializers.SerializerMethodField(method_name='get_seller',source='seller')
 
     class Meta:
         model = Product
         fields = ('id', 'name', 'enterprise', 'local_name', 'image', 'description', 'price', 'available',
-         'date_created', 'date_updated')
+         'date_created', 'date_updated','seller')
+
+    def get_seller(self, obj):
+        try:
+
+            return '{} {}'.format(obj.seller.first_name, obj.seller.last_name)
+        except:
+            pass
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

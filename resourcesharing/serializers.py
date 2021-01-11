@@ -16,7 +16,11 @@ class ResourceSerializer(serializers.ModelSerializer):
         return '{} {}'.format(obj.owner.first_name, obj.owner.last_name)
 
     def get_district(self, obj):
-        return '{}'.format(obj.owner.profile.district.name)
+        try:
+
+            return '{}'.format(obj.owner.profile.district.name)
+        except:
+            pass
  
     def get_lat(self,obj):
         try:
