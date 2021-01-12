@@ -92,18 +92,14 @@
 
   function operateFormatter(value, row, index) {
     var url = "/openmarket/" + row.id + "/edit/product/"
-    var view_url = "/openmarket/" + row.id + "/view"
+    
     return [
       {% if request.user.is_superuser or perms.openmarket.change_product %}
   '<a class="Edit " href="' + url + '" title="Update">',
     '<i class="fa fa-edit"></i>',
     '</a>  ',
     {% endif %}
-  {% if request.user.is_superuser or perms.openmarket.view_product %}
-  '<a class="Edit " href="' + view_url + '" title="De"tails>',
-    '<i class="fa fa-eye"></i>',
-    '</a>  ',
-    {% endif %}
+
     ].join('')
   }
   function imageFormatter(value, row) {
