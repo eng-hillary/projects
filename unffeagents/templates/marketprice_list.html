@@ -8,6 +8,12 @@
             <div class="col-lg-6">
                 <div class="page-header-left">
                     <h3>Market price List
+                      {% if perms.openmarket.add_marketprice %}
+                      <small><a class="add-new" href="{% url 'unffeagents:add_market_price' %}">
+          
+                          Add new
+                        </a></small>
+                     {% endif %}
               
                     </h3>
                 </div>
@@ -93,7 +99,7 @@ data-show-refresh="true"
 
 
   function operateFormatter(value, row, index) {
-    var url = "/unffeagents/" + row.id + "/edit/market/"
+    var url = "/unffeagents/" + row.id + "/edit/price/"
   
     return [
       {% if request.user.is_superuser or perms.unffagents.change_market %}
