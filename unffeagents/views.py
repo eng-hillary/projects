@@ -158,7 +158,7 @@ class MarketViewSet(viewsets.ModelViewSet):
     """
     #queryset = Market.objects.all().order_by('market_name')
     serializer_class = MarketSerializer
-    permission_classes = [permissions.IsAuthenticated]
+   # permission_classes = [permissions.IsAuthenticated]
 
 
     def get_queryset(self):
