@@ -176,7 +176,7 @@
         // alert('it works');
         $('#id_category').change(function () {
 
-            if ($('#id_category').val() == 'storage') {
+            if ($('#id_category').val() == 2) {
                 $('#transport').hide();
                 $('#others').hide();
                 $('#storage-div').show();
@@ -185,7 +185,7 @@
                 $("#id_name_of_storage_center").show();
                 $("#id_location_of_storage_center").show();
             }
-            else if ($('#id_category').val() == 'value addition') {
+            else if ($('#id_category').val() == 3) {
                 $('#value-addition-id').hide();
                 $('#enterprise').show();
                 $('#storage-div').hide();
@@ -193,11 +193,11 @@
                 $('#transport').hide();
                 $('#others').hide();
             }
-            else if ($('#id_category').val()=='Medical Services'){
+            else if ($('#id_category').val()==5){
                 $('#size').hide();
                 $('#id_size').hide();
                 $('#others').hide();
-                $('#enterprise').show();
+                $('#enterprise').hide();
                 $('#storage-div').hide();
 
             }
@@ -210,7 +210,7 @@
                 $('#size').hide();
                 $('#transport').hide();
             }
-            else if ($('#id_category').val()=='transport'){
+            else if ($('#id_category').val()==1){
                 $('#size').hide();
                 $('#id_size').hide();
                 $('#transport').show();

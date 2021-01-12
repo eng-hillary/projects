@@ -10,7 +10,7 @@ class SellerAdmin(admin.ModelAdmin):
     list_display = [
         'user',
 ]
-    search_fields = ['seller_type', 'business_location']
+    search_fields = ['seller_type', 'location']
 
 admin.site.register(Seller, SellerAdmin)
 

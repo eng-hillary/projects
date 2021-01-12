@@ -42,21 +42,20 @@ class CategorySerializer(serializers.ModelSerializer):
 class SellerSerializer(serializers.ModelSerializer):
    
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
-    region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    # region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    # district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    # county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    # sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    # parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    # village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
 
 
    # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
-        fields = ('user','full_name', 'business_number', 'business_location', 'seller_type', 'date_of_birth', 'gender',
-          'major_products', 'status', 'approver','approved_date','region','district','county','sub_county'
-          ,'parish','village')
+        fields = ('user','full_name', 'business_number', 'location', 'seller_type', 'date_of_birth', 'gender',
+          'major_products', 'status', 'approver','approved_date')
 
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
