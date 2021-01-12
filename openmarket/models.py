@@ -29,18 +29,28 @@ class Seller(models.Model):
 
     #Location
     business_number = PhoneNumberField()
-    business_location = models.TextField(_('Business Address'),null=True)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
-    county = models.ForeignKey(County, on_delete=models.CASCADE)
-    sub_county = models.ForeignKey(SubCounty, on_delete=models.CASCADE)
-    parish = models.ForeignKey(Parish, on_delete=models.CASCADE)
-    village = models.ForeignKey(Village, on_delete=models.CASCADE)
-
+    #business_location = models.TextField(_('Business Address'),null=True)
+    location = models.PointField( srid=4326,null=True)
+   
     status = models.CharField(choices=REGISTER_STATUS, default='in_active', max_length=20,null=False)
       # handle approving of a seller
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
+
+    @property
+    def compute_location(self):
+        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
+        
+       
+        try:
+            lat = str(self.location.y)
+            lon = str(self.location.x)
+            location = geolocator.reverse(lat + "," + lon)
+            return '{}'.format(location.address)
+        except:
+            #location = str(self.location.y) + "," + str(self.location.x)
+            return 'slow network, loading location ...'
+
 
     class Meta:
         ordering = ('seller_type',)
@@ -161,17 +171,16 @@ class Service(models.Model):
     @property
     def compute_location(self):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        lat = str(self.lat)
-        lon = str(self.lon)
-
+        
+       
         try:
-
+            lat = str(self.location.y)
+            lon = str(self.location.x)
             location = geolocator.reverse(lat + "," + lon)
-            return '{}'.format(location)
+            return '{}'.format(location.address)
         except:
-            #location = str(self.lat) + "," + str(self.lon)
+            #location = str(self.location.y) + "," + str(self.location.x)
             return 'slow network, loading location ...'
-
 
 
 class ContactDetails(models.Model):

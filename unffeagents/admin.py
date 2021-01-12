@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Notice, AgentProfile, Market
+from .models import Notice, AgentProfile, Market,MarketPrice
 
 # Register your models here.
 class NoticeAdmin(admin.ModelAdmin):
@@ -43,3 +43,20 @@ class MarketAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Market, MarketAdmin)
+
+class MarketPriceAdmin(admin.ModelAdmin):
+    list_display = [
+        'market',
+        'user',
+        'product',
+        'unit_of_measure',
+        'max_price',
+        'min_price',
+        'created'
+    
+
+    ]
+    search_fields = ['market__market_name','product__name','max_price','min_price','date_posted']
+
+
+admin.site.register(MarketPrice, MarketPriceAdmin)

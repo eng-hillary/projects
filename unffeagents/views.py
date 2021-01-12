@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from rest_framework.views import APIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.permissions import IsAuthenticated
-from .forms import (AgentProfileForm, NoticeForm,EnquiryForm, MarketForm)
+from .forms import (AgentProfileForm, NoticeForm,EnquiryForm, MarketForm, MarketPriceForm)
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
@@ -281,6 +281,70 @@ class MarketPriceList(APIView):
     def get(self, request):
         queryset = MarketPrice.objects.order_by('market')
         return Response({'marketprices': queryset})
+
+
+
+class CreateMarketPrice(CreateView):
+    template_name = 'create_market_price.html'
+    form_class = MarketPriceForm
+    success_message = "Market Price  was posted successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateMarketPrice, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateMarketPrice, self).get_form_kwargs()
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        market = form.save(commit=False)
+        market.save()
+        return redirect('unffeagents:marketprice_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+  
+# update market
+# update product view
+class EditMarketPriceView(LoginRequiredMixin, UpdateView):
+    model = MarketPrice
+    template_name = 'create_market_price.html'
+    success_url = reverse_lazy('unffeagents:market_list')
+    form_class = MarketPriceForm
+    success_message = "Market Price has been updated successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditMarketPriceView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(EditMarketPriceView, self).get_form_kwargs()
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+       
+        farm.save()
+        return redirect('unffeagents:marketprice_list')
 
 
 # views for notices

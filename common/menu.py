@@ -88,8 +88,13 @@ def can_view_queries(user, context):
 
 def can_add_resources(user, context):
     if user.is_superuser:
-        return user.has_perm('resourcesharing.add_resource')
+        return True
+    return user.has_perm('resourcesharing.add_resource')
 
+def can_add_prices(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('unffeagents.add_marketprice')
 
 def can_view_resources(user, context):
     if user.is_superuser:
@@ -301,7 +306,7 @@ menus = [
     menu.PassTestNode(
         id='query-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-tractor"></span>  <span>Queries and Reports</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-tractor"></span>  <span>Queries & Reports</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_queries,
         children=[
@@ -332,14 +337,16 @@ menus = [
                               label='<i class="fa fa-circle"></i>Markets',
 
                                pattern_name='unffeagents:market_list', test=can_register_services),
-            # menu.PassTestNode(id='services',
-            #                   label='<i class="fa fa-circle"></i>Markets',
+            menu.PassTestNode(id='product_list',
+                              label='<i class="fa fa-circle"></i>Products',
 
-            #                   pattern_name='openmarket:serviceregistration_list', test=can_view_services),
-            # menu.PassTestNode(id='services',
-            #                   label='<i class="fa fa-circle"></i>Hire',
+                              pattern_name='openmarket:product_list', test=can_view_products),
 
-            #                   pattern_name='openmarket:serviceregistration_list', test=can_view_services),
+            
+            menu.PassTestNode(id='prices',
+                               label='<i class="fa fa-circle"></i>Prices',
+
+                               pattern_name='unffeagents:marketprice_list', test=can_add_prices),
 
 
 
