@@ -56,14 +56,15 @@ class Market(models.Model):
 
 class MarketPrice(TimeStampedModel, models.Model):
     market = models.ForeignKey(Market, blank = False, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='unffeagent')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='unffeagent')
     product = models.ForeignKey(Product, blank=False, on_delete=models.CASCADE) # let it be product per price
     unit_of_measure = models.CharField(blank=False, max_length=100) # unit of measure like kilogram
-    start_price = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
-    end_price = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    max_price = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    min_price = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    
 
     def __str__(self):
-        return self.market
+        return str(self.market)
 
 
 

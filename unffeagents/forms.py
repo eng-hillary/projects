@@ -1,5 +1,5 @@
 from django import forms
-from .models import AgentProfile, Notice,CallRsponse,Market
+from .models import AgentProfile, Notice,CallRsponse,Market, MarketPrice
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from common .models import (Region,District)
@@ -81,6 +81,18 @@ class MarketForm(forms.ModelForm):
   
     class Meta:
         model = Market
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+        super(MarketForm, self).__init__(*args, **kwargs)
+        self.fields['market_description'].widget.attrs.update({'rows': '2'})
+
+
+class MarketPriceForm(forms.ModelForm):
+   
+
+    class Meta:
+        model = MarketPrice
         exclude = []
 
     def __init__(self, *args, **kwargs):
