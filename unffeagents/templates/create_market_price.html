@@ -48,15 +48,22 @@
                                 {% csrf_token %}
                                 <div class="row">
                                         
-                                    <div class="col-md-12">
-                                        {{ form.market_name|as_crispy_field }}
+                                    <div class="col-md-6">
+                                        {{ form.market|as_crispy_field }}
                                     </div>
-                                    <div class="col-md-12">
-                                        {{ form.market_description|as_crispy_field }}
+                                    <div class="col-md-6">
+                                        {{ form.product|as_crispy_field }}
                                     </div>
-                                    <div class="col-md-12">
-                                        {{ form.location|as_crispy_field }}
+                                    <div class="col-md-4">
+                                        {{ form.unit_of_measure|as_crispy_field }}
                                     </div>
+                                    <div class="col-md-4">
+                                        {{ form.min_price|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ form.max_price|as_crispy_field }}
+                                    </div>
+                                    
 
                                 </div>
                               
