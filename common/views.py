@@ -131,7 +131,7 @@ class LoginView(TemplateView):
 
                     if user is not None:
                         login(request, user)
-                        return HttpResponseRedirect('/')
+                        return HttpResponseRedirect('/home')
                     return render(request, "registration/login.html", {
                         "error": True,
                         "message":
@@ -161,7 +161,7 @@ class LogoutView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         logout(request)
         request.session.flush()
-        return redirect("open_market")
+        return redirect("common:open_market")
 
 
 class SignUpView(CreateView):

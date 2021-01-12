@@ -39,9 +39,19 @@ class MarketSerializer(serializers.ModelSerializer):
 
 
 class MarketPriceSerializer(serializers.ModelSerializer):
+    market = serializers.SlugRelatedField(many=False,read_only=True, slug_field='market_name')
+    product = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
+    posted_by = serializers.SerializerMethodField(method_name='get_agent_name',source='user')
+
     class Meta:
         model = MarketPrice
-        fields = ['market', 'user', 'product', 'unit_of_measure', 'start_price', 'end_price']
+        fields = ['id','market', 'posted_by', 'product', 'unit_of_measure', 'max_price', 'min_price','created']
+
+    def get_agent_name(self, obj):
+        try:
+            return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+        except:
+            return None
 
 class NoticeSerializer(serializers.ModelSerializer):
     sector = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
