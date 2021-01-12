@@ -379,19 +379,25 @@ function initialize() {
   var infowindow = new google.maps.InfoWindow();
   var mapProp = {
     center: new google.maps.LatLng(1.0609637, 32.5672804),
-    zoom: 7,
+    zoom: 8,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
   };
 
-  map = new google.maps.Map(document.getElementById("map"), mapProp);
+  
+  map = new google.maps.Map(
+    document.getElementById("map"),
+    mapProp);
+
   resourcemap = new google.maps.Map(
     document.getElementById("resourcemap"),
     mapProp
   );
+
   servicemap = new google.maps.Map(
     document.getElementById("servicemap"),
     mapProp
   );
+
 
   //FARMS
   $.getJSON("/farm/api/maps/", function (json) {
@@ -445,7 +451,7 @@ function initialize() {
 
     $.each(servicedata, function (key, data) {
       var latlon = new google.maps.LatLng(data.lat, data.lon);
-      console.log(data);
+     // console.log(data);
       var marker = new google.maps.Marker({
         position: latlon,
         map: servicemap,
@@ -476,7 +482,7 @@ function initialize() {
 
     $.each(resourcedata, function (key, data) {
       var latlon = new google.maps.LatLng(data.lat, data.lon);
-      console.log(data);
+      //console.log(data);
       var marker = new google.maps.Marker({
         position: latlon,
         map: resourcemap,
@@ -505,6 +511,7 @@ function initialize() {
       bindInfoWindow(marker, resourcemap, infowindow, resource_details);
     });
   });
+
 }
 
 function bindInfoWindow(marker, map, infowindow, strDescription) {

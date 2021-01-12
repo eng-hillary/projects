@@ -1,4 +1,4 @@
-{% extends 'dashboard_base.html' %}
+{% extends 'openmarket_base.html' %}
 {% block content %}
 <!-- <div style="background-color: #08b200;"> -->
 
@@ -38,18 +38,15 @@
                     <h5>Map of Uganda</h5>
                 </div>
                 <div class="card-body">
-  
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade active show" id="farm_container" role="tabpanel"
-                            aria-labelledby="farm_container-tab">
-                            <div id="map" style="height:1000px; width: 100% !important;">
+                        <div class="tab-pane fade active show" id="market_container" role="tabpanel" aria-labelledby="market_container-tab">
+                            <div id="marketmap" style="height:1000px; width: 100% !important;">
                             </div>
                         </div>
-
-                    
-                     
-
+                       
                     </div>
+                    
+                </div>  
 
                 </div>
             </div>
@@ -64,6 +61,70 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>
        
+//Map
+var marketmap;
+var icon = "";
+
+function initialize() {
+  var infowindow = new google.maps.InfoWindow();
+  var mapProp = {
+    center: new google.maps.LatLng(1.0609637, 32.5672804),
+    zoom: 8,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+  };
+
+  marketmap = new google.maps.Map(
+    document.getElementById("marketmap"),
+    mapProp
+  );
+
+  //MARKETS
+  $.getJSON("/unffeagents/api/market/", function (json) {
+    var marketdata = [];
+    json.forEach(function (p) {
+      p.z = p.id;
+      marketdata.push(p);
+    });
+    console.log(marketdata)
+
+    $.each(marketdata, function (key, data) {
+      var latlon = new google.maps.LatLng(data.lat, data.lon);
+      //console.log(data);
+      var marker = new google.maps.Marker({
+        position: latlon,
+        map: marketmap,
+        //icon: icon,
+        data: data.market_name,
+      });
+
+      var market_details =
+        "NAME:" +
+        data.market_name +
+        "<br>" +
+        "LOCATION:" +
+        data.location +
+        "."+
+        "<br>" +
+        '<a style="color:blue;" href="/unffeagents/' +
+        data.id +
+        '/view/">View Products</a>';
+
+      bindInfoWindow(marker, marketmap, infowindow, market_details);
+    });
+  });
+
+
+}
+
+function bindInfoWindow(marker, map, infowindow, strDescription) {
+  google.maps.event.addListener(marker, "mouseover", function () {
+    infowindow.setContent(strDescription);
+    infowindow.open(map, marker);
+  });
+}
+
+google.maps.event.addDomListener(window, "load", initialize);
+
     </script>
 
     {% endblock %}

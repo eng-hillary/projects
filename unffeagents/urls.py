@@ -3,7 +3,7 @@ from rest_framework import routers
 from . import views
 from .views import (AgentProfileList, MarketList, MarketPriceList, 
 NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView,
-CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,
+CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,MarketDetailView,
 EditMarketView)
 
 
@@ -31,6 +31,7 @@ urlpatterns = [
     path('create/market', CreateMarket.as_view(), name='add_market'),
     path('<int:pk>/edit/market/',EditMarketView.as_view(), name='edit_market'),
     path('marketprice', MarketPriceList.as_view(), name='marketprice_list'),
+     path('<int:pk>/view/', MarketDetailView.as_view(), name="view_market_detail"),
     path('alert&notification', NoticeList.as_view(), name='notice_list'),
     path('calls',CallList.as_view(), name='calls'),
     path('enquiries',EquiryList.as_view(), name='enquiries'),
