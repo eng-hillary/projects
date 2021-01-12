@@ -158,7 +158,7 @@ class MarketViewSet(viewsets.ModelViewSet):
     """
     #queryset = Market.objects.all().order_by('market_name')
     serializer_class = MarketSerializer
-    permission_classes = [permissions.IsAuthenticated]
+   # permission_classes = [permissions.IsAuthenticated]
 
 
     def get_queryset(self):
@@ -178,6 +178,16 @@ class MarketViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+
+class MarketDetailView(DetailView):
+    model = Market
+    template_name = "view_market_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(MarketDetailView, self).get_context_data(**kwargs)
+        context['Marketobject'] = self.object
+        
+        return context
 
 class MarketList(APIView):
     permission_classes = (IsAuthenticated,)

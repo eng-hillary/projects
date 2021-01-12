@@ -1,10 +1,10 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import (AgentProfileList, MarketList, MarketPriceList, 
+from .views import (AgentProfileList, MarketList, MarketPriceList, CreateMarketPrice,EditMarketPriceView,
 NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView,
-CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,
-EditMarketView,CreateMarketPrice,EditMarketPriceView)
+CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,MarketDetailView,
+EditMarketView)
 
 
 router = routers.DefaultRouter()
@@ -33,6 +33,7 @@ urlpatterns = [
     path('marketprice', MarketPriceList.as_view(), name='marketprice_list'),
     path('create/market/price', CreateMarketPrice.as_view(), name='add_market_price'),
     path('<int:pk>/edit/market/price',EditMarketPriceView.as_view(), name='edit_market_price'),
+    path('<int:pk>/view/', MarketDetailView.as_view(), name="view_market_detail"),
     path('alert&notification', NoticeList.as_view(), name='notice_list'),
     path('calls',CallList.as_view(), name='calls'),
     path('enquiries',EquiryList.as_view(), name='enquiries'),
