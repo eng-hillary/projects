@@ -25,7 +25,8 @@ from .views import (ProductList,
                     ServiceProviderProfileDetailView,
                     ServiceDetailView,
                     MapServiceDetailView,
-                    EditServiceView,EditProductView
+                    EditServiceView,EditProductView,
+                    EditSellerView
                      )
 
 router = routers.DefaultRouter()
@@ -74,6 +75,8 @@ urlpatterns = [
     path('sellers', SellerList.as_view(), name='seller_list'),
     path('<int:pk>/approve/seller', approve_seller, name='approve_seller'),
     path('create/profile', CreateSellerProfile.as_view(), name="create_seller"),
+    path('<int:pk>/edit/seller/', EditSellerView.as_view(), name="edit_seller"),
+
     path('buyers', BuyerList.as_view(), name='buyer_list'),
     path('sellerposts', SellerPostList.as_view(), name='sellerpost_list'),
     path('buyerposts', BuyerPostList.as_view(), name='buyerpost_list'),

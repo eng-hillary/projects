@@ -719,7 +719,7 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
 
 class ServiceDetailView(LoginRequiredMixin, DetailView):
     model = Service
-    context_object_name = "providerrecord"
+    context_object_name = "servicerecord"
 
     template_name = "view_services_details.html"
 
@@ -742,9 +742,9 @@ class EditServiceView(LoginRequiredMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         return super(EditServiceView, self).dispatch(request, *args, **kwargs)
 
-    def get_form_kwargs(self):
+    # def get_form_kwargs(self, request, *args, **kwargs):
 
-        kwargs['request'] = self.request
+    #     kwargs['request'] = self.request
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -760,28 +760,44 @@ class EditServiceView(LoginRequiredMixin, UpdateView):
         farm.save()
 
         # send email to farmer  a message after an update
-        current_site = get_current_site(self.request)
-        subject = 'Service Updated Successfully'
-        message = render_to_string('farm_created_successful_email.html', {
-            'user': farm.user,
-            'domain': current_site.domain,
-            'message': 'Your '+farm.service_name + ' Details have been updated sucessfully',
-        })
-        to_email = farm.user.email
-        subject = 'Farm Updated Successfully'
-        message = render_to_string('farm_created_successful_email.html', {
-            'user': openmarket.serviceprovider.user,
-            'domain': current_site.domain,
-            'message': 'Your '+farm.farm_name + ' Details have been updated sucessfully',
-        })
-        to_email = farm.farmer.user.email
-
-        email = EmailMessage(
-            subject, message, to=[to_email]
-        )
-        email.content_subtype = "html"
-        email.send()
         return redirect('openmarket:serviceregistration_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+#Edit seller View
+class EditSellerView(LoginRequiredMixin, UpdateView):
+    model = Seller
+    template_name = 'create_seller_profile.html'
+    success_url = reverse_lazy('openmarket:seller_list')
+    form_class = SellerProfileForm
+    success_message = "Seller Profile has been updated successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditSellerView, self).dispatch(request, *args, **kwargs)
+
+    # def get_form_kwargs(self, request, *args, **kwargs):
+
+    #     kwargs['request'] = self.request
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        farm = form.save(commit=False)
+        farm.save()
+
+        # send email to farmer  a message after an update
+        return redirect('openmarket:seller_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
