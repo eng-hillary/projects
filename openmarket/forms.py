@@ -1,5 +1,5 @@
 from django import forms
-from .models import Seller,Product,ServiceProvider, Service, Category
+from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost
 from common.models import Region, District, County, SubCounty, Parish, Village
 from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField
@@ -113,3 +113,17 @@ class ServiceProfileForm(forms.ModelForm):
         self.fields['category'].empty_label = '--please select--'
         # servicecategories = ServiceProvider.objects.filter(user=self.request.user).values('category')
         # self.fields['category'].queryset = Category.objects.filter(id__in = servicecategories)
+
+
+class SellerPostForm(forms.ModelForm):
+
+    class Meta:
+        model = SellerPost
+        exclude = ['seller']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(SellerPostForm, self).__init__(*args, **kwargs)
+        self.fields['product'].empty_label = '--please select--'
+        self.fields['product_description'].widget.attrs.update({'rows': '2'})
+

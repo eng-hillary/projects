@@ -43,6 +43,10 @@ def can_add_farmer_profile(user, context):
         return True
     return user.has_perm('farmer.add_farmerprofile')
 
+def can_view_seller_post(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('openmarket.view_sellerpost')
 
 def can_view_farms(user, context):
     if user.is_superuser:
@@ -378,18 +382,15 @@ menus = [
     menu.PassTestNode(
         id='product-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-lemon"></span>  <span>My Products</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-lemon"></span>  <span>Seller Post</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_products,
         children=[
-            menu.PassTestNode(id='create_product',
-                              label='<i class="fa fa-circle"></i>Add Products',
 
-                              pattern_name='openmarket:create_product', test=can_add_product),
             menu.PassTestNode(id='product_list',
-                              label='<i class="fa fa-circle"></i>Products',
+                              label='<i class="fa fa-circle"></i>My Products',
 
-                              pattern_name='openmarket:product_list', test=can_view_products),
+                              pattern_name='openmarket:sellerpost_list', test=can_view_seller_post),
 
         ]
     ),
