@@ -18,19 +18,14 @@ from common.customSerializers import GeometryPointFieldSerializerFields
 
 class ProductSerializer(serializers.ModelSerializer):
    
-    market = serializers.SerializerMethodField(method_name='get_market',source='market')
+   # market = serializers.SerializerMethodField(method_name='get_market',source='market')
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'market', 'local_name', 'image', 'description',
+        fields = ('id', 'name', 'local_name', 'image', 'description',
          'date_created', 'date_updated')
 
-    def get_market(self, obj):
-        try:
-
-            return '{}'.format(obj.market.market_name)
-        except:
-            pass
+ 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

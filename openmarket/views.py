@@ -838,6 +838,7 @@ class CreateSellerPost(CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(CreateSellerPost, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
 
     def post(self, request, *args, **kwargs):
@@ -851,7 +852,7 @@ class CreateSellerPost(CreateView):
 
     def form_valid(self, form):
         product = form.save(commit=False)
-        product.seller = self.request.user
+        product.seller = Seller.objects.get(user=self.request.user)
         product.save()
         return redirect('openmarket:sellerpost_list')
 

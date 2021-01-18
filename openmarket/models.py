@@ -20,6 +20,17 @@ from django.contrib.gis.db import models
 from django.urls import reverse
 
 
+class Product(models.Model):
+    name = models.CharField(max_length=50, null=True)
+    local_name = models.CharField(max_length=200,null=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    description = models.TextField(blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.name
 
 class Seller(models.Model):
     #personal information
@@ -27,7 +38,7 @@ class Seller(models.Model):
     date_of_birth = models.DateField(max_length=8)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     seller_type = models.CharField(choices=TYPE,max_length=15, null=False)
-    major_products = models.CharField(max_length=50,blank=True)
+    major_products = models.ManyToManyField(Product, blank=False)
 
     #Location
     business_number = PhoneNumberField()
@@ -88,10 +99,6 @@ class Product(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
-
-    def __str__(self):
-        return self.name
-
     def get_absolute_url(self):
         return reverse('unffeagents:product_detail',
                        args=[self.id, self.slug])
@@ -107,6 +114,7 @@ class Buyer(TimeStampedModel, models.Model):
 class SellerPost(models.Model):
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     product = models.ForeignKey('unffeagents.MarketPrice', on_delete=models.CASCADE)
+    market = models.ForeignKey('unffeagents.Market', on_delete=models.CASCADE, null=True)
     quantity = models.FloatField(max_length=50, null=True)
     price_offer = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_option = models.CharField(max_length=50)
