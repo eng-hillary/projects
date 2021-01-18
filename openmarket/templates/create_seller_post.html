@@ -54,6 +54,7 @@
                                             
                                             <div class="col-xl-6 col-md-6">
                                                 {{ form.price_offer|as_crispy_field }}
+                                                <label class="error" id="error_2_id_price_offer"></span>
                                             </div>
                                             
                                             <div class="col-md-6">
@@ -105,6 +106,22 @@
     var range=val[1];
     var prices = range.split('-');
     var min_price = prices[0];
-    console.log(min_price);
+    var max_price = prices[1];
+   
+    
+    $('#id_price_offer').on('mouseout', function (e) {
+        $('#error_2_id_price_offer').val("Enter an amount with in the price range of the product");
+        if(parseInt($('#id_price_offer').val()) < parseInt(min_price)){
+            $('#error_2_id_price_offer').text("Enter an amount with in the price range of the product");
+            
+        }
+        else if(parseInt($('#id_price_offer').val()) > parseInt(max_price)){
+            $('#error_2_id_price_offer').text("Enter an amount with in the price range of the product");
+        }
+        else{
+            $('#error_2_id_price_offer').text('');
+        }
+       
+     });
     </script>
 {% endblock %}

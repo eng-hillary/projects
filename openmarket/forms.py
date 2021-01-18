@@ -126,4 +126,11 @@ class SellerPostForm(forms.ModelForm):
         super(SellerPostForm, self).__init__(*args, **kwargs)
         self.fields['product'].empty_label = '--please select--'
         self.fields['product_description'].widget.attrs.update({'rows': '2'})
-
+    
+    def clean_price_offer(self):
+        price_offer = self.cleaned_data['price_offer']
+        price_range = self.cleaned_data['product']
+        print("price" + str(price_range))
+        # if User.objects.filter(email=email).exists():
+        #     raise ValidationError("Email already exists")
+        return price_offer
