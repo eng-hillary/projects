@@ -6,6 +6,7 @@ from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from django.contrib.gis import forms 
 from django.contrib.gis.geos import Point
+from decimal import Decimal
 
 
 class ServiceProviderProfileForm(forms.ModelForm):
@@ -124,13 +125,19 @@ class SellerPostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(SellerPostForm, self).__init__(*args, **kwargs)
+        user = self.request.user
         self.fields['product'].empty_label = '--please select--'
         self.fields['product_description'].widget.attrs.update({'rows': '2'})
     
     def clean_price_offer(self):
-        price_offer = self.cleaned_data['price_offer']
+        price_offer = Decimal(self.cleaned_data['price_offer'])
         price_range = self.cleaned_data['product']
-        print("price" + str(price_range))
-        # if User.objects.filter(email=email).exists():
-        #     raise ValidationError("Email already exists")
+        prices = str(price_range).split()
+        splitted_prices = prices[-1]
+        actual_prices = splitted_prices.split("-")
+        max_price = Decimal(actual_prices[1])
+        min_price = Decimal(actual_prices[0])
+       
+        if not min_price <= price_offer <= max_price:
+            raise forms.ValidationError("Please enter a price within the product price range")
         return price_offer
