@@ -82,16 +82,19 @@ class Buyer(TimeStampedModel, models.Model):
 
 
 class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    product = models.ForeignKey('unffeagents.MarketPrice', on_delete=models.CASCADE)
     quantity = models.FloatField(max_length=50, null=True)
     price_offer = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_option = models.CharField(max_length=50)
     payment_options = models.CharField(choices=PAYMENT_OPTIONS, max_length=50, null=True)
     payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, max_length=50)
+    product_description = models.TextField(null=True, blank=True)
+    product_image_1 = models.ImageField(null=True, blank=False)
+    product_image_2 = models.ImageField(null=True, blank=True)
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('-id',)
 
 
 class BuyerPost(models.Model):

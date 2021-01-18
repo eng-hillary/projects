@@ -75,9 +75,31 @@ class BuyerSerializer(serializers.ModelSerializer):
         fields = ('user', 'created', 'modified')
 
 class SellerPostSerializer(serializers.ModelSerializer):
+    payment_options = serializers.CharField(source='get_payment_options_display')
+    payment_mode = serializers.CharField(source='get_payment_mode_display')
+    product = serializers.SerializerMethodField(method_name='get_product',source='product')
+    seller = serializers.SerializerMethodField(method_name='get_seller',source='seller')
+    market = serializers.SerializerMethodField(method_name='get_market',source='product')
+
     class Meta:
         model = SellerPost
-        fields = ('name', 'product', 'quantity', 'price_offer', 'delivery_option','payment_options', 'payment_mode')
+        fields = ('id','seller', 'product','market', 'quantity', 'price_offer', 'delivery_option','payment_options', 'payment_mode','product_description','product_image_1','product_image_2')
+
+    def get_product(self, obj):
+        try:
+            return '{}'.format(obj.product.product.name)
+        except:
+            return None
+    def get_seller(self, obj):
+        try:
+            return '{} {}'.format(obj.seller.user.first_name, obj.seller.user.last_name)
+        except:
+            return None
+    def get_market(self, obj):
+        try:
+            return '{}'.format(obj.product.market.market_name)
+        except:
+            return None
 
 
 class BuyerPostSerializer(serializers.ModelSerializer):
