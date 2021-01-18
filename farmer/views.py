@@ -241,6 +241,7 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
         form.save_m2m()
 
         # send email to farmer after registration
+        
         current_site = get_current_site(self.request)
         subject = 'Registered Successfully'
         message = render_to_string('profile_created_successful_email.html', {
@@ -254,7 +255,10 @@ class CreateFarmerProfile(LoginRequiredMixin,CreateView):
                 subject, message, to=[to_email]
             )
         email.content_subtype = "html"
-        email.send()
+        try:
+            email.send()
+        except:
+            print("Unable to send confirmation Message")
         messages.add_message(self.request, messages.INFO, 'Please Register your farm from here, note that you can register more than one')
         return redirect('farm:create_farm')
 

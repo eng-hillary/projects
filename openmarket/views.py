@@ -26,7 +26,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import(SellerProfileForm, ProductProfileForm,
-                   ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
+
+                   ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm,MajorproductsFormSet)
+
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
 from django.urls import reverse_lazy
@@ -228,10 +230,15 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-        if form.is_valid():
+        self.major_products = MajorproductsFormSet(request.POST, prefix='major_products_set')
+        formsets_valid = (
+            self.major_products.is_valid() 
+        )
+        if form.is_valid() and formsets_valid:
             return self.form_valid(form)
         else:
             print(form.errors)
+            print(self.major_products)
         return self.form_invalid(form)
 
     def form_valid(self, form):
@@ -240,7 +247,8 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
         profile.status = 'pending'
         profile.user = self.request.user
         profile.save()
-
+        self.major_products.instance = profile
+        self.major_products.save()
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Successful'
@@ -258,8 +266,20 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
-        return self.render_to_response(self.get_context_data(form=form))
+        return self.render_to_response(self.get_context_data(form=form, major_products=self.major_products))
 # views for buyers
+
+#Get Context data
+    def get_context_data(self, **kwargs):
+        context = super(CreateSellerProfile, self).get_context_data(**kwargs)
+        context["seller_form"] = context["form"]
+        user = self.request.user
+
+        print("kwargs", self.kwargs)
+        # context['call'] = Call.objects.get(pk=self.kwargs['call_pk'])
+        context["majorproduct_form"] = context.get('major_products') or MajorproductsFormSet(prefix='major_products_set')
+        
+        return context
 
 
 class BuyerViewSet(viewsets.ModelViewSet):
