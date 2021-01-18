@@ -169,19 +169,17 @@ class FarmMapSerializer(serializers.ModelSerializer):
             return None
 
 class EnterpriseSelectionSerializer(serializers.ModelSerializer):
-     user = serializers.SerializerMethodField(method_name='get_user_full_name')
-     #full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
-     #user = serializers.SerializerMethodField(method_name='get_id')
-     #recommendation = serializers.SlugRelatedField(many=True,read_only=True, slug_field='crops')
+    user = serializers.SerializerMethodField(method_name='get_user_full_name')
+    crops = serializers.SlugRelatedField(many=True,read_only=True, slug_field='crop')
 
-     class Meta:
+    class Meta:
          model = EnterpriseSelection
          fields = ('id','own_piece_of_land','what_is_your_inspiration_for_considering_in_farming',
         'involved_in_anyother_farming_activity','full_time_devotion',
         'time_allocated_to_farming','user', 'profession','monthly_income','level_of_education',
-        'capital','land_size','land_location','region','scale','recommendation')
+        'capital_available','land_size','land_location','region','scale','recommendation','crops')
     
-     def get_user_full_name(self, obj):
+    def get_user_full_name(self, obj):
          try:
             return '{} {}'.format(obj.user.first_name, obj.user.last_name)
          except:

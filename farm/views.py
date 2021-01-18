@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, ProductionRecord, Query,
-                     FarmRecord, FinancialRecord, EnterpriseSelection, Ecological_Zones)
+                     FarmRecord, FinancialRecord, EnterpriseSelection, Ecological_Zones,Crop)
 from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer, FarmMapSerializer, FarmProductionRecordSerializer, PostFarmSerializer, PostEnterpriseSelectionSerializer,
                           PostEnterpriseSerializer, PostQuerySerializer, FarmRecordSerializer, FarmFinancilRecordSerializer, EnterpriseSelectionSerializer, QuerySerializer)
 from rest_framework import viewsets
@@ -33,6 +33,7 @@ from rest_framework import filters
 class SectorViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows sectors to be viewed or edited.
+    
     """
     queryset = Sector.objects.all().order_by('-id')
     serializer_class = SectorSerializer
@@ -1015,15 +1016,30 @@ class EnterpriseSelectionView(LoginRequiredMixin, CreateView):
         enterprise = form.save(commit=False)
         enterprise.user = self.request.user
         crops_info = []
+        # capital = EnterpriseSelection.objects.get(capital)
+        # print(capital)
 
         region = form.cleaned_data.get('region')
-        # print(region.id)
-        results = Ecological_Zones.objects.get(ecological_zone_name=region.id)
-        print(results.crops.all())
-        crops = results.crops.all()
-        enterprise.recommendation = results
+        capital = form.cleaned_data.get('capital_available')
+        print(capital)
+        
+        try:
+            results = Ecological_Zones.objects.get(ecological_zone_name=region.id)
+            crops = results.crops.all().values('id')
+            crop_names = Crop.objects.filter(id__in=crops, required_capital__lte=capital)
+            print(crop_names)
+            enterprise.recommendation = results
+            
+            
+        except:
+            print("Empty Query set")
+        
+        
+
 
         enterprise.save()
+        enterprise.crops.set(crop_names)
+       
         form.save_m2m()
         # context = {
         #     "crops":crops,
