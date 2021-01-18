@@ -179,6 +179,16 @@ class MarketViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+class MarketDetailView(DetailView):
+    model = Market
+    template_name = "view_market_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(MarketDetailView, self).get_context_data(**kwargs)
+        context['Marketobject'] = self.object
+        
+        return context
+
 class MarketList(APIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]

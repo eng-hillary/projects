@@ -60,6 +60,11 @@ class Seller(models.Model):
     def __str__(self):
         return self.seller_type
 
+
+class MajorProducts(models.Model):
+    product_name = models.CharField(max_length=150,blank=True,null=True)
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+   
 class Product(models.Model):
     name = models.CharField(max_length=50, null=True)
     market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
