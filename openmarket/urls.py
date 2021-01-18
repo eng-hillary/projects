@@ -26,7 +26,7 @@ from .views import (ProductList,
                     ServiceDetailView,
                     MapServiceDetailView,
                     EditServiceView,EditProductView,
-                    EditSellerView
+                    EditSellerView,CreateSellerPost
                      )
 
 router = routers.DefaultRouter()
@@ -79,6 +79,7 @@ urlpatterns = [
 
     path('buyers', BuyerList.as_view(), name='buyer_list'),
     path('sellerposts', SellerPostList.as_view(), name='sellerpost_list'),
+    path('post/product',CreateSellerPost.as_view(), name='add_seller_post'),
     path('buyerposts', BuyerPostList.as_view(), name='buyerpost_list'),
     path('serviceproviders', ServiceProviderList.as_view(), name='serviceprovider_list'),
     path('serviceregistration', ServiceRegistrationList.as_view(), name='serviceregistration_list'),

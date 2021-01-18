@@ -1,12 +1,18 @@
 from django import forms
-from .models import Seller,Product,ServiceProvider, Service, Category,MajorProducts
+
+from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost,MajorProducts
+
 from common.models import Region, District, County, SubCounty, Parish, Village
 from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from django.contrib.gis import forms 
 from django.contrib.gis.geos import Point
+
+from decimal import Decimal
+
 from django.forms.models import inlineformset_factory
+
 
 
 class ServiceProviderProfileForm(forms.ModelForm):
@@ -70,3 +76,30 @@ class ServiceProfileForm(forms.ModelForm):
         self.fields['category'].empty_label = '--please select--'
         # servicecategories = ServiceProvider.objects.filter(user=self.request.user).values('category')
         # self.fields['category'].queryset = Category.objects.filter(id__in = servicecategories)
+
+
+class SellerPostForm(forms.ModelForm):
+
+    class Meta:
+        model = SellerPost
+        exclude = ['seller']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(SellerPostForm, self).__init__(*args, **kwargs)
+        user = self.request.user
+        self.fields['product'].empty_label = '--please select--'
+        self.fields['product_description'].widget.attrs.update({'rows': '2'})
+    
+    def clean_price_offer(self):
+        price_offer = Decimal(self.cleaned_data['price_offer'])
+        price_range = self.cleaned_data['product']
+        prices = str(price_range).split()
+        splitted_prices = prices[-1]
+        actual_prices = splitted_prices.split("-")
+        max_price = Decimal(actual_prices[1])
+        min_price = Decimal(actual_prices[0])
+       
+        if not min_price <= price_offer <= max_price:
+            raise forms.ValidationError("Please enter a price within the product price range")
+        return price_offer

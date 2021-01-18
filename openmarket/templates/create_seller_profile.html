@@ -96,6 +96,30 @@
                 </div>
               </div>
 
+{% block javascript %}
+ <!-- included them for stepwise forms  -->
+ <script src="{% static 'js/validate.min.js' %}"></script>
+
+ <script type="text/javascript" src="{% static 'js/multi_form.js' %}"></script>
+    <script type="text/javascript">
+     $(document).ready(function () {
+       $('#id_major_products').select2();
+
+    //load districts
+    $("#id_region").change(function () {
+      var url = $("#form").attr("data-districts-url");  // get the url of the `load_cities` view
+      var regionId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'region': regionId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_district").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
 
 
 
