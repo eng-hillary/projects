@@ -17,6 +17,8 @@ from geopy.geocoders import Nominatim
 from django.contrib.gis.db import models
 from django.contrib.gis.db import models
 
+from django.urls import reverse
+
 
 
 class Seller(models.Model):
@@ -60,18 +62,39 @@ class Seller(models.Model):
     def __str__(self):
         return self.seller_type
 
+
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=200,db_index=True, null=True)
+    slug = models.SlugField(max_length=200,unique=True, null=True)
+
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('unffeagents:view_market_detail_by_category',
+                       args=[self.slug])
+
 class Product(models.Model):
+    category = models.ForeignKey(ProductCategory,related_name='products', null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=50, null=True)
     market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
     local_name = models.CharField(max_length=200,null=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     description = models.TextField(blank=True)
+    available = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('unffeagents:product_detail',
+                       args=[self.id, self.slug])
 
 
 class Buyer(TimeStampedModel, models.Model):
