@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost,MajorProducts
+from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost
 
 from common.models import Region, District, County, SubCounty, Parish, Village
 from common.choices import SERVICE_CATEGORY
@@ -37,18 +37,8 @@ class SellerProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(SellerProfileForm, self).__init__(*args, **kwargs)
-      
-class MajorProductsForm(forms.ModelForm):
-    product_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
-    
-    class Meta:
-        model = MajorProducts
-        fields = ['product_name']
+
         
-
-MajorproductsFormSet = inlineformset_factory(Seller, MajorProducts,
-                                                 form=MajorProductsForm, min_num=1,max_num=10,extra=0)
-
 
 class ProductProfileForm(forms.ModelForm):
     

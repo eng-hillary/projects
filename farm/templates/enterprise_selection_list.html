@@ -69,17 +69,16 @@
       <th data-field="user" data-sortable="true">Name</th>
       <th data-field="profession" data-sortable="true">Profession</th>
       <th data-field="level_of_education" data-sortable="true">level of education</th>
-      <th data-field="region" data-sortable="true">level of education</th>
       <th data-field="monthly_income" data-sortable="true">monthly Income</th>
-      <th data-field="capital" data-visible="false" data-sortable="true">Capital To Invest</th>
+      <th data-field="capital_available" data-visible="false" data-sortable="true">Capital To Invest</th>
       <th data-field="scale" data-sortable="true">Interested Production Scale</th>
       <th data-field="full_time_devotion"  data-visible="false" data-sortable="true">Full Time Farming</th>
-      <th data-field="own_piece_of_land" data-sortable="true">Do you own a piece of land</th>
-      <th data-field="land_size" data-sortable="true">Land Size</th>
-      <th data-field="land_location" data-sortable="true">Land Location</th>      
-      <th data-field="what_is_your_inspiration_for_considering_in_farming" data-sortable="true">Inspiration for considering farming</th>
-      <th data-field="time_allocated_to_farming" data-sortable="true">Time allocated to farming</th>
-      <th data-field="recommendation" data-visible="true" data-sortable="true">Enterprises Recommended</th>
+      <th data-field="own_piece_of_land" data-sortable="true" >Do you own a piece of land</th>
+      <th data-field="land_size" data-sortable="true" data-visible="false">Land Size</th>
+      <th data-field="land_location" data-sortable="true" data-visible="false">Land Location</th>      
+      <th data-field="what_is_your_inspiration_for_considering_in_farming" data-sortable="true" data-visible="false">Inspiration for considering farming</th>
+      <th data-field="time_allocated_to_farming" data-sortable="true" data-visible="false">Time allocated to farming</th>
+      <th data-field="crops" data-visible="true" data-sortable="true">Enterprises Recommended</th>
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
                 
     </tr>
@@ -112,18 +111,24 @@
   function operateFormatter(value, row, index) {
     console.log(row.id);
     var url ="/farm/"+row.id+"/edit/farm";
+    var view_url = "/farm/"+row.id+"/view/selectenterprise"
     var create_enterprise_url ="/farm/create/enterprise/"+row.id;
     return [
-    {% if request.user.is_superuser or perms.farm.change_farm %}
-      '<a class="Edit " href="'+url+'" title="Edit">',
-      '<i class="fa fa-pencil"></i>',
+    // {% if request.user.is_superuser or perms.farm.change_farm %}
+    //   '<a class="Edit " href="'+url+'" title="Edit">',
+    //   '<i class="fa fa-pencil"></i>',
+    //   '</a>  ',
+    //     {% endif %}
+    //     {% if request.user.is_superuser or perms.farm.add_enterprise %}
+    //   '<a class="Edit " href="'+create_enterprise_url+'" title="Add Enterprise">',
+    //   '<i class="fa fa-plus"></i>',
+    //   '</a>  ',
+    //     {% endif %}
+        {% if request.user.is_superuser or perms.farm.view_enterpriseselection %}
+        '<a class="Edit " href="'+view_url+'" title="View Recommended Enterprise">',
+      '<i class="fa fa-eye"></i>',
       '</a>  ',
-        {% endif %}
-        {% if request.user.is_superuser or perms.farm.add_enterprise %}
-      '<a class="Edit " href="'+create_enterprise_url+'" title="Add Enterprise">',
-      '<i class="fa fa-plus"></i>',
-      '</a>  ',
-        {% endif %}
+      {% endif %}
     ].join('')
   }
 

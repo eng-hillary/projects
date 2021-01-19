@@ -73,21 +73,6 @@ class Seller(models.Model):
 
 
 
-class MajorProducts(models.Model):
-    product_name = models.CharField(max_length=150,blank=True,null=True)
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
-   
-class Product(models.Model):
-    name = models.CharField(max_length=50, null=True)
-    market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
-    local_name = models.CharField(max_length=200,null=True)
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-    description = models.TextField(blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-
-
-
 
 class Buyer(TimeStampedModel, models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')

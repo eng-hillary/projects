@@ -4,7 +4,7 @@ from . import views
 from .views import (AgentProfileList, MarketList, MarketPriceList, CreateMarketPrice,EditMarketPriceView,
 NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView,
 CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,MarketDetailView,
-EditMarketView)
+EditMarketView, CreateMarketPrice, EditMarketPriceView)
 
 
 router = routers.DefaultRouter()
