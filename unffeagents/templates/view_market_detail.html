@@ -23,19 +23,25 @@
     </div>
 </div>
 <!-- Container-fluid Ends-->
- <div id="sidebar">
-    <h3>Categories</h3>
-    <ul>
-      <li {% if not category %}class="selected"{% endif %} style="background-color:#ffff;">
-        <a href="{% url "unffeagents:view_market_detail" %} " style="color:black;">All</a>
-      </li>
-      {% for c in categories %}
-        <li {% if category.slug == c.slug %}class="selected"
-        {% endif %}>
-          <a href="{{ c.get_absolute_url }}" style="color:black;">{{ c.name }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-   
+<div class="Container">
+  <div id="main" class="market-list">
+    <h4 style="color:black;">{% if category %}{{ category.name }}{% else %}Products
+    {% endif %}</h4>
+    {% for product in products %}
+      <div class="item">
+        <a href="{{ product.get_absolute_url }}" style="color:black;">
+            {% if product.product_image_1 %}
+          <img src="{{ product.product_image_1.url }}">
+          {% else %}
+          <img src="{% static "img/no_image.png" %}">
+          {% endif %}
+        </a>
+        <a href="{{ product.get_absolute_url }}" style="color:black">{{ product.product.product.name }}</a>
+        <br>
+        Shs.{{ product.price_offer }}
+      </div>
+    {% endfor %}
   </div>
+</div>
+
 {% endblock %}

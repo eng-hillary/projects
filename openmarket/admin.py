@@ -28,6 +28,7 @@ admin.site.register(ProductCategory, ProductCategoryAdmin)
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
        'name', 
+       'slug',
        'local_name', 
        'image', 
        'description', 
