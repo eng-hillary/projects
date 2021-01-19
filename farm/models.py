@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 from common .models import(TimeStampedModel,District,Region)
 from django.contrib.auth.models import User
 from common .choices import (TRANSACTION_TYPE,PAYMENT_OPTIONS, PAYMENT_MODE,YES_OR_NO,QUERIES, SCALE,SECTOR,
-PROFESSION, EDUCATION_LEVEL,INCOME, UNIT)
+PROFESSION, EDUCATION_LEVEL,INCOME, UNIT, CAPITAL)
 from geopy.geocoders import Nominatim
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
@@ -15,12 +15,10 @@ from django_postgres_extensions.models.fields import ArrayField
 
 
 class Sector(TimeStampedModel, models.Model):
-   
-    name = models.CharField(max_length=50)
 
+    name = models.CharField(max_length=50)
     def __str__(self):
         return self.name
-
 
 
 class Farm(TimeStampedModel, models.Model):
@@ -226,7 +224,7 @@ class Crop(models.Model):
     crop = models.CharField(max_length = 100, null= True, blank=False)
     benefits = models.CharField(max_length = 100, null=True, blank=True)
     what_you_need_to_know = models.CharField(max_length = 500, null=True, blank=True)
-    required_capital = models. CharField(max_length=40, null = False, blank=True )
+    required_capital = models.IntegerField(null=True, choices=CAPITAL)
    
 
     def __str__(self):
@@ -237,15 +235,18 @@ class Ecological_Zones(models.Model):
     ecological_zone_name = models.ForeignKey(Region,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
     crops = models.ManyToManyField(Crop, related_name='ecological_zone_crops')
 
-
+# class Capital(models.Model):
+#     available_capital = models.CharField(null=True, choices=CAPITAL, max_length=200)
+#     crop = models.ForeignKey(Crop,  on_delete=models.CASCADE, unique=False, related_name='zone', default=True)
 
 #Enterprise Selection
 class EnterpriseSelection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=False, related_name='enterpriseselections')
     profession = models.CharField(_('What is your current proffession?'),max_length=200, choices = PROFESSION, null=False, default=False )
     monthly_income = models.CharField(null=True, choices=INCOME, max_length=200)
+    capital_available = models.IntegerField(null=True, choices=CAPITAL)
     level_of_education = models.CharField(max_length=100, choices =EDUCATION_LEVEL, null=False, default=False)
-    capital = models.FloatField(_('How much money would you be willing to invest in farming?'), null=False, blank=False, default=True)
+    #capital = models.FloatField(_('How much money would you be willing to invest in farming?'), null=False, blank=False, default=True)
     what_is_your_inspiration_for_considering_in_farming = models.TextField(null=True, blank=True)
    # interested_sector = models.CharField(_('What Sector of farming are you interested in'), max_length = 100, choices=SECTOR, null=True, blank=False)
     scale = models.CharField(_('At what scale would you like to do farming?'), max_length = 100, choices=SCALE, null=True, blank=False)
@@ -259,6 +260,7 @@ class EnterpriseSelection(models.Model):
     time_allocated_to_farming = models.FloatField(null= True, blank=True)
     rented_land = models.BooleanField(_('Do you intend to use rented land?'),choices=YES_OR_NO, null=False, blank=False, default=True)
     recommendation = models.ForeignKey(Ecological_Zones,  on_delete=models.CASCADE, unique=False, null=True,related_name='zone', default=True)
+    crops = models.ManyToManyField(Crop, related_name='enterprise_selection_crops')
 
 
     def __str__(self):

@@ -48,6 +48,28 @@ from django.contrib.gis.db.models.functions import Distance
 from common.menu import has_group
 from unffeagents.models import MarketPrice
 
+def Products_list(request, category_slug=None):
+    category = None
+    categories = Category.objects.all()
+    products = Product.objects.filter(available=True)
+    if category_slug:
+        category = get_object_or_404(Category, 
+                                     slug=category_slug)
+        products = products.filter(category=category)
+
+    return render(request, 'openmarket/product/list.html',{'category': category,
+                                                     'categories': categories,
+                                                     'products': products})
+
+
+def product_detail(request, id, slug):
+    product = get_object_or_404(Product, id=id,
+                                         slug=slug,
+                                         available=True)
+    return render(request,
+                  'openmarket/product/detail.html',
+                  {'product': product})
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
@@ -627,6 +649,7 @@ class CreateServiceProviderProfile(LoginRequiredMixin, CreateView):
 class ServiceRegistrationList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceregistration_list.html'
+    #context_object_name = "servicerecord"
 
     def get(self, request):
         return Response()
@@ -737,9 +760,8 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
         context = super(ServiceProviderProfileDetailView,
                         self).get_context_data(**kwargs)
 
-        context.update({
-
-        })
+        context['providerrecord'] = self.object
+        #context['servicerecord'] = Service.objects.filter(user = self.object)
         return context
 
 

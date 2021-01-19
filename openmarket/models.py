@@ -17,18 +17,38 @@ from geopy.geocoders import Nominatim
 from django.contrib.gis.db import models
 from django.contrib.gis.db import models
 
+from django.urls import reverse
 
-class Product(models.Model):
-    name = models.CharField(max_length=50, null=True)
-    local_name = models.CharField(max_length=200,null=True)
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-    description = models.TextField(blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
 
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=200,db_index=True, null=True)
+    slug = models.SlugField(max_length=200,unique=True, null=True)
+
+   
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'productcategory'
+        verbose_name_plural = 'productcategories'
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('unffeagents:view_market_detail_by_category',
+                       args=[self.slug])
+
+class Product(models.Model):
+    category = models.ForeignKey(ProductCategory,related_name='products', null=True,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=True)
+    slug = models.SlugField(max_length=200, null=True)
+    market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
+    local_name = models.CharField(max_length=200,null=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    description = models.TextField(blank=True)
+    available = models.BooleanField(default=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
 
 class Seller(models.Model):
     #personal information
@@ -72,8 +92,6 @@ class Seller(models.Model):
         return self.seller_type
 
 
-
-
 class Buyer(TimeStampedModel, models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
 
@@ -97,6 +115,12 @@ class SellerPost(models.Model):
     class Meta:
         ordering = ('-id',)
 
+    
+    def get_absolute_url(self):
+        return reverse('unffeagents:view_product_detail',
+                       args=[self.id, self.product.product.slug])
+
+
 
 class BuyerPost(models.Model):
     name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
@@ -116,7 +140,7 @@ class BuyerPost(models.Model):
 
 class Category(TimeStampedModel, models.Model):
     cat_name = models.CharField(max_length=255)
-   
+    
     def __str__(self):
         return self.cat_name
 
@@ -125,9 +149,11 @@ class ServiceProvider(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='serviceprovider',primary_key=True)
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=14, null=True, blank=False)
     service_provider_location = models.CharField(null=True, max_length=50)
-    list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
+    #business_number = PhoneNumberField(default=False)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=15, default=False)
+    #list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
     is_the_service_available = models.BooleanField(choices=YES_OR_NO, null=True)
-    service_location = models.CharField(max_length=100, null=True)
+    #service_location = models.CharField(max_length=100, null=True)
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
    # category = models.ManyToManyField(to='openmarket.Category', related_name='enterprise categories', choices=)
     category = models.ManyToManyField(Category, related_name='Categories')
@@ -146,7 +172,8 @@ class ServiceProvider(models.Model):
 
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
+    #This is a service provider
+    user = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='service',null=True)
     category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)

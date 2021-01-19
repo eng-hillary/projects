@@ -113,3 +113,4 @@ class CropAdmin(admin.ModelAdmin):
         'crop',
     ]
 admin.site.register(Crop, CropAdmin)
+

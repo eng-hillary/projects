@@ -27,6 +27,7 @@ from django.contrib.auth.models import User, Group
 import requests
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
+from openmarket.models import SellerPost,ProductCategory,Product
 
 
 # views for agentprofiles
@@ -188,9 +189,24 @@ class MarketDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(MarketDetailView, self).get_context_data(**kwargs)
         context['Marketobject'] = self.object
+        products = SellerPost.objects.filter(market=self.object)
+        print(products)
+        context["products"]= products
+        context["categories"] = ProductCategory.objects.all()
+        print(products)
         
         return context
 
+class ProductDetailView(DetailView):
+    model = SellerPost
+    template_name = "view_product_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        context['Productobject'] = self.object
+        
+        return context
+        
 class MarketList(APIView):
     permission_classes = (IsAuthenticated,)
     renderer_classes = [TemplateHTMLRenderer]
@@ -309,7 +325,6 @@ class CreateMarketPrice(CreateView):
 
     def form_valid(self, form):
         market = form.save(commit=False)
-        market.user = self.request.user
         market.save()
         return redirect('unffeagents:marketprice_list')
 
