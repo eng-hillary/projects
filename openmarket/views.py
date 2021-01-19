@@ -615,6 +615,7 @@ def load_districts(request):
 class ServiceRegistrationList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceregistration_list.html'
+    #context_object_name = "servicerecord"
 
     def get(self, request):
         return Response()
@@ -725,9 +726,8 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
         context = super(ServiceProviderProfileDetailView,
                         self).get_context_data(**kwargs)
 
-        context.update({
-
-        })
+        context['providerrecord'] = self.object
+        #context['servicerecord'] = Service.objects.filter(user = self.object)
         return context
 
 

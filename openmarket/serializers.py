@@ -112,7 +112,8 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ServiceProvider
-        fields = ('user_id','user',  'nin','service_provider_location','category', 'list_of_services_if_more_than_one', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
+        fields = ('user_id','user',  'nin','service_provider_location','category', 'is_the_service_available', 'is_the_service_at_a_fee','status', 'approver',
+         'approved_date','gender'
        )
     '''
     returns yes or no for boolean fields
