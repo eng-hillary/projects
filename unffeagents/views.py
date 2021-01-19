@@ -89,6 +89,7 @@ class CreateAgentProfile(LoginRequiredMixin,CreateView):
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
+        email.content_subtype = "html"
         email.send()
         return redirect('unffeagents:agentprofile_list')
 
@@ -142,6 +143,7 @@ class EditAgentProfileView(LoginRequiredMixin,UpdateView):
         email = EmailMessage(
                 subject, message, to=[to_email]
             )
+        email.content_subtype = "html"
         email.send()
         return redirect('unffeagents:agentprofile_list')
 

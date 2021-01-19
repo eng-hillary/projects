@@ -8,6 +8,7 @@ from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from django.contrib.gis import forms 
 from django.contrib.gis.geos import Point
+from unffeagents.models import Market, MarketPrice
 
 from decimal import Decimal
 
@@ -37,7 +38,7 @@ class SellerProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(SellerProfileForm, self).__init__(*args, **kwargs)
-
+       
         
 
 class ProductProfileForm(forms.ModelForm):
@@ -69,6 +70,9 @@ class ServiceProfileForm(forms.ModelForm):
 
 
 class SellerPostForm(forms.ModelForm):
+    market = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Market.objects.all())
+    product = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Market.objects.none())
+
 
     class Meta:
         model = SellerPost
@@ -78,12 +82,23 @@ class SellerPostForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(SellerPostForm, self).__init__(*args, **kwargs)
         user = self.request.user
+        self.fields['market'].empty_label = '--please select--'
         self.fields['product'].empty_label = '--please select--'
         self.fields['product_description'].widget.attrs.update({'rows': '2'})
+
+        if 'market' in self.data:
+            try:
+                market_id = int(self.data.get('market'))
+                self.fields['product'].queryset = MarketPrice.objects.filter(market_id=market_id).order_by('-min_price')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty district queryset
+        elif self.instance.pk:
+            self.fields['product'].queryset = self.instance.market.marketprice_set.order_by('-min_price')
     
     def clean_price_offer(self):
         price_offer = Decimal(self.cleaned_data['price_offer'])
-        price_range = self.cleaned_data['product']
+        price_range = self.cleaned_data.get('product')
+        print(price_range)
         prices = str(price_range).split()
         splitted_prices = prices[-1]
         actual_prices = splitted_prices.split("-")
@@ -93,3 +108,4 @@ class SellerPostForm(forms.ModelForm):
         if not min_price <= price_offer <= max_price:
             raise forms.ValidationError("Please enter a price within the product price range")
         return price_offer
+    

@@ -35,16 +35,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class SellerSerializer(serializers.ModelSerializer):
-   
+    location = serializers.CharField(source='compute_location')
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
-    # region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
-
+    major_products = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    seller_type = serializers.CharField(source='get_seller_type_display')
 
    # enterprise = EnterpriseSerializer()
     class Meta:

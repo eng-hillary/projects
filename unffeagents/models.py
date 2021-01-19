@@ -66,6 +66,11 @@ class MarketPrice(TimeStampedModel, models.Model):
     def __str__(self):
         return '{} {}-{}'.format(self.product.name, self.min_price, self.max_price)
 
+    @property
+    def get_product(self):
+        return '{} {}-{}'.format(self.product.name, self.min_price, self.max_price)
+        
+
 
 
 class Notice(TimeStampedModel, models.Model):
