@@ -17,18 +17,38 @@ from geopy.geocoders import Nominatim
 from django.contrib.gis.db import models
 from django.contrib.gis.db import models
 
+from django.urls import reverse
 
-class Product(models.Model):
-    name = models.CharField(max_length=50, null=True)
-    local_name = models.CharField(max_length=200,null=True)
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-    description = models.TextField(blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
 
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=200,db_index=True, null=True)
+    slug = models.SlugField(max_length=200,unique=True, null=True)
+
+   
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'productcategory'
+        verbose_name_plural = 'productcategories'
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('unffeagents:view_market_detail_by_category',
+                       args=[self.slug])
+
+class Product(models.Model):
+    category = models.ForeignKey(ProductCategory,related_name='products', null=True,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=True)
+    slug = models.SlugField(max_length=200, null=True)
+    market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
+    local_name = models.CharField(max_length=200,null=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    description = models.TextField(blank=True)
+    available = models.BooleanField(default=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
 
 class Seller(models.Model):
     #personal information
@@ -72,8 +92,6 @@ class Seller(models.Model):
         return self.seller_type
 
 
-
-
 class Buyer(TimeStampedModel, models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
 
@@ -96,6 +114,12 @@ class SellerPost(models.Model):
 
     class Meta:
         ordering = ('-id',)
+
+    
+    def get_absolute_url(self):
+        return reverse('unffeagents:view_product_detail',
+                       args=[self.id, self.product.product.slug])
+
 
 
 class BuyerPost(models.Model):
