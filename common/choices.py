@@ -50,7 +50,7 @@ CAPITAL = (
 )
 TYPE = (
     (None, "--please select--"),
-    ('wholeseller', 'wholeseller'),
+    ('wholeseller', 'whole seller'),
     ('retail', 'Retail'),
 )
 
