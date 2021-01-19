@@ -158,7 +158,7 @@ class MarketViewSet(viewsets.ModelViewSet):
     """
     #queryset = Market.objects.all().order_by('market_name')
     serializer_class = MarketSerializer
-    permission_classes = [permissions.IsAuthenticated]
+   # permission_classes = [permissions.IsAuthenticated]
 
 
     def get_queryset(self):
@@ -307,6 +307,7 @@ class CreateMarketPrice(CreateView):
 
     def form_valid(self, form):
         market = form.save(commit=False)
+        market.user = self.request.user
         market.save()
         return redirect('unffeagents:marketprice_list')
 

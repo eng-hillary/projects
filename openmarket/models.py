@@ -18,6 +18,17 @@ from django.contrib.gis.db import models
 from django.contrib.gis.db import models
 
 
+class Product(models.Model):
+    name = models.CharField(max_length=50, null=True)
+    local_name = models.CharField(max_length=200,null=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    description = models.TextField(blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.name
 
 class Seller(models.Model):
     #personal information
@@ -25,7 +36,7 @@ class Seller(models.Model):
     date_of_birth = models.DateField(max_length=8)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     seller_type = models.CharField(choices=TYPE,max_length=15, null=False)
-    major_products = models.CharField(max_length=50,blank=True)
+    major_products = models.ManyToManyField(Product, blank=False)
 
     #Location
     business_number = PhoneNumberField()
@@ -61,22 +72,6 @@ class Seller(models.Model):
         return self.seller_type
 
 
-class MajorProducts(models.Model):
-    product_name = models.CharField(max_length=150,blank=True,null=True)
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
-   
-class Product(models.Model):
-    name = models.CharField(max_length=50, null=True)
-    market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
-    local_name = models.CharField(max_length=200,null=True)
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-    description = models.TextField(blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-
-
-    def __str__(self):
-        return self.name
 
 
 class Buyer(TimeStampedModel, models.Model):
@@ -87,16 +82,20 @@ class Buyer(TimeStampedModel, models.Model):
 
 
 class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    product = models.ForeignKey('unffeagents.MarketPrice', on_delete=models.CASCADE)
+    market = models.ForeignKey('unffeagents.Market', on_delete=models.CASCADE, null=True)
     quantity = models.FloatField(max_length=50, null=True)
     price_offer = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_option = models.CharField(max_length=50)
     payment_options = models.CharField(choices=PAYMENT_OPTIONS, max_length=50, null=True)
     payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, max_length=50)
+    product_description = models.TextField(null=True, blank=True)
+    product_image_1 = models.ImageField(null=True, blank=False)
+    product_image_2 = models.ImageField(null=True, blank=True)
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('-id',)
 
 
 class BuyerPost(models.Model):
