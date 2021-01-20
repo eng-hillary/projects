@@ -46,6 +46,29 @@ from django.contrib.auth.models import Group
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from common.menu import has_group
+from unffeagents.models import MarketPrice
+
+def Products_list(request, category_slug=None):
+    category = None
+    categories = Category.objects.all()
+    products = Product.objects.filter(available=True)
+    if category_slug:
+        category = get_object_or_404(Category, 
+                                     slug=category_slug)
+        products = products.filter(category=category)
+
+    return render(request, 'openmarket/product/list.html',{'category': category,
+                                                     'categories': categories,
+                                                     'products': products})
+
+
+def product_detail(request, id, slug):
+    product = get_object_or_404(Product, id=id,
+                                         slug=slug,
+                                         available=True)
+    return render(request,
+                  'openmarket/product/detail.html',
+                  {'product': product})
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -243,6 +266,7 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
         profile.status = 'pending'
         profile.user = self.request.user
         profile.save()
+        form.save_m2m()
       
         # send email to farmer after registration
         current_site = get_current_site(self.request)
@@ -255,6 +279,7 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
         email = EmailMessage(
             subject, message, to=[to_email]
         )
+        email.content_subtype = "html"
         email.send()
         return redirect('openmarket:seller_list')
 
@@ -299,9 +324,25 @@ class SellerPostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = SellerPost.objects.all().order_by('-id')
+    #queryset = SellerPost.objects.all().order_by('-id')
     serializer_class = SellerPostSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the sellerposts
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        products = SellerPost.objects.all().order_by('-id')
+        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_sellerpost'):
+            queryset = products
+        else:
+            seller = Seller.objects.get(user= user)
+            queryset = products.filter(seller=seller)
+        
+        return queryset
 
 
 class SellerPostList(APIView):
@@ -603,13 +644,6 @@ class CreateServiceProviderProfile(LoginRequiredMixin, CreateView):
         email.send()
         return redirect('openmarket:serviceprovider_list')
 
-# view for loading
-
-
-def load_districts(request):
-    region_id = request.GET.get('region')
-    districts = District.objects.filter(region_id=region_id).order_by('name')
-    return render(request, 'city_dropdown_list_options.html', {'cities': cities})
 
 
 class ServiceRegistrationList(APIView, LoginRequiredMixin):
@@ -886,3 +920,11 @@ class EditSellerPostView(LoginRequiredMixin, UpdateView):
         product = form.save(commit=False)
         product.save()
         return redirect('openmarket:sellerpost_list')
+
+# load products with in a specific market selected
+
+def load_products(request):
+    market_id = request.GET.get('market')
+    products = MarketPrice.objects.filter(market_id=market_id).order_by('-min_price')
+    return render(request, 'products_dropdown_list_options.html', {'products': products})
+

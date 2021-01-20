@@ -13,12 +13,10 @@ from .views import (ProductList,
                     ContactDetailsList,
                     LogiticsList,
                     SellerViewSet,
-                    # PackagingList,
-                    # MedicalList,
                     SoilScienceList,
                     ServiceProviderProfileList,
                     CreateServiceProviderProfile,
-                    load_districts,
+                    load_products,
                     CreateServiceView,
                     ServiceProviderViewSet,
                     UpdateServiceProviderProfile,
@@ -34,7 +32,7 @@ router.register(r'products', views.ProductViewSet)
 router.register(r'categories', views.CategoryViewSet)
 router.register(r'sellers', views.SellerViewSet)
 router.register(r'buyers', views.BuyerViewSet)
-router.register(r'sellerposts', views.SellerPostViewSet)
+router.register(r'sellerposts', views.SellerPostViewSet, basename='sellerpost')
 router.register(r'buyersposts', views.BuyerPostViewSet)
 router.register(r'serviceproviders', views.ServiceProviderViewSet, basename='service_providers')
 
@@ -70,6 +68,11 @@ app_name = 'openmarket'
 urlpatterns = [
     path('api/', include(router.urls)),
     path('products', ProductList.as_view(), name='product_list'),
+    
+    path('', views.Products_list, name='products_list'),
+    path('<slug:category_slug>/', views.Products_list,name='product_list_by_category'),
+    path('<int:id>/<slug:slug>/', views.product_detail,name='product_detail'),
+   
     path('create/products', CreateProductProfile.as_view(), name="create_product"),
     path('<int:pk>/edit/product/', EditProductView.as_view(), name="edit_product"),
     path('sellers', SellerList.as_view(), name='seller_list'),
@@ -93,7 +96,7 @@ urlpatterns = [
     # path('medicals', MedicalList.as_view(), name='medical_list'),
     path('soilsciences', SoilScienceList.as_view(), name='soilscience_list'),
     path('<int:pk>/approve/', approve_serviceprovider, name='aprrove'),    
-    path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),  # <-- this one here
+    path('ajax/load-products/',load_products, name='ajax_load_products'),  # <-- this one here
     path('<int:pk>/edit/', UpdateServiceProviderProfile.as_view(), name="edit_service_provider_profile"),
     path('<int:pk>/viewprovider/', ServiceProviderProfileDetailView.as_view(), name="view_serviceprovider_profile"),
     path('<int:pk>/editservice/', EditServiceView.as_view(), name="edit_service_profile"),

@@ -1,0 +1,22 @@
+{% extends "openmarket_base.html" %}
+{% load static %}
+{% block title %}
+  {{ product.product.product.name  }}
+{% endblock %}
+
+{% block content %}
+ <div class="product-detail">
+    {% if Productobject.product_image_1.url %}
+    <img src="{{ Productobject.product_image_1.url }}">
+    {% else %}
+    <img src="{% static "img/no_image.png" %}">
+    {% endif %}
+    <h2 style="color: black;">{{ Productobject.product.product.name }}</h2>
+    
+    <p class="price">Shs.{{ Productobject.price_offer }}</p>
+
+
+    {{ Productobject.product_description|linebreaks }}
+  <input class="btn btn-primary" type="submit" value="Fill Orderform">
+  </div>
+{% endblock %}
