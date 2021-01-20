@@ -695,7 +695,7 @@ class SoilScienceList(APIView):
 class UpdateServiceProviderProfile(LoginRequiredMixin, UpdateView):
     model = ServiceProvider
     template_name = 'register_service_provider.html'
-    success_url = reverse_lazy('openmarket:serviceprovider_list')
+    success_url = reverse_lazy('openmarket:service_registration')
     form_class = ServiceProviderProfileForm
     success_message = "Your profile was Updated successfully"
 
@@ -735,7 +735,9 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "providerrecord"
     template_name = "view_service_provider_profile.html"
 
+   
     def get_context_data(self, **kwargs):
+        #serviceprovider = ServiceProvider.objects.create(user=kwargs['instance'].user)
         context = super(ServiceProviderProfileDetailView,
                         self).get_context_data(**kwargs)
 

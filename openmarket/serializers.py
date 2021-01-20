@@ -145,7 +145,7 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ('id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
+        fields = ('user_id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
         'available_services','rent','name_of_storage_center','location_of_storage_center','certification_status',
         'vehicle_type','vehicle_capacity','location','others','full_name')
 
