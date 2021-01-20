@@ -71,9 +71,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('products', ProductList.as_view(), name='product_list'),
     
-    path('', views.Products_list, name='products_list'),
-    path('<slug:category_slug>/', views.Products_list,name='product_list_by_category'),
-    path('<int:id>/<slug:slug>/', views.product_detail,name='product_detail'),
    
     path('create/products', CreateProductProfile.as_view(), name="create_product"),
     path('<int:pk>/edit/product/', EditProductView.as_view(), name="edit_product"),
