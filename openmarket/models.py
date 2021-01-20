@@ -40,9 +40,9 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(ProductCategory,related_name='products', null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=50, null=True)
-    slug = models.SlugField(max_length=200, null=True)
+    slug = models.SlugField(_('Local Name'),max_length=200, null=True)
     market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
-    local_name = models.CharField(max_length=200,null=True)
+    #local_name = models.CharField(max_length=200,null=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     description = models.TextField(blank=True)
     available = models.BooleanField(default=True)

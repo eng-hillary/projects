@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, SoilScience, Category,SellerPost
 from common.models import Region, District
 from .serializers import (ProductSerializer,
