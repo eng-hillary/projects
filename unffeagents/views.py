@@ -325,6 +325,7 @@ class CreateMarketPrice(CreateView):
 
     def form_valid(self, form):
         market = form.save(commit=False)
+        market.user = self.request.user
         market.save()
         return redirect('unffeagents:marketprice_list')
 

@@ -49,6 +49,9 @@ class Product(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Seller(models.Model):
     #personal information
@@ -100,7 +103,7 @@ class Buyer(TimeStampedModel, models.Model):
 
 
 class SellerPost(models.Model):
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey('unffeagents.MarketPrice', on_delete=models.CASCADE)
     market = models.ForeignKey('unffeagents.Market', on_delete=models.CASCADE, null=True)
     quantity = models.FloatField(max_length=50, null=True)

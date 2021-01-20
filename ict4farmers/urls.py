@@ -56,7 +56,7 @@ urlpatterns = [
     path('unffeagents/', include('unffeagents.urls', namespace="unffeagents")),
 
     # open weather urls
-    path('api-weather/', include('weather.urls', namespace="api-weather")),
+   
     path('weather/', include('weather.urls', namespace="weather")),
 
     # resorce sharing urls

@@ -882,7 +882,7 @@ class CreateSellerPost(CreateView):
 
     def form_valid(self, form):
         product = form.save(commit=False)
-        product.seller = Seller.objects.get(user=self.request.user)
+        product.seller = self.request.user
         product.save()
         return redirect('openmarket:sellerpost_list')
 
