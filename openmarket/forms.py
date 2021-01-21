@@ -1,5 +1,5 @@
 from django import forms
-from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost
+from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost, BuyerPost
 from common.models import Region, District, County, SubCounty, Parish, Village
 from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField
@@ -141,3 +141,16 @@ class SellerPostForm(forms.ModelForm):
         if not min_price <= price_offer <= max_price:
             raise forms.ValidationError("Please enter a price within the product price range")
         return price_offer
+
+class BuyerPostForm(forms.ModelForm):
+
+    class Meta:
+        model = BuyerPost
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(BuyerPostForm, self).__init__(*args, **kwargs)
+        user = self.request.user
+        self.fields['product'].empty_label = '--please select--'
+ 

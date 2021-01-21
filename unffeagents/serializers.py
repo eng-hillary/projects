@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from .models import (AgentProfile, Market, MarketPrice, Notice,Call,CallRsponse)
 from django.contrib.auth.models import User
+from openmarket.models import ProductOrdering
+
+class ProductOrderingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductOrdering
+        fields = ('id','product','quantity','delivery_date', 'delivery_address', 'payment_mode', 'payment_method', 'Additional_notes')
 
 
 class AgentProfileSerializer(serializers.ModelSerializer):

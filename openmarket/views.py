@@ -26,7 +26,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import(SellerProfileForm, ProductProfileForm,
-                   ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
+                   ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
 from django.urls import reverse_lazy
@@ -834,6 +834,41 @@ class CreateSellerPost(CreateView):
         product.seller = Seller.objects.get(user=self.request.user)
         product.save()
         return redirect('openmarket:sellerpost_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+# seller post
+class CreateBuyerPost(CreateView):
+    template_name = 'create_buyer_post.html'
+    success_url = reverse_lazy('openmarket:buyerpost_list')
+    form_class = BuyerPostForm
+    success_message = "Product was created successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateBuyerPost, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateBuyerPost, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        product = form.save(commit=False)
+        product.seller = Seller.objects.get(user=self.request.user)
+        product.save()
+        return redirect('openmarket:buyerpost_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():

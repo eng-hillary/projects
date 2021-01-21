@@ -115,12 +115,28 @@ class SellerPost(models.Model):
     class Meta:
         ordering = ('-id',)
 
+    def __str__(self):
+        return self.product.product.name
+
     
     def get_absolute_url(self):
         return reverse('unffeagents:view_product_detail',
                        args=[self.id, self.product.product.slug])
 
 
+
+class ProductOrdering(models.Model):
+    product = models.ForeignKey(SellerPost, on_delete = models.CASCADE)
+    buyer = models.CharField(max_length=25,null=True, blank=True)
+    quantity = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    delivery_date = models.DateField(null=True, blank=True)
+    delivery_address = models.TextField(blank=False, null=False)
+    payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, blank=True, max_length=25)
+    payment_method = models.CharField(choices=PAYMENT_OPTIONS, max_length=25,null=True, blank=True)
+    Additional_notes = models.TextField(blank=False, null=False)
+    
+    def __str__(self):
+        return self.product
 
 class BuyerPost(models.Model):
     name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
