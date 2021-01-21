@@ -410,7 +410,7 @@ menus = [
         children=[
 
             menu.PassTestNode(id='product_list',
-                              label='<i class="fa fa-circle"></i>My Products',
+                              label='<i class="fa fa-circle"></i>Post Product',
 
                               pattern_name='openmarket:buyerpost_list', test=can_view_buyer_post),
 
