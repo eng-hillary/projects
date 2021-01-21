@@ -17,6 +17,6 @@
 
 
     {{ Productobject.product_description|linebreaks }}
-  <input class="btn btn-primary" type="submit" value="Fill Orderform">
+  <a class="btn btn-primary" href="{% url "unffeagents:productordering" Productobject.pk %}">ORDER</a>
   </div>
 {% endblock %}

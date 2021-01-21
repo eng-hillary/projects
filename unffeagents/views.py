@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import (AgentProfile, Market, MarketPrice, Notice,CallRsponse,Call)
-from .serializers import (AgentProfileSerializer, MarketSerializer, MarketPriceSerializer, 
-NoticeSerializer,CallSerializer,ResponseSerializer,PostAgentProfileSerializer)
+from .serializers import (AgentProfileSerializer,ProductOrderingSerializer, MarketSerializer, MarketPriceSerializer, 
+NoticeSerializer,CallSerializer,ResponseSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -11,12 +11,14 @@ from django.shortcuts import redirect
 from rest_framework.views import APIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.permissions import IsAuthenticated
-from .forms import (AgentProfileForm, NoticeForm,EnquiryForm, MarketForm, MarketPriceForm)
+from .forms import (AgentProfileForm,ProductOrderingForm, NoticeForm,EnquiryForm, MarketForm, MarketPriceForm)
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+
+from django.contrib import messages
 from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 
@@ -27,7 +29,7 @@ from django.contrib.auth.models import User, Group
 import requests
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
-from openmarket.models import SellerPost,ProductCategory,Product
+from openmarket.models import SellerPost,ProductCategory,Product, ProductOrdering
 from django.db import IntegrityError
 
 # views for agentprofiles
@@ -295,6 +297,82 @@ class MarketList(APIView):
         return Response({'markets': queryset})
 
 
+
+class ProductOrderingList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'productordering_list.html'
+
+    def get(self, request):
+        queryset = ProductOrdering.objects.order_by('product')
+        return Response({'productorderings': queryset})
+
+class ProductOrderingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows resources to be viewed or edited.
+    """
+    queryset = ProductOrdering.objects.all()
+    serializer_class = ProductOrderingSerializer
+
+
+# create booking
+class ProductOrderingView(CreateView):
+    template_name = 'ordering.html'
+    success_url = reverse_lazy('unffeagents:productordering_list')
+    form_class = ProductOrderingForm
+    success_message = "Ordering has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductOrderingView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(ProductOrderingView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        product = form.save(commit=False)
+        product.buyer = self.request.user
+        product.save()
+        
+        print(product.product.seller.user.email)
+
+        # send email to seller after registration
+        current_site = get_current_site(self.request)
+        subject = 'Order successfully Successfully'
+        message = render_to_string('booking_created_successfully_email.html', {
+            'user': product.product.seller.user,
+            'domain': current_site.domain,
+            'product':product
+            })
+        to_email = product.product.seller.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        messages.add_message(self.request, messages.INFO, 'Please wait for approval from the seller')
+        return redirect('unffeagents:productordering_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_initial(self, *args, **kwargs):
+        initial = super(ProductOrderingView, self).get_initial(**kwargs)
+        initial['product'] = SellerPost.objects.get(pk=self.kwargs['product_pk'])
+        return initial
 
 class CreateMarket(CreateView):
     template_name = 'create_market.html'

@@ -30,6 +30,8 @@ class AgentProfile(models.Model):
         return self.specific_role
 
 
+
+
 class Market(models.Model):
     market_name = models.CharField(max_length=100, blank = False)
     market_description = models.TextField(max_length=600, blank=False)

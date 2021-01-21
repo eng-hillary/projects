@@ -1,13 +1,14 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import (AgentProfileList,ProductDetailView, MarketList, MarketPriceList, CreateMarketPrice,EditMarketPriceView,
+from .views import (AgentProfileList,ProductOrderingView,ProductOrderingList,ProductDetailView, MarketList, MarketPriceList, CreateMarketPrice,EditMarketPriceView,
 NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView,
 CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,MarketDetailView,
 EditMarketView, CreateMarketPrice, EditMarketPriceView)
 
 
 router = routers.DefaultRouter()
+router.register(r'productordering', views.ProductOrderingViewSet)
 router.register(r'agentprofile', views.AgentProfileViewSet, basename='agents')
 router.register(r'market', views.MarketViewSet, basename='markets_api')
 router.register(r'marketprice', views.MarketPriceViewSet)
@@ -37,6 +38,10 @@ urlpatterns = [
     path('<int:pk>/view/market', MarketDetailView.as_view(), name="view_market_detail"),
     path('<slug:category_slug>/', MarketDetailView.as_view(), name='view_market_detail_by_category'),
     path('<int:pk>/<slug:slug>/', ProductDetailView.as_view(), name="view_product_detail"),
+
+
+    path('ordering/<int:product_pk>', ProductOrderingView.as_view(), name="productordering"), 
+    path('productordering', ProductOrderingList.as_view(), name='productordering_list'), 
 
     path('alert&notification', NoticeList.as_view(), name='notice_list'),
     path('calls',CallList.as_view(), name='calls'),
