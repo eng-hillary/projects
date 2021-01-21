@@ -116,7 +116,7 @@ class SellerPost(models.Model):
     product_image_2 = models.ImageField(null=True, blank=True)
 
     class Meta:
-        ordering = ('-id',)
+        ordering = ('id',)
 
     def __str__(self):
         return self.product.product.name
@@ -153,7 +153,7 @@ class BuyerPost(models.Model):
     any_other_comment =models.TextField(null=True)
 
     class meta:
-        ordering =("-id",)
+        ordering =("id",)
 
 
 
