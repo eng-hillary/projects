@@ -280,7 +280,7 @@ class FarmViewSet(viewsets.ModelViewSet):
                 farmer = FarmerProfile.objects.get(user=user)
                 queryset = farms.filter(farmer=farmer)
             except:
-                return 'user has no farmer account'
+                queryset = Farm.objects.none()
 
         return queryset
 
