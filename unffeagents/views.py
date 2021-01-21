@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import (AgentProfile, Market, MarketPrice, Notice,CallRsponse,Call)
 from .serializers import (AgentProfileSerializer, MarketSerializer, MarketPriceSerializer, 
-NoticeSerializer,CallSerializer,ResponseSerializer)
+NoticeSerializer,CallSerializer,ResponseSerializer,PostAgentProfileSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -28,16 +28,99 @@ import requests
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from openmarket.models import SellerPost,ProductCategory,Product
-
+from django.db import IntegrityError
 
 # views for agentprofiles
 class AgentProfileViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows agentprofiles to be viewed or edited.
+    API endpoint that allows agent profiles to be viewed or edited.
+    To post the body must contain 
+        {
+        "user": "1",//the user profile of the agent
+        "contact": "+256788329636", //contact with the country code
+        "region": "1", //region of the agent
+        "district": "1", // District where the agent is located
+        "specific_role": "call centre agent",options['account manager','market manager','call centre agent','notifications and alerts']
+      
+    }
     """
-    queryset = AgentProfile.objects.all().order_by('specific_role')
+    #queryset = AgentProfile.objects.all().order_by('specific_role')
     serializer_class = AgentProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the agent profiles
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        agents = AgentProfile.objects.all().order_by('-user')
+        if  self.request.user.has_perm('unffeagents.delete_agentprofile'):
+            queryset = agents
+        else:
+            queryset = agents.filter(user=user)
+        
+        return queryset
+    """
+    Retrieve, update or delete a snippet an agent.
+    """
+    # def get_object(self, pk):
+    #     try:
+    #         return AgentProfile.objects.get(pk=pk)
+    #     except AgentProfile.DoesNotExist:
+    #         raise Http404
+
+
+    def create(self, request, format=None):
+        serializer = PostAgentProfileSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save(user = self.request.user)
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Agent account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
+    
+    def update(self, request,pk,format=None):
+        """
+        get the object
+        """
+        try:
+            agent = AgentProfile.objects.get(pk=pk)
+        except AgentProfile.DoesNotExist:
+            raise Http404
+        """Updating the object"""
+        serializer = PostAgentProfileSerializer(agent,data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'An error has occured'})
+                
+            return Response({'status':'successful updated'})
+        return Response(serializer.errors, status=404)
+    
+
+    def delete(self, request, pk, format=None):
+        try:
+            agent = AgentProfile.objects.get(pk=pk)
+        except AgentProfile.DoesNotExist:
+            raise Http404
+
+        agent.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get(self, request, pk, format=None):
+        try:
+            agent = AgentProfile.objects.get(pk=pk)
+        except AgentProfile.DoesNotExist:
+            raise Http404
+        serializer = AgentProfileSerializer(agent)
+        return Response(serializer.data)
 
 
 class AgentProfileList(APIView):
@@ -47,6 +130,8 @@ class AgentProfileList(APIView):
     def get(self, request):
         queryset = AgentProfile.objects.order_by('specific_role')
         return Response({'agentprofiles': queryset})
+
+   
 
 
 class CreateAgentProfile(LoginRequiredMixin,CreateView):
@@ -325,6 +410,7 @@ class CreateMarketPrice(CreateView):
 
     def form_valid(self, form):
         market = form.save(commit=False)
+        market.user = self.request.user
         market.save()
         return redirect('unffeagents:marketprice_list')
 

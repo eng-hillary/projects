@@ -276,8 +276,11 @@ class FarmViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farms
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            queryset = farms.filter(farmer=farmer)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                queryset = farms.filter(farmer=farmer)
+            except:
+                return 'user has no farmer account'
 
         return queryset
 

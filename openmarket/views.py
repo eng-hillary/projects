@@ -48,27 +48,6 @@ from django.contrib.gis.db.models.functions import Distance
 from common.menu import has_group
 from unffeagents.models import MarketPrice
 
-def Products_list(request, category_slug=None):
-    category = None
-    categories = Category.objects.all()
-    products = Product.objects.filter(available=True)
-    if category_slug:
-        category = get_object_or_404(Category, 
-                                     slug=category_slug)
-        products = products.filter(category=category)
-
-    return render(request, 'openmarket/product/list.html',{'category': category,
-                                                     'categories': categories,
-                                                     'products': products})
-
-
-def product_detail(request, id, slug):
-    product = get_object_or_404(Product, id=id,
-                                         slug=slug,
-                                         available=True)
-    return render(request,
-                  'openmarket/product/detail.html',
-                  {'product': product})
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -882,7 +861,7 @@ class CreateSellerPost(CreateView):
 
     def form_valid(self, form):
         product = form.save(commit=False)
-        product.seller = Seller.objects.get(user=self.request.user)
+        product.seller = self.request.user
         product.save()
         return redirect('openmarket:sellerpost_list')
 
