@@ -96,7 +96,10 @@ class SellerPost(models.Model):
     product_image_2 = models.ImageField(null=True, blank=True)
 
     class Meta:
-        ordering = ('-id',)
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.product.product.name
 
     
     def get_absolute_url(self):
@@ -105,10 +108,23 @@ class SellerPost(models.Model):
 
 
 
+class ProductOrdering(models.Model):
+    product = models.ForeignKey(SellerPost, on_delete = models.CASCADE)
+    buyer = models.CharField(max_length=25,null=True, blank=True)
+    quantity = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    delivery_date = models.DateField(null=True, blank=True)
+    delivery_address = models.TextField(blank=False, null=False)
+    payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, blank=True, max_length=25)
+    payment_method = models.CharField(choices=PAYMENT_OPTIONS, max_length=25,null=True, blank=True)
+    Additional_notes = models.TextField(blank=False, null=False)
+    
+    def __str__(self):
+        return self.product
+
 class BuyerPost(models.Model):
-    name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=True)
     current_location = models.CharField(max_length=50)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.CharField(max_length=50, null=True)
     quantity = models.FloatField(max_length=50, null=True)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_options = models.CharField(max_length=50, null=False)
@@ -117,7 +133,7 @@ class BuyerPost(models.Model):
     any_other_comment =models.TextField(null=True)
 
     class meta:
-        ordering =("name",)
+        ordering =("id",)
 
 
 
