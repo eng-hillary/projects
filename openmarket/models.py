@@ -173,6 +173,7 @@ class ServiceProvider(models.Model):
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
     #This is a service provider
+    serviceprovider = models.ManyToManyField(ServiceProvider, blank=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='service',default=True)
     category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
