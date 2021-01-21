@@ -52,7 +52,7 @@ def can_view_seller_post(user, context):
 def can_view_buyer_post(user, context):
     if user.is_superuser:
         return True
-    return user.has_perm('openmarket.view_buyerpost')
+    return user.has_perm('openmarket.view_sellerpost')
 
 def can_view_farms(user, context):
     if user.is_superuser:
@@ -201,7 +201,6 @@ def can_add_enterprise_selection(user, context):
 menus = [
     menu.Node(id='dashboard', css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>',
               pattern_name='common:home', link_attrs={'id': 'dashboard'}),
-              
 
     menu.PassTestNode(
         id='Enterprise-selection-section',
@@ -402,11 +401,10 @@ menus = [
         ]
     ),
 
-
-    menu.PassTestNode(
-        id='product-section',
+        menu.PassTestNode(
+        id='buyer-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-lemon"></span>  <span>Buyer Posts</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-lemon"></span>  <span>Buyer Post</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_products,
         children=[
