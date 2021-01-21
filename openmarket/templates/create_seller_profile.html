@@ -39,18 +39,12 @@
 
 
           <div class="tab-content" id="myTabContent">
-            <div class="tab" id="personalinfo" role="tabpanel" aria-labelledby="personalinfo-tab">
+
               <div class="row">
                 <div class="col-md-12">
                   <h4>Personal Information</h4>
                 </div>
 
-                <div class="col-xl-6 col-md-6">
-                  {{ form.date_of_birth|as_crispy_field }}
-                </div>
-                <div class="col-xl-6 col-md-6">
-                  {{ form.gender|as_crispy_field }}
-                </div>
                 <div class="col-xl-6 col-md-6">
                   {{ form.business_number|as_crispy_field }}
                 </div>
@@ -62,74 +56,22 @@
                 <div class="col-md-12">
                   {{ form.major_products|as_crispy_field }}
                 </div>
-                <div class="col-xl-12 col-md-12">
-              
-                <div class="">
-
-                  <div class="row marl">
-                    <div class="col-md-12">
-                      <div id='productTable' class="table">
-                        {{ majorproduct_form.management_form }}
-
-                        {% for form in majorproduct_form.forms %}
-
-
-                        <div class="formset_row row">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="exampleInputEmail1" class="required">Product names
-
-                                {% if form.product_name.field.required %}<span class="error_marker"
-                                  style="color:red">*</span>{% endif %}</label>
-                              {{ form.product_name}}
-                              <span class="error" id="id__referee_names">{{ form.product_name.errors }}</span>
-                            </div>
-                          </div>
-
-
-                        </div>
-                        {% endfor %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-
-
-
-
-
-              </div>
-            </div>
-            <div class="tab" id="address" role="tabpanel" aria-labelledby="address-tabs">
-              <div class="row">
+                
                 <div class="col-md-12">
-                  <h4>Address</h4>
-                </div>
-
-                <div class="col-xl-12 col-md-12">
-                  {{ form.location|as_crispy_field }}
+                  {{ form.business_address|as_crispy_field }}
                 </div>
 
               </div>
-            </div>
+        
+           
           </div>
 
           <div style="overflow:auto;">
             <div style="float:right;">
-              <button type="button" class="btn previous">Previous</button>
-              <button type="button" class="next btn btn-primary">Next</button>
-
-              <button type="button" class="btn btn-success submit">Submit</button>
+              <input type='submit' class="btn btn-primary" value='save'/>
             </div>
           </div>
-          <!-- Circles which indicates the steps of the form: -->
-          <div style="text-align:center;margin-top:40px;">
-            <span class="step">1</span>
-            <span class="step">2</span>
-          </div>
+ 
 
         </form>
       </div>
@@ -185,18 +127,7 @@
         }
       }
     }
-    // calling multistep
-    $("#form").multiStepForm(
-      {
-        // defaultStep:0,
-        beforeSubmit: function (form, submit) {
-          console.log("called before submiting the form");
-          console.log(form);
-          console.log(submit);
-        },
-        validations: val,
-      }
-    ).navigateTo(0);
+   
 
 
 

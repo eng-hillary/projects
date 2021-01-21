@@ -56,34 +56,14 @@ class Product(models.Model):
 class Seller(models.Model):
     #personal information
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='seller',primary_key=True)
-    date_of_birth = models.DateField(max_length=8)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     seller_type = models.CharField(choices=TYPE,max_length=15, null=False)
     major_products = models.ManyToManyField(Product, blank=False)
-
-    #Location
-    business_number = PhoneNumberField()
-    #business_location = models.TextField(_('Business Address'),null=True)
-    location = models.PointField( srid=4326,null=True)
-   
-    status = models.CharField(choices=REGISTER_STATUS, default='in_active', max_length=20,null=False)
+    business_number = PhoneNumberField()   
+    status = models.CharField(choices=REGISTER_STATUS, default='Pending', max_length=20,null=False)
+    business_address = models.TextField(null=True, blank=True)
       # handle approving of a seller
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
-
-    @property
-    def compute_location(self):
-        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        
-       
-        try:
-            lat = str(self.location.y)
-            lon = str(self.location.x)
-            location = geolocator.reverse(lat + "," + lon)
-            return '{}'.format(location.address)
-        except:
-            #location = str(self.location.y) + "," + str(self.location.x)
-            return 'slow network, loading location ...'
 
 
     class Meta:
@@ -92,7 +72,7 @@ class Seller(models.Model):
             ("can_approve_sellers", "Can approve Sellers"),
         )
     def __str__(self):
-        return self.seller_type
+        return '{} {}'.format(self.user.first_name , self.user.last_name)
 
 
 class Buyer(TimeStampedModel, models.Model):
