@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page-header-left">
+                                <h3>Post Product
+                                   
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item"><a href="{% url 'openmarket:sellerpost_list' %}"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item">Products</li>
+                                <li class="breadcrumb-item active">Post Product you want for Sale </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card tab2-card">
+                            <div class="card-header">
+                                <h5> Add Profile</h5>
+                            </div>
+                            <form id="form"  novalidate enctype="multipart/form-data" class="card-body" action="" method="post">
+                             {% csrf_token %}
+
+                                <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
+                                    <li class="nav-item"><a class="nav-link active show" id="productinfo-tab" data-toggle="tab" href="#productinfo" role="tab" aria-controls="productinfo" aria-selected="true" data-original-title="" title="">Product Information</a></li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade active show" id="productinfo" role="tabpanel" aria-labelledby="productinfo-tab">
+                                        <div class="row">
+
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.name|as_crispy_field }}
+                                            </div>
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.product|as_crispy_field }}
+                                            </div>
+                                    
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.current_location|as_crispy_field }}
+                                            </div>
+                                            
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.quantity|as_crispy_field }}
+                                                <span class="error" id="error_2_id_price_offer"></span>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                {{ form.total_cost|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form.delivery_options|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form.payment_options|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form.payment_mode|as_crispy_field }}
+                                            </div>
+                                            <div class="col-md-12">
+                                                {{ form.any_other_comment|as_crispy_field }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                                                                    
+                                <div style="overflow:auto;">
+                                    <div style="float:right;">
+                                        <input type='submit' class="btn btn-primary" value='save'/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+            {% endblock %}
+            
+{% block javascript %}
+    <script type="text/javascript">
+    {% for message in messages %}
+    $(document).ready(function() {
+        $.notify("{{message}}", "{{ message.tags }}", { position:"center" });
+    });
+    {% endfor %}
+
+    var product = $('#id_product').find('option:selected').text();
+    var val=product.split(' ');
+    var range=val[1];
+    var prices = range.split('-');
+    var min_price = prices[0];
+    var max_price = prices[1];
+   
+    
+    $('#id_price_offer').on('mouseout', function (e) {
+        $('#error_2_id_price_offer').val("Enter an amount with in the price range of the product");
+        if(parseInt($('#id_price_offer').val()) < parseInt(min_price)){
+            $('#error_2_id_price_offer').text("Enter an amount with in the price range of the product");
+            
+        }
+        else if(parseInt($('#id_price_offer').val()) > parseInt(max_price)){
+            $('#error_2_id_price_offer').text("Enter an amount with in the price range of the product");
+        }
+        else{
+            $('#error_2_id_price_offer').text('');
+        }
+       
+     });
+    </script>
+{% endblock %}
