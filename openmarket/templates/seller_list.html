@@ -9,7 +9,7 @@
                 <div class="page-header-left">
                     
                     <h3>Seller List <br>
-                      {% if  perms.openmarket.add_seller and not request.user.seller %}
+                      {% if request.user.is_superuser or perms.seller.add_seller %}
                       <small><a class="add-new" href="{% url 'openmarket:create_seller' %}">
                         {% if request.user.is_superuser %}
                         Add new

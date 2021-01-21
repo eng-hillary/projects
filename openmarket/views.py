@@ -26,7 +26,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import(SellerProfileForm, ProductProfileForm,
+
                    ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
+
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
 from django.urls import reverse_lazy
@@ -44,6 +46,7 @@ from django.contrib.auth.models import Group
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from common.menu import has_group
+from unffeagents.models import MarketPrice
 
 
 
@@ -229,6 +232,7 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
+        
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -241,7 +245,8 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
         profile.status = 'pending'
         profile.user = self.request.user
         profile.save()
-
+        form.save_m2m()
+      
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Successful'
@@ -253,14 +258,26 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
         email = EmailMessage(
             subject, message, to=[to_email]
         )
+        email.content_subtype = "html"
         email.send()
         return redirect('openmarket:seller_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():
             return JsonResponse({'error': True, 'errors': form.errors})
-        return self.render_to_response(self.get_context_data(form=form))
+        return self.render_to_response(self.get_context_data(form=form, major_products=self.major_products))
 # views for buyers
+
+#Get Context data
+    def get_context_data(self, **kwargs):
+        context = super(CreateSellerProfile, self).get_context_data(**kwargs)
+        context["seller_form"] = context["form"]
+
+
+        print("kwargs", self.kwargs)
+        # context['call'] = Call.objects.get(pk=self.kwargs['call_pk']
+        
+        return context
 
 
 class BuyerViewSet(viewsets.ModelViewSet):
@@ -286,9 +303,25 @@ class SellerPostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = SellerPost.objects.all().order_by('-id')
+    #queryset = SellerPost.objects.all().order_by('-id')
     serializer_class = SellerPostSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the sellerposts
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        products = SellerPost.objects.all().order_by('-id')
+        if self.request.user.is_superuser or self.request.user.has_perm('openmarket.delete_sellerpost'):
+            queryset = products
+        else:
+            seller = Seller.objects.get(user= user)
+            queryset = products.filter(seller=seller)
+        
+        return queryset
 
 
 class SellerPostList(APIView):
@@ -590,18 +623,12 @@ class CreateServiceProviderProfile(LoginRequiredMixin, CreateView):
         email.send()
         return redirect('openmarket:serviceprovider_list')
 
-# view for loading
-
-
-def load_districts(request):
-    region_id = request.GET.get('region')
-    districts = District.objects.filter(region_id=region_id).order_by('name')
-    return render(request, 'city_dropdown_list_options.html', {'cities': cities})
 
 
 class ServiceRegistrationList(APIView, LoginRequiredMixin):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'serviceregistration_list.html'
+    #context_object_name = "servicerecord"
 
     def get(self, request):
         return Response()
@@ -712,9 +739,8 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
         context = super(ServiceProviderProfileDetailView,
                         self).get_context_data(**kwargs)
 
-        context.update({
-
-        })
+        context['providerrecord'] = self.object
+        #context['servicerecord'] = Service.objects.filter(user = self.object)
         return context
 
 
@@ -817,6 +843,10 @@ class CreateSellerPost(CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(CreateSellerPost, self).get_form_kwargs()
+        
+        
+        
+        
         kwargs['request'] = self.request
         return kwargs
 
@@ -831,7 +861,7 @@ class CreateSellerPost(CreateView):
 
     def form_valid(self, form):
         product = form.save(commit=False)
-        product.seller = Seller.objects.get(user=self.request.user)
+        product.seller = self.request.user
         product.save()
         return redirect('openmarket:sellerpost_list')
 
@@ -869,3 +899,11 @@ class EditSellerPostView(LoginRequiredMixin, UpdateView):
         product = form.save(commit=False)
         product.save()
         return redirect('openmarket:sellerpost_list')
+
+# load products with in a specific market selected
+
+def load_products(request):
+    market_id = request.GET.get('market')
+    products = MarketPrice.objects.filter(market_id=market_id).order_by('-min_price')
+    return render(request, 'products_dropdown_list_options.html', {'products': products})
+

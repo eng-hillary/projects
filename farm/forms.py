@@ -136,4 +136,9 @@ class EnterpriseSelectionForm(forms.ModelForm):
 
     class Meta:
         model = EnterpriseSelection
-        exclude = ['user', 'recommendation']
+        exclude = ['user', 'recommendation','crops']
+
+# class CapitalForm(forms.ModelForm):
+#     class Meta:
+#         model = Capital
+#         fields = ['available_capital']

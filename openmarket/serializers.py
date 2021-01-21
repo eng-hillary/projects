@@ -35,16 +35,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class SellerSerializer(serializers.ModelSerializer):
-   
+    location = serializers.CharField(source='compute_location')
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
-    # region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
-
+    major_products = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    seller_type = serializers.CharField(source='get_seller_type_display')
 
    # enterprise = EnterpriseSerializer()
     class Meta:
@@ -112,7 +107,8 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ServiceProvider
-        fields = ('user_id','user',  'nin','service_provider_location','category', 'list_of_services_if_more_than_one', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
+        fields = ('user_id','user',  'nin','service_provider_location','category', 'is_the_service_available', 'is_the_service_at_a_fee','status', 'approver',
+         'approved_date','gender'
        )
     '''
     returns yes or no for boolean fields

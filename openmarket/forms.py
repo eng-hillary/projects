@@ -1,12 +1,19 @@
 from django import forms
+
 from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost
+
 from common.models import Region, District, County, SubCounty, Parish, Village
 from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from django.contrib.gis import forms 
 from django.contrib.gis.geos import Point
+from unffeagents.models import Market, MarketPrice
+
 from decimal import Decimal
+
+from django.forms.models import inlineformset_factory
+
 
 
 class ServiceProviderProfileForm(forms.ModelForm):
@@ -31,62 +38,8 @@ class SellerProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(SellerProfileForm, self).__init__(*args, **kwargs)
-        # self.fields['district'].empty_label = '--please select--'
-        # self.fields['region'].empty_label = '--please select--'
-        # self.fields['county'].empty_label = '--please select--'
-        # self.fields['sub_county'].empty_label = '--please select--'
-        # self.fields['parish'].empty_label = '--please select--'
-        # self.fields['village'].empty_label = '--please select--'
-        # self.fields['business_location'].widget.attrs.update({'rows': '2'})
-        # self.fields['major_products'].empty_label = '--please select--'
-
-        # if 'region' in self.data:
-        #     try:
-        #         region_id = int(self.data.get('region'))
-        #         self.fields['district'].queryset = District.objects.filter(region_id=region_id).order_by('name')
-        #     except (ValueError, TypeError):
-        #         pass  # invalid input from the client; ignore and fallback to empty district queryset
-        # elif self.instance.pk:
-        #     self.fields['district'].queryset = self.instance.region.district_set.order_by('name')
-
-        # if 'district' in self.data:
-        #     try:
-        #         district_id = int(self.data.get('district'))
-        #         self.fields['county'].queryset = County.objects.filter(district_id=district_id).order_by('name')
-        #     except (ValueError, TypeError):
-        #         pass  # invalid input from the client; ignore and fallback to empty district queryset
-        # elif self.instance.pk:
-        #     self.fields['county'].queryset = self.instance.district.county_set.order_by('name')
+       
         
-        # if 'county' in self.data:
-        #     try:
-        #         county_id = int(self.data.get('county'))
-        #         self.fields['sub_county'].queryset = SubCounty.objects.filter(county_id=county_id).order_by('name')
-        #     except (ValueError, TypeError):
-        #         pass  # invalid input from the client; ignore and fallback to empty district queryset
-        # elif self.instance.pk:
-        #     self.fields['sub_county'].queryset = self.instance.county.subcounty_set.order_by('name')
-
-        
-        # if 'sub_county' in self.data:
-        #     try:
-        #         sub_county_id = int(self.data.get('sub_county'))
-        #         self.fields['parish'].queryset = Parish.objects.filter(sub_county_id=sub_county_id).order_by('name')
-        #     except (ValueError, TypeError):
-        #         pass  # invalid input from the client; ignore and fallback to empty district queryset
-        # elif self.instance.pk:
-        #     self.fields['parish'].queryset = self.instance.sub_county.parish_set.order_by('name')
-        #     print(self.instance.sub_county.parish_set)
-
-
-        # if 'parish' in self.data:
-        #     try:
-        #         parish_id = int(self.data.get('parish'))
-        #         self.fields['village'].queryset = Village.objects.filter(parish_id=parish_id).order_by('name')
-        #     except (ValueError, TypeError):
-        #         pass  # invalid input from the client; ignore and fallback to empty district queryset
-        # elif self.instance.pk:
-        #     self.fields['village'].queryset = self.instance.parish.village_set.order_by('name')
 
 class ProductProfileForm(forms.ModelForm):
     
@@ -117,6 +70,9 @@ class ServiceProfileForm(forms.ModelForm):
 
 
 class SellerPostForm(forms.ModelForm):
+    market = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Market.objects.all())
+    product = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Market.objects.none())
+
 
     class Meta:
         model = SellerPost
@@ -126,12 +82,23 @@ class SellerPostForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(SellerPostForm, self).__init__(*args, **kwargs)
         user = self.request.user
+        self.fields['market'].empty_label = '--please select--'
         self.fields['product'].empty_label = '--please select--'
         self.fields['product_description'].widget.attrs.update({'rows': '2'})
+
+        if 'market' in self.data:
+            try:
+                market_id = int(self.data.get('market'))
+                self.fields['product'].queryset = MarketPrice.objects.filter(market_id=market_id).order_by('-min_price')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty district queryset
+        elif self.instance.pk:
+            self.fields['product'].queryset = self.instance.market.marketprice_set.order_by('-min_price')
     
     def clean_price_offer(self):
         price_offer = Decimal(self.cleaned_data['price_offer'])
-        price_range = self.cleaned_data['product']
+        price_range = self.cleaned_data.get('product')
+        print(price_range)
         prices = str(price_range).split()
         splitted_prices = prices[-1]
         actual_prices = splitted_prices.split("-")
@@ -141,3 +108,4 @@ class SellerPostForm(forms.ModelForm):
         if not min_price <= price_offer <= max_price:
             raise forms.ValidationError("Please enter a price within the product price range")
         return price_offer
+    
