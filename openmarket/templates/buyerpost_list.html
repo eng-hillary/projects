@@ -97,18 +97,18 @@
 
 
 
-  function operateFormatter(value, row, index) {
-    var url = "/unffeagents/" + row.id + "/edit/market/"
+  // function operateFormatter(value, row, index) {
+  //   var url = "/unffeagents/" + row.id + "/edit/market/"
   
-    return [
-      {% if request.user.is_superuser or perms.unffagents.change_market %}
-  '<a class="Edit " href="' + url + '" title="Update">',
-    '<i class="fa fa-edit"></i>',
-    '</a>  ',
-    {% endif %}
+  //   return [
+  //     {% if request.user.is_superuser or perms.unffagents.change_market %}
+  // '<a class="Edit " href="' + url + '" title="Update">',
+  //   '<i class="fa fa-edit"></i>',
+  //   '</a>  ',
+  //   {% endif %}
 
-    ].join('')
-  }
+  //   ].join('')
+  // }
 
 
 

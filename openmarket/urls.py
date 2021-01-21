@@ -84,6 +84,7 @@ urlpatterns = [
     path('buyerposts', BuyerPostList.as_view(), name='buyerpost_list'),
 
     path('post/products',CreateBuyerPost.as_view(), name='add_buyer_post'),
+    
     path('serviceproviders', ServiceProviderList.as_view(), name='serviceprovider_list'),
     path('serviceregistration', ServiceRegistrationList.as_view(), name='serviceregistration_list'),
     path('<int:pk>/view/', MapServiceDetailView.as_view(), name="map_service_detail"),  

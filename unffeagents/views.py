@@ -1,12 +1,7 @@
 from django.shortcuts import render
 from .models import (AgentProfile, Market, MarketPrice, Notice,CallRsponse,Call)
-<<<<<<< HEAD
 from .serializers import (AgentProfileSerializer,ProductOrderingSerializer, MarketSerializer, MarketPriceSerializer, 
 NoticeSerializer,CallSerializer,ResponseSerializer)
-=======
-from .serializers import (AgentProfileSerializer, MarketSerializer, MarketPriceSerializer, 
-NoticeSerializer,CallSerializer,ResponseSerializer,PostAgentProfileSerializer)
->>>>>>> 9bad65d836dbe7f82c2fd20a5763f150782b7c23
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -34,13 +29,8 @@ from django.contrib.auth.models import User, Group
 import requests
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
-<<<<<<< HEAD
 from openmarket.models import SellerPost,ProductCategory,Product, ProductOrdering
-
-=======
-from openmarket.models import SellerPost,ProductCategory,Product
 from django.db import IntegrityError
->>>>>>> 9bad65d836dbe7f82c2fd20a5763f150782b7c23
 
 # views for agentprofiles
 class AgentProfileViewSet(viewsets.ModelViewSet):

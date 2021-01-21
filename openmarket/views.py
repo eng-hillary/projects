@@ -345,7 +345,7 @@ class BuyerPostList(APIView):
     template_name = 'buyerpost_list.html'
 
     def get(self, request):
-        queryset = BuyerPost.objects.order_by('name')
+        queryset = BuyerPost.objects.order_by('-name')
         return Response({'buyerposts': queryset})
 
 
@@ -892,9 +892,6 @@ class CreateBuyerPost(CreateView):
         return self.form_invalid(form)
 
     def form_valid(self, form):
-        product = form.save(commit=False)
-        product.seller = Seller.objects.get(user=self.request.user)
-        product.save()
         return redirect('openmarket:buyerpost_list')
 
     def form_invalid(self, form):

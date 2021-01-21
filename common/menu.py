@@ -201,6 +201,7 @@ def can_add_enterprise_selection(user, context):
 menus = [
     menu.Node(id='dashboard', css_class="sidebar-header", label='<i data-feather="home"></i><span>Dashboard</span>',
               pattern_name='common:home', link_attrs={'id': 'dashboard'}),
+              
 
     menu.PassTestNode(
         id='Enterprise-selection-section',

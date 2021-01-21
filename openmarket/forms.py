@@ -1,11 +1,5 @@
 from django import forms
-<<<<<<< HEAD
 from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost, BuyerPost
-=======
-
-from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost
-
->>>>>>> 9bad65d836dbe7f82c2fd20a5763f150782b7c23
 from common.models import Region, District, County, SubCounty, Parish, Village
 from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField

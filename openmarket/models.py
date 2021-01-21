@@ -142,9 +142,9 @@ class ProductOrdering(models.Model):
         return self.product
 
 class BuyerPost(models.Model):
-    name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=True)
     current_location = models.CharField(max_length=50)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.CharField(max_length=50, null=True)
     quantity = models.FloatField(max_length=50, null=True)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_options = models.CharField(max_length=50, null=False)
@@ -153,7 +153,7 @@ class BuyerPost(models.Model):
     any_other_comment =models.TextField(null=True)
 
     class meta:
-        ordering =("name",)
+        ordering =("-id",)
 
 
 
