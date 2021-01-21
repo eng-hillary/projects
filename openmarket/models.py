@@ -49,6 +49,9 @@ class Product(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Seller(models.Model):
     #personal information
@@ -100,7 +103,7 @@ class Buyer(TimeStampedModel, models.Model):
 
 
 class SellerPost(models.Model):
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey('unffeagents.MarketPrice', on_delete=models.CASCADE)
     market = models.ForeignKey('unffeagents.Market', on_delete=models.CASCADE, null=True)
     quantity = models.FloatField(max_length=50, null=True)
@@ -156,7 +159,7 @@ class BuyerPost(models.Model):
 
 class Category(TimeStampedModel, models.Model):
     cat_name = models.CharField(max_length=255)
-   
+    
     def __str__(self):
         return self.cat_name
 
@@ -165,9 +168,11 @@ class ServiceProvider(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='serviceprovider',primary_key=True)
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=14, null=True, blank=False)
     service_provider_location = models.CharField(null=True, max_length=50)
-    list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
+    #business_number = PhoneNumberField(default=False)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=15, default=False)
+    #list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
     is_the_service_available = models.BooleanField(choices=YES_OR_NO, null=True)
-    service_location = models.CharField(max_length=100, null=True)
+    #service_location = models.CharField(max_length=100, null=True)
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
    # category = models.ManyToManyField(to='openmarket.Category', related_name='enterprise categories', choices=)
     category = models.ManyToManyField(Category, related_name='Categories')
@@ -186,7 +191,8 @@ class ServiceProvider(models.Model):
 
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
+    #This is a service provider
+    user = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='service',null=True)
     category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)

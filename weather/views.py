@@ -33,11 +33,18 @@ class CommunityWeatherViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
        
         #,'-id','-date_reported','time_reported'
-        lon = float(self.request.query_params.get('lon', None))
-        lat = float(self.request.query_params.get('lat', None))
-        user_location = Point(lon, lat, srid=4326)
-        queryset = CommunityWeather.objects.annotate(distance=Distance("location", user_location)).filter(distance__lte=2000).order_by('-date_reported','-time_reported','distance')[0:1]
-        print(queryset)
+        longitude = self.request.query_params.get('lon', None)
+        latitude = self.request.query_params.get('lat', None)
+        if longitude is not None and latitude is not None:
+            lon = float(longitude)
+            lat = float(latitude)
+            user_location = Point(lon, lat, srid=4326)
+            queryset = CommunityWeather.objects.annotate(distance=Distance("location", user_location)).filter(distance__lte=2000).order_by('-date_reported','-time_reported','distance')[0:1]
+
+        else:
+            queryset = CommunityWeather.objects.order_by('-date_reported','-time_reported')[0:1]
+
+        
         return queryset
 
     def create(self, request, format=None):
@@ -67,7 +74,19 @@ class CommunityWeatherList(APIView):
 
 class PostWeatherViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    Post weather by passing in weather,location and description as fields.
+    e.g 
+    {
+        "weather": "04d",
+        "description": "few clouds",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                0.355005257766652,
+                32.61432185769081
+            ]
+        }
+    }
     """
     serializer_class = CommunityWeatherSerializer
     permission_classes = [permissions.IsAuthenticated]

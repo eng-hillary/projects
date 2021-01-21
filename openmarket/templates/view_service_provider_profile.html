@@ -73,13 +73,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for service in providerrecord.serviceregistration.all %}
+                            {% for service in servicerecord %}
                             <tr>
                                 <!--<td>{{service.farm_name}}</td>-->
-                                <td>{{service.service_name}}</td>
-                                <td>{{service.category}} </td>
-                                <td>{{service.service_type}}</td>
-                                <td>{{service.size}}</td>
+                                <td>{{servicerecord.service_name}}</td>
+                                <td>{{servicerecord.category}} </td>
+                                <td>{{servicerecord.service_type}}</td>
+                                <td>{{servicerecord.size}}</td>
 
                                 <td>{{service.availability_date}}</td>
                                 <td>

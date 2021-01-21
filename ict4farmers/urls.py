@@ -40,7 +40,6 @@ urlpatterns = [
     path('', include('common.urls', namespace="common")),
 
     # open market urls
-    path('api-openmarket/', include('openmarket.urls', namespace="api-openmarket")),
     path('openmarket/', include('openmarket.urls', namespace="openmarket")),
 
     # farm urls
@@ -52,14 +51,12 @@ urlpatterns = [
     path('farmer/', include('farmer.urls', namespace="farmer")),
 
     # unffeagents urls
-    path('api-unffeagents/', include('unffeagents.urls', namespace="api-unffeagents")),
     path('unffeagents/', include('unffeagents.urls', namespace="unffeagents")),
 
     # open weather urls
-    path('api-weather/', include('weather.urls', namespace="api-weather")),
+   
     path('weather/', include('weather.urls', namespace="weather")),
 
     # resorce sharing urls
-    path('api-resourcesharing/', include('resourcesharing.urls', namespace="api-resourcesharing")),
     path('resourcesharing/', include('resourcesharing.urls', namespace="resourcesharing")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -21,7 +21,13 @@ class AgentProfileSerializer(serializers.ModelSerializer):
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
+class PostAgentProfileSerializer(serializers.ModelSerializer):
 
+  
+    class Meta:
+        model = AgentProfile
+        exclude=['user']
+        
 
 class MarketSerializer(serializers.ModelSerializer):
     lat = serializers.SerializerMethodField(method_name='get_lat',source='location')

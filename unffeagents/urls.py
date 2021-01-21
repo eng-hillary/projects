@@ -4,13 +4,12 @@ from . import views
 from .views import (AgentProfileList,ProductOrderingView,ProductOrderingList,ProductDetailView, MarketList, MarketPriceList, CreateMarketPrice,EditMarketPriceView,
 NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView,
 CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,MarketDetailView,
-EditMarketView)
+EditMarketView, CreateMarketPrice, EditMarketPriceView)
 
 
 router = routers.DefaultRouter()
-router.register(r'agentprofile', views.AgentProfileViewSet)
-
 router.register(r'productordering', views.ProductOrderingViewSet)
+router.register(r'agentprofile', views.AgentProfileViewSet, basename='agents')
 router.register(r'market', views.MarketViewSet, basename='markets_api')
 router.register(r'marketprice', views.MarketPriceViewSet)
 router.register(r'notice', views.NoticeViewSet)
