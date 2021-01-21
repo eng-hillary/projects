@@ -35,7 +35,6 @@ class FarmerProfile(TimeStampedModel, models.Model):
     # personal information
 
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=14, null=False, blank=False)
-    date_of_birth = models.DateField()
     level_of_education = models.CharField(choices = EDUCATION_LEVEL, max_length=100, null=False, blank=False)
     marital_status = models.CharField(choices=MARITAL_STATUSES, max_length=15, null=False, blank=False)
     number_of_dependants = models.PositiveIntegerField()

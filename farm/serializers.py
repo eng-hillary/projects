@@ -27,7 +27,7 @@ class FarmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Farm
-        fields = ['id', 'farm_name', 'farmer', 'lat', 'lon','location',
+        fields = ['id', 'farm_name', 'farmer','location',
          'start_date','close_date',  'image','availability_of_services','availability_of_water','land_occupied','available_land', 'status', 'general_remarks']
 
     def get_farmer_name(self, obj):
@@ -136,6 +136,9 @@ class FarmMapSerializer(serializers.ModelSerializer):
     phone_number =  serializers.SerializerMethodField(method_name='get_user_phone_number',source='farmer__user__profile')
     district = serializers.SerializerMethodField(method_name='get_district',source='farmer')
     region = serializers.SerializerMethodField(method_name='get_region',source='farmer')
+    lon = serializers.SerializerMethodField(method_name='get_lon',source='location')
+    lat = serializers.SerializerMethodField(method_name='get_lat',source='location')
+
     class Meta:
         model = Farm
         fields = ('id','region','phone_number','district','farm_name','farmer',  'lat', 'lon','land_occupied')
@@ -165,6 +168,17 @@ class FarmMapSerializer(serializers.ModelSerializer):
     def get_region(self, obj):
         try:
             return '{}'.format(obj.farmer.user.profile.region)
+        except:
+            return None
+    def get_lon(self, obj):
+        try:
+            return '{}'.format(obj.location.y)
+        except:
+            return None
+
+    def get_lat(self, obj):
+        try:
+            return '{}'.format(obj.location.x)
         except:
             return None
 

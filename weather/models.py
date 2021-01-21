@@ -37,13 +37,12 @@ class CommunityWeather(TimeStampedModel, models.Model):
     @property
     def compute_location(self):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        lat = str(self.location.y)
-        lon = str(self.location.x)
-       
+              
         try:
-
+            lat = str(self.location.y)
+            lon = str(self.location.x)
             location = geolocator.reverse(lat + "," + lon)
             return '{}'.format(location.address)
         except:
-            location = str(self.location.y) + "," + str(self.location.x)
+          
             return 'slow network, loading location ...'

@@ -4,11 +4,15 @@ from django import forms
 from farmer.models import FarmerProfile
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from django.contrib.gis import forms 
+from django.contrib.gis.geos import Point
 
 
 class FarmForm(forms.ModelForm):
     start_date = forms.DateField(widget=forms.DateInput(
         attrs={'class': 'form-control', 'type': 'date'}))
+    location = forms.PointField(widget=forms.OSMWidget(attrs={'map_width': 800, 'map_height': 500, 'mouse_position': True,'default_zoom':7}),
+    initial=Point(y=1.0609637, x=32.5672804, srid=4326))
 
     class Meta:
         model = Farm
