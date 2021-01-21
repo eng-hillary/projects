@@ -114,9 +114,12 @@ class QueryViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = queries
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            queryset = queries.filter(farm__in=farms)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                queryset = queries.filter(farm__in=farms)
+            except:
+                queryset = Query.objects.none()
 
         return queryset
 
@@ -222,9 +225,12 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = enterprises
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            queryset = enterprises.filter(farm__in=farms)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                queryset = enterprises.filter(farm__in=farms)
+            except:
+                 queryset = Enterprise.objects.none()
 
         return queryset
 
@@ -575,10 +581,13 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            enterprises = Enterprise.objects.filter(farm__in=farms)
-            queryset = farmrecords.filter(enterprise__in=enterprises)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                enterprises = Enterprise.objects.filter(farm__in=farms)
+                queryset = farmrecords.filter(enterprise__in=enterprises)
+            except:
+                queryset = FarmRecord.objects.none()
 
         return queryset
 
@@ -840,10 +849,13 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            enterprises = Enterprise.objects.filter(farm__in=farms)
-            queryset = farmrecords.filter(enterprise__in=enterprises)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                enterprises = Enterprise.objects.filter(farm__in=farms)
+                queryset = farmrecords.filter(enterprise__in=enterprises)
+            except:
+                queryset = FinancialRecord.objects.none()
 
         return queryset
 
@@ -984,10 +996,13 @@ class FarmProductionRecordViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = productionrecords
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            enterprises = Enterprise.objects.filter(farm__in=farms)
-            queryset = productionrecords.filter(enterprise__in=enterprises)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                enterprises = Enterprise.objects.filter(farm__in=farms)
+                queryset = productionrecords.filter(enterprise__in=enterprises)
+            except:
+                queryset = ProductionRecord.objects.none()
 
         return queryset
 
