@@ -15,7 +15,7 @@ from .serializers import (ProductSerializer,
                           SellerApprovalSerializer,
                           PostServiceProviderSerializer,
                           PostServiceRegistrationSerializer,
-                          CategorySerializer)
+                          CategorySerializer,PostSellerSerializer)
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import permissions
@@ -175,11 +175,49 @@ class EditProductView(LoginRequiredMixin, UpdateView):
 
 class SellerViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Seller by its id
+
+    list:
+        Return a list of all Sellers.
+
+    create:
+        Create a new Seller.e.g
+        {
+        "business_number": "+256788329636",
+        "seller_type": "wholeseller",
+        "major_products": [7,6,5],
+        "status": "Pending"
+        "business_address":"Kampala"
+    }
+
+    destroy:
+        Delete a Seller.
+
+    update:
+        Update a Seller.
+
+    partial_update:
+        Update a Seller.
     """
     queryset = Seller.objects.all().order_by('seller_type')
     serializer_class = SellerSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the sellers or 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        sellers = Seller.objects.order_by('-user')
+        if  self.request.user.has_perm('openmarket.delete_seller') or self.request.user.is_superuser:
+            queryset = sellers
+        else:
+            queryset = sellers.filter(user=user)
+        
+        return queryset
+
 
     def approved(self, request, pk, format=None):
         profile = self.get_object()
@@ -200,7 +238,19 @@ class SellerViewSet(viewsets.ModelViewSet):
             ), approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+    def create(self, request, format=None):
+        serializer = PostSellerSerializer(data=request.data)
 
+        if serializer.is_valid():
+            try:
+                serializer.save(user = self.request.user)
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Seller account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 class SellerList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
