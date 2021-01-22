@@ -60,6 +60,11 @@ class FarmRecordSerializer(serializers.ModelSerializer):
         model = FarmRecord
         fields = '__all__'
 
+class PostFarmRecordSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model = FarmRecord
+        exclude = []
 
 class FarmFinancilRecordSerializer(serializers.ModelSerializer):
     enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
