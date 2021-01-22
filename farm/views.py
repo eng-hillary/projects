@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, ProductionRecord, Query,
                      FarmRecord, FinancialRecord, EnterpriseSelection, Ecological_Zones,Crop)
-from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer, FarmMapSerializer, FarmProductionRecordSerializer, PostFarmSerializer, PostEnterpriseSelectionSerializer,
+from .serializers import (
+    SectorSerializer, EnterpriseSerializer, FarmSerializer,
+     FarmMapSerializer, FarmProductionRecordSerializer, PostFarmSerializer,
+      PostEnterpriseSelectionSerializer,PostFarmRecordSerializer,
                           PostEnterpriseSerializer, PostQuerySerializer, FarmRecordSerializer, FarmFinancilRecordSerializer, EnterpriseSelectionSerializer, QuerySerializer,
                           PostFarmProductionRecordSerializer,PostFarmFinancilRecordSerializer)
 from rest_framework import viewsets
@@ -604,8 +607,35 @@ class FarmProfileDetailView(DetailView):
 
 class FarmRecordViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows sectors to be viewed or edited.
+    retrieve:
+        retrieve a sigle FarmRecord by its id
+
+    list:
+        Return a list of all FarmRecords.
+
+    create:
+        Create a new FarmRecord.e.g
+      {
+        "enterprise": 1,   
+        "name": "Feeding the Birds",
+        "from_date": "2020-11-09",
+        "to_date": "2020-11-11",
+        "description": "Supply the birds with feeds.",
+        "taken_by": "Mbabazi Isaac",
+        "contact": "+256780602550",
+        "next_activity_date": "2020-11-17"
+    }
+
+    destroy:
+        Delete a FarmRecord.
+
+    update:
+        Update a FarmRecord.
+
+    partial_update:
+        Update a FarmRecord.
     """
+     
     serializer_class = FarmRecordSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -629,6 +659,19 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
                 queryset = FarmRecord.objects.none()
 
         return queryset
+
+
+    def create(self, request, format=None):
+        serializer = PostFarmRecordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save()
+            except :
+                return Response({'error':'An error occured while saving your data'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 
 # create farm record
