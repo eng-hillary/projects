@@ -36,8 +36,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class SellerSerializer(serializers.ModelSerializer):
 
-    location = serializers.CharField(source='compute_location')
-
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
     major_products = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
