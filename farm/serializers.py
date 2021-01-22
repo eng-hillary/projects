@@ -71,12 +71,24 @@ class FarmFinancilRecordSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PostFarmFinancilRecordSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model = FinancialRecord
+        exclude=['reported_by','transaction_date']
+
 class FarmProductionRecordSerializer(serializers.ModelSerializer):
     enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
 
     class Meta:
         model = ProductionRecord
         fields = '__all__'
+
+class PostFarmProductionRecordSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ProductionRecord
+        exclude=[]
 
 class EnterpriseTypeSerializer(serializers.ModelSerializer):
     

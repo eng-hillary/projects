@@ -137,9 +137,9 @@ class FarmProduce(TimeStampedModel, models.Model):
 class FinancialRecord(TimeStampedModel, models.Model):
     FINANCIAL_OPTIONS = (
     (None, '--please select--'),
-    ('full_payment', 'full payment'),
-    ('installments', 'installments'),
-    ('debt', 'debt')
+    ('full_payment', 'Full Payment'),
+    ('installments', 'Installments'),
+    ('debt', 'Debt')
     )
     enterprise = models.ForeignKey(Enterprise, on_delete=models.DO_NOTHING, null=False, blank=False, related_name='farm_financial_record')
     transaction_type = models.CharField(choices=TRANSACTION_TYPE, max_length=100, null=False)
@@ -166,7 +166,7 @@ class ProductionRecord(TimeStampedModel, models.Model):
     production_activity = models.CharField(max_length=50, null=True, blank=True)
     quantity = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
     unit_of_measure =  models.CharField(choices=UNIT, max_length=25, null=True, blank=False)
-    measurements = models.CharField(max_length=25, null=True, blank=True)
+    #measurements = models.CharField(max_length=25, null=True, blank=True)
     record_date = models.DateField()
     record_time = models.TimeField(auto_now=True, blank=True)
     record_taker = models.CharField(max_length=50, null=True, blank=True)
