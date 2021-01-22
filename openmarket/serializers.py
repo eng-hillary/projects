@@ -22,7 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'local_name', 'image', 'description',
+        fields = ('id', 'name', 'slug', 'image', 'description',
          'date_created', 'date_updated')
 
  
@@ -35,6 +35,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class SellerSerializer(serializers.ModelSerializer):
+
+    location = serializers.CharField(source='compute_location')
+
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
     major_products = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
@@ -148,7 +151,7 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ('id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
+        fields = ('user_id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
         'available_services','rent','name_of_storage_center','location_of_storage_center','certification_status',
         'vehicle_type','vehicle_capacity','location','others','full_name')
 
