@@ -294,17 +294,17 @@ menus = [
     menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="truck"></i><span>Manage Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="truck"></i><span>Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_services,
         children=[
 
-            menu.PassTestNode(id='register_service',
-                              label='<i class="fa fa-circle"></i>Register',
+            # menu.PassTestNode(id='register_service',
+            #                   label='<i class="fa fa-circle"></i>Register',
 
-                              pattern_name='openmarket:service_registration', test=can_register_services),
+            #                   pattern_name='openmarket:service_registration', test=can_register_services),
             menu.PassTestNode(id='services',
-                              label='<i class="fa fa-circle"></i>My Services',
+                              label='<i class="fa fa-circle"></i>Manage Services',
 
                               pattern_name='openmarket:serviceregistration_list', test=can_view_services),
 
