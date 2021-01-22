@@ -1,0 +1,98 @@
+{% extends "openmarket_base.html" %}
+{% load staticfiles %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page-header-left">
+                                <h3>Create Order Profile{{message}}
+                                    <small>{{ user.groups.all.0 }} </small>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item">Order Form</li>
+                                <li class="breadcrumb-item active">Add Profile </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card tab2-card">
+                            <div class="card-header">
+                                <h5> Add Profile</h5>
+                            </div>
+                            <form id="form" class="card-body" action="" novalidate enctype="multipart/form-data" method="post">
+                             {% csrf_token %}
+
+                                <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
+                                    <li class="nav-item"><a class="nav-link active show" id="orderinfo-tab" data-toggle="tab" href="#orderinfo" role="tab" aria-controls="orderinfo" aria-selected="true" data-original-title="" title="">Order Information</a></li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade active show" id="orderinfo" role="tabpanel" aria-labelledby="orderinfo-tab">
+                                        <div class="row">
+                                          
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.product|as_crispy_field }}
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.quantity|as_crispy_field }}
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.payment_mode|as_crispy_field }}
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.payment_method|as_crispy_field }}
+                                            </div>
+
+                                            <div class="col-xl-12 col-md-12">
+                                                {{ form.delivery_date|as_crispy_field }}
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.delivery_address|as_crispy_field }}
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-6">
+                                                {{ form.Additional_notes|as_crispy_field }}
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                 </div>
+                                                                    
+                                 <div class="float-right">
+                                    <input type="submit" value="Submit" class="btn btn-primary">
+                                 </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+            {% endblock %}
+            
+{% block javascript %}
+    <script type="text/javascript">
+    {% for message in messages %}
+    $(document).ready(function() {
+        $.notify("{{message}}", "{{ message.tags }}", { position:"center" });
+    });
+    {% endfor %}
+    </script>
+{% endblock %}

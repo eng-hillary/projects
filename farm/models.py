@@ -8,6 +8,8 @@ from geopy.geocoders import Nominatim
 import phonenumbers
 from phonenumber_field.modelfields import PhoneNumberField
 from django_postgres_extensions.models.fields import ArrayField
+from django.contrib.gis.db import models
+from geopy.geocoders import Nominatim
 
 
 
@@ -29,8 +31,7 @@ class Farm(TimeStampedModel, models.Model):
      )
     farm_name = models.CharField(max_length=100, null=False, blank=False)
     farmer = models.ForeignKey('farmer.FarmerProfile', on_delete=models.CASCADE, related_name='farms')
-    lat = models.FloatField(_('Latitude'), blank=True, null=True, help_text="Latitude of your location")
-    lon = models.FloatField(_('Longitude'), blank=True, null=True,help_text="Longitude of your location")
+    location = models.PointField( srid=4326,null=True)
     start_date = models.DateField(blank=False, null=False)
     close_date = models.DateField(blank=True, null=True)
     image = models.ImageField(null=True, blank=False)
@@ -47,16 +48,17 @@ class Farm(TimeStampedModel, models.Model):
     @property
     def compute_location(self):
         geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        lat = str(self.lat)
-        lon = str(self.lon)
-
+       
+       
         try:
-
+            lat = str(self.location.x)
+            lon = str(self.location.y)
             location = geolocator.reverse(lat + "," + lon)
-            return '{}'.format(location)
+            return '{}'.format(location.address)
         except:
-            #location = str(self.lat) + "," + str(self.lon)
+            # location = str(self.location.y) + "," + str(self.location.x)
             return 'slow network, loading location ...'
+
 
 
 class EnterpriseType(TimeStampedModel, models.Model):

@@ -3,6 +3,7 @@ from rest_framework import routers
 from . import views
 from .views import (ProductList,
                     SellerList,
+                    CreateBuyerPost,
                     CreateSellerProfile,
                     CreateProductProfile,
                     BuyerList,
@@ -76,11 +77,14 @@ urlpatterns = [
     path('<int:pk>/approve/seller', approve_seller, name='approve_seller'),
     path('create/profile', CreateSellerProfile.as_view(), name="create_seller"),
     path('<int:pk>/edit/seller/', EditSellerView.as_view(), name="edit_seller"),
+    path('sellerposts', SellerPostList.as_view(), name='sellerpost_list'),
 
     path('buyers', BuyerList.as_view(), name='buyer_list'),
-    path('sellerposts', SellerPostList.as_view(), name='sellerpost_list'),
     path('post/product',CreateSellerPost.as_view(), name='add_seller_post'),
     path('buyerposts', BuyerPostList.as_view(), name='buyerpost_list'),
+
+    path('post/products',CreateBuyerPost.as_view(), name='add_buyer_post'),
+    
     path('serviceproviders', ServiceProviderList.as_view(), name='serviceprovider_list'),
     path('serviceregistration', ServiceRegistrationList.as_view(), name='serviceregistration_list'),
     path('<int:pk>/view/', MapServiceDetailView.as_view(), name="map_service_detail"),  

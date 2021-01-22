@@ -15,7 +15,7 @@ from .serializers import (ProductSerializer,
                           SellerApprovalSerializer,
                           PostServiceProviderSerializer,
                           PostServiceRegistrationSerializer,
-                          CategorySerializer)
+                          CategorySerializer,PostSellerSerializer)
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import permissions
@@ -25,9 +25,13 @@ from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .forms import(SellerProfileForm, ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
+
 from .forms import(SellerProfileForm, ProductProfileForm,
 
                    ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
+
 
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
@@ -175,11 +179,49 @@ class EditProductView(LoginRequiredMixin, UpdateView):
 
 class SellerViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Seller by its id
+
+    list:
+        Return a list of all Sellers.
+
+    create:
+        Create a new Seller.e.g
+        {
+        "business_number": "+256788329636",
+        "seller_type": "wholeseller",
+        "major_products": [7,6,5],
+        "status": "Pending"
+        "business_address":"Kampala"
+    }
+
+    destroy:
+        Delete a Seller.
+
+    update:
+        Update a Seller.
+
+    partial_update:
+        Update a Seller.
     """
     queryset = Seller.objects.all().order_by('seller_type')
     serializer_class = SellerSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the sellers or 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        sellers = Seller.objects.order_by('-user')
+        if  self.request.user.has_perm('openmarket.delete_seller') or self.request.user.is_superuser:
+            queryset = sellers
+        else:
+            queryset = sellers.filter(user=user)
+        
+        return queryset
+
 
     def approved(self, request, pk, format=None):
         profile = self.get_object()
@@ -200,7 +242,19 @@ class SellerViewSet(viewsets.ModelViewSet):
             ), approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+    def create(self, request, format=None):
+        serializer = PostSellerSerializer(data=request.data)
 
+        if serializer.is_valid():
+            try:
+                serializer.save(user = self.request.user)
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Seller account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 class SellerList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -348,7 +402,7 @@ class BuyerPostList(APIView):
     template_name = 'buyerpost_list.html'
 
     def get(self, request):
-        queryset = BuyerPost.objects.order_by('name')
+        queryset = BuyerPost.objects.order_by('-name')
         return Response({'buyerposts': queryset})
 
 
@@ -863,9 +917,41 @@ class CreateSellerPost(CreateView):
 
     def form_valid(self, form):
         product = form.save(commit=False)
-        product.seller = Seller.objects.get(user=self.request.user)
+        product.seller = self.request.user
         product.save()
         return redirect('openmarket:sellerpost_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+# seller post
+class CreateBuyerPost(CreateView):
+    template_name = 'create_buyer_post.html'
+    success_url = reverse_lazy('openmarket:buyerpost_list')
+    form_class = BuyerPostForm
+    success_message = "Product was created successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateBuyerPost, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateBuyerPost, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        return redirect('openmarket:buyerpost_list')
 
     def form_invalid(self, form):
         if self.request.is_ajax():

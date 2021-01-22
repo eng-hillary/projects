@@ -48,6 +48,12 @@ def can_view_seller_post(user, context):
         return True
     return user.has_perm('openmarket.view_sellerpost')
 
+
+def can_view_buyer_post(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('openmarket.view_sellerpost')
+
 def can_view_farms(user, context):
     if user.is_superuser:
         return True
@@ -391,6 +397,22 @@ menus = [
                               label='<i class="fa fa-circle"></i>My Products',
 
                               pattern_name='openmarket:sellerpost_list', test=can_view_seller_post),
+
+        ]
+    ),
+
+        menu.PassTestNode(
+        id='buyer-section',
+        css_class="sidebar-header",
+        label='<span class="fas fa-lemon"></span>  <span>Buyer Post</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        url='#',
+        test=can_view_products,
+        children=[
+
+            menu.PassTestNode(id='product_list',
+                              label='<i class="fa fa-circle"></i>Post Product',
+
+                              pattern_name='openmarket:buyerpost_list', test=can_view_buyer_post),
 
         ]
     ),
