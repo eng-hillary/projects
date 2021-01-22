@@ -1,5 +1,10 @@
 from django import forms
+
 from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost, BuyerPost
+
+
+from .models import Seller,Product,ServiceProvider, Service, Category,SellerPost
+
 from common.models import Region, District, County, SubCounty, Parish, Village
 from common.choices import SERVICE_CATEGORY
 from phonenumber_field.formfields import PhoneNumberField
@@ -34,9 +39,8 @@ class SellerProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(SellerProfileForm, self).__init__(*args, **kwargs)
+
         self.fields['business_address'].widget.attrs.update({'rows': '2'})
-       
-        
 
 class ProductProfileForm(forms.ModelForm):
     
@@ -106,6 +110,7 @@ class SellerPostForm(forms.ModelForm):
             raise forms.ValidationError("Please enter a price within the product price range")
         return price_offer
 
+
 class BuyerPostForm(forms.ModelForm):
 
     class Meta:
@@ -118,3 +123,4 @@ class BuyerPostForm(forms.ModelForm):
         user = self.request.user
         self.fields['product'].empty_label = '--please select--'
  
+

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, SoilScience, Category,SellerPost
 from common.models import Region, District
 from .serializers import (ProductSerializer,
@@ -25,7 +25,14 @@ from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .forms import(SellerProfileForm, ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
+
+from .forms import(SellerProfileForm, ProductProfileForm,
+
+                   ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
+
+
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
 from django.urls import reverse_lazy
@@ -742,7 +749,7 @@ class SoilScienceList(APIView):
 class UpdateServiceProviderProfile(LoginRequiredMixin, UpdateView):
     model = ServiceProvider
     template_name = 'register_service_provider.html'
-    success_url = reverse_lazy('openmarket:serviceprovider_list')
+    success_url = reverse_lazy('openmarket:service_registration')
     form_class = ServiceProviderProfileForm
     success_message = "Your profile was Updated successfully"
 
@@ -782,7 +789,9 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "providerrecord"
     template_name = "view_service_provider_profile.html"
 
+   
     def get_context_data(self, **kwargs):
+        #serviceprovider = ServiceProvider.objects.create(user=kwargs['instance'].user)
         context = super(ServiceProviderProfileDetailView,
                         self).get_context_data(**kwargs)
 
