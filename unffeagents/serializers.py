@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from .models import (AgentProfile, Market, MarketPrice, Notice,Call,CallRsponse)
 from django.contrib.auth.models import User
+from openmarket.models import ProductOrdering
+
+class ProductOrderingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductOrdering
+        fields = ('id','product','quantity','delivery_date', 'delivery_address', 'payment_mode', 'payment_method', 'Additional_notes')
 
 
 class AgentProfileSerializer(serializers.ModelSerializer):
@@ -15,7 +21,13 @@ class AgentProfileSerializer(serializers.ModelSerializer):
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
+class PostAgentProfileSerializer(serializers.ModelSerializer):
 
+  
+    class Meta:
+        model = AgentProfile
+        exclude=['user']
+        
 
 class MarketSerializer(serializers.ModelSerializer):
     lat = serializers.SerializerMethodField(method_name='get_lat',source='location')

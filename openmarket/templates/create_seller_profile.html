@@ -39,19 +39,22 @@
 
 
           <div class="tab-content" id="myTabContent">
+
             <div class="tab" id="personalinfo" role="tabpanel" aria-labelledby="personalinfo-tab">
+
               <div class="row">
                 <div class="col-md-12">
                   <h4>Personal Information</h4>
                 </div>
 
                 <div class="col-xl-6 col-md-6">
-                  {{ form.date_of_birth|as_crispy_field }}
+         {{ form.date_of_birth|as_crispy_field }}
                 </div>
                 <div class="col-xl-6 col-md-6">
                   {{ form.gender|as_crispy_field }}
                 </div>
                 <div class="col-xl-6 col-md-6">
+
                   {{ form.business_number|as_crispy_field }}
                 </div>
 
@@ -62,6 +65,59 @@
                 <div class="col-md-12">
                   {{ form.major_products|as_crispy_field }}
                 </div>
+
+                <div class="col-md-12">
+                  {{ form.business_address|as_crispy_field }}
+                </div>
+
+              </div>
+        
+           
+          </div>
+
+          <div style="overflow:auto;">
+            <div style="float:right;">
+              <input type='submit' class="btn btn-primary" value='save'/>
+            </div>
+          </div>
+ 
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+{% endblock %}
+
+{% block javascript %}
+<!-- included them for stepwise forms  -->
+<script src="{% static 'js/validate.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/multi_form.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#id_major_products").select2();
+
+    $('#productTable .formset_row').formset({
+      addText: 'Add product',
+      deleteText: 'remove',
+      prefix: 'major_products_set'
+    });
+
+    var val = {
+      // Specify validation rules
+      rules: {
+        business_number_1: {
+          required: true,
+          minlength: 9,
+          digits: true
+        },
+        phone_2_1: {
+          required: true,
+          minlength: 9,
+          digits: true
+
                 <div class="col-xl-12 col-md-12">
               
                 <div class="">
@@ -185,6 +241,7 @@
         }
       }
     }
+
     // calling multistep
     $("#form").multiStepForm(
       {
@@ -197,6 +254,7 @@
         validations: val,
       }
     ).navigateTo(0);
+
 
 
 

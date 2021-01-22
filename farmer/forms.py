@@ -7,7 +7,7 @@ from common .choices import PAST_YEARS
 
 
 class FarmerProfileForm(forms.ModelForm):
-    date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=PAST_YEARS,attrs={'class': 'form-control','style':'display:inline-block; width:33%; '}))
+   # date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=PAST_YEARS,attrs={'class': 'form-control','style':'display:inline-block; width:33%; '}))
    
 
 

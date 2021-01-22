@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import (AgentProfile, Market, MarketPrice, Notice,CallRsponse,Call)
-from .serializers import (AgentProfileSerializer, MarketSerializer, MarketPriceSerializer, 
+from .serializers import (AgentProfileSerializer,ProductOrderingSerializer, MarketSerializer, MarketPriceSerializer, 
 NoticeSerializer,CallSerializer,ResponseSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -11,12 +11,14 @@ from django.shortcuts import redirect
 from rest_framework.views import APIView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.permissions import IsAuthenticated
-from .forms import (AgentProfileForm, NoticeForm,EnquiryForm, MarketForm, MarketPriceForm)
+from .forms import (AgentProfileForm,ProductOrderingForm, NoticeForm,EnquiryForm, MarketForm, MarketPriceForm)
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+
+from django.contrib import messages
 from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 
@@ -27,17 +29,93 @@ from django.contrib.auth.models import User, Group
 import requests
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
-from openmarket.models import SellerPost,ProductCategory,Product
-
+from openmarket.models import SellerPost,ProductCategory,Product, ProductOrdering
+from django.db import IntegrityError
 
 # views for agentprofiles
 class AgentProfileViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows agentprofiles to be viewed or edited.
+    API endpoint that allows agent profiles to be viewed or edited.
+    To post the body must contain 
+        {
+        "user": "1",//the user profile of the agent
+        "contact": "+256788329636", //contact with the country code
+        "region": "1", //region of the agent
+        "district": "1", // District where the agent is located
+        "specific_role": "call centre agent",options['account manager','market manager','call centre agent','notifications and alerts']
+      
+    }
     """
-    queryset = AgentProfile.objects.all().order_by('specific_role')
+    #queryset = AgentProfile.objects.all().order_by('specific_role')
     serializer_class = AgentProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the agent profiles
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        agents = AgentProfile.objects.all().order_by('-user')
+        if  self.request.user.has_perm('unffeagents.delete_agentprofile'):
+            queryset = agents
+        else:
+            queryset = agents.filter(user=user)
+        
+        return queryset
+  
+
+
+    def create(self, request, format=None):
+        serializer = PostAgentProfileSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save(user = self.request.user)
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Agent account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
+    
+    def update(self, request,pk,format=None):
+        """
+        get the object
+        """
+        try:
+            agent = AgentProfile.objects.get(pk=pk)
+        except AgentProfile.DoesNotExist:
+            raise Http404
+        """Updating the object"""
+        serializer = PostAgentProfileSerializer(agent,data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'An error has occured'})
+                
+            return Response({'status':'successful updated'})
+        return Response(serializer.errors, status=404)
+    
+
+    def delete(self, request, pk, format=None):
+        try:
+            agent = AgentProfile.objects.get(pk=pk)
+        except AgentProfile.DoesNotExist:
+            raise Http404
+
+        agent.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get(self, request, pk, format=None):
+        try:
+            agent = AgentProfile.objects.get(pk=pk)
+        except AgentProfile.DoesNotExist:
+            raise Http404
+        serializer = AgentProfileSerializer(agent)
+        return Response(serializer.data)
 
 
 class AgentProfileList(APIView):
@@ -47,6 +125,8 @@ class AgentProfileList(APIView):
     def get(self, request):
         queryset = AgentProfile.objects.order_by('specific_role')
         return Response({'agentprofiles': queryset})
+
+   
 
 
 class CreateAgentProfile(LoginRequiredMixin,CreateView):
@@ -218,6 +298,82 @@ class MarketList(APIView):
 
 
 
+class ProductOrderingList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'productordering_list.html'
+
+    def get(self, request):
+        queryset = ProductOrdering.objects.order_by('product')
+        return Response({'productorderings': queryset})
+
+class ProductOrderingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows resources to be viewed or edited.
+    """
+    queryset = ProductOrdering.objects.all()
+    serializer_class = ProductOrderingSerializer
+
+
+# create booking
+class ProductOrderingView(CreateView):
+    template_name = 'ordering.html'
+    success_url = reverse_lazy('unffeagents:productordering_list')
+    form_class = ProductOrderingForm
+    success_message = "Ordering has been created successfully"
+
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductOrderingView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(ProductOrderingView, self).get_form_kwargs()
+        return kwargs
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        product = form.save(commit=False)
+        product.buyer = self.request.user
+        product.save()
+        
+        print(product.product.seller.user.email)
+
+        # send email to seller after registration
+        current_site = get_current_site(self.request)
+        subject = 'Order successfully Successfully'
+        message = render_to_string('booking_created_successfully_email.html', {
+            'user': product.product.seller.user,
+            'domain': current_site.domain,
+            'product':product
+            })
+        to_email = product.product.seller.user.email
+        email = EmailMessage(
+                subject, message, to=[to_email]
+            )
+        email.content_subtype = "html"
+        email.send()
+        messages.add_message(self.request, messages.INFO, 'Please wait for approval from the seller')
+        return redirect('unffeagents:productordering_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_initial(self, *args, **kwargs):
+        initial = super(ProductOrderingView, self).get_initial(**kwargs)
+        initial['product'] = SellerPost.objects.get(pk=self.kwargs['product_pk'])
+        return initial
+
 class CreateMarket(CreateView):
     template_name = 'create_market.html'
     form_class = MarketForm
@@ -325,6 +481,7 @@ class CreateMarketPrice(CreateView):
 
     def form_valid(self, form):
         market = form.save(commit=False)
+        market.user = self.request.user
         market.save()
         return redirect('unffeagents:marketprice_list')
 
