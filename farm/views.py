@@ -213,8 +213,42 @@ class EditQueryView(LoginRequiredMixin, UpdateView):
 # views for enterprise
 class EnterpriseViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows sectors to be viewed or edited.
+    retrieve:
+        retrieve a sigle Enterprise by its id
+
+    list:
+        Return a list of all Enterprise.
+
+    create:
+        Create a new Enterprise.e.g
+        {
+        "farm": 923,
+        "sector":4,
+        "name": "Test API Enterprise",
+        "source": "None",
+        "enterprise_type": "Commercial",
+        "animal_seed_density": 10,
+        "capital_invested": "12000000.00",
+        "return_on_investment": "20000000.00",
+        "from_period": "2020-11-30",
+        "to_period": "2021-12-31",
+        "land_occupied": 2.0,
+        "start_date": "2020-11-30",
+        "close_date": null,
+        "description": "Cattle farm",
+        "image": null,
+        "status": "open"
+    }
+    delete:
+        Delete a Enterprise.
+
+    PUT:
+        Update a Enterprise.
+
+    partial_update:
+        Update a Seller.
     """
+  
     serializer_class = EnterpriseSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -243,10 +277,6 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             try:
-                user = self.request.user
-                # farmer = FarmerProfile.objects.get(user=user)
-                # farm = Farm.objects.get(farmer=farmer)
-                #serializer.user = self.request.user
                 serializer.save()
             except IntegrityError:
                 return Response({'error': 'Enterprise already exists'})

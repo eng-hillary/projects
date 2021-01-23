@@ -42,7 +42,32 @@ from django.db.models.functions import Cast
 # views for groups
 class GroupViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows sectors to be viewed or edited.
+    retrieve:
+        retrieve a sigle Farmer Group by its id
+
+    list:
+        Return a list of all Farmer Groups.
+
+    create:
+        Create a new Farmer Group.e.g
+        {
+        "name": "Zeu Rural Producer Organization",
+        "description": "short group description",
+        "logo": null, # groups's image(logo)
+        "address": "Moyo town",
+        "contact_person": "Achanda Grace",
+        "contact_person_email": "group@gmail.com",
+        "contact_person_phone": "+256777792725"
+    }
+      
+    delete:
+        Delete a Farmer Group.
+
+    PUT:
+        Update a Farmer Group.
+
+    partial_update:
+        Update a Farmer Group.
     """
     queryset = Group.objects.all().order_by('-id')
     serializer_class = GroupSerializer
@@ -141,7 +166,42 @@ class EditFarmerGroup(LoginRequiredMixin,UpdateView):
 # views for farmerprofile
 class FarmerProfileViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows sectors to be viewed or edited.
+    retrieve:
+        retrieve a sigle Farmer Profile by its id
+
+    list:
+        Return a list of all Farmer Profile.
+
+    create:
+        Create a new Farmer Profile.e.g
+        {
+    
+        "nin": "42143242324B2",
+        "sector": [
+            1,2
+        ],
+        "occupation": "Student",
+        "level_of_education": "University",
+        "marital_status": "married", #options['single','married','divorced','widowed']
+        "size_of_land": "4.00",
+        "group": 2,
+        "type_of_land": "rented", #options['rented','owned']
+        "production_scale": "subsistence", #options['subsistence','small','large']
+        "number_of_dependants": 0,
+        "credit_access": true, #boolean field
+        "source_of_credit": "Village Savings and Loan Associate",
+        "experience": 1,
+        "status": "Active", # options['Active','Pending','Rejected']
+        "general_remarks": "General Comment"
+    }
+    delete:
+        Delete a Farmer Profile.
+
+    PUT:
+        Update a Farmer Profile.
+
+    partial_update:
+        Update a Farmer Profile.
     """
     #queryset = FarmerProfile.objects.all().order_by('region')
     serializer_class = FarmerProfileSerializer

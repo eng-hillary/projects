@@ -41,7 +41,6 @@ class SellerSerializer(serializers.ModelSerializer):
     major_products = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
     seller_type = serializers.CharField(source='get_seller_type_display')
 
-   # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
         fields = ('user','full_name','business_address', 'business_number', 'seller_type',
