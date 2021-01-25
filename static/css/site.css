@@ -43,14 +43,16 @@
 
  .market-list .item {
   width:20%;
-  padding:10px 20px 10px 0;
+  padding:10px 10px 10px 10px;
   text-align:center;
   line-height:1.2;
   display: inline-block;
 }
 
 .market-list .item img {
-  width:100%;
+
+  height: 200px;
+  width: 100%;
   margin-bottom:5px;
 }
 

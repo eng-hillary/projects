@@ -6,7 +6,6 @@ from .views import (ProductList,
                     CreateBuyerPost,
                     CreateSellerProfile,
                     CreateProductProfile,
-                    BuyerList,
                     ServiceProviderList,
                     ServiceRegistrationList,
                     SellerPostList,
@@ -32,7 +31,6 @@ router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet)
 router.register(r'categories', views.CategoryViewSet)
 router.register(r'sellers', views.SellerViewSet)
-router.register(r'buyers', views.BuyerViewSet)
 router.register(r'sellerposts', views.SellerPostViewSet, basename='sellerpost')
 router.register(r'buyersposts', views.BuyerPostViewSet)
 router.register(r'serviceproviders', views.ServiceProviderViewSet, basename='service_providers')
@@ -42,6 +40,7 @@ router.register(r'serviceregistration', views.ServiceRegistrationViewSet,  basen
 router.register(r'contactdetails', views.ContactDetailsViewSet)
 router.register(r'logistics', views.LogisticsViewSet)
 router.register(r'soilsciences', views.SoilScienceViewSet)
+router.register(r'product_category',views.ProductCategoryViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API
@@ -78,8 +77,6 @@ urlpatterns = [
     path('create/profile', CreateSellerProfile.as_view(), name="create_seller"),
     path('<int:pk>/edit/seller/', EditSellerView.as_view(), name="edit_seller"),
     path('sellerposts', SellerPostList.as_view(), name='sellerpost_list'),
-
-    path('buyers', BuyerList.as_view(), name='buyer_list'),
     path('post/product',CreateSellerPost.as_view(), name='add_seller_post'),
     path('buyerposts', BuyerPostList.as_view(), name='buyerpost_list'),
 
