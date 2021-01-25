@@ -40,9 +40,7 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(ProductCategory,related_name='products', null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=50, null=True)
-    slug = models.SlugField(_('Local Name'),max_length=200, null=True)
-    market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
-    #local_name = models.CharField(max_length=200,null=True)
+    slug = models.SlugField(_('Local Name'), max_length=200, null=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     description = models.TextField(blank=True)
     available = models.BooleanField(default=True)
@@ -51,6 +49,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 class Seller(models.Model):
@@ -74,12 +73,6 @@ class Seller(models.Model):
     def __str__(self):
         return '{} {}'.format(self.user.first_name , self.user.last_name)
 
-
-class Buyer(TimeStampedModel, models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
-
-    class meta:
-        ordering =("created")
 
 
 class SellerPost(models.Model):
