@@ -1,25 +1,8 @@
-{% extends 'openmarket_base.html' %}
+{% extends 'market_base.html' %}
 {% load staticfiles %}
 {% block content %}
    <!-- Container-fluid starts-->
-   <div class="container-fluid">
-    <div class="page-header">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="page-header-left">
-                    <h3>Market price List</h3>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <ol class="breadcrumb float-right">
-                    <li class="breadcrumb-item"><a href="{% url 'common:home' %}"><i data-feather="home"></i></a></li>
-                    <li class="breadcrumb-item">Market price</li>
-                    <li class="breadcrumb-item active">Market price List</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
+  
 
 <!-- Container-fluid Ends-->
 <link href="{% static 'css/bootstrap-table.css' %}" rel="stylesheet">
