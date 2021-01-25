@@ -380,6 +380,7 @@ class SellerPostViewSet(viewsets.ModelViewSet):
         "product": "Milk",
         "market": 1,
         "quantity": 200.0,
+        "unit_of_measure": "kilogram",
         "price_offer": "1100.04",
         "delivery_option": "Pick up from the market",
         "payment_options": "credit", # options['credit','full_payment','installements','exchange']
