@@ -380,7 +380,7 @@ function initialize() {
   var myLatlng1 = new google.maps.LatLng(1.0609637, 32.5672804);
   var mapProp = {
     center: myLatlng1,
-    zoom: 8,
+    zoom: 9,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
   };
 
@@ -420,7 +420,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: map,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"},
         data: data.farm_name,
       });
 
@@ -461,7 +461,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: servicemap,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"},
         data: data.service_name,
       });
 
@@ -492,7 +492,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: resourcemap,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png"},
         data: data.resource_name,
       });
 
