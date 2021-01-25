@@ -377,8 +377,9 @@ var icon = "";
 
 function initialize() {
   var infowindow = new google.maps.InfoWindow();
+  var myLatlng1 = new google.maps.LatLng(1.0609637, 32.5672804);
   var mapProp = {
-    center: new google.maps.LatLng(1.0609637, 32.5672804),
+    center: myLatlng1,
     zoom: 8,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
   };
@@ -398,7 +399,12 @@ function initialize() {
     mapProp
   );
 
-
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+        initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        map.setCenter(initialLocation);
+    });
+}
   //FARMS
   $.getJSON("/farm/api/maps/", function (json) {
     var farmdata = [];
@@ -511,6 +517,8 @@ function initialize() {
       bindInfoWindow(marker, resourcemap, infowindow, resource_details);
     });
   });
+
+
 
 }
 
