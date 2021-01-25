@@ -52,6 +52,7 @@ class ProductProfileForm(forms.ModelForm):
          self.request = kwargs.pop('request', None)
          super(ProductProfileForm, self).__init__(*args, **kwargs)
          self.fields['description'].widget.attrs.update({'rows': '2'})
+         self.fields['category'].empty_label = '--please select--'
 
 class ServiceProfileForm(forms.ModelForm):
     availability_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
