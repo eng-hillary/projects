@@ -70,7 +70,6 @@ class ProductViewSet(viewsets.ModelViewSet):
         "slug": null,
         "image": "product_image_url", # product's image
         "description": "Chicken both hen and cock",
-        "available": true, #boolean fields
         "category": 7
     }
 
