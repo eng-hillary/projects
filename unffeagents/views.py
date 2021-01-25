@@ -269,8 +269,7 @@ class MarketDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(MarketDetailView, self).get_context_data(**kwargs)
         context['Marketobject'] = self.object
-        products = SellerPost.objects.filter(market=self.object)
-        print(products)
+        products = MarketPrice.objects.filter(market=self.object).order_by('-id')
         context["products"]= products
         context["categories"] = ProductCategory.objects.all()
         print(products)

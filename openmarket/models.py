@@ -271,4 +271,4 @@ class SoilScience(models.Model):
     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
 
     class Meta:
-        ordering =("name",)
+        ordering =["name"]

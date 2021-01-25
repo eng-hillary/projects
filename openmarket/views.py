@@ -3,7 +3,7 @@ from .models import (Product, Seller, SellerPost, BuyerPost,
 ServiceProvider, Service, ContactDetails, Logistics, SoilScience, 
 Category,SellerPost, ProductCategory)
 from common.models import Region, District
-from .serializers import (ProductSerializer,
+from .serializers import (ProductSerializer,PostProductSerializer,
                           SellerSerializer,
                           SellerPostSerializer,
                           BuyerPostSerializer,
@@ -80,6 +80,18 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by('-id')
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, format=None):
+        serializer = PostProductSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save()
+            except:
+                return Response({'error':'An error has occured while posting the product'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 
 

@@ -25,6 +25,13 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
  
+class PostProductSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -96,6 +103,8 @@ class SellerPostSerializer(serializers.ModelSerializer):
             return None
 
 class PostSellerPostSerializer(serializers.ModelSerializer):
+    product_image_1 = Base64ImageField()
+    product_image_2 = Base64ImageField()
     class Meta:
         model = SellerPost
         exclude =['seller']
@@ -164,6 +173,7 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
 
 
 class PostServiceRegistrationSerializer(serializers.ModelSerializer):
+    picture = Base64ImageField()
     class Meta:
         model = Service
         exclude=['user']
