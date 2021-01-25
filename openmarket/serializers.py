@@ -77,7 +77,7 @@ class SellerPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SellerPost
-        fields = ('id','seller', 'product','market', 'quantity', 'price_offer', 'delivery_option','payment_options', 'payment_mode','product_description','product_image_1','product_image_2')
+        fields = ('id','seller', 'product','market', 'quantity','unit_of_measure', 'price_offer', 'delivery_option','payment_options', 'payment_mode','product_description','product_image_1','product_image_2')
 
     def get_product(self, obj):
         try:

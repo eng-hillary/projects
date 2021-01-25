@@ -27,12 +27,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import(SellerProfileForm, ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
-
-from .forms import(SellerProfileForm, ProductProfileForm,
-
-                   ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
-
+from .forms import(SellerProfileForm, MarketPriceForm,ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
 
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
@@ -380,6 +375,7 @@ class SellerPostViewSet(viewsets.ModelViewSet):
         "product": "Milk",
         "market": 1,
         "quantity": 200.0,
+        "unit_of_measure": "kilogram",
         "price_offer": "1100.04",
         "delivery_option": "Pick up from the market",
         "payment_options": "credit", # options['credit','full_payment','installements','exchange']
@@ -447,7 +443,6 @@ class BuyerPostViewSet(viewsets.ModelViewSet):
     """
     queryset = BuyerPost.objects.all().order_by('name')
     serializer_class = BuyerPostSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class BuyerPostList(APIView):
@@ -457,6 +452,16 @@ class BuyerPostList(APIView):
     def get(self, request):
         queryset = BuyerPost.objects.order_by('-name')
         return Response({'buyerposts': queryset})
+
+#open market price
+
+class MarketPriceList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'openmarketprice_list.html'
+
+    def get(self, request):
+        queryset = MarketPrice.objects.order_by('market')
+        return Response({'marketprices': queryset})
 
 
 # views for service provider

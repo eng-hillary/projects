@@ -70,6 +70,7 @@ class SellerPostAdmin(admin.ModelAdmin):
        'seller', 
        'product', 
        'quantity', 
+       'unit_of_measure',
        'price_offer', 
        'delivery_option', 
        'payment_options', 
