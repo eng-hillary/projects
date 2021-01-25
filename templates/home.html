@@ -121,16 +121,7 @@
              </div>
              
              <div class="row">
-
-                <div class="col-xl-6 col-md-6 xl-80">
-                    <div class="card h-00 order-graph sales-carousel">
-                        
-                        <div id="piecontainer" >
-                            <canvas id="pie-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6 col-md-6 xl-50">
+                <div class="col-xl-6 col-md-6 ">
                     <div class="card">
                         
                         <div class="card-body">
@@ -141,6 +132,16 @@
                         </div>
                 </div>
                 </div>
+
+                <div class="col-xl-6 col-md-6 ">
+                    <div class="card h-00 order-graph sales-carousel">
+                        
+                        <div id="piecontainer" style="height: 460px;">
+                            <canvas id="pie-chart" style="width: 450px !important; height: 350px !important;"></canvas>
+                        </div>
+                    </div>
+                </div>
+              
 
              </div>
 
@@ -201,7 +202,7 @@
         title: {
             display: true,
             text: 'Percentage of all farmers based on Region',
-            fontSize:13
+            fontSize:15
         },
         legend: {
             display: true,
