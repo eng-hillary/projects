@@ -13,6 +13,7 @@ from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
 from common.serializers import UserSerializer
 from common.customSerializers import GeometryPointFieldSerializerFields
+from drf_extra_fields.fields import Base64ImageField
 
 
 class ProductSerializer(serializers.ModelSerializer):
