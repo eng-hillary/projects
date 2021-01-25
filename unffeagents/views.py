@@ -63,14 +63,7 @@ class AgentProfileViewSet(viewsets.ModelViewSet):
             queryset = agents.filter(user=user)
         
         return queryset
-    """
-    Retrieve, update or delete a snippet an agent.
-    """
-    # def get_object(self, pk):
-    #     try:
-    #         return AgentProfile.objects.get(pk=pk)
-    #     except AgentProfile.DoesNotExist:
-    #         raise Http404
+  
 
 
     def create(self, request, format=None):

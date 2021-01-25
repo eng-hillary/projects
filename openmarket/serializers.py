@@ -1,14 +1,13 @@
 from rest_framework import serializers
 from .models import (Product,
                      Seller,
-                     Buyer,
                      SellerPost,
                      BuyerPost,
                      ServiceProvider,
                      Service,
                      ContactDetails,
                      Logistics,
-                     SoilScience,Category)
+                     SoilScience,Category,ProductCategory)
 from django.contrib.auth.models import User
 from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
@@ -22,8 +21,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'local_name', 'image', 'description',
-         'date_created', 'date_updated')
+        fields = '__all__'
 
  
 
@@ -33,24 +31,33 @@ class CategorySerializer(serializers.ModelSerializer):
         fields =('id','cat_name')
 
 
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields ='__all__'
+
+
 
 class SellerSerializer(serializers.ModelSerializer):
-    location = serializers.CharField(source='compute_location')
+
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
     major_products = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
     seller_type = serializers.CharField(source='get_seller_type_display')
 
-   # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
-        fields = ('user','full_name', 'business_number', 'location', 'seller_type', 'date_of_birth', 'gender',
+        fields = ('user','full_name','business_address', 'business_number', 'seller_type',
           'major_products', 'status', 'approver','approved_date')
 
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
 
+class PostSellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seller
+        exclude =['status','approver','approved_date','user']
 
 
 class SellerApprovalSerializer(serializers.ModelSerializer):
@@ -59,10 +66,6 @@ class SellerApprovalSerializer(serializers.ModelSerializer):
         fields =('status','approver','approved_date')
 
 
-class BuyerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Buyer
-        fields = ('user', 'created', 'modified')
 
 class SellerPostSerializer(serializers.ModelSerializer):
     payment_options = serializers.CharField(source='get_payment_options_display')
@@ -90,6 +93,12 @@ class SellerPostSerializer(serializers.ModelSerializer):
             return '{}'.format(obj.product.market.market_name)
         except:
             return None
+
+class PostSellerPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SellerPost
+        exclude =['seller']
+
 
 
 class BuyerPostSerializer(serializers.ModelSerializer):
@@ -145,7 +154,7 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ('id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
+        fields = ('user_id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
         'available_services','rent','name_of_storage_center','location_of_storage_center','certification_status',
         'vehicle_type','vehicle_capacity','location','others','full_name')
 

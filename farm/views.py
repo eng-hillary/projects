@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from .models import (Sector, Enterprise, Farm, ProductionRecord, Query,
                      FarmRecord, FinancialRecord, EnterpriseSelection, Ecological_Zones,Crop)
-from .serializers import (SectorSerializer, EnterpriseSerializer, FarmSerializer, FarmMapSerializer, FarmProductionRecordSerializer, PostFarmSerializer, PostEnterpriseSelectionSerializer,
-                          PostEnterpriseSerializer, PostQuerySerializer, FarmRecordSerializer, FarmFinancilRecordSerializer, EnterpriseSelectionSerializer, QuerySerializer)
+from .serializers import (
+    SectorSerializer, EnterpriseSerializer, FarmSerializer,
+     FarmMapSerializer, FarmProductionRecordSerializer, PostFarmSerializer,
+      PostEnterpriseSelectionSerializer,PostFarmRecordSerializer,
+                          PostEnterpriseSerializer, PostQuerySerializer, FarmRecordSerializer, FarmFinancilRecordSerializer, EnterpriseSelectionSerializer, QuerySerializer,
+                          PostFarmProductionRecordSerializer,PostFarmFinancilRecordSerializer)
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -114,9 +118,12 @@ class QueryViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = queries
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            queryset = queries.filter(farm__in=farms)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                queryset = queries.filter(farm__in=farms)
+            except:
+                queryset = Query.objects.none()
 
         return queryset
 
@@ -206,8 +213,42 @@ class EditQueryView(LoginRequiredMixin, UpdateView):
 # views for enterprise
 class EnterpriseViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows sectors to be viewed or edited.
+    retrieve:
+        retrieve a sigle Enterprise by its id
+
+    list:
+        Return a list of all Enterprise.
+
+    create:
+        Create a new Enterprise.e.g
+        {
+        "farm": 923,
+        "sector":4,
+        "name": "Test API Enterprise",
+        "source": "None",
+        "enterprise_type": "Commercial",
+        "animal_seed_density": 10,
+        "capital_invested": "12000000.00",
+        "return_on_investment": "20000000.00",
+        "from_period": "2020-11-30",
+        "to_period": "2021-12-31",
+        "land_occupied": 2.0,
+        "start_date": "2020-11-30",
+        "close_date": null,
+        "description": "Cattle farm",
+        "image": null,
+        "status": "open"
+    }
+    delete:
+        Delete a Enterprise.
+
+    PUT:
+        Update a Enterprise.
+
+    partial_update:
+        Update a Seller.
     """
+  
     serializer_class = EnterpriseSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -222,9 +263,12 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = enterprises
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            queryset = enterprises.filter(farm__in=farms)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                queryset = enterprises.filter(farm__in=farms)
+            except:
+                 queryset = Enterprise.objects.none()
 
         return queryset
 
@@ -233,10 +277,6 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             try:
-                user = self.request.user
-                # farmer = FarmerProfile.objects.get(user=user)
-                # farm = Farm.objects.get(farmer=farmer)
-                #serializer.user = self.request.user
                 serializer.save()
             except IntegrityError:
                 return Response({'error': 'Enterprise already exists'})
@@ -257,8 +297,46 @@ class EnterpriseList(LoginRequiredMixin, APIView):
 # farm api viewset
 class FarmViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows farms to be viewed or edited.
+    retrieve:
+        retrieve a sigle Farm by its id
+
+    list:
+        Return a list of all Farms.
+
+    create:
+        Create a new Farm.e.g
+
+         {
+        "farm_name": "R&R Poultry Farm",
+        "lat": 0.3645272,
+        "lon": 32.6061894,
+        "location": {
+                "type": "Point",
+                        "coordinates": [
+                                0.3645272,
+                                32.61432185769081
+                                ]
+                            },
+        "start_date": "2020-11-17",
+        "image": null,
+        "availability_of_services": true,
+        "availability_of_water": true,
+        "land_occupied": 4.0,
+        "available_land": 2.0,
+        "status": "active",
+        "general_remarks": "Good farm"
+    }
+
+    destroy:
+        Delete a Farm.
+
+    update:
+        Update a Farm.
+
+    partial_update:
+        Update a Farm.
     """
+    
     serializer_class = FarmSerializer
     permission_classes = [permissions.IsAuthenticated]
     permission_classes = [permissions.IsAuthenticated]
@@ -280,7 +358,7 @@ class FarmViewSet(viewsets.ModelViewSet):
                 farmer = FarmerProfile.objects.get(user=user)
                 queryset = farms.filter(farmer=farmer)
             except:
-                return 'user has no farmer account'
+                queryset = Farm.objects.none()
 
         return queryset
 
@@ -559,8 +637,35 @@ class FarmProfileDetailView(DetailView):
 
 class FarmRecordViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows sectors to be viewed or edited.
+    retrieve:
+        retrieve a sigle FarmRecord by its id
+
+    list:
+        Return a list of all FarmRecords.
+
+    create:
+        Create a new FarmRecord.e.g
+      {
+        "enterprise": 1,   
+        "name": "Feeding the Birds",
+        "from_date": "2020-11-09",
+        "to_date": "2020-11-11",
+        "description": "Supply the birds with feeds.",
+        "taken_by": "Mbabazi Isaac",
+        "contact": "+256780602550",
+        "next_activity_date": "2020-11-17"
+    }
+
+    destroy:
+        Delete a FarmRecord.
+
+    update:
+        Update a FarmRecord.
+
+    partial_update:
+        Update a FarmRecord.
     """
+     
     serializer_class = FarmRecordSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -575,12 +680,28 @@ class FarmRecordViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            enterprises = Enterprise.objects.filter(farm__in=farms)
-            queryset = farmrecords.filter(enterprise__in=enterprises)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                enterprises = Enterprise.objects.filter(farm__in=farms)
+                queryset = farmrecords.filter(enterprise__in=enterprises)
+            except:
+                queryset = FarmRecord.objects.none()
 
         return queryset
+
+
+    def create(self, request, format=None):
+        serializer = PostFarmRecordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save()
+            except :
+                return Response({'error':'An error occured while saving your data'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 
 # create farm record
@@ -825,7 +946,37 @@ class EditFarmFinancialRecordView(LoginRequiredMixin, UpdateView):
 # farm record viewset
 class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows sectors to be viewed or edited.
+    retrieve:
+        retrieve a sigle Farm Financial by its id
+
+    list:
+        Return a list of all Farm Financials.
+
+    create:
+        Create a new Farm Financial.e.g
+      {
+        "enterprise": "1",
+        "transaction_type": "income",# options['income','expense']
+        "means_of_payment": "cash",#options['cash','bank','cheque','mobilemoney','credit_card','others']
+        "payment_mode": "full_payment",# options['full_payment','installments','debt']
+        "next_payment_date": "2021-01-18",
+        "spent_on": "Hen",
+        "transaction_to": "Jk",
+        "amount": 25000.0,
+        "quantity": 1.0,
+        "transaction_date": "2021-01-22",
+        "description": "Sold a hen to Jonathan K"
+    }
+
+
+    destroy:
+        Delete a Farm Financial.
+
+    update:
+        Update a Farm Financial.
+
+    partial_update:
+        Update a Farm Financial.
     """
     serializer_class = FarmFinancilRecordSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -840,12 +991,28 @@ class FarmFinancialRecordViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = farmrecords
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            enterprises = Enterprise.objects.filter(farm__in=farms)
-            queryset = farmrecords.filter(enterprise__in=enterprises)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                enterprises = Enterprise.objects.filter(farm__in=farms)
+                queryset = farmrecords.filter(enterprise__in=enterprises)
+            except:
+                queryset = FinancialRecord.objects.none()
 
         return queryset
+
+
+    def create(self, request, format=None):
+        serializer = PostFarmFinancilRecordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save(reported_by=self.request.user)
+            except:
+                return Response({'error': 'An error occured while submitting your data'})
+
+            return Response({'status': 'successful'})
+        return Response(serializer.errors, status=400)
 
 
 # create Production record
@@ -969,8 +1136,36 @@ class EditFarmproductionRecordView(LoginRequiredMixin, UpdateView):
 # production record viewset
 class FarmProductionRecordViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows sectors to be viewed or edited.
+    retrieve:
+        retrieve a sigle Seller by its id
+
+    list:
+        Return a list of all Sellers.
+
+    create:
+        Create new Production Record.e.g
+    {
+        "enterprise": 1,
+        "record_name": "Spreaying",
+        "production_activity": "Pestcide speaying",
+        "quantity": "2.00",
+        "unit_of_measure": "litres",
+        "record_date": "2020-12-02",
+        "record_time": "10:10:56.124953",
+        "record_taker": "Musa",
+        "general_remarks": "Test from the api"
+    }
+
+    destroy:
+        Delete  Production Record.
+
+    update:
+        Update a  Production Record.
+
+    partial_update:
+        Update a  Production Record.
     """
+    
     serializer_class = FarmProductionRecordSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -984,13 +1179,28 @@ class FarmProductionRecordViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='UNFFE Agents').exists():
             queryset = productionrecords
         else:
-            farmer = FarmerProfile.objects.get(user=user)
-            farms = Farm.objects.filter(farmer=farmer)
-            enterprises = Enterprise.objects.filter(farm__in=farms)
-            queryset = productionrecords.filter(enterprise__in=enterprises)
+            try:
+                farmer = FarmerProfile.objects.get(user=user)
+                farms = Farm.objects.filter(farmer=farmer)
+                enterprises = Enterprise.objects.filter(farm__in=farms)
+                queryset = productionrecords.filter(enterprise__in=enterprises)
+            except:
+                queryset = ProductionRecord.objects.none()
 
         return queryset
 
+
+    def create(self, request, format=None):
+        serializer = PostFarmProductionRecordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save()
+            except:
+                return Response({'error':'Failed to submit record'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 class EnterpriseSelectionView(LoginRequiredMixin, CreateView):
     template_name = 'enterprise_selection.html'

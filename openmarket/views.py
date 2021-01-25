@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, SoilScience, Category,SellerPost
+from django.shortcuts import render,get_object_or_404
+from .models import (Product, Seller, SellerPost, BuyerPost, 
+ServiceProvider, Service, ContactDetails, Logistics, SoilScience, 
+Category,SellerPost, ProductCategory)
 from common.models import Region, District
 from .serializers import (ProductSerializer,
                           SellerSerializer,
-                          BuyerSerializer,
                           SellerPostSerializer,
                           BuyerPostSerializer,
                           ServiceProviderSerializer,
@@ -15,7 +16,7 @@ from .serializers import (ProductSerializer,
                           SellerApprovalSerializer,
                           PostServiceProviderSerializer,
                           PostServiceRegistrationSerializer,
-                          CategorySerializer)
+                          CategorySerializer,PostSellerSerializer,ProductCategorySerializer,PostSellerPostSerializer)
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import permissions
@@ -25,7 +26,14 @@ from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .forms import(SellerProfileForm, ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
+
+from .forms import(SellerProfileForm, ProductProfileForm,
+
+                   ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
+
+
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
 from django.urls import reverse_lazy
@@ -49,11 +57,41 @@ from unffeagents.models import MarketPrice
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Product by its id
+
+    list:
+        Return a list of all Products.
+
+    create:
+        Create a new Product.E.g
+        {
+        "name": "Chicken",
+        "slug": null,
+        "image": "product_image_url", # product's image
+        "description": "Chicken both hen and cock",
+        "category": 7
+    }
+
+    destroy:
+        Delete a Product.
+
+    update:
+        Update a Product.
+
+    partial_update:
+        Update a Product.
     """
     queryset = Product.objects.all().order_by('-id')
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+
+class ProductCategoryViewSet(viewsets.ModelViewSet):
+    queryset = ProductCategory.objects.all()
+    serializer_class = ProductCategorySerializer
+
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -172,11 +210,49 @@ class EditProductView(LoginRequiredMixin, UpdateView):
 
 class SellerViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Seller by its id
+
+    list:
+        Return a list of all Sellers.
+
+    create:
+        Create a new Seller.e.g
+        {
+        "business_number": "+256788329636",
+        "seller_type": "wholeseller",
+        "major_products": [7,6,5],
+        "status": "Pending"
+        "business_address":"Kampala"
+    }
+
+    destroy:
+        Delete a Seller.
+
+    update:
+        Update a Seller.
+
+    partial_update:
+        Update a Seller.
     """
     queryset = Seller.objects.all().order_by('seller_type')
     serializer_class = SellerSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the sellers or 
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        sellers = Seller.objects.order_by('-user')
+        if  self.request.user.has_perm('openmarket.delete_seller') or self.request.user.is_superuser:
+            queryset = sellers
+        else:
+            queryset = sellers.filter(user=user)
+        
+        return queryset
+
 
     def approved(self, request, pk, format=None):
         profile = self.get_object()
@@ -197,7 +273,19 @@ class SellerViewSet(viewsets.ModelViewSet):
             ), approver=self.request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+    def create(self, request, format=None):
+        serializer = PostSellerSerializer(data=request.data)
 
+        if serializer.is_valid():
+            try:
+                serializer.save(user = self.request.user)
+                serializer.save()
+            except IntegrityError:
+                return Response({'error':'Seller account already exists'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
 
 class SellerList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -277,28 +365,38 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
         return context
 
 
-class BuyerViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows products to be viewed or edited.
-    """
-    queryset = Buyer.objects.all().order_by('created')
-    serializer_class = BuyerSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class BuyerList(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'buyer_list.html'
-
-    def get(self, request):
-        queryset = Buyer.objects.order_by('created')
-        return Response({'buyers': queryset})
-
-
 # views for sellerpost
 class SellerPostViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Seller Post by its id
+
+    list:
+        Return a list of all Seller Posts.
+
+    create:
+        Create a new Seller Post.e.g
+        {
+        "product": "Milk",
+        "market": 1,
+        "quantity": 200.0,
+        "price_offer": "1100.04",
+        "delivery_option": "Pick up from the market",
+        "payment_options": "credit", # options['credit','full_payment','installements','exchange']
+        "payment_mode": "cash", # options['cash','bank','cheque','mobilemoney','credit_card','others']
+        "product_description": "Water melon",
+        "product_image_1": "http://127.0.0.1:8000/uploads/FB_IMG_15888191318596590.jpg",
+        "product_image_2": "http://127.0.0.1:8000/uploads/FB_IMG_15878330260195603_SaIZmeP.jpg"
+    }
+      
+    delete:
+        Delete a Selller Post.
+
+    PUT:
+        Update a Seller Post.
+
+    partial_update:
+        Update a Seller Post.
     """
     #queryset = SellerPost.objects.all().order_by('-id')
     serializer_class = SellerPostSerializer
@@ -319,6 +417,18 @@ class SellerPostViewSet(viewsets.ModelViewSet):
             queryset = products.filter(seller=seller)
         
         return queryset
+
+    def create(self, request, format=None):
+        serializer = PostSellerPostSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save(seller=self.request.user)
+            except:
+                return Response({'error': 'An error occured while posting your data'})
+
+            return Response({'status': 'successful'})
+        return Response(serializer.errors, status=400)
 
 
 class SellerPostList(APIView):
@@ -692,7 +802,7 @@ class SoilScienceList(APIView):
 class UpdateServiceProviderProfile(LoginRequiredMixin, UpdateView):
     model = ServiceProvider
     template_name = 'register_service_provider.html'
-    success_url = reverse_lazy('openmarket:serviceprovider_list')
+    success_url = reverse_lazy('openmarket:service_registration')
     form_class = ServiceProviderProfileForm
     success_message = "Your profile was Updated successfully"
 
@@ -732,7 +842,9 @@ class ServiceProviderProfileDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "providerrecord"
     template_name = "view_service_provider_profile.html"
 
+   
     def get_context_data(self, **kwargs):
+        #serviceprovider = ServiceProvider.objects.create(user=kwargs['instance'].user)
         context = super(ServiceProviderProfileDetailView,
                         self).get_context_data(**kwargs)
 

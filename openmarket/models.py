@@ -40,12 +40,9 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(ProductCategory,related_name='products', null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=50, null=True)
-    slug = models.SlugField(max_length=200, null=True)
-    market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
-    local_name = models.CharField(max_length=200,null=True)
+    slug = models.SlugField(_('Local Name'), max_length=200, null=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     description = models.TextField(blank=True)
-    available = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -53,37 +50,18 @@ class Product(models.Model):
         return self.name
 
 
+
 class Seller(models.Model):
     #personal information
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='seller',primary_key=True)
-    date_of_birth = models.DateField(max_length=8)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     seller_type = models.CharField(choices=TYPE,max_length=15, null=False)
     major_products = models.ManyToManyField(Product, blank=False)
-
-    #Location
-    business_number = PhoneNumberField()
-    #business_location = models.TextField(_('Business Address'),null=True)
-    location = models.PointField( srid=4326,null=True)
-   
-    status = models.CharField(choices=REGISTER_STATUS, default='in_active', max_length=20,null=False)
+    business_number = PhoneNumberField()   
+    status = models.CharField(choices=REGISTER_STATUS, default='Pending', max_length=20,null=False)
+    business_address = models.TextField(null=True, blank=True)
       # handle approving of a seller
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
-
-    @property
-    def compute_location(self):
-        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        
-       
-        try:
-            lat = str(self.location.y)
-            lon = str(self.location.x)
-            location = geolocator.reverse(lat + "," + lon)
-            return '{}'.format(location.address)
-        except:
-            #location = str(self.location.y) + "," + str(self.location.x)
-            return 'slow network, loading location ...'
 
 
     class Meta:
@@ -92,14 +70,8 @@ class Seller(models.Model):
             ("can_approve_sellers", "Can approve Sellers"),
         )
     def __str__(self):
-        return self.seller_type
+        return '{} {}'.format(self.user.first_name , self.user.last_name)
 
-
-class Buyer(TimeStampedModel, models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
-
-    class meta:
-        ordering =("created")
 
 
 class SellerPost(models.Model):
@@ -192,7 +164,11 @@ class ServiceProvider(models.Model):
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
     #This is a service provider
+
     user = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='service',null=True)
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='service',default=True)
+
     category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)
