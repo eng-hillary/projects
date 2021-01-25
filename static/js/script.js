@@ -377,9 +377,10 @@ var icon = "";
 
 function initialize() {
   var infowindow = new google.maps.InfoWindow();
+  var myLatlng1 = new google.maps.LatLng(1.0609637, 32.5672804);
   var mapProp = {
-    center: new google.maps.LatLng(1.0609637, 32.5672804),
-    zoom: 8,
+    center: myLatlng1,
+    zoom: 9,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
   };
 
@@ -398,7 +399,12 @@ function initialize() {
     mapProp
   );
 
-
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+        initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        map.setCenter(initialLocation);
+    });
+}
   //FARMS
   $.getJSON("/farm/api/maps/", function (json) {
     var farmdata = [];
@@ -414,7 +420,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: map,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"},
         data: data.farm_name,
       });
 
@@ -455,7 +461,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: servicemap,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"},
         data: data.service_name,
       });
 
@@ -486,7 +492,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: resourcemap,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png"},
         data: data.resource_name,
       });
 
@@ -511,6 +517,8 @@ function initialize() {
       bindInfoWindow(marker, resourcemap, infowindow, resource_details);
     });
   });
+
+
 
 }
 
