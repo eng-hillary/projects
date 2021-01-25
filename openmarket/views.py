@@ -27,12 +27,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import(SellerProfileForm, ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
-
-from .forms import(SellerProfileForm, ProductProfileForm,
-
-                   ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
-
+from .forms import(SellerProfileForm, MarketPriceForm, ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
 
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
@@ -459,6 +454,50 @@ class BuyerPostList(APIView):
         queryset = BuyerPost.objects.order_by('-name')
         return Response({'buyerposts': queryset})
 
+#open market price
+
+class MarketPriceList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'openmarketprice_list.html'
+
+    def get(self, request):
+        queryset = MarketPrice.objects.order_by('market')
+        return Response({'marketprices': queryset})
+
+
+
+class CreateMarketPrice(CreateView):
+    template_name = 'create_openmarket_price.html'
+    form_class = MarketPriceForm
+    success_message = "Market Price  was posted successfully"
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateMarketPrice, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateMarketPrice, self).get_form_kwargs()
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        market = form.save(commit=False)
+        market.user = self.request.user
+        market.save()
+        return redirect('openmarket:openmarketprice_list')
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return JsonResponse({'error': True, 'errors': form.errors})
+        return self.render_to_response(self.get_context_data(form=form))
+  
 
 # views for service provider
 class ServiceProviderViewSet(viewsets.ModelViewSet):

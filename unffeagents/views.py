@@ -444,7 +444,6 @@ class MarketPriceViewSet(viewsets.ModelViewSet):
     """
     queryset = MarketPrice.objects.all().order_by('market')
     serializer_class = MarketPriceSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 

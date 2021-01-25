@@ -125,3 +125,13 @@ class BuyerPostForm(forms.ModelForm):
         self.fields['product'].empty_label = '--please select--'
  
 
+class MarketPriceForm(forms.ModelForm):
+    class Meta:
+        model = MarketPrice
+        exclude = ['user']
+
+    def __init__(self, *args, **kwargs):
+        super(MarketPriceForm, self).__init__(*args, **kwargs)
+        self.fields['market'].empty_label = '--please select--'
+        self.fields['product'].empty_label = '--please select--'
+       
