@@ -71,13 +71,13 @@
             <div class="nav-right col">
                 <ul class="nav-menus">
                     <li style="padding: 5px; color:white; font-size: larger;">Call Us: 0800-209003</li>
-                    <li>
+                    <!-- <li>
                         <form class="form-inline search-form">
                             <div class="form-group">
                                 <input class="form-control-plaintext" type="search" placeholder="Search.."><span class="d-sm-none mobile-search"><i data-feather="search"></i></span>
                             </div>
                         </form>
-                    </li>
+                    </li> -->
                     <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize-2"></i></a></li>
 
                     {% if request.user.id %}
@@ -101,7 +101,7 @@
                     </li>
                     {% else %}
                    
-                    <li><a href="{% url 'login' %}">LOGIN</a></li>
+                    <li><a href="{% url 'login' %}" style="font-size: 20px;">LOGIN</a></li>
                     
                     {% endif %}
                 </ul>
@@ -113,16 +113,6 @@
 
     <!-- Page Body Start-->
     <div class="page-body-wrapper">
-
-        <!-- Page Sidebar Start-->
-        <div class="page-sidebar" style="margin-top: 80px;">
-            <div class="sidebar custom-scrollbar">
-               
-                {% render_menu menu=menus.main user=request.user %}
-            </div>
-
-        </div>
-        <!-- Page Sidebar Ends-->
 
 
 
