@@ -1,9 +1,10 @@
 from django.shortcuts import render,get_object_or_404
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, SoilScience, Category,SellerPost
+from .models import (Product, Seller, SellerPost, BuyerPost, 
+ServiceProvider, Service, ContactDetails, Logistics, SoilScience, 
+Category,SellerPost, ProductCategory)
 from common.models import Region, District
 from .serializers import (ProductSerializer,
                           SellerSerializer,
-                          BuyerSerializer,
                           SellerPostSerializer,
                           BuyerPostSerializer,
                           ServiceProviderSerializer,
@@ -15,7 +16,7 @@ from .serializers import (ProductSerializer,
                           SellerApprovalSerializer,
                           PostServiceProviderSerializer,
                           PostServiceRegistrationSerializer,
-                          CategorySerializer,PostSellerSerializer)
+                          CategorySerializer,PostSellerSerializer,ProductCategorySerializer,PostSellerPostSerializer)
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import permissions
@@ -56,11 +57,42 @@ from unffeagents.models import MarketPrice
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Product by its id
+
+    list:
+        Return a list of all Products.
+
+    create:
+        Create a new Product.E.g
+        {
+        "name": "Chicken",
+        "slug": null,
+        "image": "product_image_url", # product's image
+        "description": "Chicken both hen and cock",
+        "available": true, #boolean fields
+        "category": 7
+    }
+
+    destroy:
+        Delete a Product.
+
+    update:
+        Update a Product.
+
+    partial_update:
+        Update a Product.
     """
     queryset = Product.objects.all().order_by('-id')
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+
+class ProductCategoryViewSet(viewsets.ModelViewSet):
+    queryset = ProductCategory.objects.all()
+    serializer_class = ProductCategorySerializer
+
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -334,28 +366,38 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
         return context
 
 
-class BuyerViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows products to be viewed or edited.
-    """
-    queryset = Buyer.objects.all().order_by('created')
-    serializer_class = BuyerSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class BuyerList(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'buyer_list.html'
-
-    def get(self, request):
-        queryset = Buyer.objects.order_by('created')
-        return Response({'buyers': queryset})
-
-
 # views for sellerpost
 class SellerPostViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Seller Post by its id
+
+    list:
+        Return a list of all Seller Posts.
+
+    create:
+        Create a new Seller Post.e.g
+        {
+        "product": "Milk",
+        "market": 1,
+        "quantity": 200.0,
+        "price_offer": "1100.04",
+        "delivery_option": "Pick up from the market",
+        "payment_options": "credit", # options['credit','full_payment','installements','exchange']
+        "payment_mode": "cash", # options['cash','bank','cheque','mobilemoney','credit_card','others']
+        "product_description": "Water melon",
+        "product_image_1": "http://127.0.0.1:8000/uploads/FB_IMG_15888191318596590.jpg",
+        "product_image_2": "http://127.0.0.1:8000/uploads/FB_IMG_15878330260195603_SaIZmeP.jpg"
+    }
+      
+    delete:
+        Delete a Selller Post.
+
+    PUT:
+        Update a Seller Post.
+
+    partial_update:
+        Update a Seller Post.
     """
     #queryset = SellerPost.objects.all().order_by('-id')
     serializer_class = SellerPostSerializer
@@ -376,6 +418,18 @@ class SellerPostViewSet(viewsets.ModelViewSet):
             queryset = products.filter(seller=seller)
         
         return queryset
+
+    def create(self, request, format=None):
+        serializer = PostSellerPostSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save(seller=self.request.user)
+            except:
+                return Response({'error': 'An error occured while posting your data'})
+
+            return Response({'status': 'successful'})
+        return Response(serializer.errors, status=400)
 
 
 class SellerPostList(APIView):

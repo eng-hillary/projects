@@ -1,14 +1,13 @@
 from rest_framework import serializers
 from .models import (Product,
                      Seller,
-                     Buyer,
                      SellerPost,
                      BuyerPost,
                      ServiceProvider,
                      Service,
                      ContactDetails,
                      Logistics,
-                     SoilScience,Category)
+                     SoilScience,Category,ProductCategory)
 from django.contrib.auth.models import User
 from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
@@ -22,8 +21,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'slug', 'image', 'description',
-         'date_created', 'date_updated')
+        fields = '__all__'
 
  
 
@@ -31,6 +29,12 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields =('id','cat_name')
+
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields ='__all__'
 
 
 
@@ -62,10 +66,6 @@ class SellerApprovalSerializer(serializers.ModelSerializer):
         fields =('status','approver','approved_date')
 
 
-class BuyerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Buyer
-        fields = ('user', 'created', 'modified')
 
 class SellerPostSerializer(serializers.ModelSerializer):
     payment_options = serializers.CharField(source='get_payment_options_display')
@@ -93,6 +93,12 @@ class SellerPostSerializer(serializers.ModelSerializer):
             return '{}'.format(obj.product.market.market_name)
         except:
             return None
+
+class PostSellerPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SellerPost
+        exclude =['seller']
+
 
 
 class BuyerPostSerializer(serializers.ModelSerializer):
