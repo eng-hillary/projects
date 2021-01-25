@@ -36,14 +36,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class SellerSerializer(serializers.ModelSerializer):
 
-    location = serializers.CharField(source='compute_location')
-
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
     major_products = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
     seller_type = serializers.CharField(source='get_seller_type_display')
 
-   # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
         fields = ('user','full_name','business_address', 'business_number', 'seller_type',

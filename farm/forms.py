@@ -99,7 +99,7 @@ class FarmRecordForm(forms.ModelForm):
 
 class FarmFnancialRecordForm(forms.ModelForm):
     next_payment_date = forms.DateField(widget=forms.DateInput(
-        attrs={'class': 'form-control', 'type': 'date'}))
+        attrs={'class': 'form-control', 'type': 'date'}),required=False)
     # transaction_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 
     class Meta:
