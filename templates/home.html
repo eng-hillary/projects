@@ -120,23 +120,36 @@
               
              </div>
              
-             <div class="row">
-
+             <div class="">
+<!-- 
                 <div class="col-xl-6 col-md-6 xl-80">
-                    <div class="card h-00 order-graph sales-carousel">
+                    <div class="card h-500 order-graph sales-carousel">
                         
                         <div id="piecontainer" >
                             <canvas id="pie-chart"></canvas>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-6 col-md-6 xl-50">
+                </div> -->
+
+                <div class="col-xl-12 col-md-6 xl-100">
                     <div class="card">
                         
                         <div class="card-body">
                         
                             <div id="barscontainer">
                                 
+                            </div>
+                        </div>
+                </div>
+                </div>
+
+                <div class="col-xl-12 col-md-6 xl-100">
+                    <div class="card">
+                        
+                        <div class="card-body">
+                        
+                            <div id="piecontainer">
+                                <canvas id="pie-chart"></canvas>
                             </div>
                         </div>
                 </div>
@@ -219,6 +232,47 @@
     };
 
     //piechart ends here
+
+
+
+
+//     Highcharts.chart('container', {
+//   chart: {
+//     plotBackgroundColor: null,
+//     plotBorderWidth: null,
+//     plotShadow: false,
+//     type: 'pie'
+//   },
+//   title: {
+//     text: 'Browser market shares in January, 2018'
+//   },
+//   tooltip: {
+//     pointFormat: '{data.name}: <b>{point.percentage:.1f}%</b>'
+//   },
+//   accessibility: {
+//     point: {
+//       valueSuffix: '%'
+//     }
+//   },
+//   plotOptions: {
+//     pie: {
+//       allowPointSelect: true,
+//       cursor: 'pointer',
+//       dataLabels: {
+//         enabled: false
+//       },
+//       showInLegend: true
+//     }
+//   },
+//   series: [{
+//     name: 'Brands',
+//     colorByPoint: true,
+//     data: []
+//   }]
+// });
+
+
+
 
     //Bar graph starts here
      Highcharts.chart('barscontainer', {
