@@ -50,6 +50,7 @@ class FarmSerializer(serializers.ModelSerializer):
             return "No"
 
 class PostFarmSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Farm
         exclude=['farmer']
@@ -112,6 +113,7 @@ class EnterpriseSerializer(serializers.ModelSerializer):
 
 
 class PostEnterpriseSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Enterprise
         exclude=[]
