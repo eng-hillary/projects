@@ -530,3 +530,5 @@ function bindInfoWindow(marker, map, infowindow, strDescription) {
 }
 
 google.maps.event.addDomListener(window, "load", initialize);
+
+
