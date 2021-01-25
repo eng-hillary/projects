@@ -121,16 +121,7 @@
              </div>
              
              <div class="row">
-
-                <div class="col-xl-6 col-md-6 xl-80">
-                    <div class="card h-00 order-graph sales-carousel">
-                        
-                        <div id="piecontainer" >
-                            <canvas id="pie-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6 col-md-6 xl-50">
+                <div class="col-xl-6 col-md-6 ">
                     <div class="card">
                         
                         <div class="card-body">
@@ -142,24 +133,32 @@
                 </div>
                 </div>
 
+                <div class="col-xl-6 col-md-6 ">
+                    <div class="card h-00 order-graph sales-carousel">
+                        
+                        <div id="piecontainer" style="height: 460px;">
+                            <canvas id="pie-chart" style="width: 450px !important; height: 350px !important;"></canvas>
+                        </div>
+                    </div>
+                </div>
+              
+
              </div>
 
 
                 <div class="row">
                    <div class="col-xl-12 xl-100">
                         <div class="card tab2-card">
-                            <div class="card-header">
-                                <h5>Map of Uganda</h5>
-                            </div>
                                 <div class="card-body">
                                     <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
-                                        <li class="nav-item"><a class="nav-link active show" id="farm_container-tab" data-toggle="tab" href="#farm_container" role="tab" aria-controls="farm_container" aria-selected="true" data-original-title="" title="">Farms</a></li>
-                                        <li class="nav-item"><a class="nav-link show" id="resource_container-tabs" data-toggle="tab" href="#resource_container" role="tab" aria-controls="resource_container" aria-selected="false" data-original-title="" title="">Resources</a></li>
-                                        <li class="nav-item"><a class="nav-link show" id="service_container-tabs" data-toggle="tab" href="#service_container" role="tab" aria-controls="serivice_container" aria-selected="false" data-original-title="" title="">Services</a></li>
+                                        <li class="nav-item"><a class="nav-link active show" id="farm_container-tab" data-toggle="tab" href="#farm_container" role="tab" aria-controls="farm_container" aria-selected="true" data-original-title="" title="">FARMS IN UGANDA</a></li>
+                                        <li class="nav-item"><a class="nav-link show" id="resource_container-tabs" data-toggle="tab" href="#resource_container" role="tab" aria-controls="resource_container" aria-selected="false" data-original-title="" title="">RESOURCES IN UGANDA</a></li>
+                                        <li class="nav-item"><a class="nav-link show" id="service_container-tabs" data-toggle="tab" href="#service_container" role="tab" aria-controls="serivice_container" aria-selected="false" data-original-title="" title="">SERVICES IN UGANDA</a></li>
                                         <li>
                                     </ul>
                                     <div class="tab-content" id="myTabContent">
                                         <div class="tab-pane fade active show" id="farm_container" role="tabpanel" aria-labelledby="farm_container-tab">
+                                        
                                             <div id="map" style="height:1000px; width: 100% !important;">
                                             </div>
                                         </div>
@@ -203,7 +202,7 @@
         title: {
             display: true,
             text: 'Percentage of all farmers based on Region',
-            fontSize:13
+            fontSize:15
         },
         legend: {
             display: true,
