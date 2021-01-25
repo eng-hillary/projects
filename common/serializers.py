@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group as UserGroup
 from rest_framework.authtoken.models import Token
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
+from drf_extra_fields.fields import Base64ImageField
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -45,7 +46,7 @@ class UserSerializer(serializers.Serializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    #profile_pic = serializers.FileField(required=False, source='profile.profile_pic')
+    profile_pic = Base64ImageField()
   
     class Meta:
         model = Profile
