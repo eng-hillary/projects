@@ -995,3 +995,6 @@ def load_products(request):
     products = MarketPrice.objects.filter(market_id=market_id).order_by('-min_price')
     return render(request, 'products_dropdown_list_options.html', {'products': products})
 
+
+
+

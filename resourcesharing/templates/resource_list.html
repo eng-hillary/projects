@@ -73,6 +73,20 @@
       <th data-formatter="operateFormatter"  class="text-center">Action</th>
     </tr>
   </thead>
+  
+        {% for resource in resource_object_lis %}
+          <tr>
+            <td>{{resource.name}}</td>
+            <td>{{resource.owner}}</td>
+            <td>{{resource.Phone_number1}}</td>
+            <td>{{resource.price}}</td>
+            
+            
+          </tr>
+          
+        {% endfor %}
+
+  
 </table>
  <!--bootstrap table ends here-->
 

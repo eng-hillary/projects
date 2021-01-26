@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import ResourceList,EditBookingView,ResourceBookingView,ResourceDetailView,CreateResourceView,EditResourceView,ResourceSharingList, ResourceBookingList
+from .views import ResourceList,EditBookingView,ResourceBookingView,ResourceDetailView,CreateResourceView,EditResourceView,ResourceSharingList, ResourceBookingList,ResourceList
 
 
 router = routers.DefaultRouter()

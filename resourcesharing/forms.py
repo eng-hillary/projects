@@ -32,5 +32,10 @@ class ResourceBookingForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ResourceBookingForm, self).__init__(*args, **kwargs)
+
+class ResourceListForm(forms.ModelForm):
+    class Meta:
+        model = Resource
+        fields = ['resource_name','owner','Phone_number1','price']
        
     
