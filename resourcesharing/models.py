@@ -31,10 +31,13 @@ class Resource(models.Model):
         return self.resource_name
 
     class Meta:
+        
         permissions = (
             ("can_approve_resourcebooking", "Can approve resourcebooking"),
               ("can_cancel_resourcebooking", "Can cancel resourcebooking")
         )
+        ordering = ("-id",)
+        
 
     @property
     def compute_location(self):

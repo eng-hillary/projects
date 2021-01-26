@@ -43,6 +43,16 @@ def can_add_farmer_profile(user, context):
         return True
     return user.has_perm('farmer.add_farmerprofile')
 
+def can_view_seller_post(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('openmarket.view_sellerpost')
+
+
+def can_view_buyer_post(user, context):
+    if user.is_superuser:
+        return True
+    return user.has_perm('openmarket.view_sellerpost')
 
 def can_view_farms(user, context):
     if user.is_superuser:
@@ -284,17 +294,17 @@ menus = [
     menu.PassTestNode(
         id='Service-section',
         css_class="sidebar-header",
-        label='<i data-feather="truck"></i><span>Manage Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<i data-feather="truck"></i><span>Services</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_services,
         children=[
 
-            menu.PassTestNode(id='register_service',
-                              label='<i class="fa fa-circle"></i>Register',
+            # menu.PassTestNode(id='register_service',
+            #                   label='<i class="fa fa-circle"></i>Register',
 
-                              pattern_name='openmarket:service_registration', test=can_register_services),
+            #                   pattern_name='openmarket:service_registration', test=can_register_services),
             menu.PassTestNode(id='services',
-                              label='<i class="fa fa-circle"></i>My Services',
+                              label='<i class="fa fa-circle"></i>Manage Services',
 
                               pattern_name='openmarket:serviceregistration_list', test=can_view_services),
 
@@ -378,18 +388,31 @@ menus = [
     menu.PassTestNode(
         id='product-section',
         css_class="sidebar-header",
-        label='<span class="fas fa-lemon"></span>  <span>My Products</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        label='<span class="fas fa-lemon"></span>  <span>Seller Post</span><i class="fa fa-angle-right fa-pull-right"></i>',
         url='#',
         test=can_view_products,
         children=[
-            menu.PassTestNode(id='create_product',
-                              label='<i class="fa fa-circle"></i>Add Products',
 
-                              pattern_name='openmarket:create_product', test=can_add_product),
             menu.PassTestNode(id='product_list',
-                              label='<i class="fa fa-circle"></i>Products',
+                              label='<i class="fa fa-circle"></i>My Products',
 
-                              pattern_name='openmarket:product_list', test=can_view_products),
+                              pattern_name='openmarket:sellerpost_list', test=can_view_seller_post),
+
+        ]
+    ),
+
+        menu.PassTestNode(
+        id='buyer-section',
+        css_class="sidebar-header",
+        label='<span class="fas fa-lemon"></span>  <span>Buyer Post</span><i class="fa fa-angle-right fa-pull-right"></i>',
+        url='#',
+        test=can_view_products,
+        children=[
+
+            menu.PassTestNode(id='product_list',
+                              label='<i class="fa fa-circle"></i>Post Product',
+
+                              pattern_name='openmarket:buyerpost_list', test=can_view_buyer_post),
 
         ]
     ),

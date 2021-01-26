@@ -7,7 +7,7 @@ db.sqlite3
 .vscode/
 uploads/
 static/CACHE
-node_modules
+node_modules/
 angelenv/
 myvenv/
 staticfiles/CACHE/
@@ -20,3 +20,4 @@ unffeagents/migrations/
 weather/migrations/
 lydiaenv/
 malaikaenv/
+hillary_env/

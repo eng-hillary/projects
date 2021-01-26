@@ -1,36 +1,37 @@
 from rest_framework import serializers
 from .models import (Product,
                      Seller,
-                     Buyer,
                      SellerPost,
                      BuyerPost,
                      ServiceProvider,
                      Service,
                      ContactDetails,
                      Logistics,
-                     SoilScience,Category)
+                     SoilScience,Category,ProductCategory)
 from django.contrib.auth.models import User
 from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
 from common.serializers import UserSerializer
 from common.customSerializers import GeometryPointFieldSerializerFields
+from drf_extra_fields.fields import Base64ImageField
 
 
 class ProductSerializer(serializers.ModelSerializer):
    
-    market = serializers.SerializerMethodField(method_name='get_market',source='market')
+   # market = serializers.SerializerMethodField(method_name='get_market',source='market')
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'market', 'local_name', 'image', 'description',
-         'date_created', 'date_updated')
+        fields = '__all__'
 
-    def get_market(self, obj):
-        try:
+ 
+class PostProductSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
 
-            return '{}'.format(obj.market.market_name)
-        except:
-            pass
+    class Meta:
+        model = Product
+        fields = '__all__'
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,29 +39,33 @@ class CategorySerializer(serializers.ModelSerializer):
         fields =('id','cat_name')
 
 
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields ='__all__'
+
+
 
 class SellerSerializer(serializers.ModelSerializer):
-   
+
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
-    # region = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # district = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # sub_county = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # parish = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
-    # village = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
     approver = serializers.SlugRelatedField(many=False,read_only=True, slug_field='first_name')
+    major_products = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
+    seller_type = serializers.CharField(source='get_seller_type_display')
 
-
-   # enterprise = EnterpriseSerializer()
     class Meta:
         model = Seller
-        fields = ('user','full_name', 'business_number', 'location', 'seller_type', 'date_of_birth', 'gender',
+        fields = ('user','full_name','business_address', 'business_number', 'seller_type',
           'major_products', 'status', 'approver','approved_date')
 
     def get_user_full_name(self, obj):
         return '{} {}'.format(obj.user.first_name, obj.user.last_name)
 
 
+class PostSellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seller
+        exclude =['status','approver','approved_date','user']
 
 
 class SellerApprovalSerializer(serializers.ModelSerializer):
@@ -69,15 +74,41 @@ class SellerApprovalSerializer(serializers.ModelSerializer):
         fields =('status','approver','approved_date')
 
 
-class BuyerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Buyer
-        fields = ('user', 'created', 'modified')
 
 class SellerPostSerializer(serializers.ModelSerializer):
+    payment_options = serializers.CharField(source='get_payment_options_display')
+    payment_mode = serializers.CharField(source='get_payment_mode_display')
+    product = serializers.SerializerMethodField(method_name='get_product',source='product')
+    seller = serializers.SerializerMethodField(method_name='get_seller',source='seller')
+    market = serializers.SerializerMethodField(method_name='get_market',source='product')
+
     class Meta:
         model = SellerPost
-        fields = ('name', 'product', 'quantity', 'price_offer', 'delivery_option','payment_options', 'payment_mode')
+        fields = ('id','seller', 'product','market', 'quantity','unit_of_measure', 'price_offer', 'delivery_option','payment_options', 'payment_mode','product_description','product_image_1','product_image_2')
+
+    def get_product(self, obj):
+        try:
+            return '{}'.format(obj.product.product.name)
+        except:
+            return None
+    def get_seller(self, obj):
+        try:
+            return '{} {}'.format(obj.seller.user.first_name, obj.seller.user.last_name)
+        except:
+            return None
+    def get_market(self, obj):
+        try:
+            return '{}'.format(obj.product.market.market_name)
+        except:
+            return None
+
+class PostSellerPostSerializer(serializers.ModelSerializer):
+    product_image_1 = Base64ImageField()
+    product_image_2 = Base64ImageField()
+    class Meta:
+        model = SellerPost
+        exclude =['seller']
+
 
 
 class BuyerPostSerializer(serializers.ModelSerializer):
@@ -95,7 +126,8 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ServiceProvider
-        fields = ('user_id','user',  'nin','service_provider_location','category', 'list_of_services_if_more_than_one', 'is_the_service_available', 'service_location', 'is_the_service_at_a_fee','status', 'approver', 'approved_date'
+        fields = ('user_id','user',  'nin','service_provider_location','category', 'is_the_service_available', 'is_the_service_at_a_fee','status', 'approver',
+         'approved_date','gender'
        )
     '''
     returns yes or no for boolean fields
@@ -121,29 +153,32 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
         model = ServiceProvider
         fields =('status','approver','approved_date')
 
-
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField(method_name='get_user_full_name')
+    service_provider = serializers.SerializerMethodField(method_name='get_user_full_name')
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     #category = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
     category = serializers.SlugRelatedField(many=False,read_only=True, slug_field='cat_name')
-    location = GeometryPointFieldSerializerFields()
+    location = serializers.SerializerMethodField(method_name='get_service_location',source='location')
 
 
     class Meta:
         model = Service
-        fields = ('id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
+        fields = ('id','service_provider', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
         'available_services','rent','name_of_storage_center','location_of_storage_center','certification_status',
         'vehicle_type','vehicle_capacity','location','others','full_name')
 
     def get_user_full_name(self, obj):
-        return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+        return '{} {}'.format(obj.service_provider.user.first_name, obj.service_provider.user.last_name)
+    
+    def get_service_location(self,obj):
+        return '{}'.format(obj.compute_location)
 
 
 class PostServiceRegistrationSerializer(serializers.ModelSerializer):
+    picture = Base64ImageField(required=False)
     class Meta:
         model = Service
-        exclude=['user']
+        exclude=['service_provider']
 
 class ContactDetailsSerializer(serializers.ModelSerializer):
     class Meta:

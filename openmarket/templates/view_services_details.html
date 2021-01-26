@@ -57,44 +57,7 @@
                     <b>Availability Date</b>: {{servicerecord.availability_date}} <br>
                     <h3 class="product-title">Address</h3>
                     
-                    <hr>
-                    <h6 class="product-title size-text">Other Services Offered by {{providerrecord.user.profile}} </h6>
-                    <table data-toggle="table" data-show-toggle="true" data-search="true"
-                        data-show-columns-toggle-all="true" data-show-columns="true">
-                        <thead>
-
-                            <tr>
-                                <!--<th>Farm Name</th>-->
-                                <th>Service Name</th>
-                                <th>Category</th>
-                                <th>Service Type</th>
-                                <th>Size</th>
-                                <th data-visible="false">Availability Date</th>
-                                <th data-visible="false">Picture</thdata-visible="false"
-                                        data-formatter="imageFormatter">
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for service in servicerecord.serviceregistration.all %}
-                            <tr>
-                                <!--<td>{{service.farm_name}}</td>-->
-                                <td>{{servicerecord.service_name}}</td>
-                                <td>{{servicerecord.category}} </td>
-                                <td>{{servicerecord.service_type}}</td>
-                                <td>{{servicerecord.size}}</td>
-
-                                <td>{{servicerecord.availability_date}}</td>
-                                <td>
-                                    <img src="{{servicerecord.picture.url}}" class="img-thumbnail">
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-
-
-
-                    <hr>
+                   
 
                     <div class="m-t-15">
                         <button class="btn btn-primary m-r-10" id="approve_btn" type="button">Approve</button>
@@ -138,8 +101,8 @@
             $approve.prop('disabled', true)
 
             swal({
-                title: "Approve Service Provider Applications?",
-                text: "Are you sure you want to approve these applications!",
+                title: "Approve Services?",
+                text: "Are you sure you want to approve services",
                 icon: "success",
                 buttons: true,
                 dangerMode: false,
@@ -157,11 +120,11 @@
                             console.log('approved successfully');
                         },
                 });
-            swal("You have approve service provider/s successfully!", {
+            swal("You have approve service/s successfully!", {
                 icon: "success",
             });
         } else {
-            swal("You have cancelled service provider approvals!");
+            swal("You have cancelled service approvals!");
         }
 });
 
@@ -193,11 +156,11 @@
                         console.log(' Service Provider /s approved successfully');
                     },
             });
-        swal("You have approved Service Provider/s successfully!", {
+        swal("You have Declined Services successfully!", {
             icon: "success",
         });
     } else {
-        swal("You have cancelled Service Provider approvals!");
+        swal("You have cancelled Service approvals!");
     }
 });
 

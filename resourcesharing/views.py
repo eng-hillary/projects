@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import (Resource, ResourceSharing, ResourceBooking)
-from .forms import(ResourceForm,ResourceBookingForm)
+from .forms import(ResourceForm,ResourceBookingForm,ResourceListForm)
 from .serializers import ResourceSerializer,PostResourceSerializer, ResourceSharingSerializer, ResourceBookingSerializer
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -21,7 +21,7 @@ from django.http import (HttpResponseRedirect,JsonResponse, HttpResponse,
                          Http404)
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.views.generic import (
-    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView)
+    CreateView, UpdateView, DetailView, TemplateView, View, DeleteView, ListView)
 from django.db import IntegrityError
 from farmer.models import FarmerProfile
 # views for resources
@@ -33,6 +33,17 @@ class ResourceViewSet(viewsets.ModelViewSet):
     """
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        allowed_users = ['farmer']
+        if user.is_superuser:
+            queryset = Resource.objects.all().order_by('id')
+        elif user.groups.filter(name='farmer').exists():
+            queryset = Resource.objects.filter(owner=self.request.user).order_by('-id')
+        else:
+            queryset = []
+        return queryset
     
     def create(self, request, format=None):
         serializer = PostResourceSerializer(data=request.data)
@@ -136,11 +147,31 @@ class ResourceDetailView(DetailView):
 class ResourceList(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'resource_list.html'
+    #context_object_name = 'resource_object_list'
 
+    """
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            queryset = Resource.objects.all()
+        else:
+            queryset = Resource.objects.filter(owner=user)
+        return Response({'resource_object_list':queryset})
+    """
+    
     def get(self, request):
-       # queryset = Sector.objects.order_by('-id')
-        return Response()
-
+        #queryset = Sector.objects.order_by('-id')
+        user = self.request.user
+        allowed_users = ['farmer']
+        if user.is_superuser:
+            queryset = Resource.objects.all().order_by('id')
+        elif user.groups.filter(name='farmers').exists():
+            queryset = Resource.objects.filter(owner=self.request.user).order_by('-id')
+        else:
+            queryset = []
+        return Response({'ressource_object_list':queryset})
+        #return Response()
+    
 # views for resource booking
 class ResourceBookingList(LoginRequiredMixin,APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -270,6 +301,5 @@ class ResourceSharingList(APIView):
     def get(self, request):
         queryset = ResourceSharing.objects.order_by('resource')
         return Response({'resourcesharings': queryset})
-
 
 

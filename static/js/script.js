@@ -145,10 +145,10 @@ $(document).ready(function () {
     var wheather_api = "https://api.openweathermap.org/data/2.5/weather?lat=" + crd.latitude + "&lon=" + crd.longitude + "&appid=b63fe7d4cf27f561ccaed0342922db91";
     var dairy_weather_url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + crd.latitude + "&lon=" + crd.longitude + "&exclude=hourly,current,minutely,&appid=b63fe7d4cf27f561ccaed0342922db91";
     var community_weather_url = "/weather/api/community_weather/?lon=" + crd.longitude + "&lat=" + crd.latitude;
-    console.log(community_weather_url);
-    console.log('Your current position is:');
-    console.log(`Latitude : ${crd.latitude}`);
-    console.log(`Longitude: ${crd.longitude}`);
+    //console.log(community_weather_url);
+    //console.log('Your current position is:');
+    //console.log(`Latitude : ${crd.latitude}`);
+    //console.log(`Longitude: ${crd.longitude}`);
     // console.log(`More or less ${crd.accuracy} meters.`);
     $.ajax({
       url: wheather_api,
@@ -377,9 +377,10 @@ var icon = "";
 
 function initialize() {
   var infowindow = new google.maps.InfoWindow();
+  var myLatlng1 = new google.maps.LatLng(1.0609637, 32.5672804);
   var mapProp = {
-    center: new google.maps.LatLng(1.0609637, 32.5672804),
-    zoom: 8,
+    center: myLatlng1,
+    zoom: 9,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
   };
 
@@ -398,7 +399,12 @@ function initialize() {
     mapProp
   );
 
-
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+        initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        map.setCenter(initialLocation);
+    });
+}
   //FARMS
   $.getJSON("/farm/api/maps/", function (json) {
     var farmdata = [];
@@ -414,7 +420,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: map,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"},
         data: data.farm_name,
       });
 
@@ -455,7 +461,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: servicemap,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"},
         data: data.service_name,
       });
 
@@ -486,7 +492,7 @@ function initialize() {
       var marker = new google.maps.Marker({
         position: latlon,
         map: resourcemap,
-        //icon: icon,
+        icon: {url: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png"},
         data: data.resource_name,
       });
 
@@ -512,6 +518,8 @@ function initialize() {
     });
   });
 
+
+
 }
 
 function bindInfoWindow(marker, map, infowindow, strDescription) {
@@ -522,3 +530,5 @@ function bindInfoWindow(marker, map, infowindow, strDescription) {
 }
 
 google.maps.event.addDomListener(window, "load", initialize);
+
+

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Seller, Product, ServiceProvider,Service,Category
+from .models import Seller,ProductCategory, Product, ServiceProvider,Service,Category,SellerPost
 from common.models import Region, District
 from django import forms
 #from .forms import ServiceProviderProfileForm
@@ -14,13 +14,21 @@ class SellerAdmin(admin.ModelAdmin):
 
 admin.site.register(Seller, SellerAdmin)
 
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+        'slug'
+    ]
+
+    search_fields = ['name', 'slug']
+
+admin.site.register(ProductCategory, ProductCategoryAdmin)
 
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
        'name', 
-       'market', 
-       'local_name', 
+       'slug', 
        'image', 
        'description', 
        'date_created', 
@@ -55,3 +63,21 @@ class CategoryAdmin(admin.ModelAdmin):
        
 ]
 admin.site.register(Category, CategoryAdmin)
+
+
+class SellerPostAdmin(admin.ModelAdmin):
+    list_display = [
+       'seller', 
+       'product', 
+       'quantity', 
+       'unit_of_measure',
+       'price_offer', 
+       'delivery_option', 
+       'payment_options', 
+       'payment_mode',
+       'product_description'
+        
+]
+    search_fields = ['seller', 'product_description','payment_mode','payment_mode']
+
+admin.site.register(SellerPost, SellerPostAdmin)

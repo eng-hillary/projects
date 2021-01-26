@@ -1,14 +1,15 @@
 from django.urls import include, path
 from rest_framework import routers
 from . import views
-from .views import (AgentProfileList, MarketList, MarketPriceList, 
+from .views import (AgentProfileList,ProductOrderingView,ProductOrderingList,ProductDetailView, MarketList, MarketPriceList, CreateMarketPrice,EditMarketPriceView,
 NoticeList,CreateAgentProfile, CreateNoticeView,EditNoticeView, EditAgentProfileView,
 CallList,EquiryList,CreateEquiryView,EditEquiryView,UsersList,CreateMarket,MarketDetailView,
-EditMarketView)
+EditMarketView, CreateMarketPrice, EditMarketPriceView)
 
 
 router = routers.DefaultRouter()
-router.register(r'agentprofile', views.AgentProfileViewSet)
+router.register(r'productordering', views.ProductOrderingViewSet)
+router.register(r'agentprofile', views.AgentProfileViewSet, basename='agents')
 router.register(r'market', views.MarketViewSet, basename='markets_api')
 router.register(r'marketprice', views.MarketPriceViewSet)
 router.register(r'notice', views.NoticeViewSet)
@@ -33,7 +34,15 @@ urlpatterns = [
     path('marketprice', MarketPriceList.as_view(), name='marketprice_list'),
     path('create/market/price', CreateMarketPrice.as_view(), name='add_market_price'),
     path('<int:pk>/edit/market/price',EditMarketPriceView.as_view(), name='edit_market_price'),
-    path('<int:pk>/view/', MarketDetailView.as_view(), name="view_market_detail"),
+
+    path('<int:pk>/view/market', MarketDetailView.as_view(), name="view_market_detail"),
+    path('<slug:category_slug>/', MarketDetailView.as_view(), name='view_market_detail_by_category'),
+    path('<int:pk>/<slug:slug>/', ProductDetailView.as_view(), name="view_product_detail"),
+
+
+    path('ordering/<int:product_pk>', ProductOrderingView.as_view(), name="productordering"), 
+    path('productordering', ProductOrderingList.as_view(), name='productordering_list'), 
+
     path('alert&notification', NoticeList.as_view(), name='notice_list'),
     path('calls',CallList.as_view(), name='calls'),
     path('enquiries',EquiryList.as_view(), name='enquiries'),

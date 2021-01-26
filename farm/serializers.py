@@ -5,7 +5,7 @@ from .models import (Sector, Enterprise, Farm, FarmFacility, Produce, FarmProduc
 
 from farmer .serializers import FarmerProfileSerializer
 from django.contrib.auth.models import User
-
+from drf_extra_fields.fields import Base64ImageField
 from geopy.geocoders import Nominatim
 
 
@@ -27,8 +27,8 @@ class FarmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Farm
-        fields = ('id', 'farm_name', 'farmer', 'lat', 'lon','location',
-         'start_date','close_date',  'image','availability_of_services','availability_of_water','land_occupied','available_land', 'status', 'general_remarks')
+        fields = ['id', 'farm_name', 'farmer','location',
+         'start_date','close_date',  'image','availability_of_services','availability_of_water','land_occupied','available_land', 'status', 'general_remarks']
 
     def get_farmer_name(self, obj):
         try:
@@ -50,6 +50,7 @@ class FarmSerializer(serializers.ModelSerializer):
             return "No"
 
 class PostFarmSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Farm
         exclude=['farmer']
@@ -60,6 +61,11 @@ class FarmRecordSerializer(serializers.ModelSerializer):
         model = FarmRecord
         fields = '__all__'
 
+class PostFarmRecordSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model = FarmRecord
+        exclude = []
 
 class FarmFinancilRecordSerializer(serializers.ModelSerializer):
     enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
@@ -71,12 +77,24 @@ class FarmFinancilRecordSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PostFarmFinancilRecordSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model = FinancialRecord
+        exclude=['reported_by','transaction_date']
+
 class FarmProductionRecordSerializer(serializers.ModelSerializer):
     enterprise = serializers.SlugRelatedField(many=False,read_only=True, slug_field='name')
 
     class Meta:
         model = ProductionRecord
         fields = '__all__'
+
+class PostFarmProductionRecordSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ProductionRecord
+        exclude=[]
 
 class EnterpriseTypeSerializer(serializers.ModelSerializer):
     
@@ -95,6 +113,7 @@ class EnterpriseSerializer(serializers.ModelSerializer):
 
 
 class PostEnterpriseSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Enterprise
         exclude=[]
@@ -109,6 +128,7 @@ class QuerySerializer(serializers.ModelSerializer):
         'action_taken', 'image', 'reporting_date', 'solution']
 
 class PostQuerySerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Query
         exclude=[]
@@ -136,6 +156,9 @@ class FarmMapSerializer(serializers.ModelSerializer):
     phone_number =  serializers.SerializerMethodField(method_name='get_user_phone_number',source='farmer__user__profile')
     district = serializers.SerializerMethodField(method_name='get_district',source='farmer')
     region = serializers.SerializerMethodField(method_name='get_region',source='farmer')
+    lon = serializers.SerializerMethodField(method_name='get_lon',source='location')
+    lat = serializers.SerializerMethodField(method_name='get_lat',source='location')
+
     class Meta:
         model = Farm
         fields = ('id','region','phone_number','district','farm_name','farmer',  'lat', 'lon','land_occupied')
@@ -167,21 +190,30 @@ class FarmMapSerializer(serializers.ModelSerializer):
             return '{}'.format(obj.farmer.user.profile.region)
         except:
             return None
+    def get_lon(self, obj):
+        try:
+            return '{}'.format(obj.location.y)
+        except:
+            return None
+
+    def get_lat(self, obj):
+        try:
+            return '{}'.format(obj.location.x)
+        except:
+            return None
 
 class EnterpriseSelectionSerializer(serializers.ModelSerializer):
-     user = serializers.SerializerMethodField(method_name='get_user_full_name')
-     #full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
-     #user = serializers.SerializerMethodField(method_name='get_id')
-     #recommendation = serializers.SlugRelatedField(many=True,read_only=True, slug_field='crops')
+    user = serializers.SerializerMethodField(method_name='get_user_full_name')
+    crops = serializers.SlugRelatedField(many=True,read_only=True, slug_field='crop')
 
-     class Meta:
+    class Meta:
          model = EnterpriseSelection
          fields = ('id','own_piece_of_land','what_is_your_inspiration_for_considering_in_farming',
         'involved_in_anyother_farming_activity','full_time_devotion',
         'time_allocated_to_farming','user', 'profession','monthly_income','level_of_education',
-        'capital','land_size','land_location','region','scale','recommendation')
+        'capital_available','land_size','land_location','region','scale','recommendation','crops')
     
-     def get_user_full_name(self, obj):
+    def get_user_full_name(self, obj):
          try:
             return '{} {}'.format(obj.user.first_name, obj.user.last_name)
          except:

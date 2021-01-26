@@ -30,6 +30,8 @@ class AgentProfile(models.Model):
         return self.specific_role
 
 
+
+
 class Market(models.Model):
     market_name = models.CharField(max_length=100, blank = False)
     market_description = models.TextField(max_length=600, blank=False)
@@ -64,7 +66,12 @@ class MarketPrice(TimeStampedModel, models.Model):
     
 
     def __str__(self):
-        return str(self.market)
+        return '{} {}-{}'.format(self.product.name, self.min_price, self.max_price)
+
+    @property
+    def get_product(self):
+        return '{} {}-{}'.format(self.product.name, self.min_price, self.max_price)
+        
 
 
 

@@ -51,8 +51,7 @@
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="name" data-sortable="true">Name</th>
-      <th data-field="market" data-sortable="true">Enterprise</th>
-      <th data-field="local_name" data-sortable="true">Local Name</th>
+      <th data-field="slug" data-sortable="true">Local Name</th>
       <th data-field="image" data-visible="true" data-formatter="imageFormatter" data-sortable="true">Image</th>
       <th data-field="description" data-sortable="true">Description</th>
     
@@ -92,23 +91,19 @@
 
   function operateFormatter(value, row, index) {
     var url = "/openmarket/" + row.id + "/edit/product/"
-    var view_url = "/openmarket/" + row.id + "/view"
+    
     return [
       {% if request.user.is_superuser or perms.openmarket.change_product %}
   '<a class="Edit " href="' + url + '" title="Update">',
     '<i class="fa fa-edit"></i>',
     '</a>  ',
     {% endif %}
-  {% if request.user.is_superuser or perms.openmarket.view_product %}
-  '<a class="Edit " href="' + view_url + '" title="De"tails>',
-    '<i class="fa fa-eye"></i>',
-    '</a>  ',
-    {% endif %}
+
     ].join('')
   }
   function imageFormatter(value, row) {
     var url = row.image;
-    return '<img class="img-thumbnail" src="' + url + '">'
+    return '<img class="img-thumbnail" style="height:80px; width:80px;" src="' + url + '">'
   }
 
 

@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 from django.contrib.gis import forms 
 from django.contrib.gis.geos import Point
-
+from openmarket.models import ProductOrdering
 class CustomUserChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
          return obj.get_full_name()
@@ -89,12 +89,24 @@ class MarketForm(forms.ModelForm):
 
 
 class MarketPriceForm(forms.ModelForm):
-   
-
     class Meta:
         model = MarketPrice
-        exclude = []
+        exclude = ['user']
 
     def __init__(self, *args, **kwargs):
-        super(MarketForm, self).__init__(*args, **kwargs)
-        self.fields['market_description'].widget.attrs.update({'rows': '2'})
+        super(MarketPriceForm, self).__init__(*args, **kwargs)
+        self.fields['market'].empty_label = '--please select--'
+        self.fields['product'].empty_label = '--please select--'
+       
+   
+class ProductOrderingForm(forms.ModelForm):
+    delivery_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+     
+    class Meta:
+        model = ProductOrdering
+        exclude = ['buyer']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ProductOrderingForm, self).__init__(*args, **kwargs)
+              

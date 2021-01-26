@@ -65,8 +65,7 @@ class FarmAdmin(admin.ModelAdmin):
         'start_date',
         'close_date',
         'status',
-        'lat',
-        'lon',
+        'location',
         'availability_of_services',
         'availability_of_water',
         'land_occupied'
@@ -113,3 +112,4 @@ class CropAdmin(admin.ModelAdmin):
         'crop',
     ]
 admin.site.register(Crop, CropAdmin)
+

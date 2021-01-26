@@ -9,7 +9,7 @@
                 <div class="page-header-left">
                     
                     <h3>Seller List <br>
-                      {% if  perms.openmarket.add_seller and not request.user.seller %}
+                      {% if request.user.is_superuser or perms.seller.add_seller %}
                       <small><a class="add-new" href="{% url 'openmarket:create_seller' %}">
                         {% if request.user.is_superuser %}
                         Add new
@@ -78,7 +78,7 @@
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="full_name" data-sortable="true">User</th>
       <th data-field="business_number" data-sortable="true">Business Number</th>
-      <th data-field="location" data-sortable="true">Business Address</th>
+      <th data-field="business_address" data-sortable="true">Business Address</th>
       <th data-field="seller_type" data-sortable="true">Seller Type</th>
       <th data-field="major_products" data-sortable="true">Major Products</th>
       
@@ -227,9 +227,10 @@
           console.log('approved successfully');
         },
        });
-    swal("You have approve seller/s successfully!", {
+       swal("You have approved seller/s successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});}
   } else {
     swal("You have cancelled seller approvals!");
   }
@@ -267,7 +268,9 @@
        });
     swal("You have approved seller/s successfully!", {
       icon: "success",
-    });}
+      
+    }).then(() =>{
+        window.location.reload()});;}
   } else {
     swal("You have cancelled seller approvals!");
   }

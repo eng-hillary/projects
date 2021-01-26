@@ -73,7 +73,6 @@
   data-toolbar="#toolbar"
   data-side-pagination="server"
   data-server-sort="false"
-  data-page-list="[10, 25, 50, 100, all]"
   data-export-types="[‘png’, ‘csv’,‘doc’, ‘excel’, ‘xlsx’, ‘pdf’]"
   data-page-list="[10, 25, 50, 100, all]"
   data-url="/farmer/api/farmerprofiles/?format=json"
@@ -296,7 +295,7 @@
           console.log('approved successfully');
         },
        });
-    swal("You have approved farmer/s successfully!", {
+    swal("You have declined farmer/s successfully!", {
       icon: "success",
     }).then(() =>{
         window.location.reload()});

@@ -17,39 +17,53 @@ from geopy.geocoders import Nominatim
 from django.contrib.gis.db import models
 from django.contrib.gis.db import models
 
+from django.urls import reverse
+
+
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=200,db_index=True, null=True)
+    slug = models.SlugField(max_length=200,unique=True, null=True)
+
+   
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'productcategory'
+        verbose_name_plural = 'productcategories'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('unffeagents:view_market_detail_by_category',
+                       args=[self.slug])
+
+class Product(models.Model):
+    category = models.ForeignKey(ProductCategory,related_name='products', null=True,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=True)
+    slug = models.SlugField(_('Local Name'), max_length=200, null=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
+    description = models.TextField(blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
 
 
 class Seller(models.Model):
     #personal information
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='seller',primary_key=True)
-    date_of_birth = models.DateField(max_length=8)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=15)
     seller_type = models.CharField(choices=TYPE,max_length=15, null=False)
-    major_products = models.CharField(max_length=50,blank=True)
-
-    #Location
-    business_number = PhoneNumberField()
-    #business_location = models.TextField(_('Business Address'),null=True)
-    location = models.PointField( srid=4326,null=True)
-   
-    status = models.CharField(choices=REGISTER_STATUS, default='in_active', max_length=20,null=False)
+    major_products = models.ManyToManyField(Product, blank=False)
+    business_number = PhoneNumberField()   
+    status = models.CharField(choices=REGISTER_STATUS, default='Pending', max_length=20,null=False)
+    business_address = models.TextField(null=True, blank=True)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=15, default=False)
+    
       # handle approving of a seller
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
-
-    @property
-    def compute_location(self):
-        geolocator = Nominatim(user_agent="ICT4Farmers", timeout=10)
-        
-       
-        try:
-            lat = str(self.location.y)
-            lon = str(self.location.x)
-            location = geolocator.reverse(lat + "," + lon)
-            return '{}'.format(location.address)
-        except:
-            #location = str(self.location.y) + "," + str(self.location.x)
-            return 'slow network, loading location ...'
 
 
     class Meta:
@@ -58,46 +72,54 @@ class Seller(models.Model):
             ("can_approve_sellers", "Can approve Sellers"),
         )
     def __str__(self):
-        return self.seller_type
+        return '{} {}'.format(self.user.first_name , self.user.last_name)
 
-class Product(models.Model):
-    name = models.CharField(max_length=50, null=True)
-    market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
-    local_name = models.CharField(max_length=200,null=True)
-    image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
-    description = models.TextField(blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-
-
-    def __str__(self):
-        return self.name
-
-
-class Buyer(TimeStampedModel, models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
-
-    class meta:
-        ordering =("created")
 
 
 class SellerPost(models.Model):
-    name = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey('unffeagents.MarketPrice', on_delete=models.CASCADE)
+    market = models.ForeignKey('unffeagents.Market', on_delete=models.CASCADE, null=True)
     quantity = models.FloatField(max_length=50, null=True)
+    unit_of_measure = models.CharField(blank=False, max_length=100, null=True) # unit of measure like kilogram
     price_offer = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_option = models.CharField(max_length=50)
     payment_options = models.CharField(choices=PAYMENT_OPTIONS, max_length=50, null=True)
     payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, max_length=50)
+    product_description = models.TextField(null=True, blank=True)
+    product_image_1 = models.ImageField(null=True, blank=False)
+    product_image_2 = models.ImageField(null=True, blank=True)
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('id',)
 
+    def __str__(self):
+        return self.product.product.name
+
+    
+    def get_absolute_url(self):
+        return reverse('unffeagents:view_product_detail',
+                       args=[self.id, self.product.product.slug])
+
+
+
+class ProductOrdering(models.Model):
+    product = models.ForeignKey(SellerPost, on_delete = models.CASCADE)
+    buyer = models.CharField(max_length=25,null=True, blank=True)
+    quantity = models.DecimalField(decimal_places=2, max_digits=20, blank=False)
+    delivery_date = models.DateField(null=True, blank=True)
+    delivery_address = models.TextField(blank=False, null=False)
+    payment_mode = models.CharField(choices=PAYMENT_MODE, null=True, blank=True, max_length=25)
+    payment_method = models.CharField(choices=PAYMENT_OPTIONS, max_length=25,null=True, blank=True)
+    Additional_notes = models.TextField(blank=False, null=False)
+    
+    def __str__(self):
+        return self.product
 
 class BuyerPost(models.Model):
-    name = models.ForeignKey(Buyer, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=True)
     current_location = models.CharField(max_length=50)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.CharField(max_length=50, null=True)
     quantity = models.FloatField(max_length=50, null=True)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_options = models.CharField(max_length=50, null=False)
@@ -106,13 +128,13 @@ class BuyerPost(models.Model):
     any_other_comment =models.TextField(null=True)
 
     class meta:
-        ordering =("name",)
+        ordering =("id",)
 
 
 
 class Category(TimeStampedModel, models.Model):
     cat_name = models.CharField(max_length=255)
-   
+    
     def __str__(self):
         return self.cat_name
 
@@ -121,9 +143,11 @@ class ServiceProvider(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='serviceprovider',primary_key=True)
     nin = models.CharField(_('National Identity Number (NIN)'),max_length=14, null=True, blank=False)
     service_provider_location = models.CharField(null=True, max_length=50)
-    list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
+    #business_number = PhoneNumberField(default=False)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=15, default=False)
+    #list_of_services_if_more_than_one = models.CharField(blank=True, max_length=50)
     is_the_service_available = models.BooleanField(choices=YES_OR_NO, null=True)
-    service_location = models.CharField(max_length=100, null=True)
+    #service_location = models.CharField(max_length=100, null=True)
     is_the_service_at_a_fee = models.BooleanField(choices=YES_OR_NO, null=True)
    # category = models.ManyToManyField(to='openmarket.Category', related_name='enterprise categories', choices=)
     category = models.ManyToManyField(Category, related_name='Categories')
@@ -142,12 +166,14 @@ class ServiceProvider(models.Model):
 
 class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='service',null=True)
+    #This is a service provider
+
+    service_provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='service',null=True)
     category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True,blank=True)
-    terms_and_conditions = models.BooleanField(default=True)
+    terms_and_conditions = models.TextField(null=True, blank=True)
     availability_date = models.DateField(blank=True, null=True)
     availability_time = models.DateTimeField(auto_now_add=True, null=True)
     picture = models.ImageField(null=True, blank=True)
@@ -244,4 +270,4 @@ class SoilScience(models.Model):
     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
 
     class Meta:
-        ordering =("name",)
+        ordering =["name"]
