@@ -168,15 +168,12 @@ class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
     #This is a service provider
 
-    user = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='service',null=True)
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='service',default=True)
-
+    service_provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='service',null=True)
     category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True,blank=True)
-    terms_and_conditions = models.BooleanField(default=True)
+    terms_and_conditions = models.TextField(null=True, blank=True)
     availability_date = models.DateField(blank=True, null=True)
     availability_time = models.DateTimeField(auto_now_add=True, null=True)
     picture = models.ImageField(null=True, blank=True)

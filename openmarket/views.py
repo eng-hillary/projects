@@ -605,18 +605,20 @@ class CreateServiceView(LoginRequiredMixin, CreateView):
         profile = form.save(commit=False)
         # setting farmer profile to in-active
         profile.status = 'Pending'
-        profile.user = self.request.user
+        service_provider = ServiceProvider.objects.get(user=self.request.user)
+        profile.service_provider = service_provider
         profile.save()
-        form.save_m2m()
+        
+
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Service Successful'
         message = render_to_string('profile_created_successful.html', {
-            'user': profile.user,
+            'user': profile.service_provider.user,
             'domain': current_site.domain
         })
-        to_email = profile.user.email
+        to_email = profile.service_provider.user.email
         email = EmailMessage(
             subject, message, to=[to_email]
         )
@@ -634,7 +636,40 @@ class CreateServiceView(LoginRequiredMixin, CreateView):
 
 class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Service by its id
+
+    list:
+        Return a list of all Services.
+
+    create:
+        Create a new Service.e.g
+        {
+        "service_name": "Test Service",
+        "size":null, //in case of a storage facility
+        "category":1, //foreign key from category
+        "availability_date":"2021-01-26",
+        "terms_and_conditions":"Must be returned in good condition",
+        "picture":null,
+        "description":"service description",
+        "available_services":"services available",
+        "rent":null,
+        "name_of_storage_center":null,
+        "location_of_storage_center":null,
+        "certification_status":null, // 
+        "vehicle_type":null, // the type of vehicle e.g passenger van
+        "vehicle_capacity":null,//interger field
+        "others":null,// any other comment or description
+        "location": "POINT(0.277157303776631 32.52098210502083)"
+        }
+    delete:
+        Delete a Service.
+
+    PUT:
+        Update a Service.
+
+    partial_update:
+        Update a Service.
     """
     #queryset = Service.objects.all().order_by('service_name')
     serializer_class = ServiceRegistrationSerializer
@@ -670,8 +705,8 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             try:
                 #     serializer.status ='Pending'
-                #serializer.user = self.request.user
-                serializer.save(user=self.request.user)
+                service_provider = ServiceProvider.objects.get(user=self.request.user)
+                serializer.save(service_provider=service_provider)
             except IntegrityError:
                 return Response({'error': 'Service account already exists'})
 
