@@ -59,6 +59,8 @@ class Seller(models.Model):
     business_number = PhoneNumberField()   
     status = models.CharField(choices=REGISTER_STATUS, default='Pending', max_length=20,null=False)
     business_address = models.TextField(null=True, blank=True)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=15, default=False)
+    
       # handle approving of a seller
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
