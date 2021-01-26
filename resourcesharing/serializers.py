@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import (Resource, ResourceSharing, ResourceBooking)
+from drf_extra_fields.fields import Base64ImageField
 
 
 class ResourceSerializer(serializers.ModelSerializer):
@@ -35,6 +36,7 @@ class ResourceSerializer(serializers.ModelSerializer):
 
 
 class PostResourceSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Resource
         exclude=['owner']  

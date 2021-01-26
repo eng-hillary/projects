@@ -25,6 +25,13 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
  
+class PostProductSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -96,6 +103,8 @@ class SellerPostSerializer(serializers.ModelSerializer):
             return None
 
 class PostSellerPostSerializer(serializers.ModelSerializer):
+    product_image_1 = Base64ImageField()
+    product_image_2 = Base64ImageField()
     class Meta:
         model = SellerPost
         exclude =['seller']
@@ -144,29 +153,32 @@ class ServiceProviderApprovalSerializer(serializers.ModelSerializer):
         model = ServiceProvider
         fields =('status','approver','approved_date')
 
-
 class ServiceRegistrationSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField(method_name='get_user_full_name')
+    service_provider = serializers.SerializerMethodField(method_name='get_user_full_name')
     full_name = serializers.SerializerMethodField(method_name='get_user_full_name',source='user')
     #category = serializers.SlugRelatedField(many=True,read_only=True, slug_field='name')
     category = serializers.SlugRelatedField(many=False,read_only=True, slug_field='cat_name')
-    location = GeometryPointFieldSerializerFields()
+    location = serializers.SerializerMethodField(method_name='get_service_location',source='location')
 
 
     class Meta:
         model = Service
-        fields = ('user_id','user', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
+        fields = ('id','service_provider', 'service_name', 'size','category', 'availability_date', 'terms_and_conditions', 'availability_time', 'picture','description',
         'available_services','rent','name_of_storage_center','location_of_storage_center','certification_status',
         'vehicle_type','vehicle_capacity','location','others','full_name')
 
     def get_user_full_name(self, obj):
-        return '{} {}'.format(obj.user.first_name, obj.user.last_name)
+        return '{} {}'.format(obj.service_provider.user.first_name, obj.service_provider.user.last_name)
+    
+    def get_service_location(self,obj):
+        return '{}'.format(obj.compute_location)
 
 
 class PostServiceRegistrationSerializer(serializers.ModelSerializer):
+    picture = Base64ImageField(required=False)
     class Meta:
         model = Service
-        exclude=['user']
+        exclude=['service_provider']
 
 class ContactDetailsSerializer(serializers.ModelSerializer):
     class Meta:

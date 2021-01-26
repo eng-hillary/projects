@@ -3,6 +3,7 @@ from rest_framework import routers
 from . import views
 from .views import (ProductList,
                     SellerList,
+                    MarketPriceList,
                     CreateBuyerPost,
                     CreateSellerProfile,
                     CreateProductProfile,
@@ -100,7 +101,9 @@ urlpatterns = [
     path('<int:pk>/editservice/', EditServiceView.as_view(), name="edit_service_profile"),
     path('<int:pk>/viewservice/', ServiceDetailView.as_view(), name="view_service"),
     
-    
+
+    path('marketprice', MarketPriceList.as_view(), name='marketprice_list'),
+   
 ]
 
 

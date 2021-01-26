@@ -61,15 +61,14 @@ class ServiceProfileForm(forms.ModelForm):
 
     class Meta:
         model = Service
-        exclude = ['date_created', 'date_updated','user']
+        exclude = ['date_created', 'date_updated','service_provider']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ServiceProfileForm, self).__init__(*args, **kwargs)
         self.fields['category'].empty_label = '--please select--'
-        # servicecategories = ServiceProvider.objects.filter(user=self.request.user).values('category')
-        # self.fields['category'].queryset = Category.objects.filter(id__in = servicecategories)
-
+        self.fields['terms_and_conditions'].widget.attrs.update({'rows': '2'})
+     
 
 class SellerPostForm(forms.ModelForm):
     market = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}), queryset=Market.objects.all())
@@ -125,3 +124,13 @@ class BuyerPostForm(forms.ModelForm):
         self.fields['product'].empty_label = '--please select--'
  
 
+class MarketPriceForm(forms.ModelForm):
+    class Meta:
+        model = MarketPrice
+        exclude = ['user']
+
+    def __init__(self, *args, **kwargs):
+        super(MarketPriceForm, self).__init__(*args, **kwargs)
+        self.fields['market'].empty_label = '--please select--'
+        self.fields['product'].empty_label = '--please select--'
+       

@@ -227,9 +227,10 @@
           console.log('approved successfully');
         },
        });
-    swal("You have approve seller/s successfully!", {
+       swal("You have approved seller/s successfully!", {
       icon: "success",
-    });}
+    }).then(() =>{
+        window.location.reload()});}
   } else {
     swal("You have cancelled seller approvals!");
   }
@@ -267,7 +268,9 @@
        });
     swal("You have approved seller/s successfully!", {
       icon: "success",
-    });}
+      
+    }).then(() =>{
+        window.location.reload()});;}
   } else {
     swal("You have cancelled seller approvals!");
   }
