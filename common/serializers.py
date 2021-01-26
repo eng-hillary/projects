@@ -46,11 +46,11 @@ class UserSerializer(serializers.Serializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    profile_pic = Base64ImageField()
+    profile_pic = Base64ImageField(max_length=None,allow_empty_file=True, required=False)
   
     class Meta:
         model = Profile
-        fields = ['phone_number','phone_2','home_address','gender','region','district','county','sub_county']
+        fields = ['phone_number','phone_2','home_address','gender','region','district','county','sub_county','profile_pic']
         
 
 class UserPostSerializer(serializers.ModelSerializer):
