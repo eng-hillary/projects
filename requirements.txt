@@ -2,6 +2,7 @@ argon2-cffi==20.1.0
 astroid==2.4.2
 async-generator==1.10
 attrs==20.2.0
+autopep8==1.5.4
 Babel==2.8.0
 backcall==0.2.0
 bleach==3.2.1
@@ -17,6 +18,7 @@ django-appconf==1.0.4
 django-cascading-dropdown-widget==0.2.1
 django-compressor==2.4
 django-crispy-forms==1.9.2
+django-extra-fields==3.0.2
 django-filter==2.3.0
 django-navutils==0.7
 django-nvd3==0.9.7
@@ -72,6 +74,7 @@ prometheus-client==0.8.0
 prompt-toolkit==3.0.7
 psycopg2-binary==2.8.5
 ptyprocess==0.6.0
+pycodestyle==2.6.0
 pycparser==2.20
 Pygments==2.7.1
 pylint==2.6.0

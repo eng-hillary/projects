@@ -81,6 +81,7 @@ class SellerPost(models.Model):
     product = models.ForeignKey('unffeagents.MarketPrice', on_delete=models.CASCADE)
     market = models.ForeignKey('unffeagents.Market', on_delete=models.CASCADE, null=True)
     quantity = models.FloatField(max_length=50, null=True)
+    unit_of_measure = models.CharField(blank=False, max_length=100, null=True) # unit of measure like kilogram
     price_offer = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_option = models.CharField(max_length=50)
     payment_options = models.CharField(choices=PAYMENT_OPTIONS, max_length=50, null=True)
@@ -272,4 +273,4 @@ class SoilScience(models.Model):
     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
 
     class Meta:
-        ordering =("name",)
+        ordering =["name"]

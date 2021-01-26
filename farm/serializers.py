@@ -5,7 +5,7 @@ from .models import (Sector, Enterprise, Farm, FarmFacility, Produce, FarmProduc
 
 from farmer .serializers import FarmerProfileSerializer
 from django.contrib.auth.models import User
-
+from drf_extra_fields.fields import Base64ImageField
 from geopy.geocoders import Nominatim
 
 
@@ -50,6 +50,7 @@ class FarmSerializer(serializers.ModelSerializer):
             return "No"
 
 class PostFarmSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Farm
         exclude=['farmer']
@@ -112,6 +113,7 @@ class EnterpriseSerializer(serializers.ModelSerializer):
 
 
 class PostEnterpriseSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Enterprise
         exclude=[]
@@ -126,6 +128,7 @@ class QuerySerializer(serializers.ModelSerializer):
         'action_taken', 'image', 'reporting_date', 'solution']
 
 class PostQuerySerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     class Meta:
         model = Query
         exclude=[]

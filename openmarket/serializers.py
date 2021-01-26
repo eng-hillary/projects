@@ -13,6 +13,7 @@ from farm.serializers import EnterpriseSerializer
 from farm.models import Enterprise
 from common.serializers import UserSerializer
 from common.customSerializers import GeometryPointFieldSerializerFields
+from drf_extra_fields.fields import Base64ImageField
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -24,6 +25,13 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
  
+class PostProductSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,7 +84,7 @@ class SellerPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SellerPost
-        fields = ('id','seller', 'product','market', 'quantity', 'price_offer', 'delivery_option','payment_options', 'payment_mode','product_description','product_image_1','product_image_2')
+        fields = ('id','seller', 'product','market', 'quantity','unit_of_measure', 'price_offer', 'delivery_option','payment_options', 'payment_mode','product_description','product_image_1','product_image_2')
 
     def get_product(self, obj):
         try:
@@ -95,6 +103,8 @@ class SellerPostSerializer(serializers.ModelSerializer):
             return None
 
 class PostSellerPostSerializer(serializers.ModelSerializer):
+    product_image_1 = Base64ImageField()
+    product_image_2 = Base64ImageField()
     class Meta:
         model = SellerPost
         exclude =['seller']
@@ -163,6 +173,7 @@ class ServiceRegistrationSerializer(serializers.ModelSerializer):
 
 
 class PostServiceRegistrationSerializer(serializers.ModelSerializer):
+    picture = Base64ImageField()
     class Meta:
         model = Service
         exclude=['user']
