@@ -40,17 +40,15 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(ProductCategory,related_name='products', null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=50, null=True)
-    slug = models.SlugField(_('Local Name'),max_length=200, null=True)
-    market = models.ForeignKey(to='unffeagents.Market', on_delete=models.CASCADE, null=True)
-    #local_name = models.CharField(max_length=200,null=True)
+    slug = models.SlugField(_('Local Name'), max_length=200, null=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d',blank=True)
     description = models.TextField(blank=True)
-    available = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+
 
 
 class Seller(models.Model):
@@ -61,6 +59,8 @@ class Seller(models.Model):
     business_number = PhoneNumberField()   
     status = models.CharField(choices=REGISTER_STATUS, default='Pending', max_length=20,null=False)
     business_address = models.TextField(null=True, blank=True)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=15, default=False)
+    
       # handle approving of a seller
     approver = models.ForeignKey(User, on_delete=models.DO_NOTHING,related_name="seller_unffe_agent",null=True,blank=True)
     approved_date = models.DateTimeField(blank=True, null=True)
@@ -75,18 +75,13 @@ class Seller(models.Model):
         return '{} {}'.format(self.user.first_name , self.user.last_name)
 
 
-class Buyer(TimeStampedModel, models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
-
-    class meta:
-        ordering =("created")
-
 
 class SellerPost(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey('unffeagents.MarketPrice', on_delete=models.CASCADE)
     market = models.ForeignKey('unffeagents.Market', on_delete=models.CASCADE, null=True)
     quantity = models.FloatField(max_length=50, null=True)
+    unit_of_measure = models.CharField(blank=False, max_length=100, null=True) # unit of measure like kilogram
     price_offer = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_option = models.CharField(max_length=50)
     payment_options = models.CharField(choices=PAYMENT_OPTIONS, max_length=50, null=True)
@@ -173,15 +168,12 @@ class Service(models.Model):
     enterprise = models.CharField(max_length=50, null=True, blank=True)
     #This is a service provider
 
-    user = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='service',null=True)
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='service',default=True)
-
+    service_provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='service',null=True)
     category = models.ForeignKey(Category, on_delete= models.CASCADE, null=True)
     service_name = models.CharField(max_length=200, null=True)
     #service_type = models.CharField(max_length=50, null=True)
     size =  models.FloatField(max_length=50, null=True,blank=True)
-    terms_and_conditions = models.BooleanField(default=True)
+    terms_and_conditions = models.TextField(null=True, blank=True)
     availability_date = models.DateField(blank=True, null=True)
     availability_time = models.DateTimeField(auto_now_add=True, null=True)
     picture = models.ImageField(null=True, blank=True)
@@ -278,4 +270,4 @@ class SoilScience(models.Model):
     status = models.CharField(choices=STATUS, default='True', max_length=20, null=False)
 
     class Meta:
-        ordering =("name",)
+        ordering =["name"]

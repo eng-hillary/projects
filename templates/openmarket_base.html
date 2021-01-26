@@ -56,28 +56,22 @@
             
             <div class="logo">
                   <img src="{% static 'images/logo_circle.png' %}"  class="img-responsive" alt="Responsive image" 
-                  style="margin-top: 10px; height:85px; width:85px; margin-left: 2px;">
+                  style="margin-top: 10px; height:80px; width:80px; margin-left: 2px; margin-bottom: 10px;">
             
             </div>
             
-            <div class="main-header-left d-lg-none">
-                <div class="logo-wrapper"><a href="#"><img class="blur-up lazyloaded" src="{% static 'images/logo_circle.png' %}"  alt=""></a></div>
-            </div>
-            <div class="mobile-sidebar" style="margin-left: 95px;">
-                <div class="media-body text-right switch-sm">
-                    <label class="switch"><a href="#"><i id="sidebar-toggle" data-feather="align-left"></i></a></label>
-                </div>
-            </div>
+         
+         
             <div class="nav-right col">
                 <ul class="nav-menus">
                     <li style="padding: 5px; color:white; font-size: larger;">Call Us: 0800-209003</li>
-                    <li>
+                    <!-- <li>
                         <form class="form-inline search-form">
                             <div class="form-group">
                                 <input class="form-control-plaintext" type="search" placeholder="Search.."><span class="d-sm-none mobile-search"><i data-feather="search"></i></span>
                             </div>
                         </form>
-                    </li>
+                    </li> -->
                     <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize-2"></i></a></li>
 
                     {% if request.user.id %}
@@ -101,7 +95,7 @@
                     </li>
                     {% else %}
                    
-                    <li><a href="{% url 'login' %}">LOGIN</a></li>
+                    <li><a href="{% url 'login' %}" style="font-size: 20px;">LOGIN</a></li>
                     
                     {% endif %}
                 </ul>
@@ -113,16 +107,6 @@
 
     <!-- Page Body Start-->
     <div class="page-body-wrapper">
-
-        <!-- Page Sidebar Start-->
-        <div class="page-sidebar" style="margin-top: 80px;">
-            <div class="sidebar custom-scrollbar">
-               
-                {% render_menu menu=menus.main user=request.user %}
-            </div>
-
-        </div>
-        <!-- Page Sidebar Ends-->
 
 
 

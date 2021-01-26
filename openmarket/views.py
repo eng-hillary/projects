@@ -1,9 +1,10 @@
 from django.shortcuts import render,get_object_or_404
-from .models import Product, Seller, Buyer, SellerPost, BuyerPost, ServiceProvider, Service, ContactDetails, Logistics, SoilScience, Category,SellerPost
+from .models import (Product, Seller, SellerPost, BuyerPost, 
+ServiceProvider, Service, ContactDetails, Logistics, SoilScience, 
+Category,SellerPost, ProductCategory)
 from common.models import Region, District
-from .serializers import (ProductSerializer,
+from .serializers import (ProductSerializer,PostProductSerializer,
                           SellerSerializer,
-                          BuyerSerializer,
                           SellerPostSerializer,
                           BuyerPostSerializer,
                           ServiceProviderSerializer,
@@ -15,7 +16,7 @@ from .serializers import (ProductSerializer,
                           SellerApprovalSerializer,
                           PostServiceProviderSerializer,
                           PostServiceRegistrationSerializer,
-                          CategorySerializer,PostSellerSerializer)
+                          CategorySerializer,PostSellerSerializer,ProductCategorySerializer,PostSellerPostSerializer)
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import permissions
@@ -26,12 +27,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import(SellerProfileForm, ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
-
-from .forms import(SellerProfileForm, ProductProfileForm,
-
-                   ServiceProviderProfileForm, ServiceProfileForm,SellerPostForm)
-
+from .forms import(SellerProfileForm, MarketPriceForm,ProductProfileForm,ServiceProviderProfileForm, ServiceProfileForm,BuyerPostForm,SellerPostForm)
 
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group as UserGroup
@@ -56,11 +52,53 @@ from unffeagents.models import MarketPrice
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Product by its id
+
+    list:
+        Return a list of all Products.
+
+    create:
+        Create a new Product.E.g
+        {
+        "name": "Chicken",
+        "slug": null,
+        "image": "product_image_url", # product's image
+        "description": "Chicken both hen and cock",
+        "category": 7
+    }
+
+    destroy:
+        Delete a Product.
+
+    update:
+        Update a Product.
+
+    partial_update:
+        Update a Product.
     """
     queryset = Product.objects.all().order_by('-id')
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, format=None):
+        serializer = PostProductSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save()
+            except:
+                return Response({'error':'An error has occured while posting the product'})
+                
+            return Response({'status':'successful'})
+        return Response(serializer.errors, status=400)
+
+
+
+class ProductCategoryViewSet(viewsets.ModelViewSet):
+    queryset = ProductCategory.objects.all()
+    serializer_class = ProductCategorySerializer
+
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -334,28 +372,39 @@ class CreateSellerProfile(LoginRequiredMixin, CreateView):
         return context
 
 
-class BuyerViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows products to be viewed or edited.
-    """
-    queryset = Buyer.objects.all().order_by('created')
-    serializer_class = BuyerSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class BuyerList(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'buyer_list.html'
-
-    def get(self, request):
-        queryset = Buyer.objects.order_by('created')
-        return Response({'buyers': queryset})
-
-
 # views for sellerpost
 class SellerPostViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Seller Post by its id
+
+    list:
+        Return a list of all Seller Posts.
+
+    create:
+        Create a new Seller Post.e.g
+        {
+        "product": "Milk",
+        "market": 1,
+        "quantity": 200.0,
+        "unit_of_measure": "kilogram",
+        "price_offer": "1100.04",
+        "delivery_option": "Pick up from the market",
+        "payment_options": "credit", # options['credit','full_payment','installements','exchange']
+        "payment_mode": "cash", # options['cash','bank','cheque','mobilemoney','credit_card','others']
+        "product_description": "Water melon",
+        "product_image_1": "http://127.0.0.1:8000/uploads/FB_IMG_15888191318596590.jpg",
+        "product_image_2": "http://127.0.0.1:8000/uploads/FB_IMG_15878330260195603_SaIZmeP.jpg"
+    }
+      
+    delete:
+        Delete a Selller Post.
+
+    PUT:
+        Update a Seller Post.
+
+    partial_update:
+        Update a Seller Post.
     """
     #queryset = SellerPost.objects.all().order_by('-id')
     serializer_class = SellerPostSerializer
@@ -377,6 +426,18 @@ class SellerPostViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    def create(self, request, format=None):
+        serializer = PostSellerPostSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                serializer.save(seller=self.request.user)
+            except:
+                return Response({'error': 'An error occured while posting your data'})
+
+            return Response({'status': 'successful'})
+        return Response(serializer.errors, status=400)
+
 
 class SellerPostList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -394,7 +455,6 @@ class BuyerPostViewSet(viewsets.ModelViewSet):
     """
     queryset = BuyerPost.objects.all().order_by('name')
     serializer_class = BuyerPostSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class BuyerPostList(APIView):
@@ -404,6 +464,16 @@ class BuyerPostList(APIView):
     def get(self, request):
         queryset = BuyerPost.objects.order_by('-name')
         return Response({'buyerposts': queryset})
+
+#open market price
+
+class MarketPriceList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'openmarketprice_list.html'
+
+    def get(self, request):
+        queryset = MarketPrice.objects.order_by('market')
+        return Response({'marketprices': queryset})
 
 
 # views for service provider
@@ -535,18 +605,20 @@ class CreateServiceView(LoginRequiredMixin, CreateView):
         profile = form.save(commit=False)
         # setting farmer profile to in-active
         profile.status = 'Pending'
-        profile.user = self.request.user
+        service_provider = ServiceProvider.objects.get(user=self.request.user)
+        profile.service_provider = service_provider
         profile.save()
-        form.save_m2m()
+        
+
 
         # send email to farmer after registration
         current_site = get_current_site(self.request)
         subject = 'Registrated Service Successful'
         message = render_to_string('profile_created_successful.html', {
-            'user': profile.user,
+            'user': profile.service_provider.user,
             'domain': current_site.domain
         })
-        to_email = profile.user.email
+        to_email = profile.service_provider.user.email
         email = EmailMessage(
             subject, message, to=[to_email]
         )
@@ -564,7 +636,40 @@ class CreateServiceView(LoginRequiredMixin, CreateView):
 
 class ServiceRegistrationViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows products to be viewed or edited.
+    retrieve:
+        retrieve a sigle Service by its id
+
+    list:
+        Return a list of all Services.
+
+    create:
+        Create a new Service.e.g
+        {
+        "service_name": "Test Service",
+        "size":null, //in case of a storage facility
+        "category":1, //foreign key from category
+        "availability_date":"2021-01-26",
+        "terms_and_conditions":"Must be returned in good condition",
+        "picture":null,
+        "description":"service description",
+        "available_services":"services available",
+        "rent":null,
+        "name_of_storage_center":null,
+        "location_of_storage_center":null,
+        "certification_status":null, // 
+        "vehicle_type":null, // the type of vehicle e.g passenger van
+        "vehicle_capacity":null,//interger field
+        "others":null,// any other comment or description
+        "location": "POINT(0.277157303776631 32.52098210502083)"
+        }
+    delete:
+        Delete a Service.
+
+    PUT:
+        Update a Service.
+
+    partial_update:
+        Update a Service.
     """
     #queryset = Service.objects.all().order_by('service_name')
     serializer_class = ServiceRegistrationSerializer
@@ -600,8 +705,8 @@ class ServiceRegistrationViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             try:
                 #     serializer.status ='Pending'
-                #serializer.user = self.request.user
-                serializer.save(user=self.request.user)
+                service_provider = ServiceProvider.objects.get(user=self.request.user)
+                serializer.save(service_provider=service_provider)
             except IntegrityError:
                 return Response({'error': 'Service account already exists'})
 
