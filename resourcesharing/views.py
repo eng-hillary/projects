@@ -36,13 +36,17 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        allowed_users = ['farmer']
+        #allowed_users = ['farmer']
         if user.is_superuser:
-            queryset = Resource.objects.all().order_by('id')
-        elif user.groups.filter(name='farmer').exists():
-            queryset = Resource.objects.filter(owner=self.request.user).order_by('-id')
+            queryset = Resource.objects.all().order_by('-id')
+        #elif user.groups.filter(name='farmer').exists():
+            
         else:
-            queryset = []
+            try:
+                queryset = Resource.objects.filter(owner=self.request.user).order_by('-id')
+            except:
+                queryset = []
+
         return queryset
     
     def create(self, request, format=None):
@@ -162,13 +166,16 @@ class ResourceList(LoginRequiredMixin, APIView):
     def get(self, request):
         #queryset = Sector.objects.order_by('-id')
         user = self.request.user
-        allowed_users = ['farmer']
+        #allowed_users = ['farmer']
         if user.is_superuser:
-            queryset = Resource.objects.all().order_by('id')
-        elif user.groups.filter(name='farmers').exists():
             queryset = Resource.objects.filter(owner=self.request.user).order_by('-id')
+        #elif user.groups.filter(name='farmers').exists():  
         else:
-            queryset = []
+            try:
+                queryset = Resource.objects.all().order_by('-id')
+            except:
+                queryset = Resource.objects.none
+            
         return Response({'ressource_object_list':queryset})
         #return Response()
     
